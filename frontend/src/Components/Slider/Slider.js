@@ -7,6 +7,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import styles from '~/Components/Slider/Slider.module.scss';
 import classNames from 'classnames/bind';
 
+import sliderImg from '~/Assets/image/SelectProduct/fc1fd804573a1de7f94b49e80fb41d21.jpg';
+
 const cx = classNames.bind(styles);
 
 function Slider() {
@@ -19,33 +21,21 @@ function Slider() {
         <div className={cx('wrapper')}>
             <Carousel>
                 <Carousel.Item interval={2000}>
-                    <img
-                        className={cx('slider-img')}
-                        src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt9fe65a5659ae89d5/64fde1dcefe403414d4e939c/GOAL_-_Blank_WEB_-_Facebook_-_2023-09-10T163322.289.png?auto=webp&format=pjpg&width=3840&quality=60"
-                        alt="ronaldo"
-                    />
+                    <img className={cx('slider-img')} src={sliderImg} alt="ronaldo" />
                     <Carousel.Caption>
                         <h3>First slide label</h3>
                         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item interval={2000}>
-                    <img
-                        className={cx('slider-img')}
-                        src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt9fe65a5659ae89d5/64fde1dcefe403414d4e939c/GOAL_-_Blank_WEB_-_Facebook_-_2023-09-10T163322.289.png?auto=webp&format=pjpg&width=3840&quality=60"
-                        alt="ronaldo"
-                    />
+                    <img className={cx('slider-img')} src={sliderImg} alt="ronaldo" />
                     <Carousel.Caption>
                         <h3>Second slide label</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item interval={2000}>
-                    <img
-                        className={cx('slider-img')}
-                        src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt9fe65a5659ae89d5/64fde1dcefe403414d4e939c/GOAL_-_Blank_WEB_-_Facebook_-_2023-09-10T163322.289.png?auto=webp&format=pjpg&width=3840&quality=60"
-                        alt="ronaldo"
-                    />
+                    <img className={cx('slider-img')} src={sliderImg} alt="ronaldo" />
                     <Carousel.Caption>
                         <h3>Third slide label</h3>
                         <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>

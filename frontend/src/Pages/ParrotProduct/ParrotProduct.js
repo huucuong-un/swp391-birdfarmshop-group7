@@ -1,5 +1,7 @@
+import Breadcrumbs from '~/Components/Breadcrumbs/Breadcrumbs';
+
 function ParrotProduct() {
-    return <h1>ParrotProduct</h1>;
+    return <Breadcrumbs></Breadcrumbs>;
 }
 
 export default ParrotProduct;

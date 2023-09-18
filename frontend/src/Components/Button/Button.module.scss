@@ -1,0 +1,20 @@
+.wrapper {
+    cursor: pointer;
+
+    .icon + .title,
+    .title + .icon {
+        margin-left: 3px;
+    }
+}
+
+//type of button
+.text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-color-nav);
+    background-color: transparent;
+}
+
+.leftIcon {
+    background-color: transparent;
+}

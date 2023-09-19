@@ -31,7 +31,7 @@ public class ParrotAPI {
     private IParrotService parrotService;
      
      @GetMapping(value="")
-     public ListOutput showParrot(){
+     public ListOutput showParrots(){
       ListOutput result = new ListOutput();
       result.setListResult(parrotService.findAll());
       return  result;

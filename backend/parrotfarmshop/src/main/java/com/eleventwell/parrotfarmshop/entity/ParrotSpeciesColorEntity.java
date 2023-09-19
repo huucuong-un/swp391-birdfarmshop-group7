@@ -34,7 +34,7 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
     private Long parrotSpeciesColorPrice;
 
     @Column(name = "parrotSpeciesDetailImageUrl")
-    private Long parrotSpeciesColorImageUrl;
+    private String parrotSpeciesColorImageUrl;
 
     @Column(name = "color")
     private String color;

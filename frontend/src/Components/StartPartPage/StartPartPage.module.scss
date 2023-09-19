@@ -1,0 +1,19 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 30px;
+}
+
+.inner {
+    width: 100%;
+    border-bottom: 3px solid #ccc;
+}
+
+.page-title {
+    font-weight: 700;
+}
+
+.product-quantity {
+    padding-top: 10px;
+}

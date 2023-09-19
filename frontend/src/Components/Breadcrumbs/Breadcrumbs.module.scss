@@ -1,13 +1,12 @@
-.breadcrumb-not-active {
-    color: #cccccc;
-    display: none;
+a {
+    color: var(--black);
 }
 
-.breadcrumb-active {
-    color: #000000;
+ul {
+    padding: 0;
 }
 
-.breadcrumb-arrow {
-    margin-left: 10px;
-    margin-right: 10px;
+li {
+    display: inline;
+    font-weight: 500;
 }

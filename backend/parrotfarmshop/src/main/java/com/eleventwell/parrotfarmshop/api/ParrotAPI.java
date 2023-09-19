@@ -4,8 +4,9 @@
  */
 package com.eleventwell.parrotfarmshop.api;
 
-import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
+import com.eleventwell.parrotfarmshop.service.IParrotService;
 import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,33 +21,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/parrot-species")
-public class ParrotSpeciesAPI {
-    @Autowired
-    private IParrotSpeciesService parrotSpeciesService;
-    
-    @GetMapping(value = "") 
-    public ListOutput showParrotSpecies() {
-        ListOutput result = new ListOutput();
-        
-        result.setListResult(parrotSpeciesService.findAll());
-        return result;
-    }
-    @PostMapping(value = "")
-	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
-		return parrotSpeciesService.save(model);
-	}
-        @PutMapping(value = "{id}")
-	public ParrotSpeciesDTO updateParrotSpecies(@RequestBody ParrotSpeciesDTO model, @PathVariable("id") long id) {
-		model.setId(id);
-		return parrotSpeciesService.save(model);
-	}
+@RequestMapping(value = "/api/parrot")
+public class ParrotAPI {
+     @Autowired
+    private IParrotService parrotService;
+     
+     @GetMapping(value="")
+     public ListOutput showParrot(){
+      ListOutput result = new ListOutput();
+      result.setListResult(parrotService.findAll());
+      return  result;
+     }
+     
+       @PostMapping(value="")
+      public ParrotDTO createParrot(@RequestBody ParrotDTO model){
+         
+         return parrotService.save(model);
+     }
+     
+     @PutMapping(value="{id}")
+     public ParrotDTO updateParrot(@RequestBody ParrotDTO model,@PathVariable("id") long id){
+         model.setId(id);
+         return parrotService.save(model);
+     }
+     
         @DeleteMapping(value = "")
-	public void deleteParrotSpecies(@RequestBody long[] ids) {
-		parrotSpeciesService.delete(ids);
+	public void deleteParrot(@RequestBody long[] ids) {
+		parrotService.delete(ids);
 	}
+     
+   
+     
+     
 }

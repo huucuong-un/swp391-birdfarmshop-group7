@@ -14,10 +14,17 @@ import lombok.Setter;
  *
  * @author ASUS
  */
+/**
+ * Create a object with list with page and limit page
+ *
+ * @param num1 The first integer.
+ * @param num2 The second integer.
+ * @return list with page and limit page.
+ */
 @Getter
 @Setter
-public class ParrotSpeciesOutput {
-    List<ParrotSpeciesDTO> listResult = new ArrayList<>();
+public class ListOutput<T> {
     
-    
+    List<T> listResult = new ArrayList<>();
+
 }

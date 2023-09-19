@@ -4,15 +4,16 @@
  */
 package com.eleventwell.parrotfarmshop.service;
 
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import java.util.List;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
-public interface IParrotSpeciesService {
-    List<ParrotSpeciesDTO> findAll();
-    ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO);
+public interface IParrotSpeciesColorService {
+     List<ParrotSpeciesColorDTO> findAll();
+    ParrotSpeciesColorDTO save(ParrotSpeciesColorDTO parrotSpeciesColorDTO);
     void delete(long[] ids);
 }

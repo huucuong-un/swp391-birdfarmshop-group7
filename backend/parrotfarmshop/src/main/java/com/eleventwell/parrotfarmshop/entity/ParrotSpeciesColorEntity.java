@@ -27,14 +27,14 @@ import lombok.ToString;
 //parrotSpeciesID, colorID, parrotSpeciesDetailPrice, createdAt, createdBy,
 //parrotSpeciesDetailImageUrl
 @Entity
-@Table(name = "parrotSpeciesDetail")
-public class ParrotSpeciesDetailEntity extends BaseEntity {
+@Table(name = "parrotSpeciesColor")
+public class ParrotSpeciesColorEntity extends BaseEntity {
 
     @Column(name = "parrotSpeciesDetailPrice")
-    private Long parrotSpeciesDetailPrice;
+    private Long parrotSpeciesColorPrice;
 
     @Column(name = "parrotSpeciesDetailImageUrl")
-    private Long parrotSpeciesDetailImageUrl;
+    private Long parrotSpeciesColorImageUrl;
 
     @Column(name = "color")
     private String color;
@@ -49,7 +49,7 @@ public class ParrotSpeciesDetailEntity extends BaseEntity {
     
 //	@OneToMany(mappedBy = "user")
 //	private List<ParrotEntity> parrots = new ArrayList<>();
-    @OneToMany(mappedBy = "parrotSpeciesDetail")
+    @OneToMany(mappedBy = "parrotSpeciesColor")
     private List<ParrotEntity> parrots = new ArrayList<>();
 
 }

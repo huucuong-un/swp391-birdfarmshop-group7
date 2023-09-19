@@ -15,12 +15,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ParrotSpeciesConverter {
-
-    public ParrotSpeciesDTO toDTO(ParrotSpeciesEntity entity) {
-        ParrotSpeciesDTO dto = new ParrotSpeciesDTO();
-        if (entity.getId() != null) {
-            dto.setId(entity.getId());
-        }
 //		dto.setTitle(newEntity.getTitle());
 //		dto.setContent(newEntity.getContent());
 //		dto.setShortDescription(newEntity.getShortDescription());
@@ -29,7 +23,11 @@ public class ParrotSpeciesConverter {
 //		dto.setCreatedBy(newEntity.getCreatedBy());
 //		dto.setModifiedDate(newEntity.getModifiedDate());
 //		dto.setModifiedBy(newEntity.getModifiedBy());
-
+    public ParrotSpeciesDTO toDTO(ParrotSpeciesEntity entity) {
+        ParrotSpeciesDTO dto = new ParrotSpeciesDTO();
+        if (entity.getId() != null) {
+            dto.setId(entity.getId());
+        }
         dto.setId(entity.getId());
         dto.setParrotSpeciesName(entity.getParrotSpeciesName());
         dto.setParrotSpeciesQuantity(entity.getParrotSpeciesQuantity());
@@ -44,4 +42,40 @@ public class ParrotSpeciesConverter {
 
         return dto;
     }
+      public ParrotSpeciesEntity toEntity(ParrotSpeciesDTO dto) {
+        ParrotSpeciesEntity entity = new ParrotSpeciesEntity();
+   
+        entity.setId(dto.getId());
+        entity.setParrotSpeciesName(dto.getParrotSpeciesName());
+        entity.setParrotSpeciesQuantity(dto.getParrotSpeciesQuantity());
+        entity.setParrotSpeciesDescription(dto.getParrotSpeciesDescription());
+        entity.setAvailabilityStatus(dto.getAvailabilityStatus());
+        entity.setParrotSpeciesNestQuantity(dto.getParrotSpeciesNestQuantity());
+
+        entity.setParrotSpeciesOrigin(dto.getParrotSpeciesOrigin());
+        entity.setParrotSpeciesAverageWeight(dto.getParrotSpeciesAverageWeight());
+        entity.setParrotAverageRating(dto.getParrotAverageRating());
+        entity.setNestAverageRating(dto.getNestAverageRating());
+
+        return entity;
+    }
+     public ParrotSpeciesEntity toEntity(ParrotSpeciesDTO dto, ParrotSpeciesEntity entity) {
+  
+
+    // Set properties on the parrotEntity based on the parrotDTO
+    entity.setParrotSpeciesName(dto.getParrotSpeciesName());
+    entity.setParrotSpeciesQuantity(dto.getParrotSpeciesQuantity());
+    entity.setParrotSpeciesNestQuantity(dto.getParrotSpeciesNestQuantity());
+    entity.setParrotSpeciesDescription(dto.getParrotSpeciesDescription());
+    entity.setAvailabilityStatus(dto.getAvailabilityStatus());
+    entity.setParrotSpeciesOrigin(dto.getParrotSpeciesOrigin());
+    entity.setParrotSpeciesAverageWeight(dto.getParrotSpeciesAverageWeight());
+    entity.setParrotAverageRating(dto.getParrotAverageRating());
+    entity.setNestAverageRating(dto.getNestAverageRating());
+
+    // If parrotDTO has an ID, it indicates an update operation
+ 
+
+    return entity;
+}
 }

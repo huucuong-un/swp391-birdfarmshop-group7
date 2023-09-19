@@ -6,29 +6,27 @@ const cx = classNames.bind(styles);
 
 function Breadcrumbs() {
     const location = useLocation();
+    const pathnames = location.pathname.split('/').filter((x) => x);
+
     return (
         <nav>
-            <Link to="/" className={location.pathname === '/' ? cx('breadcrumb-active') : cx('breadcrumb-not-active')}>
-                Home
-            </Link>
-            <span className="breadcrumb-arrow">&gt;</span>
-            <Link
-                to="/parrotProduct"
-                className={
-                    location.pathname.startsWith('/parrotProduct')
-                        ? cx('breadcrumb-active')
-                        : cx('breadcrumb-not-active')
-                }
-            >
-                Parrots
-            </Link>
-            <span className="breadcrumb-arrow">&gt;</span>
-            <Link
-                to="/products/1"
-                className={location.pathname === '/products/1' ? cx('breadcrumb-active') : cx('breadcrumb-not-active')}
-            >
-                Product 1
-            </Link>
+            <ul>
+                <li>
+                    <Link to="/">Home / </Link>
+                </li>
+                {pathnames.map((name, index) => {
+                    const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    const isLast = index === pathnames.length - 1;
+
+                    return isLast ? (
+                        <li key={name}>{name} / </li>
+                    ) : (
+                        <li key={name}>
+                            <Link to={routeTo}>{name}</Link>
+                        </li>
+                    );
+                })}
+            </ul>
         </nav>
     );
 }

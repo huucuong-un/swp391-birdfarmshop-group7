@@ -10,15 +10,15 @@ const cx = classNames.bind(styles);
 
 function ChooseProduct() {
     return (
-        <div className={cx('wrapper row')}>
+        <div className={cx('wrapper', 'row')}>
             <Title>Parrot Or Nest</Title>
             <div className="container">
                 <div className={cx('product-hover-effect-container row custom-product-hover')}>
-                    <Link className={cx('item-parrot col-6')} to="/nest">
+                    <Link className={cx('item-parrot', 'col-6')} to="/nest">
                         <img className={cx('nest-img')} src={nest} />
                     </Link>
 
-                    <Link className={cx('item col-6')} to="/parrotProduct">
+                    <Link className={cx('item', 'col-6')} to="/parrotProduct">
                         <img className={cx('parrot-img')} src={parrot1} />
                     </Link>
                 </div>

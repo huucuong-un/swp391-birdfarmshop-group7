@@ -1,0 +1,34 @@
+.wrapper {
+    width: 100%;
+    background-color: var(--black);
+    min-height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 150px;
+}
+
+.footer-part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h4 {
+        color: var(--text-color-nav);
+    }
+
+    a {
+        color: var(--text-color-nav);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

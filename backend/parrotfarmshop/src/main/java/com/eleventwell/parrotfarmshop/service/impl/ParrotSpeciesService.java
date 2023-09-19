@@ -41,4 +41,30 @@ public class ParrotSpeciesService implements IParrotSpeciesService{
         
         return results;
     }
+
+    @Override
+    public ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO) {
+ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
+                if(parrotSpeciesDTO.getParrotSpeciesAverageWeight() > 0 && parrotSpeciesDTO.getParrotSpeciesAverageWeight() <=5 ){
+                    return null;
+                }
+		if (parrotSpeciesDTO.getId() != null) {
+			ParrotSpeciesEntity oldNewEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
+			parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO, oldNewEntity);
+		} else {
+			parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO);
+		}
+
+		parrotSpeciesEntity = parrotSpeciesRepository.save(parrotSpeciesEntity);
+		return parrotSpeciesConverter.toDTO(parrotSpeciesEntity);
+
+    }
+
+    @Override
+    public void delete(long[] ids) {
+    for(long item: ids) {
+		parrotSpeciesRepository.deleteById(item);
+	}
+	
+	}
 }

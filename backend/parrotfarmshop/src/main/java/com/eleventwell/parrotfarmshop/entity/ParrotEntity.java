@@ -36,8 +36,7 @@ import lombok.ToString;
 @Table(name = "parrot")
 public class ParrotEntity extends BaseEntity {
 
-    @Column(name = "parrotName")
-    private String parrotName;
+   
 
     @Column(name = "parrotAge")
     private int parrotAge;
@@ -64,7 +63,7 @@ public class ParrotEntity extends BaseEntity {
 //	
     @ManyToOne
     @JoinColumn(name = "parrotSpeciesDetailID")
-    private ParrotSpeciesDetailEntity parrotSpeciesDetail;
+    private ParrotSpeciesColorEntity parrotSpeciesColor;
 
     @ManyToOne
     @JoinColumn(name = "parrotEggNestID")

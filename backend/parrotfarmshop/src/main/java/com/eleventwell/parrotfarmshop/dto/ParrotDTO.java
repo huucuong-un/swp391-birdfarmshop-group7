@@ -6,7 +6,7 @@ package com.eleventwell.parrotfarmshop.dto;
 
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesDetailEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ReproductiveHistoryEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +42,11 @@ public class ParrotDTO extends BaseDTO {
 
     private Long numberOfChildren;
 
-    private Long owner;
+    private Long ownerId;
 
-    private ParrotSpeciesDetailEntity parrotSpeciesDetail;
+    private Long parrotSpeciesColorId;
 
-    private ParrotEggNestEntity parrotEggNest;
-
-    private OrderDetailEntity orderDetail;
+    private Long parrotEggNestId;
 
     private List<ReproductiveHistoryEntity> reproductiveHistories = new ArrayList<>();
 

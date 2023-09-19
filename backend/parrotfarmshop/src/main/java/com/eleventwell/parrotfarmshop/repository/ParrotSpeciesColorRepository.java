@@ -4,16 +4,17 @@
  */
 package com.eleventwell.parrotfarmshop.repository;
 
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
-public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEntity, Long>{
-
-   	ParrotSpeciesEntity findOneById(long id);
+public interface ParrotSpeciesColorRepository extends JpaRepository<ParrotSpeciesColorEntity, Long>{
+    
+       	ParrotSpeciesColorEntity findOneById(long id);
 
     
 }

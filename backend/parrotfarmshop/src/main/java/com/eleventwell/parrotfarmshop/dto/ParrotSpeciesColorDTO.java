@@ -22,7 +22,7 @@ import lombok.ToString;
 @Setter
 public class ParrotSpeciesColorDTO extends BaseDTO {
     private Long parrotSpeciesColorPrice;
-    private Long parrotSpeciesColorImageUrl;
+    private String parrotSpeciesColorImageUrl;
     private String color;
     private long parrotSpeciesID; // This field represents the ID of the related ParrotSpeciesEntity
     private List<ParrotDTO> parrots;

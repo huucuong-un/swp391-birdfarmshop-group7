@@ -7,6 +7,7 @@ package com.eleventwell.parrotfarmshop.api;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,11 +31,11 @@ public class ParrotSpeciesAPI {
     private IParrotSpeciesService parrotSpeciesService;
     
     @GetMapping(value = "") 
-    public ListOutput showParrotSpecies() {
+    public List<ParrotSpeciesDTO> showParrotSpecies() {
         ListOutput result = new ListOutput();
         
         result.setListResult(parrotSpeciesService.findAll());
-        return result;
+        return result.getListResult();
     }
     @PostMapping(value = "")
 	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {

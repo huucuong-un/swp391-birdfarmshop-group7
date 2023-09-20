@@ -14,6 +14,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEntity, Long>{
 
    	ParrotSpeciesEntity findOneById(long id);
-
+        
     
 }

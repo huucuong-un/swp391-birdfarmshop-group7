@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -17,33 +18,88 @@ const PARROT_ITEMS = [
         img: parrot,
         like: 15,
         price: '1 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
     },
+
     {
         name: 'Black Parrot',
         img: parrot,
         like: 15,
         price: '2 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
     },
     {
         name: 'Red Parrot',
         img: parrot,
         like: 15,
         price: '3 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
     },
     {
         name: 'Pink Parrot',
         img: parrot,
         like: 15,
         price: '4 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
+    },
+    {
+        name: 'Pink Parrot',
+        img: parrot,
+        like: 15,
+        price: '4 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
+    },
+    {
+        name: 'Pink Parrot',
+        img: parrot,
+        like: 15,
+        price: '4 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
+    },
+    {
+        name: 'Pink Parrot',
+        img: parrot,
+        like: 15,
+        price: '4 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
+    },
+    {
+        name: 'Pink Parrot',
+        img: parrot,
+        like: 15,
+        price: '4 500 000 VNĐ',
+        color1: '#ce2133',
+        color2: '#3c65c5',
+        color3: '#484848',
     },
 ];
 
 function ParrotList() {
+    const [color, setColor] = useState(null);
+
+    const handleColorSelection = (color) => {
+        setColor(color);
+    };
+
     return (
         <div className={cx('wrapper')}>
             {PARROT_ITEMS.map((parrot, index) => {
                 return (
-                    <div className={cx('parrot-card')}>
+                    <Link className={cx('parrot-card')} key={index}>
                         <div className={cx('parrot-img')}>
                             <Link>
                                 <img src={parrot.img} alt="parrot" />
@@ -56,15 +112,27 @@ function ParrotList() {
                                 <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
                                 <p className={cx('parrot-like-quantity')}>15K</p>
                             </div>
-                            <input className={cx('parrot-input-quantity')} type="number" defaultValue={1} />
-                            <strong>{parrot.price}</strong>
+                            <div className={cx('parrot-color')}>
+                                <input
+                                    className={cx('parrot-color-item')}
+                                    onClick={() => handleColorSelection('red')}
+                                    style={{ backgroundColor: parrot.color1 }}
+                                ></input>
+                                <input
+                                    className={cx('parrot-color-item', { green: color === 'green' })}
+                                    onClick={() => handleColorSelection('green')}
+                                    style={{ backgroundColor: parrot.color2 }}
+                                ></input>
+                                <input
+                                    className={cx('parrot-color-item', { blue: color === 'blue' })}
+                                    onClick={() => handleColorSelection('blue')}
+                                    style={{ backgroundColor: parrot.color3 }}
+                                ></input>
+                            </div>
+                            <input className={cx('parrot-input-quantity')} type="number" defaultValue={1} min={1} />
+                            <strong className={cx('parrot-price')}>{parrot.price}</strong>
                         </div>
-                        <div className={cx('parrot-active')}>
-                            <Link to="/payment">Buy</Link>
-                            <Link to="/cart">Add To Cart</Link>
-                            {/* <FontAwesomeIcon className={cx('parrot-cart-icon')} icon={faBagShopping} /> */}
-                        </div>
-                    </div>
+                    </Link>
                 );
             })}
         </div>

@@ -9,7 +9,7 @@ const publicRoutes = [
     { path: '/', component: HomePage },
     { path: '/parrotProduct', component: ParrotProduct },
     { path: '/nest', component: Nest },
-    { path: '/maParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
+    { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

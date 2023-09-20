@@ -18,53 +18,53 @@ import org.springframework.stereotype.Service;
  *
  * @author ASUS
  */
-
 @Service
-public class ParrotSpeciesService implements IParrotSpeciesService{
+public class ParrotSpeciesService implements IParrotSpeciesService {
+
     @Autowired
     private ParrotSpeciesRepository parrotSpeciesRepository;
-    
+
     @Autowired
     private ParrotSpeciesConverter parrotSpeciesConverter;
-    
-  
 
     @Override
     public List<ParrotSpeciesDTO> findAll() {
-       List<ParrotSpeciesDTO> results = new ArrayList<>();
-       List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAll();
-       
+        List<ParrotSpeciesDTO> results = new ArrayList<>();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAll();
+
         for (ParrotSpeciesEntity entity : entities) {
             ParrotSpeciesDTO parrotSpeciesDTO = parrotSpeciesConverter.toDTO(entity);
             results.add(parrotSpeciesDTO);
         }
-        
+
         return results;
     }
 
     @Override
     public ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO) {
-ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
-                if(parrotSpeciesDTO.getParrotSpeciesAverageWeight() < 0 && parrotSpeciesDTO.getParrotSpeciesAverageWeight() >=2 ){
-                    return null;
-                }
-		if (parrotSpeciesDTO.getId() != null) {
-			ParrotSpeciesEntity oldNewEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
-			parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO, oldNewEntity);
-		} else {
-			parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO);
-		}
+        ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
 
-		parrotSpeciesEntity = parrotSpeciesRepository.save(parrotSpeciesEntity);
-		return parrotSpeciesConverter.toDTO(parrotSpeciesEntity);
+        if (parrotSpeciesDTO.getParrotSpeciesAverageWeight() < 0 && parrotSpeciesDTO.getParrotSpeciesAverageWeight() > 2) {
+
+            return null;
+        }
+        if (parrotSpeciesDTO.getId() != null) {
+            ParrotSpeciesEntity oldNewEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
+            parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO, oldNewEntity);
+        } else {
+            parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO);
+        }
+
+        parrotSpeciesEntity = parrotSpeciesRepository.save(parrotSpeciesEntity);
+        return parrotSpeciesConverter.toDTO(parrotSpeciesEntity);
 
     }
 
     @Override
     public void delete(long[] ids) {
-    for(long item: ids) {
-		parrotSpeciesRepository.deleteById(item);
-	}
-	
-	}
+        for (long item : ids) {
+            parrotSpeciesRepository.deleteById(item);
+        }
+
+    }
 }

@@ -29,9 +29,7 @@ import lombok.ToString;
 @Setter
 
 public class ParrotDTO extends BaseDTO {
-
-    private String parrotName;
-
+  
     private int parrotAge;
 
     private Boolean availabilityStatus;
@@ -48,9 +46,4 @@ public class ParrotDTO extends BaseDTO {
 
     private Long parrotEggNestId;
 
-    private List<ReproductiveHistoryEntity> reproductiveHistories = new ArrayList<>();
-
-    private List<ParrotEggNestEntity> parrotMomInNests = new ArrayList<>();
-
-    private List<ParrotEggNestEntity> parrotDadInNests = new ArrayList<>();
 }

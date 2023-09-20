@@ -45,7 +45,7 @@ public class ParrotSpeciesService implements IParrotSpeciesService{
     @Override
     public ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO) {
 ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
-                if(parrotSpeciesDTO.getParrotSpeciesAverageWeight() > 0 && parrotSpeciesDTO.getParrotSpeciesAverageWeight() <=5 ){
+                if(parrotSpeciesDTO.getParrotSpeciesAverageWeight() < 0 && parrotSpeciesDTO.getParrotSpeciesAverageWeight() >=2 ){
                     return null;
                 }
 		if (parrotSpeciesDTO.getId() != null) {

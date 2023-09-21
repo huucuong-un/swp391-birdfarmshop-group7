@@ -11,9 +11,9 @@ const publicRoutes = [
     { path: '/', component: HomePage },
     { path: '/parrotProduct', component: ParrotProduct },
     { path: '/nest', component: Nest },
+    { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/maParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

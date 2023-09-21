@@ -18,3 +18,28 @@
 .leftIcon {
     background-color: transparent;
 }
+
+.add {
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-weight: 700;
+    background-color: var(--black);
+    color: var(--text-color-nav);
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.editDeteleSwitch {
+    background-color: var(--black);
+    color: var(--text-color-nav);
+    font-weight: 700;
+    padding: 0 10px;
+    min-width: 80px;
+    border-radius: 30px;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}

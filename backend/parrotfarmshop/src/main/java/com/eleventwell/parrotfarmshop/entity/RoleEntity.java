@@ -30,18 +30,16 @@ import lombok.ToString;
 @Entity
 @Table(name = "role")
 public class RoleEntity extends BaseEntity {
-	
-	@Column(name ="roleID")
-	private String roleID;
-	
+
 	@Column(name ="roleName")
 	private String roleName;
 	
-	@Column(name ="Description")
-	private String Description;
+	@Column(name ="description")
+	private String description;
 	
 	@OneToMany(mappedBy = "role")
     private List<UserEntity> users = new ArrayList<>();
 
-	
+	@Column(name ="status")
+	private Boolean status;
 }

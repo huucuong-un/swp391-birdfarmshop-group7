@@ -1,0 +1,150 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    height: 870px;
+    align-items: center;
+    overflow: hidden;
+}
+.container {
+    width: 60%;
+    height: 70%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--black);
+    padding: 20px;
+    border-radius: 12px;
+}
+.inner {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+.title {
+    font-size: 45px;
+    text-shadow: 3px 2px 2px #888888;
+    overflow: hidden;
+}
+.inner-input {
+    width: 100%;
+    overflow: hidden;
+}
+
+//====Checkbox section=============
+.checkbox-section {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px 0 40px 0px;
+}
+.section-remember {
+    display: flex;
+    width: 74%;
+    gap: 10px;
+    p {
+        font-weight: 900;
+        color: var(--text-color-input);
+        overflow: hidden;
+    }
+    overflow: hidden;
+}
+.checkBox {
+    width: 20%;
+}
+.remember {
+    overflow: hidden;
+}
+
+.forgot {
+    background-color: var(--text-color-nav);
+    font-weight: bold;
+    font-size: 15px;
+    &:hover {
+        text-decoration: underline;
+    }
+    overflow: hidden;
+}
+
+.register {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    width: 50%;
+    height: 100%;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    p {
+        font-weight: bold;
+        color: var(--black);
+        font-size: 14px;
+        margin: 0;
+    }
+}
+// ========== Loginbtn==========
+.login-btn {
+    width: 45%;
+    padding: 20px 5px;
+    border-radius: 12px;
+    margin: 10px 0;
+    color: var(--text-color-input);
+    background-color: var(--black);
+    color: white;
+    font-weight: bold;
+    &:hover {
+        opacity: 0.8;
+    }
+    overflow: hidden;
+}
+
+// ===========Login google =============
+.google-title {
+    font-weight: bold;
+    font-size: 20px;
+    color: #ccc;
+    padding: 0;
+    margin: 5px 0 10px 0;
+    overflow: hidden;
+}
+.google {
+    padding: 10px;
+    border-radius: 30px;
+    border: 1px solid var(--black);
+    img {
+        border-radius: 30px;
+        width: 3rem;
+    }
+    &:hover {
+        background-color: #eee3e3;
+    }
+    overflow: hidden;
+}
+
+.register {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.register-title {
+    font-size: 60px;
+}
+.register-btn {
+    width: 30%;
+    padding: 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-top: 28px;
+    &:hover {
+        opacity: 0.8;
+    }
+    overflow: hidden;
+}

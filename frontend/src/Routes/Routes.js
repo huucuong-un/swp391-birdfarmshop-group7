@@ -12,10 +12,10 @@ const publicRoutes = [
     { path: '/', component: HomePage },
     { path: '/parrotProduct', component: ParrotProduct },
     { path: '/nest', component: Nest },
-    { path: '/maParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
+    { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
+    { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

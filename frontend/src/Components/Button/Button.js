@@ -10,6 +10,8 @@ function Button({
     text = false,
     disable = false,
     leftIcon,
+    add,
+    editDeteleSwitch,
     children,
     className,
     onClick,
@@ -44,6 +46,8 @@ function Button({
         to,
         text,
         disable,
+        add,
+        editDeteleSwitch,
     });
     return (
         <Comp className={classes} {...props}>

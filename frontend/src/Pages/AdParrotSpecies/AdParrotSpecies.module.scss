@@ -1,0 +1,65 @@
+.wrapper {
+    width: 100%;
+}
+
+.active {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.add-btn {
+    padding: 0 20px;
+}
+
+.sort-space-form {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.sort-space-form input {
+    padding: 0 3px;
+    max-width: 140px;
+    font-weight: 700;
+    border: 2px solid var(--black);
+    border-radius: 6px;
+}
+
+.sort-space-form select {
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    padding: 30px 30px;
+}
+
+thead {
+    background-color: var(--black);
+    color: var(--text-color-nav);
+}
+
+thead tr th {
+    padding: 20px;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+    padding: 10px 30px;
+}
+
+.status {
+    color: green;
+    font-weight: 700;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}

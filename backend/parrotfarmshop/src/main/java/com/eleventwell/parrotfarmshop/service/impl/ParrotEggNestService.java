@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -51,19 +52,18 @@ public class ParrotEggNestService implements IParrotEggNestService {
         } else {
             parrotEggNestEntity = parrotEggNestConverter.toEntity(parrotEggNestDTO);
         }
-        parrotEggNestEntity.setParrotDad(parrotRepository.findOneById(parrotEggNestDTO.getParrotDadId()));
-        parrotEggNestEntity.setParrotMom(parrotRepository.findOneById(parrotEggNestDTO.getParrotMomId()));
+        parrotEggNestEntity.setParrotDad(parrotRepository.findOneById(parrotEggNestDTO.getDadId()));
+        parrotEggNestEntity.setParrotMom(parrotRepository.findOneById(parrotEggNestDTO.getMomId()));
 
         parrotEggNestRepository.save(parrotEggNestEntity);
         return parrotEggNestConverter.toDTO(parrotEggNestEntity);
     }
 
+
+
     @Override
-    public void delete(long[] ids) {
-
-        for (long id : ids) {
-            parrotEggNestRepository.deleteById(id);
-        }
-
+    public void delete(Long[] ids) {
+        List<Long> idList = Arrays.asList(ids);
+        parrotEggNestRepository.deleteAllById((idList));
     }
 }

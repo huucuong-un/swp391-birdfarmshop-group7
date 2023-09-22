@@ -4,7 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,20 +38,26 @@ import lombok.ToString;
 @Entity
 @Table(name = "Promotion")
 public class PromotionEntity extends BaseEntity {
-	@Column(name = "promotionName")
-	private String promotionName;
-	
+
+
+	@NotBlank
+	@Size(max=30)
+	@Column(name = "code")
+	private String code;
+
+	@NotBlank
 	@Column(name = "description")
 	private String description;
-	
+
+	@Unsigned
 	@Column(name = "value")
 	private Double value;
 	
 	@Column(name = "startDate")
-	private String startDate;
+	private Date startDate;
 	
 	@Column(name = "endDate")
-	private String endDate;
+	private Date endDate;
 	
 	@Column(name = "status")
 	private Boolean status;

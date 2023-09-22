@@ -17,7 +17,7 @@ public class RoleDTO extends BaseDTO{
 
 
 
-    private String roleName;
+    private String name;
 
     private String description;
 

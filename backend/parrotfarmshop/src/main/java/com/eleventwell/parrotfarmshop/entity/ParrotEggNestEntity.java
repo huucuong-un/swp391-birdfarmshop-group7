@@ -16,6 +16,8 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -55,5 +57,9 @@ public class ParrotEggNestEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "parrotDadID")
     private ParrotEntity parrotDad;
+
+    @Unsigned
+    @Column(name = "belongTo")
+    private Integer belongTo;
 
 }

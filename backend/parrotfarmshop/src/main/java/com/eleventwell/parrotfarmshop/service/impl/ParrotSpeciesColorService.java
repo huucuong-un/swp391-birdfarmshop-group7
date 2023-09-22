@@ -12,6 +12,7 @@ import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IParrotSpeciesColorService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,10 @@ public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
 
     @Autowired
     private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
-    
+
     @Autowired
     private ParrotSpeciesRepository parrotSpeciesRepository;
-    
+
     @Autowired
     private ParrotSpeciesColorConverter parrotSpeciesColorConverter;
 
@@ -37,12 +38,12 @@ public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
         // Implement logic to retrieve all ParrotSpeciesColor entities and convert them to DTOs
         List<ParrotSpeciesColorDTO> results = new ArrayList<>();
         List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAll();
-       
+
         for (ParrotSpeciesColorEntity entity : entities) {
             ParrotSpeciesColorDTO parrotSpeciesColorDTO = parrotSpeciesColorConverter.toDTO(entity);
             results.add(parrotSpeciesColorDTO);
         }
-        
+
         return results;
     }
 
@@ -56,17 +57,16 @@ public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
         } else {
             parrotSpeciesColorEntity = parrotSpeciesColorConverter.toEntity(parrotSpeciesColorDTO);
         }
-        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(parrotSpeciesColorDTO.getParrotSpeciesID());
-       parrotSpeciesColorEntity.setParrotSpecies(parrotSpeciesEntity);
+        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(parrotSpeciesColorDTO.getSpeciesID());
+        parrotSpeciesColorEntity.setParrotSpecies(parrotSpeciesEntity);
         parrotSpeciesColorEntity = parrotSpeciesColorRepository.save(parrotSpeciesColorEntity);
         return parrotSpeciesColorConverter.toDTO(parrotSpeciesColorEntity);
     }
 
     @Override
-    public void delete(long[] ids) {
-        // Implement logic to delete ParrotSpeciesColor entities by their IDs
-        for (long id : ids) {
-            parrotSpeciesColorRepository.deleteById(id);
-        }
+    public void delete(Long[] ids) {
+        List<Long> idList = Arrays.asList(ids);
+        parrotSpeciesColorRepository.deleteAllById((idList));
     }
+
 }

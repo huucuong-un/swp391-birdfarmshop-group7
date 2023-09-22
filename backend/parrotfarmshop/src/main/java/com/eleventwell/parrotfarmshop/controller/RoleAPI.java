@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.api;
+package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;

@@ -4,12 +4,13 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesConverter;
+import com.eleventwell.parrotfarmshop.converter.Converter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,46 +26,63 @@ public class ParrotSpeciesService implements IParrotSpeciesService {
     private ParrotSpeciesRepository parrotSpeciesRepository;
 
     @Autowired
-    private ParrotSpeciesConverter parrotSpeciesConverter;
+    private Converter converter;
 
+    /*
+    * findAll()
+    * Hàm này dùng để hiển thị tất cả loài
+    * lấy danh sách species bằng parrotSpeciesRepository.findAll()
+    * duyệt list species(entity) và convert từ entity sang DTO
+    * */
     @Override
     public List<ParrotSpeciesDTO> findAll() {
         List<ParrotSpeciesDTO> results = new ArrayList<>();
         List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAll();
 
         for (ParrotSpeciesEntity entity : entities) {
-            ParrotSpeciesDTO parrotSpeciesDTO = parrotSpeciesConverter.toDTO(entity);
+            //NOTE
+            ParrotSpeciesDTO parrotSpeciesDTO = (ParrotSpeciesDTO) converter.toDTO(entity, ParrotSpeciesDTO.class);
             results.add(parrotSpeciesDTO);
         }
 
         return results;
     }
-
+/*
+* Save()
+* Hàm này dùng để add và update
+* truyền vào một DTO
+*tạo một entity
+*kiểm tra DTO truyền vào có ID hay không
+* nếu không thì convert DTO sang entity và thực thi hàm save để lưu vào database
+* nếu có Id thì tạo một oldEntity để lưu trữ entity có Id tương ứng
+* sau đó truyền DTO và oldEntity để thực thi hàm convert-update
+* thực thi hàm save để lưu vào database
+* */
     @Override
     public ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO) {
         ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
 
-        if (parrotSpeciesDTO.getParrotSpeciesAverageWeight() < 0 && parrotSpeciesDTO.getParrotSpeciesAverageWeight() > 2) {
-
-            return null;
-        }
         if (parrotSpeciesDTO.getId() != null) {
-            ParrotSpeciesEntity oldNewEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
-            parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO, oldNewEntity);
+            ParrotSpeciesEntity oldEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
+            parrotSpeciesEntity = (ParrotSpeciesEntity) converter.updateEntity(parrotSpeciesDTO, oldEntity);
         } else {
-            parrotSpeciesEntity = parrotSpeciesConverter.toEntity(parrotSpeciesDTO);
+            parrotSpeciesEntity = (ParrotSpeciesEntity) converter.toEntity(parrotSpeciesDTO,parrotSpeciesEntity.getClass());
         }
 
         parrotSpeciesEntity = parrotSpeciesRepository.save(parrotSpeciesEntity);
-        return parrotSpeciesConverter.toDTO(parrotSpeciesEntity);
+        return (ParrotSpeciesDTO) converter.toDTO(parrotSpeciesEntity,parrotSpeciesDTO.getClass());
 
     }
 
     @Override
-    public void delete(long[] ids) {
-        for (long item : ids) {
-            parrotSpeciesRepository.deleteById(item);
-        }
+    public void delete(Long[] ids) {
+        List<Long> idList = Arrays.asList(ids);
+        parrotSpeciesRepository.deleteAllById((idList));
+
+
+//        for (long item : ids) {
+//            parrotSpeciesRepository.deleteById(item);
+//        }
 
     }
 }

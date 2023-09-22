@@ -6,6 +6,8 @@ import SystemLayout from '~/Components/SystemLayout/SystemLayout';
 import ChangePassword from '~/Pages/ChangePassword/ChangePassword';
 import LoginSystemLayout from '~/Components/LoginSystemLayout/LoginSystemLayout';
 import SystemLogin from '~/Pages/SystemLogin/SystemLogin';
+import Payment from '~/Pages/Payment/Payment';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -14,6 +16,7 @@ const publicRoutes = [
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
+    { path: '/payment', component: Payment },
 ];
 
 //Dành cho những người đăng nhập mới coi được

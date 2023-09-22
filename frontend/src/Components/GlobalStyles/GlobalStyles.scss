@@ -2,9 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --black: #111;
-    --text-color: #111;
-    --text-color-nav: #f9f9f9;
+    --black-old: #111;
+    --black: #242430;
+    --white: #f9f9f9;
+    --text-color: #242430;
+    --text-color-nav: #242430;
+    --btn-color: #f57c7c;
 }
 
 * {

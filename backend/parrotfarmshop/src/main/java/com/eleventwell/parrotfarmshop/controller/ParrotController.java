@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/parrot")
-public class ParrotAPI {
+public class ParrotController {
      @Autowired
     private IParrotService parrotService;
      

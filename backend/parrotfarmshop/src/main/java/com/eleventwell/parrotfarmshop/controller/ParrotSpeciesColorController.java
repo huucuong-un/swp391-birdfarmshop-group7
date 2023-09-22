@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/parrot-species-color")
-public class ParrotSpeciesColorAPI {
+public class ParrotSpeciesColorController {
     @Autowired
     private IParrotSpeciesColorService parrotSpeciesColorService;
     

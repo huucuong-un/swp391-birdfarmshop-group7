@@ -39,7 +39,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "user",uniqueConstraints = {
 		@UniqueConstraint(columnNames = {
-				"username"
+				"user_name"
 		}),
 		@UniqueConstraint(columnNames = {
 				"email"
@@ -48,7 +48,7 @@ import lombok.ToString;
 public class UserEntity extends BaseEntity {
 	@NotBlank
     @Size(min=3,max=50)
-	@Column(name = "username")
+	@Column(name = "user_name")
 	private String userName;
 
 	@NotBlank
@@ -64,7 +64,7 @@ public class UserEntity extends BaseEntity {
 
 	@NotBlank
 	@Size(min=3,max=50)
-	@Column(name = "fullname")
+	@Column(name = "full_name")
 	private String fullName;
 
 
@@ -105,7 +105,7 @@ public class UserEntity extends BaseEntity {
 //	
 	
 	 @ManyToOne
-	    @JoinColumn(name = "roleID")
+	    @JoinColumn(name = "role_Id")
 	    private RoleEntity role;
 	
 

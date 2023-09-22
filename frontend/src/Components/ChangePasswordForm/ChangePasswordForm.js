@@ -4,6 +4,7 @@ import styles from './ChangePasswordForm.module.scss';
 import Input from '~/Components/Input/Input';
 import Title from '~/Components/Title/Title';
 import Button from '~/Components/Button/Button';
+import Line from '~/Components/Line/Line';
 
 //hook
 import { useState } from 'react';
@@ -31,49 +32,72 @@ function ChangePasswordForm() {
 
     return (
         <div className={cx('wrapper')}>
-            <form method="" action="" className={cx('inner')}>
-                <Title className={cx('title-login')}>Change password</Title>
-                {/* <Title children={'Your password has been changed successfully'} className={cx('notification')}></Title> */}
-                <Input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder={'Enter current password'}
-                    required
-                ></Input>
+            <div className={cx('container')}>
+                <form method="" action="" className={cx('inner')}>
+                    <Title className={cx('title-login')}>Change password</Title>
+                    <div className={cx('notification-container')}>
+                        <div className={cx('notification')}>
+                            <Title children={'Your password has been changed successfully'}></Title>
+                        </div>
+                    </div>
 
-                <Input
-                    type={showPasswordNew ? 'text' : 'password'}
-                    value={passwordnew}
-                    onChange={(e) => setPasswordNew(e.target.value)}
-                    placeholder={'Enter new password'}
-                    required
-                ></Input>
-                <Input type={'password'} placeholder={'Confirm new password'} required></Input>
+                    <div className={cx('password-container')}>
+                        <div className={cx('input-line')}>
+                            <Input
+                                type={showPassword ? 'text' : 'password'}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder={'Enter current password'}
+                                required
+                            ></Input>
+                            <Line></Line>
+                        </div>
+                        <i className={cx('check')}>
+                            {showPassword ? (
+                                <FontAwesomeIcon onClick={togglePasswordVisibility} icon={faEyeLowVision} />
+                            ) : (
+                                <FontAwesomeIcon onClick={togglePasswordVisibility} icon={faEye} />
+                            )}
+                        </i>
+                    </div>
 
-                <Button type="submit" className={cx('btn')}>
-                    Change
-                </Button>
-                <Button to="/nest" className={cx('login')}>
-                    Login
-                </Button>
-            </form>
+                    <div className={cx('password-container')}>
+                        <div className={cx('input-line')}>
+                            <Input
+                                type={showPasswordNew ? 'text' : 'password'}
+                                value={passwordnew}
+                                onChange={(e) => setPasswordNew(e.target.value)}
+                                placeholder={'Enter new password'}
+                                required
+                            ></Input>
+                            <Line></Line>
+                        </div>
+                        <i className={cx('check')}>
+                            {showPasswordNew ? (
+                                <FontAwesomeIcon onClick={togglePasswordVisibilityNew} icon={faEyeLowVision} />
+                            ) : (
+                                <FontAwesomeIcon onClick={togglePasswordVisibilityNew} icon={faEye} />
+                            )}
+                        </i>
+                    </div>
+                    <div className={cx('password-container')}>
+                        <div className={cx('input-line')}>
+                            <Input type={'password'} placeholder={'Confirm new password'} required></Input>
+                            <Line></Line>
+                        </div>
+                    </div>
 
-            {showPassword ? (
-                <FontAwesomeIcon onClick={togglePasswordVisibility} className={cx('check')} icon={faEyeLowVision} />
-            ) : (
-                <FontAwesomeIcon onClick={togglePasswordVisibility} className={cx('check')} icon={faEye} />
-            )}
+                    <div className={cx('change-btn')}>
+                        <Button type="submit" loginSystemBtn>
+                            Change
+                        </Button>
+                    </div>
 
-            {showPasswordNew ? (
-                <FontAwesomeIcon
-                    onClick={togglePasswordVisibilityNew}
-                    className={cx('checknew')}
-                    icon={faEyeLowVision}
-                />
-            ) : (
-                <FontAwesomeIcon onClick={togglePasswordVisibilityNew} className={cx('checknew')} icon={faEye} />
-            )}
+                    <Button to="/nest" className={cx('login-btn')}>
+                        Login
+                    </Button>
+                </form>
+            </div>
         </div>
     );
 }

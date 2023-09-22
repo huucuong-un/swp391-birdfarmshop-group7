@@ -11,6 +11,7 @@ function Button({
     disable = false,
     leftIcon,
     add,
+    loginSystemBtn,
     editDeteleSwitch,
     children,
     className,
@@ -47,6 +48,7 @@ function Button({
         text,
         disable,
         add,
+        loginSystemBtn,
         editDeteleSwitch,
     });
     return (

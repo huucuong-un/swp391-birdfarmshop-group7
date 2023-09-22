@@ -4,6 +4,7 @@ import Input from '~/Components/Input/Input';
 import Title from '~/Components/Title/Title';
 import googleLogo from '~/Assets/image/Logo/Google.png';
 import styles from '~/Pages/UserLogin/UserLogin.module.scss';
+import Line from '~/Components/Line/Line';
 
 const cx = classNames.bind(styles);
 
@@ -12,11 +13,19 @@ function UserLogin() {
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 <form className={cx('inner')}>
-                    <Title className={cx('title')}>Login here.</Title>
+                    <Title className={cx('login-title')}>Login here.</Title>
+
+                    <div className={cx('notification-container')}>
+                        {/* <div className={cx('notification')}>
+                            <Title children={'Wrong username or password'}></Title>
+                        </div> */}
+                    </div>
 
                     <div className={cx('inner-input')}>
                         <Input placeholder="Username"></Input>
+                        <Line></Line>
                         <Input type={'password'} placeholder="Password"></Input>
+                        <Line></Line>
                     </div>
 
                     <div className={cx('checkbox-section')}>
@@ -30,7 +39,7 @@ function UserLogin() {
                         <Button className={cx('forgot')}>Forgot password</Button>
                     </div>
 
-                    <Button className={cx('login-btn')}>Login</Button>
+                    <Button loginSystemBtn>Login</Button>
                     <Title className={cx('google-title')}>Or use your account</Title>
                     <Button className={cx('google')}>
                         <img src={googleLogo} />
@@ -39,7 +48,9 @@ function UserLogin() {
 
                 <div className={cx('register')}>
                     <Title className={cx('register-title')}>Welcome to my bird farm shop</Title>
-                    <Button className={cx('register-btn')}>Register </Button>
+                    <Button className={cx('register-btn')} loginSystemBtn>
+                        Register
+                    </Button>
                 </div>
             </div>
         </div>

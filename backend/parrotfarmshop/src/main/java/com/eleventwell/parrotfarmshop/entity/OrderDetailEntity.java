@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -60,9 +61,7 @@ public class OrderDetailEntity extends BaseEntity {
 	 private ParrotEggNestEntity parrotEggNest;
 	
    
-	
-	@Column(name = "belongTo")
-	private int belongTo;
+
 	
 	
 	

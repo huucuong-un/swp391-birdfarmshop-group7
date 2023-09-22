@@ -1,13 +1,12 @@
 package com.eleventwell.parrotfarmshop.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,12 +29,16 @@ import lombok.ToString;
 @Table(name = "parrotSpeciesColor")
 public class ParrotSpeciesColorEntity extends BaseEntity {
 
-    @Column(name = "parrotSpeciesDetailPrice")
-    private Long parrotSpeciesColorPrice;
 
+    @Unsigned
+    @Column(name = "parrotSpeciesDetailPrice")
+    private Double parrotSpeciesColorPrice;
+
+    @Lob
     @Column(name = "parrotSpeciesDetailImageUrl")
     private String parrotSpeciesColorImageUrl;
 
+    @NotBlank
     @Column(name = "color")
     private String color;
 

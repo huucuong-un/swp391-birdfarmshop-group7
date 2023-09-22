@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.eleventwell.parrotfarmshop.api;
+package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
@@ -47,7 +47,7 @@ public class ParrotSpeciesAPI {
 		return parrotSpeciesService.save(model);
 	}
         @DeleteMapping(value = "")
-	public void deleteParrotSpecies(@RequestBody long[] ids) {
+	public void deleteParrotSpecies(@RequestBody Long[] ids) {
 		parrotSpeciesService.delete(ids);
 	}
 }

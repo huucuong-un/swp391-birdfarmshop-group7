@@ -9,5 +9,5 @@ public interface IParrotEggNestService {
 
     List<ParrotEggNestDTO> findAll();
     ParrotEggNestDTO save(ParrotEggNestDTO ParrotEggNestDTO);
-    void delete(long[] ids);
+    void delete(Long[] ids);
 }

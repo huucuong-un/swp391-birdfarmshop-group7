@@ -18,14 +18,14 @@ public class ParrotConverter {
         ParrotDTO dto = new ParrotDTO();
         
         dto.setId(entity.getId());
-        dto.setParrotAge(entity.getParrotAge());
+        dto.setAge(entity.getParrotAge());
         dto.setAvailabilityStatus(entity.getAvailabilityStatus());
         dto.setPregnancyStatus(entity.getPregnancyStatus());
         dto.setHealthStatus(entity.getHealthStatus());
         dto.setNumberOfChildren(entity.getNumberOfChildren());
       //  dto.setOwnerId(entity.getOwner().getId());
         // Assuming you have relationships with UserEntity, ParrotSpeciesColorEntity, and ParrotEggNestEntity
-       dto.setParrotSpeciesColorId(entity.getParrotSpeciesColor().getId());
+       dto.setColorId(entity.getParrotSpeciesColor().getId());
     //    dto.setParrotEggNestId(entity.getParrotEggNest().getId());
      
         
@@ -36,7 +36,7 @@ public class ParrotConverter {
     public ParrotEntity toEntity(ParrotDTO dto) {
         ParrotEntity entity = new ParrotEntity();
         
-        entity.setParrotAge(dto.getParrotAge());
+        entity.setParrotAge(dto.getAge());
         entity.setAvailabilityStatus(dto.getAvailabilityStatus());
         entity.setPregnancyStatus(dto.getPregnancyStatus());
         entity.setHealthStatus(dto.getHealthStatus());
@@ -50,7 +50,7 @@ public class ParrotConverter {
     }
 
     public ParrotEntity toEntity(ParrotDTO dto, ParrotEntity entity) {
-        entity.setParrotAge(dto.getParrotAge());
+        entity.setParrotAge(dto.getAge());
         entity.setAvailabilityStatus(dto.getAvailabilityStatus());
         entity.setPregnancyStatus(dto.getPregnancyStatus());
         entity.setHealthStatus(dto.getHealthStatus());

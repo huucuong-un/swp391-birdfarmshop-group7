@@ -7,7 +7,6 @@ package com.eleventwell.parrotfarmshop.dto;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
-import com.eleventwell.parrotfarmshop.entity.ReproductiveHistoryEntity;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ import lombok.ToString;
 
 public class ParrotDTO extends BaseDTO {
   
-    private int parrotAge;
+    private int age;
 
     private Boolean availabilityStatus;
 
@@ -42,8 +41,8 @@ public class ParrotDTO extends BaseDTO {
 
     private Long ownerId;
 
-    private Long parrotSpeciesColorId;
+    private Long colorId;
 
-    private Long parrotEggNestId;
+    private Long nestId;
 
 }

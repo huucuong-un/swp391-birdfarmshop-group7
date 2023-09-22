@@ -2,12 +2,12 @@
 import styles from '~/Components/ParrotList/ParrotList.module.scss';
 import classNames from 'classnames/bind';
 import Button from '~/Components/Button/Button';
-import parrot from '~/Assets/image/SelectProduct/african-grey-parrot-nature.jpg';
+import parrot from '~/Assets/image/SelectProduct/Grey-Parrot-PNG-Download-Image.png';
 
 import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faBagShopping, faCashRegister } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -134,6 +134,12 @@ function ParrotList() {
                         <div className={cx('parrot-img')}>
                             <Link onClick={() => getParrots()}>
                                 <img src={parrot.img} alt="parrot" />
+                            </Link>
+                            <Link to="/payment">
+                                <FontAwesomeIcon className={cx('buy-btn')} icon={faCashRegister} />
+                            </Link>
+                            <Link to="">
+                                <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} />
                             </Link>
                         </div>
 

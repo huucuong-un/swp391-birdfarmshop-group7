@@ -25,10 +25,10 @@ function SystemNavbar() {
                         <p>SERVICE</p>
                     </Link>
                     <Link>
-                        <p>PARROTSPECIES</p>
+                        <p>SPECIES</p>
                     </Link>
                     <Link>
-                        <p>PARROTCOLORS</p>
+                        <p>COLORS</p>
                     </Link>
                 </div>
 

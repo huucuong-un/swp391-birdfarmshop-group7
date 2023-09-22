@@ -5,6 +5,7 @@ import parrot1 from '~/Assets/image/SelectProduct/Grey-Parrot-PNG-Download-Image
 // import parrot2 from '~/Assets/image/SelectProduct/Grey-Parrot-PNG-Free-Download.png';
 import nest from '~/Assets/image/SelectProduct/nest.png';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 

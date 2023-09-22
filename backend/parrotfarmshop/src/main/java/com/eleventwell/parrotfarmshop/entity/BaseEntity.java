@@ -22,14 +22,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @Setter
 public abstract class BaseEntity {
-
-
     @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
-    @Column(name = "createdDate", updatable = false)
+    @Column(name = "created_date", updatable = false)
    @CreationTimestamp
     private Date createdDate;
 

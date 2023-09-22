@@ -29,7 +29,7 @@ public abstract class BaseEntity {
     private Long id;
 
 
-    @Column(name = "createdDate", updatable = false)
+    @Column(name = "created_date", updatable = false)
    @CreationTimestamp
     private Date createdDate;
 

@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,27 +32,27 @@ import lombok.ToString;
 @Setter
 
 @Entity
-@Table(name = "Post")
+@Table(name = "post")
 public class PostEntity extends BaseEntity {
 
 
 	@NotBlank
-	@Column(name = "postTitle")
-	private String postTitle;
+	@Column(name = "title")
+	private String title;
 
 	@NotBlank
-	@Column(name = "postContent")
-	private String postContent;
+	@Column(name = "content")
+	private String content;
 
 	@NotBlank
 	@Lob
-	@Column(name = "postImageURL")
-	private String postImageURL;
+	@Column(name = "image_url")
+	private String imageUrl;
 	
-	@Column(name = "startDate")
+	@Column(name = "start_date")
 	private String startDate;
 	
-	@Column(name = "endDate")
+	@Column(name = "end_date")
 	private String endDate;
 	
 	@Column(name = "status")

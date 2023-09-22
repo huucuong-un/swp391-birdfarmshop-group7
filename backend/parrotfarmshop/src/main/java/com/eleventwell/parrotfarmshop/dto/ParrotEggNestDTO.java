@@ -16,16 +16,15 @@ import java.util.List;
 @Setter
 public class ParrotEggNestDTO extends BaseDTO{
 
-    private String parrotEggNestStatus;
+    private String status;
 
 
     private Long orderDetailId;
 
-    private List<ParrotEntity> parrots = new ArrayList<>();
 
 
-    private Long parrotMomId;
+    private Long momId;
 
 
-    private Long parrotDadId;
+    private Long dadId;
 }

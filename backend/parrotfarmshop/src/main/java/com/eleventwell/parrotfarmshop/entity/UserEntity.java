@@ -1,13 +1,18 @@
 package com.eleventwell.parrotfarmshop.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+import jakarta.persistence.*;
+
+
+
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,25 +37,41 @@ import lombok.ToString;
 @Setter
 
 @Entity
-@Table(name = "user")
+@Table(name = "user",uniqueConstraints = {
+		@UniqueConstraint(columnNames = {
+				"username"
+		}),
+		@UniqueConstraint(columnNames = {
+				"email"
+		})
+})
 public class UserEntity extends BaseEntity {
-
+	@NotBlank
+    @Size(min=3,max=50)
 	@Column(name = "username")
 	private String userName;
 
+	@NotBlank
+	@Size(min=6,max=100)
+	@JsonIgnore
 	@Column
 	private String password;
 
+	@NotBlank
+    @Email
 	@Column(name = "email")
 	private String email;
 
+	@NotBlank
+	@Size(min=3,max=50)
 	@Column(name = "fullname")
 	private String fullName;
-	
-	@Column
-	private Integer status;
 
-	
+
+	@Column
+	private Boolean status;
+
+
 //	@OneToMany(mappedBy = "user")
 //	private List<ParrotEntity> parrots = new ArrayList<>();
 	
@@ -112,13 +133,11 @@ public class UserEntity extends BaseEntity {
 		this.fullName = fullName;
 	}
 
-	public Integer getStatus() {
+	public Boolean getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-
-
 }

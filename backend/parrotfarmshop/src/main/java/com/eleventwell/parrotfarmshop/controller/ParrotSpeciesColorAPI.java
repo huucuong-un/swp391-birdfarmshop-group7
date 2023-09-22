@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.api;
+package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
@@ -33,7 +33,7 @@ public class ParrotSpeciesColorAPI {
     }
     
     @DeleteMapping(value = "")
-    public void deleteaParrotSpeciesColor(@RequestBody long[] ids) {
+    public void deleteaParrotSpeciesColor(@RequestBody Long[] ids) {
         parrotSpeciesColorService.delete(ids);
     }
 }

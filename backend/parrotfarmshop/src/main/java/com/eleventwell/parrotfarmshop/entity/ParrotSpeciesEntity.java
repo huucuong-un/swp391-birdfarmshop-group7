@@ -1,12 +1,14 @@
 package com.eleventwell.parrotfarmshop.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,44 +27,93 @@ import lombok.ToString;
 
 
 //parrotSpeciesID:pk, parrotSpeciesName, parrotSpeciesQuantity, parrotSpeciesPrice
-//parrotSpeciesDescription, createdBy:fk, createdAt, availabilityStatus, parrotSpeciesOrigin, 
+//parrotSpeciesDescription, createdBy:fk, createdAt, availabilityStatus, parrotSpeciesOrigin,
 //parrotSpeciesAverageWeight, averageRating
 @Entity
 @Table(name = "parrotSpecies")
 public class ParrotSpeciesEntity extends BaseEntity{
-	@Column(name = "parrotSpeciesName")
-	private String parrotSpeciesName;
-	
-	@Column(name = "parrotSpeciesQuantity")
-	private Long parrotSpeciesQuantity;
-	
-	@Column(name = "parrotSpeciesNestQuantity")
-	private Long parrotSpeciesNestQuantity;
-	
-	@Column(name = "parrotSpeciesDescription")
-	private String parrotSpeciesDescription;
 
-	@Column(name = "availabilityStatus")
+
+	// Đổi tên cột để phù hợp với quy tắc đặt tên
+	@NotBlank
+	@Size(max = 30)
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "quantity")
+	private Long quantity;
+
+	@Column(name = "nest_quantity")
+	private Long nestQuantity;
+
+	@NotBlank
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "availability_status")
 	private Boolean availabilityStatus;
-	
-	@Column(name = "parrotSpeciesOrigin")
-	private String parrotSpeciesOrigin;
-	
-	@Column(name = "parrotSpeciesAverageWeight")
-	private Double parrotSpeciesAverageWeight;
-	
-	@Column(name = "parrotAverageRating")
+
+	@NotBlank
+	@Size(max = 20)
+	@Column(name = "origin")
+	private String origin;
+
+	@Column(name = "average_weight")
+	private Double averageWeight;
+
+	@Column(name = "parrot_average_rating")
 	private Double parrotAverageRating;
-	
-	@Column(name = "nestAverageRating")
+
+	@Column(name = "nest_average_rating")
 	private Double nestAverageRating;
-	
 
-	
-@OneToMany(mappedBy = "parrotSpecies")
-private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 
-@OneToMany(mappedBy = "parrotSpecies")
-private List<FeedbackEntity> feedbacks = new ArrayList<>();
-	
+	@OneToMany(mappedBy = "parrotSpecies")
+	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
+
+	@OneToMany(mappedBy = "parrotSpecies")
+	private List<FeedbackEntity> feedbacks = new ArrayList<>();
+//	@NotBlank
+//	@Size(max=30)
+//	@Column(name = "parrotSpeciesName")
+//	private String parrotSpeciesName;
+//
+//	@Unsigned
+//	@Column(name = "parrotSpeciesQuantity")
+//	private Long parrotSpeciesQuantity;
+//
+//	@Unsigned
+//	@Column(name = "parrotSpeciesNestQuantity")
+//	private Long parrotSpeciesNestQuantity;
+//
+//	@NotBlank
+//	@Column(name = "parrotSpeciesDescription")
+//	private String parrotSpeciesDescription;
+//
+//	@Column(name = "availabilityStatus")
+//	private Boolean availabilityStatus;
+//
+//
+//	@NotBlank
+//	@Size(max=20)
+//	@Column(name = "parrotSpeciesOrigin")
+//	private String parrotSpeciesOrigin;
+//
+//	@NotBlank
+//	@Unsigned
+//	@Column(name = "parrotSpeciesAverageWeight")
+//	private Double parrotSpeciesAverageWeight;
+//
+//	@Unsigned
+//	@Column(name = "parrotAverageRating")
+//	private Double parrotAverageRating;
+//
+//	@Unsigned
+//	@Column(name = "nestAverageRating")
+//	private Double nestAverageRating;
+
+
+
+
+
 }

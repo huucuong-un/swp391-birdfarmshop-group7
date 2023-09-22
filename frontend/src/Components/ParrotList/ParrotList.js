@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faBagShopping, faCashRegister } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -95,13 +96,43 @@ function ParrotList() {
         setColor(color);
     };
 
+    /*
+       
+     
+    const response = await axios.get('/api/parrot-species');
+    const data = response.data;
+
+    // Equivalent using destructuring assignment
+    const { data } = await axios.get('/api/parrot-species');
+
+    */
+
+    // response will conclude:
+    // {
+    //     data: {/* Response data */},
+    //     status: 200,
+    //      statusText: "OK",
+    //     headers: {/* Response headers */},
+    //     config: {/* Request configuration */},
+    //     request: {/* XMLHttpRequest or ClientRequest */}
+    // }
+
+    const getParrots = async () => {
+        try {
+            const { data } = await axios.get('/api/parrot-species');
+            console.log(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             {PARROT_ITEMS.map((parrot, index) => {
                 return (
                     <Link className={cx('parrot-card')} key={index}>
                         <div className={cx('parrot-img')}>
-                            <Link>
+                            <Link onClick={() => getParrots()}>
                                 <img src={parrot.img} alt="parrot" />
                             </Link>
                             <Link to="/payment">

@@ -14,11 +14,11 @@ public class ParrotEggNestConverter {
 
         dto.setId(entity.getId());
         //dto.setOrderDetailId(entity.getOrderDetail().getId());
-        dto.setParrots(entity.getParrots());
+//        dto.setParrots(entity.getParrots());
         dto.setCreatedDate(entity.getCreatedDate());
-        dto.setParrotMomId(entity.getParrotMom().getId());
-        dto.setParrotDadId(entity.getParrotDad().getId());
-        dto.setParrotEggNestStatus(entity.getParrotEggNestStatus());
+        dto.setMomId(entity.getParrotMom().getId());
+        dto.setDadId(entity.getParrotDad().getId());
+        dto.setStatus(entity.getParrotEggNestStatus());
 
         return dto;
     }
@@ -29,11 +29,11 @@ public class ParrotEggNestConverter {
 
         entity.setId(dto.getId());
 //        entity.setOrderDetail(dto.getOrderDetailId()); not convert here, it will be convert in IParrotEggNestService
-        entity.setParrots(dto.getParrots());
+//        entity.setParrots(dto.getParrots());
         entity.setCreatedDate(dto.getCreatedDate());
 //        entity.setParrotMom(dto.getParrotMomId()); not convert here, it will be convert in IParrotEggNestService
 //        entity.setParrotDad(dto.getParrotDadId()); not convert here, it will be convert in IParrotEggNestService
-        entity.setParrotEggNestStatus(dto.getParrotEggNestStatus());
+        entity.setParrotEggNestStatus(dto.getStatus());
 
         return entity;
     }
@@ -42,11 +42,11 @@ public class ParrotEggNestConverter {
     public ParrotEggNestEntity toEntity(ParrotEggNestDTO dto, ParrotEggNestEntity entity) {
         entity.setId(dto.getId());
 //        entity.setOrderDetail(dto.getOrderDetailId()); not convert here, it will be convert in IParrotEggNestService
-        entity.setParrots(dto.getParrots());
+    //    entity.setParrots(dto.getParrots());
         entity.setCreatedDate(dto.getCreatedDate());
 //        entity.setParrotMom(dto.getParrotMomId()); not convert here, it will be convert in IParrotEggNestService
 //        entity.setParrotDad(dto.getParrotDadId()); not convert here, it will be convert in IParrotEggNestService
-        entity.setParrotEggNestStatus(dto.getParrotEggNestStatus());
+        entity.setParrotEggNestStatus(dto.getStatus());
 
 
 

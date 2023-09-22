@@ -9,7 +9,7 @@ function Title({ children, className, system, ...passProps }) {
         ...passProps,
     };
 
-    const classes = cx('title', { className, system });
+    const classes = cx('title', { [className]: className, system });
     return (
         <h1 className={classes} {...props}>
             {children}

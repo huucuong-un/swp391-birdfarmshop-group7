@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ParrotEggNestRepository extends JpaRepository<ParrotEggNestEntity, Long> {
     ParrotEggNestEntity findOneById(Long id);
+
 }

@@ -6,6 +6,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,18 +33,19 @@ import lombok.ToString;
 @Entity
 @Table(name = "role")
 public class RoleEntity extends BaseEntity {
-	
-	@Column(name ="roleID")
-	private String roleID;
-	
+
+	@NotBlank
+	@Size(max=30)
 	@Column(name ="roleName")
 	private String roleName;
-	
-	@Column(name ="Description")
-	private String Description;
+
+	@NotBlank
+	@Column(name ="description")
+	private String description;
 	
 	@OneToMany(mappedBy = "role")
     private List<UserEntity> users = new ArrayList<>();
 
-	
+	@Column(name ="status")
+	private Boolean status;
 }

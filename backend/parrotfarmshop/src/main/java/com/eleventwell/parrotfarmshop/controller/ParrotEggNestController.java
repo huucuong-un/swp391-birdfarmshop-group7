@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.api;
+package com.eleventwell.parrotfarmshop.controller;
 
 
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/parrot-egg-nest")
-public class ParrotEggNestAPI {
+public class ParrotEggNestController {
     @Autowired
     private IParrotEggNestService parrotEggNestService;
 
@@ -36,7 +36,7 @@ public class ParrotEggNestAPI {
     }
 
     @DeleteMapping(value = "")
-    public void deleteParrotEggNest(@RequestBody long [] ids){
+    public void deleteParrotEggNest(@RequestBody Long [] ids){
         parrotEggNestService.delete(ids);
     }
 }

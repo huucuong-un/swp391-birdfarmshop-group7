@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,16 +25,18 @@ import lombok.ToString;
 @Setter
 @Entity
 
-@Table(name = "deliveryInformation")
+@Table(name = "delivery_information")
 public class DeliveryInformationEntity extends BaseEntity {
 
+	@NotBlank
 	@Column(name = "name")
 	private String name;
 	
-	
-	@Column(name = "phoneNumber")
+	@NotBlank
+	@Column(name = "phone_number")
 	private String phoneNumber;
-	
+
+	@NotBlank
 	@Column(name = "address")
 	private String address;
 	

@@ -23,8 +23,8 @@
     padding: 5px 15px;
     border-radius: 30px;
     font-weight: 700;
-    background-color: var(--black);
-    color: var(--text-color-nav);
+    background-color: var(--black-old);
+    color: var(--white);
 
     &:hover {
         opacity: 0.9;
@@ -32,13 +32,28 @@
 }
 
 .editDeteleSwitch {
-    background-color: var(--black);
-    color: var(--text-color-nav);
+    background-color: var(--black-old);
+    color: var(--white);
     font-weight: 700;
     padding: 0 10px;
     min-width: 80px;
     border-radius: 30px;
 
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.loginSystemBtn {
+    width: 45%;
+    padding: 20px 5px;
+    border-radius: 12px;
+    margin: 10px 0;
+    color: var(--text-color-input);
+    background-color: var(--black);
+    color: white;
+    font-weight: bold;
+    overflow: hidden;
     &:hover {
         opacity: 0.8;
     }

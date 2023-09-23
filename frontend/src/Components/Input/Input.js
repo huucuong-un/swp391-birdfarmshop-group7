@@ -11,7 +11,6 @@ function Input({ placeholder, type, ...passProps }) {
     return (
         <div className={cx('wrapper')}>
             <input className={cx('input')} placeholder={placeholder} type={type} {...props}></input>
-            <i className={cx('line')}></i>
         </div>
     );
 }

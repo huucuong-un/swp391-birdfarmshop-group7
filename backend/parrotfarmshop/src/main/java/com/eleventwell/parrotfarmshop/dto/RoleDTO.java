@@ -14,13 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 public class RoleDTO extends BaseDTO{
-
-
-
-    private String roleName;
-
+    private String name;
     private String description;
-
     private Boolean status;
     //private List<UserEntity> users = new ArrayList<>();
 

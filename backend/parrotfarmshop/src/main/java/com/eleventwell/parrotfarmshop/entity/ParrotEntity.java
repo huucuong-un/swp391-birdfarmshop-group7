@@ -16,6 +16,8 @@ import jakarta.persistence.Table;
  */
 import java.util.ArrayList;
 import java.util.List;
+
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,9 +39,10 @@ import lombok.ToString;
 public class ParrotEntity extends BaseEntity {
 
    
-
+@Unsigned
     @Column(name = "parrotAge")
     private int parrotAge;
+
 
     @Column(name = "availabilityStatus")
     private Boolean availabilityStatus;
@@ -50,6 +53,7 @@ public class ParrotEntity extends BaseEntity {
     @Column(name = "healthStatus")
     private Boolean healthStatus;
 
+    @Unsigned
     @Column(name = "numberOfChildren")
     private Long numberOfChildren;
 
@@ -80,13 +84,13 @@ public class ParrotEntity extends BaseEntity {
 //	
 //	
 
-    @OneToMany(mappedBy = "parrot")
-    private List<ReproductiveHistoryEntity> reproductiveHistories = new ArrayList<>();
-
-    @OneToMany(mappedBy = "parrotMom")
-    private List<ParrotEggNestEntity> parrotMomInNests = new ArrayList<>();
-
-    @OneToMany(mappedBy = "parrotDad")
-    private List<ParrotEggNestEntity> parrotDadInNests = new ArrayList<>();
+//    @OneToMany(mappedBy = "parrot")
+//    private List<ReproductiveHistoryEntity> reproductiveHistories = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "parrotMom")
+//    private List<ParrotEggNestEntity> parrotMomInNests = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "parrotDad")
+//    private List<ParrotEggNestEntity> parrotDadInNests = new ArrayList<>();
 
 }

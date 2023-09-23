@@ -6,13 +6,12 @@ import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/Components/Popper';
 
 //assets
-import logo from '~/Assets/image/Logo/11-TWELL.png';
+import logo from '~/Assets/image/Logo/2(5).png';
 
 //fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/Components/Button/Button';
-import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -76,10 +75,18 @@ function Navbar() {
                     </div>
                     <img className={cx('logo')} src={logo} alt="Logo" />
                     <div className={cx('active-right')}>
-                        <Button text leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}>
+                        <Button
+                            text
+                            className={cx('language-anf-cart')}
+                            leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
+                        >
                             Language
                         </Button>
-                        <Button text leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}>
+                        <Button
+                            text
+                            className={cx('language-anf-cart')}
+                            leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
+                        >
                             Cart
                         </Button>
                     </div>

@@ -7,6 +7,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,7 +39,8 @@ public class OrderEntity extends BaseEntity {
 	@ManyToOne
     @JoinColumn(name = "userID")
     private UserEntity user;
-	
+
+	@NotBlank
 	@Column(name = "address")
 	private String address;
 	

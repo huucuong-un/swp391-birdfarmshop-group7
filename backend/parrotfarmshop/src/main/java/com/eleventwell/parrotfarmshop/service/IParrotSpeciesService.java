@@ -14,5 +14,5 @@ import java.util.List;
 public interface IParrotSpeciesService {
     List<ParrotSpeciesDTO> findAll();
     ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO);
-    void delete(long[] ids);
+    void delete(Long[] ids);
 }

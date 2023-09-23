@@ -11,6 +11,7 @@ import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.service.IParrotService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,30 +49,27 @@ public class ParrotService implements IParrotService{
 
     @Override
     public ParrotDTO save(ParrotDTO parrotDTO) {
-     ParrotEntity parrotEntity = new ParrotEntity();
-     
-     if(parrotDTO.getId() != null){
-         ParrotEntity oldEntity = parrotRepository.findOneById(parrotDTO.getId());
-         parrotEntity = parrotConverter.toEntity(parrotDTO, oldEntity);
-         
-         
-     }else{
-         parrotEntity =parrotConverter.toEntity(parrotDTO);
-     }
-     parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getParrotSpeciesColorId()));
-  // parrotEntity.setOwner();
-  //parrotEntity.setParrotEggNest(parrotEggNest);
-  parrotRepository.save(parrotEntity);
-  return parrotConverter.toDTO(parrotEntity);
+        ParrotEntity parrotEntity = new ParrotEntity();
+
+        if (parrotDTO.getId() != null) {
+            ParrotEntity oldEntity = parrotRepository.findOneById(parrotDTO.getId());
+            parrotEntity = parrotConverter.toEntity(parrotDTO, oldEntity);
+
+
+        } else {
+            parrotEntity = parrotConverter.toEntity(parrotDTO);
+        }
+        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getColorId()));
+        // parrotEntity.setOwner();
+        //parrotEntity.setParrotEggNest(parrotEggNest);
+        parrotRepository.save(parrotEntity);
+        return parrotConverter.toDTO(parrotEntity);
     }
 
     @Override
-    public void delete(long[] ids) {
-       
-          for (long id : ids) {
-            parrotRepository.deleteById(id);
-        }
-
+    public void delete(Long[] ids) {
+        List<Long> idList = Arrays.asList(ids);
+        parrotRepository.deleteAllById((idList));
     }
     
 }

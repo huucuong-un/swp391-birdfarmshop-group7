@@ -21,31 +21,23 @@ import lombok.ToString;
 @Getter
 @Setter
 public class ParrotSpeciesDTO extends BaseDTO {
-   
-	private String parrotSpeciesName;
-	
 
-	private Long parrotSpeciesQuantity;
-	
-	
-	private Long parrotSpeciesNestQuantity;
-		
-	
-	private String parrotSpeciesDescription;
+	private String name;
 
-	
+	private Long quantity;
+
+	private Long nestQuantity;
+
+	private String description;
+
 	private Boolean availabilityStatus;
-	
-	
-	private String parrotSpeciesOrigin;
-	
-	
-	private Double parrotSpeciesAverageWeight;
-	
-	
+
+	private String origin;
+
+	private Double averageWeight;
+
 	private Double parrotAverageRating;
-	
-	
+
 	private Double nestAverageRating;
 	
 }

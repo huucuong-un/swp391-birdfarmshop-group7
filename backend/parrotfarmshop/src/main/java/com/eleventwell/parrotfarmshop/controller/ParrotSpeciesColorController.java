@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.api;
+package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/parrot-species-color")
-public class ParrotSpeciesColorAPI {
+public class ParrotSpeciesColorController {
     @Autowired
     private IParrotSpeciesColorService parrotSpeciesColorService;
     
@@ -33,7 +33,7 @@ public class ParrotSpeciesColorAPI {
     }
     
     @DeleteMapping(value = "")
-    public void deleteaParrotSpeciesColor(@RequestBody long[] ids) {
+    public void deleteaParrotSpeciesColor(@RequestBody Long[] ids) {
         parrotSpeciesColorService.delete(ids);
     }
 }

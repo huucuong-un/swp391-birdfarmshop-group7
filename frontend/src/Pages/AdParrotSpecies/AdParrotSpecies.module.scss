@@ -22,7 +22,7 @@
 .sort-space-form input {
     padding: 0 3px;
     max-width: 140px;
-    font-weight: 700;
+    font-weight: 600;
     border: 2px solid var(--black);
     border-radius: 6px;
 }
@@ -30,7 +30,7 @@
 .sort-space-form select {
     border: 2px solid var(--black);
     border-radius: 6px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .content {
@@ -40,8 +40,8 @@
 }
 
 thead {
-    background-color: var(--black);
-    color: var(--text-color-nav);
+    background-color: var(--black-old);
+    color: var(--white);
 }
 
 thead tr th {

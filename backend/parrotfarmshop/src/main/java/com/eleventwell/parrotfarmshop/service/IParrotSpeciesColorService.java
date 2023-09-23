@@ -15,5 +15,5 @@ import java.util.List;
 public interface IParrotSpeciesColorService {
      List<ParrotSpeciesColorDTO> findAll();
     ParrotSpeciesColorDTO save(ParrotSpeciesColorDTO parrotSpeciesColorDTO);
-    void delete(long[] ids);
+    void delete(Long[] ids);
 }

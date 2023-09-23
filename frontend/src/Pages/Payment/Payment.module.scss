@@ -1,0 +1,164 @@
+p {
+    margin: 0;
+}
+
+.wrapper {
+    width: 100%;
+}
+
+.payment {
+    display: flex;
+}
+
+.payment-method {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px;
+    border-right: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.payment-method-title {
+    color: var(--black);
+}
+
+.payment-method-title p {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.payment-method-item-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.payment-method-item {
+    background-color: var(--btn-color);
+    color: var(--white);
+    text-align: center;
+    caret-color: transparent;
+    min-width: 200px;
+    margin: 0 10px;
+    padding: 5px 0;
+    border-radius: 15px;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.payment-method-input-container {
+    width: 100%;
+    padding: 0 15px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.payment-method-input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.payment-method-input p {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.payment-method-input input {
+    border: 1px solid #ccc;
+    padding: 10px 2%;
+}
+
+.pay-btn {
+    background-color: var(--btn-color);
+    color: var(--white);
+    padding: 5px 171px;
+    border-radius: 15px;
+    margin: 20px 0;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+//payment-detail
+
+.payment-detail {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+}
+
+.payment-detail-items {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+}
+.payment-detail-items p {
+    font-weight: 600;
+}
+
+.payment-detail-items-img {
+    width: 8%;
+}
+
+.payment-detail-items-img img {
+    width: 100%;
+}
+
+.payment-detail-promotions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.payment-detail-promotions input {
+    border: 1px solid #ccc;
+    min-width: 235px;
+    padding: 10px 2%;
+}
+
+.payment-detail-promotions button {
+    background-color: var(--btn-color);
+    color: var(--white);
+    padding: 0 20px;
+    border-radius: 15px;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.payment-detail-money {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-detail-money-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.payment-detail-money-item-title {
+    min-width: 170px;
+}
+
+.payment-detail-money-item-price {
+    font-weight: 600;
+}
+
+.bold {
+    font-weight: 600;
+}

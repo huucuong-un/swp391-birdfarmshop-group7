@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.api;
+package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/role")
-public class RoleAPI {
+public class RoleController {
     @Autowired
     private IRoleService roleService;
 

@@ -4,7 +4,8 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
+import com.eleventwell.parrotfarmshop.converter.Converter;
+//import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
@@ -31,7 +32,7 @@ public class ParrotService implements IParrotService{
    private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
       
       @Autowired
-      private ParrotConverter parrotConverter;
+      private Converter parrotConverter;
       
     
     @Override
@@ -40,7 +41,8 @@ public class ParrotService implements IParrotService{
        List<ParrotEntity> entities = parrotRepository.findAll();
        
         for (ParrotEntity entity : entities) {
-            result.add(parrotConverter.toDTO(entity));
+            ParrotDTO dto = (ParrotDTO) parrotConverter.toDTO(entity, ParrotDTO.class);
+            result.add(dto);
             
         }
        
@@ -53,17 +55,17 @@ public class ParrotService implements IParrotService{
 
         if (parrotDTO.getId() != null) {
             ParrotEntity oldEntity = parrotRepository.findOneById(parrotDTO.getId());
-            parrotEntity = parrotConverter.toEntity(parrotDTO, oldEntity);
+            parrotEntity = (ParrotEntity) parrotConverter.toEntity(parrotDTO, ParrotEntity.class);
 
 
         } else {
-            parrotEntity = parrotConverter.toEntity(parrotDTO);
+            parrotEntity = (ParrotEntity) parrotConverter.toEntity(parrotDTO, ParrotEntity.class);
         }
-        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getColorId()));
+        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getColorID()));
         // parrotEntity.setOwner();
         //parrotEntity.setParrotEggNest(parrotEggNest);
         parrotRepository.save(parrotEntity);
-        return parrotConverter.toDTO(parrotEntity);
+        return (ParrotDTO) parrotConverter.toDTO(parrotEntity, ParrotDTO.class);
     }
 
     @Override

@@ -1,6 +1,6 @@
 .wrapper {
     width: 100%;
-    background-color: var(--black);
+    background-color: #f9ede9;
     min-height: 190px;
     display: flex;
     align-items: center;
@@ -27,6 +27,7 @@
 
     a {
         color: var(--text-color-nav);
+        font-weight: 500;
 
         &:hover {
             text-decoration: underline;

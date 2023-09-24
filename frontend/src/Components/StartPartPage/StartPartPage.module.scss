@@ -7,7 +7,7 @@
 
 .inner {
     width: 100%;
-    border-bottom: 3px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 .page-title {
@@ -16,4 +16,8 @@
 
 .product-quantity {
     padding-top: 10px;
+}
+
+.payment {
+    display: none;
 }

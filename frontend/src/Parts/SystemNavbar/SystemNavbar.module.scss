@@ -1,7 +1,7 @@
 .wrapper {
     max-width: 200px;
-    background-color: var(--black);
-    color: var(--text-color-nav);
+    background-color: var(--black-old);
+    color: var(--white);
     min-height: 882px;
 }
 
@@ -22,9 +22,9 @@
     width: 100%;
 
     a {
-        color: var(--text-color-nav);
+        color: var(--white);
         font-size: 1.8rem;
-        font-weight: 700;
+        font-weight: 500;
         width: 100%;
 
         p {
@@ -37,6 +37,7 @@
 
         &:hover {
             color: var(--black);
+            font-weight: 700;
         }
     }
 }
@@ -50,7 +51,7 @@
 
 .out-btn-icon {
     background-color: transparent;
-    color: var(--text-color-nav);
+    color: var(--white);
     font-weight: 700;
 
     &:hover {

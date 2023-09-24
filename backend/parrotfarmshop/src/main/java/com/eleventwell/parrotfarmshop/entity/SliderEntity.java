@@ -28,18 +28,18 @@ import lombok.ToString;
 //CreatedAt
 //#CreatedBy
 @Entity
-@Table(name = "Slider")
+@Table(name = "slider")
 public class SliderEntity extends BaseEntity {
 
 
 	@NotBlank
 	@Size(max=100)
-	@Column(name = "SliderName")
+	@Column(name = "slider_name")
 	private String SliderName;
 
 	@NotBlank
 	@Lob
-	@Column(name = "SliderImageURL")
+	@Column(name = "slider_imageURL")
 	private String SliderImageURL;
 	
 	

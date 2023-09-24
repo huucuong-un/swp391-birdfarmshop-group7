@@ -12,8 +12,9 @@
 .select {
     border: 2px solid var(--black);
     border-radius: 20px;
-    min-width: 150px;
+    max-width: 150px;
     text-align: center;
+    padding: 0 5px;
 }
 
 .search {

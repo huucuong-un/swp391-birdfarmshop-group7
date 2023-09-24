@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IOrderDetailService {
 
-//    public OrderDetailDTO saveOrderDetail(Long orderId, Long parrotId, Long nestId);
+    public OrderDetailDTO saveOrderDetail(Long orderId, Long parrotId, Long nestId);
 
 }

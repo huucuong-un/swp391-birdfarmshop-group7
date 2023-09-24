@@ -9,6 +9,7 @@ import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import com.eleventwell.parrotfarmshop.service.IParrotEggNestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ParrotEggNestService implements IParrotEggNestService {
+public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
 
     @Autowired
     private ParrotRepository parrotRepository;
@@ -62,7 +63,7 @@ public class ParrotEggNestService implements IParrotEggNestService {
 
 
     @Override
-    public void delete(Long[] ids) {
+    public void changeStatus(Long ids) {
         List<Long> idList = Arrays.asList(ids);
         parrotEggNestRepository.deleteAllById((idList));
     }

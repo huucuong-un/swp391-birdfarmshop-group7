@@ -60,5 +60,4 @@ public class PostEntity extends BaseEntity {
 	
 
 	
-	
 }

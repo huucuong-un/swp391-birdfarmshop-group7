@@ -18,13 +18,16 @@ import jakarta.validation.constraints.NotBlank;
 public class FAQEntity extends BaseEntity {
 
     @NotBlank
-    @Column(name = "FAQs_title")
-    private String FAQTitle;
+    @Column(name = "title")
+    private String title;
 
     @NotBlank
-    @Column(name = "FAQs_content")
-    private String FAQContent;
+    @Column(name = "content")
+    private String content;
 
+    @NotBlank
+    @Column(name = "status")
+    private String status;
 
 
 }

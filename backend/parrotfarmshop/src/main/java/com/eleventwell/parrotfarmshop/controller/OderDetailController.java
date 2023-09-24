@@ -16,13 +16,7 @@ import java.util.List;
 @RequestMapping(value = "/api/orderdetail")
 public class OderDetailController {
 
-    @Autowired
-    OrderDetailService orderDetailService;
 
-    @GetMapping(value= "")
-    public ListOutput showOrderDetail(){
-        ListOutput result = new ListOutput();
-        result.setListResult(orderDetailService.findAll());
-        return  result;
-    }
+
+
 }

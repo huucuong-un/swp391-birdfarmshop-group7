@@ -24,6 +24,7 @@ public class ParrotSpeciesColorDTO extends BaseDTO {
     private Double price;
     private String imageUrl;
     private String color;
+    private Boolean status;
     private long speciesID; // This field represents the ID of the related ParrotSpeciesEntity
 
     

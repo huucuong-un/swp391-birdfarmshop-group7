@@ -31,20 +31,24 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
 
 
     @Unsigned
-    @Column(name = "parrotSpeciesDetailPrice")
-    private Double parrotSpeciesColorPrice;
+    @Column(name = "price")
+    private Double price;
 
     @Lob
-    @Column(name = "parrotSpeciesDetailImageUrl")
-    private String parrotSpeciesColorImageUrl;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @NotBlank
     @Column(name = "color")
     private String color;
 
+
+    @Column(name = "status")
+    private Boolean status;
+
     
     @ManyToOne
-    @JoinColumn(name = "parrotSpeciesID")
+    @JoinColumn(name = "species_ID")
     private ParrotSpeciesEntity parrotSpecies;
 
 

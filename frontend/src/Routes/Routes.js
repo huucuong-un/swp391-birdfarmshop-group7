@@ -8,7 +8,8 @@ import LoginSystemLayout from '~/Components/LoginSystemLayout/LoginSystemLayout'
 import SystemLogin from '~/Pages/SystemLogin/SystemLogin';
 import Payment from '~/Pages/Payment/Payment';
 import UserLogin from '~/Pages/UserLogin/UserLogin';
-
+import OrderHistory from '~/Pages/OrderHistory/OrderHistory';
+import FAQs from '~/Pages/FAQs/FAQs';
 import Register from '~/Pages/Register/Register';
 
 import ParrotDetail from '~/Pages/ParrotDetail/ParrotDetail';
@@ -25,6 +26,8 @@ const publicRoutes = [
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/parrotdetail', component: ParrotDetail },
+    { path: '/orderhistory', component: OrderHistory },
+    { path: '/faq', component: FAQs },
 ];
 
 //Dành cho những người đăng nhập mới coi được

@@ -40,37 +40,40 @@ public class ParrotEntity extends BaseEntity {
 
    
 @Unsigned
-    @Column(name = "parrotAge")
-    private int parrotAge;
+    @Column(name = "age")
+    private int age;
 
 
-    @Column(name = "availabilityStatus")
-    private Boolean availabilityStatus;
+    @Column(name = "status")
+    private Boolean status;
 
-    @Column(name = "pregnancyStatus")
+    @Column(name = "pregnancy_status")
     private Boolean pregnancyStatus;
 
-    @Column(name = "healthStatus")
+    @Column(name = "health_status")
     private Boolean healthStatus;
 
+    @Column(name = "sale_status")
+    private Boolean saleStatus;
+
     @Unsigned
-    @Column(name = "numberOfChildren")
+    @Column(name = "number_of_children")
     private Long numberOfChildren;
 
     
     
       @ManyToOne
-    @JoinColumn(name = "ownerID")
+    @JoinColumn(name = "owner_Id")
     private UserEntity owner;
 
 //	
 //	
     @ManyToOne
-    @JoinColumn(name = "parrotSpeciesDetailID")
+    @JoinColumn(name = "color_ID")
     private ParrotSpeciesColorEntity parrotSpeciesColor;
 
     @ManyToOne
-    @JoinColumn(name = "parrotEggNestID")
+    @JoinColumn(name = "nest_ID")
     private ParrotEggNestEntity parrotEggNest;
 
 //    @OneToOne(mappedBy = "parrot")

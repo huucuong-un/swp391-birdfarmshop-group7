@@ -16,7 +16,7 @@ function AdParrotSpecies() {
 
             <div className={cx('active')}>
                 <div className={cx('add-btn')}>
-                    <Button to="" add>
+                    <Button to="/add-parrot-species" add>
                         Add
                     </Button>
                 </div>

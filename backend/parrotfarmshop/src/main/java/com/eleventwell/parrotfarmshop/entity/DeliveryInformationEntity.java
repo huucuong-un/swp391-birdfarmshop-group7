@@ -25,7 +25,7 @@ import lombok.ToString;
 @Setter
 @Entity
 
-@Table(name = "deliveryInformation")
+@Table(name = "delivery_information")
 public class DeliveryInformationEntity extends BaseEntity {
 
 	@NotBlank
@@ -33,7 +33,7 @@ public class DeliveryInformationEntity extends BaseEntity {
 	private String name;
 	
 	@NotBlank
-	@Column(name = "phoneNumber")
+	@Column(name = "phone_number")
 	private String phoneNumber;
 
 	@NotBlank

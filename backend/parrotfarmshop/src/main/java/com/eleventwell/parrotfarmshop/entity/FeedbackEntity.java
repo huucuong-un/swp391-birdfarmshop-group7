@@ -31,15 +31,15 @@ import lombok.ToString;
 public class FeedbackEntity extends BaseEntity {
 
 	@NotBlank
-	@Column(name = "feedbackContent")
+	@Column(name = "feedback_content")
 	private String feedbackContent;
 	
 	@Unsigned
-	@Column(name = "feedbackRating")
+	@Column(name = "feedback_rating")
 	private Integer feedbackRating;
 
 	@Unsigned
-	@Column(name = "belongTo")
+	@Column(name = "belong_to")
 	private Integer belongTo;
 	
 	@ManyToOne

@@ -4,15 +4,18 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
+//import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
-import com.eleventwell.parrotfarmshop.service.IParrotService;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,7 @@ import org.springframework.stereotype.Service;
  * @author Admin
  */
 @Service
-public class ParrotService implements IParrotService{
+public class ParrotService implements IGenericService<ParrotDTO> {
 
     
       @Autowired
@@ -31,7 +34,7 @@ public class ParrotService implements IParrotService{
    private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
       
       @Autowired
-      private ParrotConverter parrotConverter;
+      private GenericConverter parrotConverter;
       
     
     @Override
@@ -40,7 +43,8 @@ public class ParrotService implements IParrotService{
        List<ParrotEntity> entities = parrotRepository.findAll();
        
         for (ParrotEntity entity : entities) {
-            result.add(parrotConverter.toDTO(entity));
+            ParrotDTO dto = (ParrotDTO) parrotConverter.toDTO(entity, ParrotDTO.class);
+            result.add(dto);
             
         }
        
@@ -53,23 +57,29 @@ public class ParrotService implements IParrotService{
 
         if (parrotDTO.getId() != null) {
             ParrotEntity oldEntity = parrotRepository.findOneById(parrotDTO.getId());
-            parrotEntity = parrotConverter.toEntity(parrotDTO, oldEntity);
+            parrotEntity = (ParrotEntity) parrotConverter.toEntity(parrotDTO, ParrotEntity.class);
 
 
         } else {
-            parrotEntity = parrotConverter.toEntity(parrotDTO);
+            parrotEntity = (ParrotEntity) parrotConverter.toEntity(parrotDTO, ParrotEntity.class);
         }
-        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getColorId()));
+        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getColorID()));
         // parrotEntity.setOwner();
         //parrotEntity.setParrotEggNest(parrotEggNest);
         parrotRepository.save(parrotEntity);
-        return parrotConverter.toDTO(parrotEntity);
+        return (ParrotDTO) parrotConverter.toDTO(parrotEntity, ParrotDTO.class);
     }
 
     @Override
-    public void delete(Long[] ids) {
-        List<Long> idList = Arrays.asList(ids);
-        parrotRepository.deleteAllById((idList));
+    public void changeStatus(Long ids) {
+
     }
+
+    public void changeSaleStatus(Long id){
+        ParrotEntity entity = parrotRepository.findOneById(id);
+        entity.setSaleStatus(true);
+        parrotRepository.save(entity);
+    }
+
     
 }

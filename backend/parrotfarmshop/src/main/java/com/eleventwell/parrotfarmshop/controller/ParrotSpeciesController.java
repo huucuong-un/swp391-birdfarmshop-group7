@@ -6,7 +6,8 @@ package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
-import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
+//import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/parrot-species")
-public class ParrotSpeciesAPI {
+public class ParrotSpeciesController {
     @Autowired
-    private IParrotSpeciesService parrotSpeciesService;
+    private IGenericService parrotSpeciesService;
     
     @GetMapping(value = "") 
     public List<ParrotSpeciesDTO> showParrotSpecies() {
@@ -39,15 +40,15 @@ public class ParrotSpeciesAPI {
     }
     @PostMapping(value = "")
 	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
-		return parrotSpeciesService.save(model);
+		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
 	}
         @PutMapping(value = "{id}")
 	public ParrotSpeciesDTO updateParrotSpecies(@RequestBody ParrotSpeciesDTO model, @PathVariable("id") long id) {
 		model.setId(id);
-		return parrotSpeciesService.save(model);
+		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
 	}
         @DeleteMapping(value = "")
-	public void deleteParrotSpecies(@RequestBody Long[] ids) {
-		parrotSpeciesService.delete(ids);
+	public void deleteParrotSpecies(@RequestBody Long ids) {
+		parrotSpeciesService.changeStatus(ids);
 	}
 }

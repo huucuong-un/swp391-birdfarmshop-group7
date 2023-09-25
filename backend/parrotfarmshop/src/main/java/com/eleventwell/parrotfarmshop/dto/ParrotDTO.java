@@ -31,7 +31,9 @@ public class ParrotDTO extends BaseDTO {
   
     private int age;
 
-    private Boolean availabilityStatus;
+    private Boolean status;
+
+    private Boolean saleStatus;
 
     private Boolean pregnancyStatus;
 
@@ -39,10 +41,10 @@ public class ParrotDTO extends BaseDTO {
 
     private Long numberOfChildren;
 
-    private Long ownerId;
+    private Long ownerID;
 
-    private Long colorId;
+    private Long colorID;
 
-    private Long nestId;
+    private Long nestID;
 
 }

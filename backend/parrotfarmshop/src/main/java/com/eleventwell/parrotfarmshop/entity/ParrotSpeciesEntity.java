@@ -58,6 +58,7 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@Column(name = "origin")
 	private String origin;
 
+
 	@Column(name = "average_weight")
 	private Double averageWeight;
 
@@ -67,6 +68,9 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@Column(name = "nest_average_rating")
 	private Double nestAverageRating;
 
+	@Column(name = "img")
+	private String img;
+
 
 	@Column(name = "img")
 	private String img;
@@ -75,7 +79,12 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 
 	@OneToMany(mappedBy = "parrotSpecies")
+	private List<SpeciesEggPriceEntity> speciesEggPrices = new ArrayList<>();
+
+	@OneToMany(mappedBy = "parrotSpecies")
 	private List<FeedbackEntity> feedbacks = new ArrayList<>();
+
+
 //	@NotBlank
 //	@Size(max=30)
 //	@Column(name = "parrotSpeciesName")

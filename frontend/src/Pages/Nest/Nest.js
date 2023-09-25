@@ -1,7 +1,5 @@
-import Breadcrumbs from '~/Components/Breadcrumbs/Breadcrumbs';
-
 function Nest() {
-    return <Breadcrumbs></Breadcrumbs>;
+    return <h1>Nest</h1>;
 }
 
 export default Nest;

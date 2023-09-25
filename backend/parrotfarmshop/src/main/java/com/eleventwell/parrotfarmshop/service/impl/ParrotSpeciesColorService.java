@@ -4,25 +4,28 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesColorConverter;
+//import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesColorConverter;
+
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
+//import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
-import com.eleventwell.parrotfarmshop.service.IParrotSpeciesColorService;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Admin
  */
 @Service
-public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
+public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesColorDTO> {
 
     @Autowired
     private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
@@ -30,8 +33,12 @@ public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
     @Autowired
     private ParrotSpeciesRepository parrotSpeciesRepository;
 
+    //@Autowired
+    //private ParrotSpeciesColorConverter parrotSpeciesColorConverter;
+
     @Autowired
-    private ParrotSpeciesColorConverter parrotSpeciesColorConverter;
+    private GenericConverter converter;
+
 
     @Override
     public List<ParrotSpeciesColorDTO> findAll() {
@@ -40,7 +47,7 @@ public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
         List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAll();
 
         for (ParrotSpeciesColorEntity entity : entities) {
-            ParrotSpeciesColorDTO parrotSpeciesColorDTO = parrotSpeciesColorConverter.toDTO(entity);
+            ParrotSpeciesColorDTO parrotSpeciesColorDTO = (ParrotSpeciesColorDTO) converter.toDTO(entity, ParrotSpeciesColorDTO.class);
             results.add(parrotSpeciesColorDTO);
         }
 
@@ -53,20 +60,33 @@ public class ParrotSpeciesColorService implements IParrotSpeciesColorService {
         ParrotSpeciesColorEntity parrotSpeciesColorEntity = new ParrotSpeciesColorEntity();
         if (parrotSpeciesColorDTO.getId() != null) {
             ParrotSpeciesColorEntity oldEntity = parrotSpeciesColorRepository.findOneById(parrotSpeciesColorDTO.getId());
-            parrotSpeciesColorEntity = parrotSpeciesColorConverter.toEntity(parrotSpeciesColorDTO, oldEntity);
+            parrotSpeciesColorEntity = (ParrotSpeciesColorEntity) converter.updateEntity(parrotSpeciesColorDTO, oldEntity);
         } else {
-            parrotSpeciesColorEntity = parrotSpeciesColorConverter.toEntity(parrotSpeciesColorDTO);
+            parrotSpeciesColorEntity = (ParrotSpeciesColorEntity) converter.toEntity(parrotSpeciesColorDTO, ParrotSpeciesColorEntity.class);
         }
-        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(parrotSpeciesColorDTO.getSpeciesID());
-        parrotSpeciesColorEntity.setParrotSpecies(parrotSpeciesEntity);
+//        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(parrotSpeciesColorDTO.getSpeciesID());
+//        parrotSpeciesColorEntity.setParrotSpecies(parrotSpeciesEntity);
         parrotSpeciesColorEntity = parrotSpeciesColorRepository.save(parrotSpeciesColorEntity);
-        return parrotSpeciesColorConverter.toDTO(parrotSpeciesColorEntity);
+        return (ParrotSpeciesColorDTO) (ParrotSpeciesColorDTO) converter.toDTO(parrotSpeciesColorEntity, ParrotSpeciesColorDTO.class);
     }
 
     @Override
-    public void delete(Long[] ids) {
-        List<Long> idList = Arrays.asList(ids);
-        parrotSpeciesColorRepository.deleteAllById((idList));
+    public void changeStatus(Long id) {
+        ParrotSpeciesColorEntity entity = parrotSpeciesColorRepository.findOneById(id);
+
+
+    }
+
+
+    public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesId(id);
+        List<ParrotSpeciesColorDTO>  result = new ArrayList<>();
+        for (ParrotSpeciesColorEntity entity:
+             entities) {
+            ParrotSpeciesColorDTO dto = (ParrotSpeciesColorDTO) converter.toDTO(entity, ParrotSpeciesColorDTO.class);
+            result.add(dto);
+        }
+        return result;
     }
 
 }

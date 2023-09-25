@@ -4,12 +4,13 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
+import com.eleventwell.parrotfarmshop.converter.Converter;
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
-
+import com.eleventwell.parrotfarmshop.service.IParrotService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

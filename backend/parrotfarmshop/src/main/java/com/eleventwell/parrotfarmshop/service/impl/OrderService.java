@@ -1,7 +1,11 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
+import com.eleventwell.parrotfarmshop.converter.Converter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;

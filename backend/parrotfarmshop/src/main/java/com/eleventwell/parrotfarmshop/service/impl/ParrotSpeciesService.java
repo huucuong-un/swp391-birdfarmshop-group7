@@ -4,7 +4,7 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.converter.Converter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
@@ -29,7 +29,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     private ParrotSpeciesRepository parrotSpeciesRepository;
 
     @Autowired
-    private GenericConverter genericConverter;
+    private Converter converter;
 
 //    @Autowired
 //    private GenericRepository<ParrotSpeciesColorEntity> genericRepository;
@@ -47,7 +47,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
         for (ParrotSpeciesEntity entity : entities) {
             //NOTE
-            ParrotSpeciesDTO parrotSpeciesDTO = (ParrotSpeciesDTO) genericConverter.toDTO(entity, ParrotSpeciesDTO.class);
+            ParrotSpeciesDTO parrotSpeciesDTO = (ParrotSpeciesDTO) converter.toDTO(entity, ParrotSpeciesDTO.class);
             results.add(parrotSpeciesDTO);
         }
 
@@ -70,13 +70,13 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
         if (parrotSpeciesDTO.getId() != null) {
             ParrotSpeciesEntity oldEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
-            parrotSpeciesEntity = (ParrotSpeciesEntity) genericConverter.updateEntity(parrotSpeciesDTO, oldEntity);
+            parrotSpeciesEntity = (ParrotSpeciesEntity) converter.updateEntity(parrotSpeciesDTO, oldEntity);
         } else {
-            parrotSpeciesEntity = (ParrotSpeciesEntity) genericConverter.toEntity(parrotSpeciesDTO,parrotSpeciesEntity.getClass());
+            parrotSpeciesEntity = (ParrotSpeciesEntity) converter.toEntity(parrotSpeciesDTO,parrotSpeciesEntity.getClass());
         }
 
         parrotSpeciesEntity = parrotSpeciesRepository.save(parrotSpeciesEntity);
-        return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesEntity,parrotSpeciesDTO.getClass());
+        return (ParrotSpeciesDTO) converter.toDTO(parrotSpeciesEntity,parrotSpeciesDTO.getClass());
 
     }
 

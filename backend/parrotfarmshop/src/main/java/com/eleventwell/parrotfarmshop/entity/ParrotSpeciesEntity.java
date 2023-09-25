@@ -8,6 +8,7 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -66,9 +67,6 @@ public class ParrotSpeciesEntity extends BaseEntity{
 
 	@Column(name = "nest_average_rating")
 	private Double nestAverageRating;
-
-	@Column(name = "img")
-	private String img;
 
 	@Column(name = "img")
 	private String img;

@@ -35,9 +35,9 @@ import lombok.ToString;
 @Getter
 @Setter
 
+@Entity
 //userName is user account name
 //fullName is name of user
-@Entity
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "user_name"

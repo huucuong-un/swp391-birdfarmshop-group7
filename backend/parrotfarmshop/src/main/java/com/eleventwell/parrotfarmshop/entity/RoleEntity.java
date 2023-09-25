@@ -36,8 +36,8 @@ public class RoleEntity extends BaseEntity {
 
 	@NotBlank
 	@Size(max=30)
-	@Column(name ="roleName")
-	private String roleName;
+	@Column(name ="name")
+	private String name;
 
 	@NotBlank
 	@Column(name ="description")

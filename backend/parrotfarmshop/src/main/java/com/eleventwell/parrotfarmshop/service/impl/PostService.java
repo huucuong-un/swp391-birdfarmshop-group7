@@ -1,11 +1,10 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.Converter;
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.entity.PostEntity;
-import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.PostRepository;
-import com.eleventwell.parrotfarmshop.service.IPostService;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PostService  implements IPostService {
+public class PostService  implements IGenericService<PostDTO> {
 
 
 
@@ -22,7 +21,7 @@ public class PostService  implements IPostService {
 
 
     @Autowired
-    private Converter converter;
+    private GenericConverter genericConverter;
 
     @Override
     public List<PostDTO> findAll() {
@@ -30,7 +29,7 @@ public class PostService  implements IPostService {
         List<PostEntity> entities = postRepository.findAll();
 
         for (PostEntity entity : entities){
-            PostDTO postDTO = (PostDTO) converter.toDTO(entity, PostDTO.class);
+            PostDTO postDTO = (PostDTO) genericConverter.toDTO(entity, PostDTO.class);
             result.add(postDTO);
         }
         return result;
@@ -41,20 +40,18 @@ public class PostService  implements IPostService {
         PostEntity postEntity = new PostEntity();
         if(postDTO.getId() != null){
             PostEntity oldEntity = postRepository.findOneById(postDTO.getId());
-            postEntity = (PostEntity) converter.updateEntity(postDTO, oldEntity);
+            postEntity = (PostEntity) genericConverter.updateEntity(postDTO, oldEntity);
         }else{
-            postEntity = (PostEntity) converter.toEntity(postDTO, PostEntity.class);
+            postEntity = (PostEntity) genericConverter.toEntity(postDTO, PostEntity.class);
         }
         postRepository.save(postEntity);
-        return (PostDTO) converter.toDTO(postEntity, PostDTO.class);
+        return (PostDTO) genericConverter.toDTO(postEntity, PostDTO.class);
     }
 
     @Override
-    public void delete(long[] ids) {
-        for (long id: ids
-             ) {
-            postRepository.deleteById(id);
+    public void changeStatus(Long ids) {
 
-        }
     }
+
+
 }

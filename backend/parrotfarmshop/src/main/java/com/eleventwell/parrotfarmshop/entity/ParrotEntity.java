@@ -53,6 +53,9 @@ public class ParrotEntity extends BaseEntity {
     @Column(name = "health_status")
     private Boolean healthStatus;
 
+    @Column(name = "sale_status")
+    private Boolean saleStatus;
+
     @Unsigned
     @Column(name = "number_of_children")
     private Long numberOfChildren;

@@ -21,5 +21,5 @@ import java.util.List;
 public interface ParrotRepository extends JpaRepository<ParrotEntity, Long>{
     ParrotEntity findOneById(Long id);
     @Query("SELECT u FROM ParrotEntity u WHERE u.status = true AND u.healthStatus = true AND u.saleStatus = false AND u.parrotSpeciesColor.id = :colorid")
-    List<ParrotEntity> findTopNByStatusIsTrue(@Param("colorid") Long coloid,Pageable pageable);
+    List<ParrotEntity> findTopNByStatusIsTrue(@Param("colorid") Long colorid, Pageable pageable);
 }

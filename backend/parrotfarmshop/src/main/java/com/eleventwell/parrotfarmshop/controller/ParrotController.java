@@ -5,6 +5,7 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/parrot")
 public class ParrotController {
+
      @Autowired
     private IGenericService parrotService;
      
@@ -52,7 +54,7 @@ public class ParrotController {
 //	public void deleteParrot(@RequestBody Long[] ids) {
 //		parrotService.delete(ids);
 //	}
-     
+//
    
      
      

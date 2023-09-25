@@ -5,21 +5,23 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 //import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesColorConverter;
+
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Admin
  */
 @Service
@@ -36,7 +38,6 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     @Autowired
     private GenericConverter converter;
-
 
 
     @Override
@@ -71,9 +72,21 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     @Override
     public void changeStatus(Long id) {
-ParrotSpeciesColorEntity entity = parrotSpeciesColorRepository.findOneById(id);
+        ParrotSpeciesColorEntity entity = parrotSpeciesColorRepository.findOneById(id);
 
 
+    }
+
+
+    public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesId(id);
+        List<ParrotSpeciesColorDTO>  result = new ArrayList<>();
+        for (ParrotSpeciesColorEntity entity:
+             entities) {
+            ParrotSpeciesColorDTO dto = (ParrotSpeciesColorDTO) converter.toDTO(entity, ParrotSpeciesColorDTO.class);
+            result.add(dto);
+        }
+        return result;
     }
 
 }

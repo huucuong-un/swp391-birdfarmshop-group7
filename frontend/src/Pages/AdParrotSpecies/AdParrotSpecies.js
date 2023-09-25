@@ -1,7 +1,11 @@
 import Title from '~/Components/Title/Title';
+
+import Button from '~/Components/Button/Button';
+
+import { Switch, Stack } from '@chakra-ui/react';
+
 import styles from '~/Pages/AdParrotSpecies/AdParrotSpecies.module.scss';
 import classNames from 'classnames/bind';
-import Button from '~/Components/Button/Button';
 
 const cx = classNames.bind(styles);
 
@@ -53,7 +57,6 @@ function AdParrotSpecies() {
                             <th>Price</th>
                             <th>Status</th>
                             <th>Create At</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,16 +65,12 @@ function AdParrotSpecies() {
                             <td>Grey Parrot</td>
                             <td>Nguyen Thanh</td>
                             <td>1 500 000</td>
-                            <td className={cx('status')}>Active</td>
-                            <td>31/10/2003</td>
-                            <td className={cx('actions')}>
-                                <Button to="" editDeteleSwitch>
-                                    Edit
-                                </Button>
-                                <Button to="" editDeteleSwitch>
-                                    Delete
-                                </Button>
+                            <td>
+                                <Stack align="center">
+                                    <Switch colorScheme="green" size="lg" />
+                                </Stack>
                             </td>
+                            <td>31/10/2003</td>
                         </tr>
 
                         <tr>
@@ -79,16 +78,12 @@ function AdParrotSpecies() {
                             <td>Grey Parrot</td>
                             <td>Nguyen Thanh</td>
                             <td>1 500 000</td>
-                            <td className={cx('status')}>Active</td>
-                            <td>31/10/2003</td>
-                            <td className={cx('actions')}>
-                                <Button to="" editDeteleSwitch>
-                                    Edit
-                                </Button>
-                                <Button to="" editDeteleSwitch>
-                                    Delete
-                                </Button>
+                            <td>
+                                <Stack align="center">
+                                    <Switch colorScheme="green" size="lg" />
+                                </Stack>
                             </td>
+                            <td>31/10/2003</td>
                         </tr>
 
                         <tr>
@@ -96,16 +91,12 @@ function AdParrotSpecies() {
                             <td>Grey Parrot</td>
                             <td>Nguyen Thanh</td>
                             <td>1 500 000</td>
-                            <td className={cx('status')}>Active</td>
-                            <td>31/10/2003</td>
-                            <td className={cx('actions')}>
-                                <Button to="" editDeteleSwitch>
-                                    Edit
-                                </Button>
-                                <Button to="" editDeteleSwitch>
-                                    Delete
-                                </Button>
+                            <td>
+                                <Stack align="center">
+                                    <Switch colorScheme="green" size="lg" />
+                                </Stack>
                             </td>
+                            <td>31/10/2003</td>
                         </tr>
                     </tbody>
                 </table>

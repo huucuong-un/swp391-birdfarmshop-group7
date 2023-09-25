@@ -40,8 +40,8 @@
 }
 
 thead {
-    background-color: var(--black-old);
-    color: var(--white);
+    background-color: var(--nav-color);
+    color: var(--text-color-nav);
 }
 
 thead tr th {
@@ -52,6 +52,16 @@ thead tr th {
 td {
     text-align: center;
     padding: 10px 30px;
+}
+
+td.editable {
+    cursor: pointer;
+}
+
+input.editable-input {
+    width: 100%;
+    border: none;
+    outline: none;
 }
 
 .status {

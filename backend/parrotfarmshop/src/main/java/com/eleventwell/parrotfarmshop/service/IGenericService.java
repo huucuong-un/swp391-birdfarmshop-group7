@@ -1,6 +1,7 @@
 package com.eleventwell.parrotfarmshop.service;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
+import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 

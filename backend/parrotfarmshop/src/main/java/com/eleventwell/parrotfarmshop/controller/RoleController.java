@@ -28,7 +28,7 @@ public class RoleController {
 
     //accept editing description and status only
     @PutMapping(value = "{id}")
-    public RoleDTO updateRole(@RequestBody RoleDTO model, @PathVariable("id") long id) {
+    public RoleDTO updateRole(@RequestBody RoleDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return roleService.save(model);
     }

@@ -68,6 +68,9 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	private Double nestAverageRating;
 
 
+	@Column(name = "img")
+	private String img;
+
 	@OneToMany(mappedBy = "parrotSpecies")
 	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 

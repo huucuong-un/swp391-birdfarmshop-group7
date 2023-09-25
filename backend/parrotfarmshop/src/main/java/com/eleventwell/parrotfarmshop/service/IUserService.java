@@ -5,6 +5,7 @@ import com.eleventwell.parrotfarmshop.dto.UserDTO;
 
 import java.util.List;
 
+
 public interface IUserService {
 
     List<UserDTO> findAll();

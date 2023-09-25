@@ -10,7 +10,7 @@ public class RoleConverter {
     public RoleDTO toDTO(RoleEntity entity) {
         RoleDTO dto = new RoleDTO();
         dto.setId(entity.getId());
-        dto.setName(entity.getRoleName());
+        dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         dto.setStatus(entity.getStatus());
         return dto;
@@ -26,7 +26,7 @@ public class RoleConverter {
     public RoleEntity toEntity(RoleDTO dto) {
         RoleEntity entity = new RoleEntity();
         entity.setId(dto.getId());
-        entity.setRoleName(dto.getName());
+        entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setStatus(dto.getStatus());
         return entity;
@@ -37,7 +37,7 @@ public class RoleConverter {
     //update
     public RoleEntity toEntity(RoleEntity entity, RoleDTO dto) {
         entity.setId(dto.getId());
-        entity.setRoleName(dto.getName());
+        entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setStatus(dto.getStatus());
 

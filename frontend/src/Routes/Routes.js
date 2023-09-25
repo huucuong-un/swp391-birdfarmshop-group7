@@ -8,6 +8,8 @@ import LoginSystemLayout from '~/Components/LoginSystemLayout/LoginSystemLayout'
 import SystemLogin from '~/Pages/SystemLogin/SystemLogin';
 import Payment from '~/Pages/Payment/Payment';
 import UserLogin from '~/Pages/UserLogin/UserLogin';
+import AddParrotSpecies from '~/Components/TestAddSpecies/AddParrotSpecies';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -18,6 +20,7 @@ const publicRoutes = [
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/payment', component: Payment },
+    { path: '/add-parrot-species', component: AddParrotSpecies },
 ];
 
 //Dành cho những người đăng nhập mới coi được

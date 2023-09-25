@@ -2,6 +2,7 @@ import Title from '~/Components/Title/Title';
 import styles from '~/Pages/AdParrotSpecies/AdParrotSpecies.module.scss';
 import classNames from 'classnames/bind';
 import Button from '~/Components/Button/Button';
+import AddParrotSpecies from '~/Components/TestAddSpecies/AddParrotSpecies';
 
 const cx = classNames.bind(styles);
 
@@ -12,7 +13,7 @@ function AdParrotSpecies() {
 
             <div className={cx('active')}>
                 <div className={cx('add-btn')}>
-                    <Button to="" add>
+                    <Button to="/add-parrot-species" add>
                         Add
                     </Button>
                 </div>

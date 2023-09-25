@@ -1,9 +1,8 @@
 package com.eleventwell.parrotfarmshop.controller;
 
-import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
-import com.eleventwell.parrotfarmshop.service.IPostService;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostAPI {
 
     @Autowired
-    IPostService postService;
+    IGenericService postService;
 
     @GetMapping(value="")
     public ListOutput showPosts() {
@@ -24,19 +23,19 @@ public class PostAPI {
 
     @PostMapping(value="")
     public PostDTO createPost(@RequestBody PostDTO model){
-        return postService.save(model);
+        return (PostDTO) postService.save(model);
     }
 
     @PutMapping(value="{id}")
     public PostDTO updatePost(@RequestBody PostDTO model,@PathVariable("id") long id){
         model.setId(id);
-        return postService.save(model);
+        return (PostDTO) postService.save(model);
     }
 
-    @DeleteMapping(value = "")
-    public void deletePost(@RequestBody long[] ids){
-        postService.delete(ids);
-    }
+//    @DeleteMapping(value = "")
+//    public void deletePost(@RequestBody long[] ids){
+//        postService.delete(ids);
+//    }
 }
 
 

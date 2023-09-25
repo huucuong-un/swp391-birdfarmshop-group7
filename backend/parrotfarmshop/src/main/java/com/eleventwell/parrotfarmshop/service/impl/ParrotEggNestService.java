@@ -1,16 +1,14 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
-import com.eleventwell.parrotfarmshop.converter.ParrotEggNestConverter;
-import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+
+
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
-import com.eleventwell.parrotfarmshop.service.IParrotEggNestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +25,10 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
     @Autowired
     private ParrotEggNestRepository parrotEggNestRepository;
 
-    @Autowired
-    private ParrotEggNestConverter parrotEggNestConverter;
+   @Autowired
+    GenericConverter genericConverter;
+
+
 
     @Override
     public List<ParrotEggNestDTO> findAll() {
@@ -36,7 +36,7 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
         List<ParrotEggNestEntity> parrotEggNestEntities = parrotEggNestRepository.findAll();
 
         for (ParrotEggNestEntity entity : parrotEggNestEntities) {
-            result.add(parrotEggNestConverter.toDTO(entity));
+            result.add((ParrotEggNestDTO) genericConverter.toDTO(entity, ParrotEggNestDTO.class));
         }
 
         return result;
@@ -48,18 +48,22 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
 
         if (parrotEggNestDTO.getId() != null) {
             ParrotEggNestEntity oldEntity = parrotEggNestRepository.findOneById(parrotEggNestDTO.getId());
-            parrotEggNestEntity = parrotEggNestConverter.toEntity(parrotEggNestDTO, oldEntity);
+            parrotEggNestEntity = (ParrotEggNestEntity) genericConverter.updateEntity(parrotEggNestDTO, oldEntity);
 
         } else {
-            parrotEggNestEntity = parrotEggNestConverter.toEntity(parrotEggNestDTO);
+            parrotEggNestEntity = (ParrotEggNestEntity) genericConverter.toEntity(parrotEggNestDTO,ParrotEggNestEntity.class);
         }
         parrotEggNestEntity.setParrotDad(parrotRepository.findOneById(parrotEggNestDTO.getDadId()));
         parrotEggNestEntity.setParrotMom(parrotRepository.findOneById(parrotEggNestDTO.getMomId()));
 
         parrotEggNestRepository.save(parrotEggNestEntity);
-        return parrotEggNestConverter.toDTO(parrotEggNestEntity);
+        return (ParrotEggNestDTO) genericConverter.toDTO(parrotEggNestEntity, ParrotEggNestDTO.class);
     }
-
+    public void changeSaleStatus(Long id){
+        ParrotEggNestEntity entity = parrotEggNestRepository.findOneById(id);
+        entity.setSaleStatus(true);
+        parrotEggNestRepository.save(entity);
+    }
 
 
     @Override

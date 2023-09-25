@@ -30,7 +30,17 @@
         opacity: 0.9;
     }
 }
+.register {
+    margin-bottom: 120px;
+    border-radius: 12px;
+    font-weight: 700;
+    background-color: var(--black-old);
+    color: var(--white);
 
+    &:hover {
+        opacity: 0.9;
+    }
+}
 .editDeteleSwitch {
     background-color: var(--black-old);
     color: var(--white);

@@ -35,19 +35,19 @@ public class OrderDetailEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private OrderEntity orders;
+    private OrderEntity orderId;
 
 //	@ManyToOne
 //    @JoinColumn(name = "serviceID")
 //    private ServiceEntity service;
 //
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parrot_id", referencedColumnName = "id", unique = true)
+    @OneToOne
+    @JoinColumn(name = "parrot_id", unique = true)
     private ParrotEntity parrot;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "nest_id", referencedColumnName = "id", unique = true)
+    @OneToOne
+    @JoinColumn(name = "nest_id", unique = true)
     private ParrotEggNestEntity parrotEggNest;
 
 

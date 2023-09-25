@@ -1,7 +1,7 @@
 .wrapper {
     max-width: 200px;
-    background-color: var(--black-old);
-    color: var(--white);
+    // background-color: var(--black-old);
+    background-color: var(--nav-color);
     min-height: 882px;
 }
 
@@ -22,16 +22,16 @@
     width: 100%;
 
     a {
-        color: var(--white);
+        color: var(--text-color-nav);
         font-size: 1.8rem;
-        font-weight: 500;
+        font-weight: 600;
         width: 100%;
 
         p {
             margin: 0;
             padding: 20px;
             &:hover {
-                background-color: #ccc;
+                background-color: #fff;
             }
         }
 
@@ -51,10 +51,10 @@
 
 .out-btn-icon {
     background-color: transparent;
-    color: var(--white);
+    color: var(--text-color-nav);
     font-weight: 700;
 
     &:hover {
-        opacity: 0.8;
+        opacity: 0.9;
     }
 }

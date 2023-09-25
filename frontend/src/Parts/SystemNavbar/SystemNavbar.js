@@ -2,7 +2,7 @@ import styles from '~/Parts/SystemNavbar/SystemNavbar.module.scss';
 import classNames from 'classnames/bind';
 import Button from '~/Components/Button/Button';
 
-import logo from '~/Assets/image/Logo/11-TWELL.png';
+import logo from '~/Assets/image/Logo/2(5).png';
 import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);

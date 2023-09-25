@@ -5,7 +5,9 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,8 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/parrot")
 public class ParrotController {
+
      @Autowired
-    private IParrotService parrotService;
+    private IGenericService parrotService;
      
      @GetMapping(value="")
      public ListOutput showParrots(){
@@ -38,20 +41,20 @@ public class ParrotController {
        @PostMapping(value="")
       public ParrotDTO createParrot(@RequestBody ParrotDTO model){
          
-         return parrotService.save(model);
+         return (ParrotDTO) parrotService.save(model);
      }
      
      @PutMapping(value="{id}")
      public ParrotDTO updateParrot(@RequestBody ParrotDTO model,@PathVariable("id") long id){
          model.setId(id);
-         return parrotService.save(model);
+         return (ParrotDTO) parrotService.save(model);
      }
      
-        @DeleteMapping(value = "")
-	public void deleteParrot(@RequestBody Long[] ids) {
-		parrotService.delete(ids);
-	}
-     
+//        @DeleteMapping(value = "")
+//	public void deleteParrot(@RequestBody Long[] ids) {
+//		parrotService.delete(ids);
+//	}
+//
    
      
      

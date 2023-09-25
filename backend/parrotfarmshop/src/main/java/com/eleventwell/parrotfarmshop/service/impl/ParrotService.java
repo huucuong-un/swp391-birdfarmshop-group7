@@ -5,6 +5,7 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
@@ -13,6 +14,8 @@ import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,7 @@ import org.springframework.stereotype.Service;
  * @author Admin
  */
 @Service
-public class ParrotService implements IParrotService{
+public class ParrotService implements IGenericService<ParrotDTO> {
 
     
       @Autowired
@@ -31,7 +34,7 @@ public class ParrotService implements IParrotService{
    private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
       
       @Autowired
-      private Converter parrotConverter;
+      private GenericConverter parrotConverter;
       
     
     @Override

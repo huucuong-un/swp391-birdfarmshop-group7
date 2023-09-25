@@ -6,7 +6,9 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
+//import com.eleventwell.parrotfarmshop.repository.GenericRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
@@ -28,6 +30,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     @Autowired
     private GenericConverter genericConverter;
+
+//    @Autowired
+//    private GenericRepository<ParrotSpeciesColorEntity> genericRepository;
 
     /*
     * findAll()

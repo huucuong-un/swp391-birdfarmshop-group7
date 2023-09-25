@@ -58,6 +58,7 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@Column(name = "origin")
 	private String origin;
 
+
 	@Column(name = "average_weight")
 	private Double averageWeight;
 
@@ -67,6 +68,8 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@Column(name = "nest_average_rating")
 	private Double nestAverageRating;
 
+	@Column(name = "img")
+	private String img;
 
 	@Column(name = "img")
 	private String img;

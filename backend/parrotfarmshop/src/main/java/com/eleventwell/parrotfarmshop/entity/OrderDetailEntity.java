@@ -30,40 +30,25 @@ import lombok.ToString;
 @Setter
 
 @Entity
-@Table(name = "OrderDetail")
+@Table(name = "order_detail")
 public class OrderDetailEntity extends BaseEntity {
 
-
-	
-	
-
-	
-
-	
-	@ManyToOne
-    @JoinColumn(name = "orderID")
+    @ManyToOne
+    @JoinColumn(name = "order_id")
     private OrderEntity orders;
-	
+
 //	@ManyToOne
 //    @JoinColumn(name = "serviceID")
 //    private ServiceEntity service;
-	
-	
-    
 //
-	
-	 @OneToOne(cascade = CascadeType.ALL)
-	    @JoinColumn(name = "parrotID", referencedColumnName = "id", unique = true)
-	private ParrotEntity parrot;
-	 
-	 @OneToOne(cascade = CascadeType.ALL)
-	    @JoinColumn(name = "parrotEggNestID", referencedColumnName = "id", unique = true)
-	 private ParrotEggNestEntity parrotEggNest;
-	
-   
 
-	
-	
-	
-	
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parrot_id", referencedColumnName = "id", unique = true)
+    private ParrotEntity parrot;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nest_id", referencedColumnName = "id", unique = true)
+    private ParrotEggNestEntity parrotEggNest;
+
+
 }

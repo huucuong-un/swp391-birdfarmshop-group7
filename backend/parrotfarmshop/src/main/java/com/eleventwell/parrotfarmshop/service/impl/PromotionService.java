@@ -1,12 +1,9 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
-import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.entity.PromotionEntity;
 import com.eleventwell.parrotfarmshop.repository.PromotionRepository;
-import com.eleventwell.parrotfarmshop.service.IPromotionService;
-import jakarta.persistence.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

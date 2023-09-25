@@ -2,7 +2,7 @@ package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
-import com.eleventwell.parrotfarmshop.service.IParrotSpeciesColorService;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/parrot-species-color")
 public class ParrotSpeciesColorController {
     @Autowired
-    private IParrotSpeciesColorService parrotSpeciesColorService;
+    private IGenericService parrotSpeciesColorService;
     
     @GetMapping(value = "") 
     public ListOutput showParrotSpeciesColors() {
@@ -23,17 +23,17 @@ public class ParrotSpeciesColorController {
     
     @PostMapping(value = "")
     public ParrotSpeciesColorDTO createaPrrotSpeciesColor(@RequestBody ParrotSpeciesColorDTO model) {
-        return parrotSpeciesColorService.save(model);
+        return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);
     }
     
     @PutMapping(value = "{id}")
     public ParrotSpeciesColorDTO updateaPrrotSpeciesColor(@RequestBody ParrotSpeciesColorDTO model, @PathVariable("id") long id) {
         model.setId(id);
-        return parrotSpeciesColorService.save(model);
+        return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);
     }
     
     @DeleteMapping(value = "")
-    public void deleteaParrotSpeciesColor(@RequestBody Long[] ids) {
-        parrotSpeciesColorService.delete(ids);
+    public void deleteaParrotSpeciesColor(@RequestBody Long id) {
+        parrotSpeciesColorService.changeStatus(id);
     }
 }

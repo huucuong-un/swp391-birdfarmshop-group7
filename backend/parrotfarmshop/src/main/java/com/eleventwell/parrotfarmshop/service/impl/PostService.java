@@ -4,7 +4,6 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.entity.PostEntity;
 import com.eleventwell.parrotfarmshop.repository.PostRepository;
-import com.eleventwell.parrotfarmshop.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

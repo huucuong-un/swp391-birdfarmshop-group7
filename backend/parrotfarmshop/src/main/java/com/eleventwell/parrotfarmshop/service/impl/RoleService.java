@@ -1,10 +1,8 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.RoleConverter;
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.entity.RoleEntity;
 import com.eleventwell.parrotfarmshop.repository.RoleRepository;
-import com.eleventwell.parrotfarmshop.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

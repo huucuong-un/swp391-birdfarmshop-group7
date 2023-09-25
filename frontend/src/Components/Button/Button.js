@@ -17,6 +17,7 @@ function Button({
     className,
     onClick,
     key,
+    register,
     ...passProps
 }) {
     let Comp = 'button';
@@ -48,6 +49,7 @@ function Button({
         text,
         disable,
         add,
+        register,
         loginSystemBtn,
         editDeteleSwitch,
     });

@@ -4,18 +4,15 @@
  */
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.Converter;
 //import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesColorConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
-import com.eleventwell.parrotfarmshop.service.IParrotSpeciesColorService;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

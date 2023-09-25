@@ -3,7 +3,7 @@ import styles from './Input.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Input({ className, placeholder, dob, type, ...passProps }) {
+function Input({ className, placeholder, dob, type, gender, ...passProps }) {
     const props = {
         dob,
         ...passProps,
@@ -12,6 +12,7 @@ function Input({ className, placeholder, dob, type, ...passProps }) {
     const classes = cx('wrapper', {
         [className]: className,
         dob,
+        gender,
     });
     return (
         <div className={cx(classes)}>

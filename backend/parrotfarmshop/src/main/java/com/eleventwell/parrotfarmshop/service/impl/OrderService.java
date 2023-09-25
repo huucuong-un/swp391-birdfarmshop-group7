@@ -1,10 +1,12 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.converter.Converter;
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
+
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
+
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
@@ -37,7 +39,7 @@ public class OrderService implements IGenericService<OrderDTO> {
     ParrotEggNestService parrotEggNestService;
 
     @Autowired
-    Converter converter;
+    GenericConverter genericConverter;
 
     @Autowired
     OrderDetailService orderDetailService;
@@ -48,7 +50,7 @@ public class OrderService implements IGenericService<OrderDTO> {
         List<OrderEntity> orderEntities = orderRepository.findAll();
 
         for (OrderEntity entity : orderEntities) {
-            OrderDTO orderDTO = (OrderDTO) converter.toDTO(entity, OrderDTO.class);
+            OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
             result.add(orderDTO);
         }
 
@@ -58,11 +60,11 @@ public class OrderService implements IGenericService<OrderDTO> {
     @Override
     public OrderDTO save(OrderDTO DTO) {
         OrderEntity orderEntity = new OrderEntity();
-        orderEntity = (OrderEntity) converter.toEntity(DTO, OrderEntity.class);
+        orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
 
         orderRepository.save(orderEntity);
 
-        return (OrderDTO) converter.toDTO(orderEntity, OrderDTO.class);
+        return (OrderDTO) genericConverter.toDTO(orderEntity, OrderDTO.class);
 
     }
 

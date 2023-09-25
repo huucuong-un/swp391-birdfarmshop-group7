@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.entity.SpeciesEggPriceEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
@@ -7,7 +8,6 @@ import com.eleventwell.parrotfarmshop.repository.SpeciesEggPriceRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.eleventwell.parrotfarmshop.converter.Converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class SpeciesEggPriceService implements IGenericService<SpeciesEggPriceDT
     ParrotSpeciesRepository parrotSpeciesRepository;
 
 @Autowired
-Converter converter;
+GenericConverter converter;
 
     @Override
     public List<SpeciesEggPriceDTO> findAll() {

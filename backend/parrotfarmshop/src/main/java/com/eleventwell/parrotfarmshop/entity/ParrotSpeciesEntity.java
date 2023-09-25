@@ -71,6 +71,7 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@Column(name = "img")
 	private String img;
 
+
 	@OneToMany(mappedBy = "parrotSpecies")
 	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 

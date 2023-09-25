@@ -4,7 +4,6 @@ import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
-import com.eleventwell.parrotfarmshop.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

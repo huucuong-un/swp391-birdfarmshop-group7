@@ -44,8 +44,8 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         orderDetailEntity = (OrderDetailEntity) converter.toEntity(orderDetailDTO, OrderDetailEntity.class);
 
 
-      orderDetailEntity.setParrotEggNest(parrotEggNestRepository.findOneById(orderDetailDTO.getNestId()));
-         orderDetailRepository.save(orderDetailEntity);
+        orderDetailEntity.setParrotEggNest(parrotEggNestRepository.findOneById(orderDetailDTO.getNestId()));
+        orderDetailRepository.save(orderDetailEntity);
         return (OrderDetailDTO) converter.toDTO(orderDetailEntity, OrderDetailDTO.class);
     }
 
@@ -56,7 +56,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         orderDetailDTO.setOrderId(orderId);
         if (check == 1) {
             orderDetailDTO.setParrotId(productID);
-        } else  if (check == 2 ) {
+        } else if (check == 2) {
             orderDetailDTO.setNestId(productID);
         }
 

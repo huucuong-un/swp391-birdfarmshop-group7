@@ -53,10 +53,10 @@ public class PromotionEntity extends BaseEntity {
 	@Column(name = "value")
 	private Double value;
 	
-	@Column(name = "startDate")
+	@Column(name = "start_date")
 	private Date startDate;
 	
-	@Column(name = "endDate")
+	@Column(name = "end_date")
 	private Date endDate;
 	
 	@Column(name = "status")

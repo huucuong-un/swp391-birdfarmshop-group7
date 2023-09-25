@@ -43,6 +43,11 @@ public class OrderEntity extends BaseEntity {
 	@NotBlank
 	@Column(name = "address")
 	private String address;
+	@Column(name="status")
+	private Boolean status;
+
+	@Column(name="totalPrice")
+	private Double totalPrice;
 	
 	@ManyToOne
     @JoinColumn(name = "promotionID")

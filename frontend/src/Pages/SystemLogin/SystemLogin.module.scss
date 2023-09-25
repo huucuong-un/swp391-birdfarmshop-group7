@@ -1,14 +1,16 @@
 .container,
 .wrapper {
     width: 100%;
-    min-height: 800px;
+    min-height: 833px;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     display: flex;
 }
+.wrapper {
+}
 .inner {
-    margin-top: 20px;
+    margin-top: 100px;
     width: 30%;
     min-height: 666px;
     box-shadow: 3px 3px 20px 10px #888888;
@@ -20,8 +22,7 @@
     gap: 50px;
 
     border-radius: 12px;
-    background-color: var(--text-color-nav);
-    h1 {
+    background-color: white h1 {
         margin: 0;
     }
 }
@@ -60,7 +61,7 @@
 }
 .title {
     display: block;
-    background-color: var(--text-color-nav);
+    background-color: var(--white);
     font-size: 5rem;
     font-weight: 800;
     padding: 0;
@@ -68,14 +69,15 @@
     width: 100%;
     text-shadow: 3px 2px 2px #888888;
     margin: 0 0 -20px 0;
+    height: 8rem;
 }
 .btn {
     font-weight: 700;
     font-size: 1.5rem;
     width: 60%;
-    color: var(--text-color-nav);
+    color: var(--white);
     padding: 20px;
-    background-color: var(--black);
+    background-color: var(--custom-black);
     border-radius: 12px;
     &:hover {
         opacity: 0.8;

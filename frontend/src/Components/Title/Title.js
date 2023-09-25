@@ -3,13 +3,14 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-function Title({ children, className, system, ...passProps }) {
+function Title({ children, className, system, dob, ...passProps }) {
     const props = {
         system,
+        dob,
         ...passProps,
     };
 
-    const classes = cx('title', { [className]: className, system });
+    const classes = cx('title', { [className]: className, system, dob });
     return (
         <h1 className={classes} {...props}>
             {children}

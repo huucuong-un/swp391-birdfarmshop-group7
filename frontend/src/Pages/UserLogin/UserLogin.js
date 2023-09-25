@@ -39,7 +39,9 @@ function UserLogin() {
                         <Button className={cx('forgot')}>Forgot password</Button>
                     </div>
 
-                    <Button loginSystemBtn>Login</Button>
+                    <Button classname={cx('login-btn')} loginSystemBtn>
+                        Login
+                    </Button>
                     <Title className={cx('google-title')}>Or use your account</Title>
                     <Button className={cx('google')}>
                         <img src={googleLogo} />
@@ -48,9 +50,7 @@ function UserLogin() {
 
                 <div className={cx('register')}>
                     <Title className={cx('register-title')}>Welcome to my bird farm shop</Title>
-                    <Button className={cx('register-btn')} loginSystemBtn>
-                        Register
-                    </Button>
+                    <Button loginSystemBtn>Register</Button>
                 </div>
             </div>
         </div>

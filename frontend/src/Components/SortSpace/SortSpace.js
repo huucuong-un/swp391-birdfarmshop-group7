@@ -1,5 +1,6 @@
 import styles from '~/Components/SortSpace/SortSpace.module.scss';
 import classNames from 'classnames/bind';
+import { Input, Stack, InputGroup, InputLeftAddon, InputRightAddon } from '@chakra-ui/react';
 
 //fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

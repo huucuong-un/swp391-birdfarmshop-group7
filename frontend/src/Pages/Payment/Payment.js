@@ -23,8 +23,8 @@ function Payment() {
         <div className={cx('wrapper')}>
             <StartPartPage payment>Payment</StartPartPage>
 
-            <div className={cx('payment')}>
-                <div className={cx('payment-method')}>
+            <div className={cx('payment', 'row')}>
+                <div className={cx('payment-method', 'col-md-8')}>
                     <div className={cx('payment-method-title')}>
                         <p>Payment method</p>
                     </div>
@@ -56,7 +56,7 @@ function Payment() {
                         Pay now
                     </Button>
                 </div>
-                <div className={cx('payment-detail')}>
+                <div className={cx('payment-detail', 'col-md-4')}>
                     <div className={cx('payment-detail-items')}>
                         <div className={cx('payment-detail-items-img')}>
                             <img src={parrotImg} alt="product" />
@@ -81,7 +81,7 @@ function Payment() {
                             <p className={cx('payment-detail-money-item-price')}>1 000 000 VNĐ</p>
                         </div>
 
-                        <div className={cx('payment-detail-money-item')}>
+                        <div className={cx('payment-detail-money-item', 'total')}>
                             <p className={cx('payment-detail-money-item-title', 'bold')}>Total</p>
                             <p className={cx('payment-detail-money-item-price')}>14 000 000 VNĐ</p>
                         </div>

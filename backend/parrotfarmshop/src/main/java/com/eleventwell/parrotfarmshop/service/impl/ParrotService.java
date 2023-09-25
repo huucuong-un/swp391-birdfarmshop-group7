@@ -71,9 +71,15 @@ public class ParrotService implements IGenericService<ParrotDTO> {
     }
 
     @Override
-    public void delete(Long[] ids) {
-        List<Long> idList = Arrays.asList(ids);
-        parrotRepository.deleteAllById((idList));
+    public void changeStatus(Long ids) {
+
     }
+
+    public void changeSaleStatus(Long id){
+        ParrotEntity entity = parrotRepository.findOneById(id);
+        entity.setSaleStatus(true);
+        parrotRepository.save(entity);
+    }
+
     
 }

@@ -33,21 +33,24 @@ public class OrderEntity extends BaseEntity {
 	
 	
 	
-	@OneToMany(mappedBy = "orders")
+	@OneToMany(mappedBy = "orderId")
 	private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 	
 	@ManyToOne
     @JoinColumn(name = "userID")
     private UserEntity user;
 
-	@NotBlank
+
 	@Column(name = "address")
 	private String address;
 	@Column(name="status")
 	private Boolean status;
 
-	@Column(name="totalPrice")
+	@Column(name="total_price")
 	private Double totalPrice;
+
+	@Column(name="quantity")
+	private int quantity;
 	
 	@ManyToOne
     @JoinColumn(name = "promotionID")

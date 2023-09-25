@@ -3,6 +3,7 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.ParrotSpeciesColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/parrot-species-color")
 public class ParrotSpeciesColorController {
     @Autowired
-    private IGenericService parrotSpeciesColorService;
+    private ParrotSpeciesColorService parrotSpeciesColorService;
     
     @GetMapping(value = "") 
     public ListOutput showParrotSpeciesColors() {
@@ -20,7 +21,15 @@ public class ParrotSpeciesColorController {
         result.setListResult(parrotSpeciesColorService.findAll());
         return result;
     }
-    
+
+    @GetMapping(value = "find-by-parrot-species-id/{id}")
+    public ListOutput getParrotSpeciesColorsBySpeciesId(@PathVariable("id") Long id) {
+        ListOutput result = new ListOutput();
+
+        result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
+        return result;
+    }
+
     @PostMapping(value = "")
     public ParrotSpeciesColorDTO createaPrrotSpeciesColor(@RequestBody ParrotSpeciesColorDTO model) {
         return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);

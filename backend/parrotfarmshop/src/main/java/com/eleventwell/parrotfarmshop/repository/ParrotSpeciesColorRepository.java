@@ -8,6 +8,8 @@ import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  *
  * @author Admin
@@ -15,6 +17,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ParrotSpeciesColorRepository extends JpaRepository<ParrotSpeciesColorEntity, Long>{
     
        	ParrotSpeciesColorEntity findOneById(long id);
+
+		List<ParrotSpeciesColorEntity> findAllByParrotSpeciesId(Long parrotSpecies_id);
 
     
 }

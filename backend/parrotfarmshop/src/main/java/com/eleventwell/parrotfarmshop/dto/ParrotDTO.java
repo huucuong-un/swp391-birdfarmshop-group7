@@ -33,6 +33,8 @@ public class ParrotDTO extends BaseDTO {
 
     private Boolean status;
 
+    private Boolean saleStatus;
+
     private Boolean pregnancyStatus;
 
     private Boolean healthStatus;

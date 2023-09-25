@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
+import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
@@ -20,7 +21,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
     private OrderDetailRepository orderDetailRepository;
 
     @Autowired
-    private Converter converter;
+    private GenericConverter converter;
 
     @Autowired
     private ParrotRepository parrotRepository;
@@ -31,6 +32,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
     @Autowired
     private ParrotEggNestRepository parrotEggNestRepository;
 
+
     @Override
     public List<OrderDetailDTO> findAll() {
         return null;
@@ -40,20 +42,22 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
     public OrderDetailDTO save(OrderDetailDTO orderDetailDTO) {
         OrderDetailEntity orderDetailEntity = new OrderDetailEntity();
         orderDetailEntity = (OrderDetailEntity) converter.toEntity(orderDetailDTO, OrderDetailEntity.class);
-        orderDetailRepository.save(orderDetailEntity);
+
+
+      orderDetailEntity.setParrotEggNest(parrotEggNestRepository.findOneById(orderDetailDTO.getNestId()));
+         orderDetailRepository.save(orderDetailEntity);
         return (OrderDetailDTO) converter.toDTO(orderDetailEntity, OrderDetailDTO.class);
     }
 
-    public void createOrderDetailDTO(Long orderId, Long productID, Boolean check) {
+    public void createOrderDetailDTO(Long orderId, Long productID, int check) {
         OrderDetailEntity orderDetailEntity = new OrderDetailEntity();
 
         OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
         orderDetailDTO.setOrderId(orderId);
-        if (check == true) {
+        if (check == 1) {
             orderDetailDTO.setParrotId(productID);
-        } else {
+        } else  if (check == 2 ) {
             orderDetailDTO.setNestId(productID);
-
         }
 
         save(orderDetailDTO);

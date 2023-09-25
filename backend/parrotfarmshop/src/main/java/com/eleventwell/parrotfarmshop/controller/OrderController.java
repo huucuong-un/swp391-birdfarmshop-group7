@@ -3,6 +3,9 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+
+import com.eleventwell.parrotfarmshop.service.impl.OrderService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,29 +13,36 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/order")
 public class OrderController {
-    @Autowired
-    private IGenericService orderService;
 
-    @GetMapping(value="")
-    public ListOutput showParrots(){
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping(value = "")
+    public ListOutput showParrots() {
         ListOutput result = new ListOutput();
         result.setListResult(orderService.findAll());
-        return  result;
+        return result;
     }
 
-    @PostMapping(value="")
-    public OrderDTO createParrot(@RequestBody OrderDTO model){
+//    @PostMapping(value = "/{parrotIds}/{nestIds}")
+//    public void createOrder(
+//            @RequestBody OrderDTO model,
+//            @PathVariable Long[] parrotIds,
+//            @PathVariable Long[] nestIds
+//    ) {
+//        orderService.createOrderDetail(model, parrotIds, nestIds);
+//    }
 
-        return (OrderDTO) orderService.save(model);
-    }
 
+    @PostMapping(value = "/{species}/{product}")
+public void createOrder(@RequestBody OrderDTO dto,@PathVariable String product,@PathVariable Long species) {
 
-
+    orderService.createOrderDetail(dto,species,product);
+}
     @DeleteMapping(value = "")
-    public void deleteParrot(@RequestBody Long ids) {orderService.changeStatus(ids);
+    public void deleteParrot(@RequestBody Long ids) {
+        orderService.changeStatus(ids);
     }
-
-
 
 
 }

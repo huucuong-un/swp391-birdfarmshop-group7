@@ -4,6 +4,7 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.entity.PostEntity;
 import com.eleventwell.parrotfarmshop.repository.PostRepository;
+import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PostService  implements IPostService {
+public class PostService  implements IGenericService<PostDTO> {
 
 
 
@@ -48,11 +49,9 @@ public class PostService  implements IPostService {
     }
 
     @Override
-    public void delete(long[] ids) {
-        for (long id: ids
-             ) {
-            postRepository.deleteById(id);
+    public void changeStatus(Long ids) {
 
-        }
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
+import com.eleventwell.parrotfarmshop.converter.Converter;
 import com.eleventwell.parrotfarmshop.converter.ParrotEggNestConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
@@ -30,13 +31,18 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
     @Autowired
     private ParrotEggNestConverter parrotEggNestConverter;
 
+    @Autowired
+    private Converter converter;
+
+
+
     @Override
     public List<ParrotEggNestDTO> findAll() {
         List<ParrotEggNestDTO> result = new ArrayList<>();
         List<ParrotEggNestEntity> parrotEggNestEntities = parrotEggNestRepository.findAll();
 
         for (ParrotEggNestEntity entity : parrotEggNestEntities) {
-            result.add(parrotEggNestConverter.toDTO(entity));
+            result.add((ParrotEggNestDTO) converter.toDTO(entity, ParrotEggNestDTO.class));
         }
 
         return result;
@@ -48,18 +54,22 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
 
         if (parrotEggNestDTO.getId() != null) {
             ParrotEggNestEntity oldEntity = parrotEggNestRepository.findOneById(parrotEggNestDTO.getId());
-            parrotEggNestEntity = parrotEggNestConverter.toEntity(parrotEggNestDTO, oldEntity);
+            parrotEggNestEntity = (ParrotEggNestEntity) converter.updateEntity(parrotEggNestDTO, oldEntity);
 
         } else {
-            parrotEggNestEntity = parrotEggNestConverter.toEntity(parrotEggNestDTO);
+            parrotEggNestEntity = (ParrotEggNestEntity) converter.toEntity(parrotEggNestDTO,ParrotEggNestEntity.class);
         }
         parrotEggNestEntity.setParrotDad(parrotRepository.findOneById(parrotEggNestDTO.getDadId()));
         parrotEggNestEntity.setParrotMom(parrotRepository.findOneById(parrotEggNestDTO.getMomId()));
 
         parrotEggNestRepository.save(parrotEggNestEntity);
-        return parrotEggNestConverter.toDTO(parrotEggNestEntity);
+        return (ParrotEggNestDTO) converter.toDTO(parrotEggNestEntity, ParrotEggNestDTO.class);
     }
-
+    public void changeSaleStatus(Long id){
+        ParrotEggNestEntity entity = parrotEggNestRepository.findOneById(id);
+        entity.setSaleStatus(true);
+        parrotEggNestRepository.save(entity);
+    }
 
 
     @Override

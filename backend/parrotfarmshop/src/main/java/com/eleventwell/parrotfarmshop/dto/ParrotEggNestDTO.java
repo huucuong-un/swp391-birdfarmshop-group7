@@ -27,4 +27,8 @@ public class ParrotEggNestDTO extends BaseDTO{
 
 
     private Long dadId;
+
+    private Boolean saleStatus;
+
+    private Long speciesEggPriceId;
 }

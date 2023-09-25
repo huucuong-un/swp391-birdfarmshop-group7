@@ -18,7 +18,7 @@ public class ParrotEggNestConverter {
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setMomId(entity.getParrotMom().getId());
         dto.setDadId(entity.getParrotDad().getId());
-        dto.setStatus(entity.getParrotEggNestStatus());
+        dto.setStatus(entity.getStatus());
 
         return dto;
     }
@@ -33,7 +33,7 @@ public class ParrotEggNestConverter {
         entity.setCreatedDate(dto.getCreatedDate());
 //        entity.setParrotMom(dto.getParrotMomId()); not convert here, it will be convert in IParrotEggNestService
 //        entity.setParrotDad(dto.getParrotDadId()); not convert here, it will be convert in IParrotEggNestService
-        entity.setParrotEggNestStatus(dto.getStatus());
+        entity.setStatus(dto.getStatus());
 
         return entity;
     }
@@ -46,7 +46,7 @@ public class ParrotEggNestConverter {
         entity.setCreatedDate(dto.getCreatedDate());
 //        entity.setParrotMom(dto.getParrotMomId()); not convert here, it will be convert in IParrotEggNestService
 //        entity.setParrotDad(dto.getParrotDadId()); not convert here, it will be convert in IParrotEggNestService
-        entity.setParrotEggNestStatus(dto.getStatus());
+        entity.setStatus(dto.getStatus());
 
 
 

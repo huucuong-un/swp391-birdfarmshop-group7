@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.dto;
 
+import com.eleventwell.parrotfarmshop.entity.BaseEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.PromotionEntity;
 import com.eleventwell.parrotfarmshop.entity.UserEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrderDTO {
+public class OrderDTO extends BaseDTO {
 
 
 
@@ -33,4 +34,6 @@ public class OrderDTO {
     private Boolean status;
 
     private Double totalPrice;
+
+    private int quantity;
 }

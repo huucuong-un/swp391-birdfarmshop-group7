@@ -75,7 +75,12 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 
 	@OneToMany(mappedBy = "parrotSpecies")
+	private List<SpeciesEggPriceEntity> speciesEggPrices = new ArrayList<>();
+
+	@OneToMany(mappedBy = "parrotSpecies")
 	private List<FeedbackEntity> feedbacks = new ArrayList<>();
+
+
 //	@NotBlank
 //	@Size(max=30)
 //	@Column(name = "parrotSpeciesName")

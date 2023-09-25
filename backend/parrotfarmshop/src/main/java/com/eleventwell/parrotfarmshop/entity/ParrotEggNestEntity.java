@@ -38,8 +38,18 @@ import lombok.ToString;
 @Table(name = "parrotEggNest")
 public class ParrotEggNestEntity extends BaseEntity {
 
-    @Column(name = "parrotEggNestStatus")
-    private String parrotEggNestStatus;
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "sale_status")
+    private Boolean saleStatus;
+
+    @Column(name = "price")
+    private Double price;
+
+    @ManyToOne
+    @JoinColumn(name ="species_egg_price_id" )
+    private SpeciesEggPriceEntity speciesEggPrice;
 
 //    @OneToOne(mappedBy = "parrotEggNest")
 //    private OrderDetailEntity orderDetailEntity;

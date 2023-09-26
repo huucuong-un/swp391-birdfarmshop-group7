@@ -1,0 +1,16 @@
+.container {
+    height: 1000px;
+    display: flex;
+    justify-content: start;
+}
+.accordion {
+}
+.accord-item {
+    margin: 12px 0;
+    span {
+        overflow: hidden;
+    }
+    button {
+        font-size: 18px;
+    }
+}

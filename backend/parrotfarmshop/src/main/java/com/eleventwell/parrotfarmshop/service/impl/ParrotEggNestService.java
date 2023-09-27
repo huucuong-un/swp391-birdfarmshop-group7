@@ -65,6 +65,10 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
         parrotEggNestRepository.save(entity);
     }
 
+    public Long countAvaiableNestById(Long id){
+        return parrotEggNestRepository.countAllBySaleStatusAndStatusAndSpeciesEggPriceParrotSpeciesId(false,"Done",id);
+    }
+
 
     @Override
     public void changeStatus(Long ids) {

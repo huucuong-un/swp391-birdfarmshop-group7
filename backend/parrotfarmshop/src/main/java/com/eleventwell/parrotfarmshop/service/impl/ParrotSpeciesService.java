@@ -5,7 +5,10 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericRepository;
@@ -81,7 +84,11 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
         return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesEntity,parrotSpeciesDTO.getClass());
 
     }
-
+public ParrotSpeciesDTO findOneSpeciesById (Long id){
+        ParrotSpeciesEntity entity =parrotSpeciesRepository.findOneById(id);
+        ParrotSpeciesDTO dto = (ParrotSpeciesDTO) genericConverter.toDTO(entity,ParrotSpeciesDTO.class);
+        return dto;
+}
     @Override
     public void changeStatus(Long ids) {
        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(ids);

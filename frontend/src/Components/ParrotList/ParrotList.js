@@ -8,8 +8,11 @@ import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faBagShopping, faCashRegister } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+
 import axios from 'axios';
+import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+
+import { useState, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -91,49 +94,45 @@ const PARROT_ITEMS = [
 
 function ParrotList() {
     const [color, setColor] = useState(null);
+    const [quantity, setQuantity] = useState(1);
 
     const handleColorSelection = (color) => {
         setColor(color);
     };
 
-    /*
-       
-     
-    const response = await axios.get('/api/parrot-species');
-    const data = response.data;
+    const handleQuantityIncrease = () => {
+        setQuantity((pre) => pre + 1);
+    };
 
-    // Equivalent using destructuring assignment
-    const { data } = await axios.get('/api/parrot-species');
+    const handleQuantityDecrease = () => {
+        setQuantity((pre) => pre - 1);
+    };
 
-    */
+    const [parrotSpecies, setParrotSpecies] = useState([]);
 
-    // response will conclude:
-    // {
-    //     data: {/* Response data */},
-    //     status: 200,
-    //      statusText: "OK",
-    //     headers: {/* Response headers */},
-    //     config: {/* Request configuration */},
-    //     request: {/* XMLHttpRequest or ClientRequest */}
-    // }
-
-    const getParrots = async () => {
+    const getParrotsSpecies = async () => {
         try {
-            const { data } = await axios.get('/api/parrot-species');
-            console.log(data);
+            const parrotSpeciesList = await ParrotSpeciesAPI.getAll();
+            setParrotSpecies(parrotSpeciesList);
         } catch (error) {
             console.error(error);
         }
     };
 
+    useEffect(() => {
+        // Gọi hàm getParrots khi component được mount
+        getParrotsSpecies();
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
+            <div className="right-container"></div>
             {PARROT_ITEMS.map((parrot, index) => {
                 return (
                     <Link className={cx('parrot-card')} key={index}>
                         <div className={cx('parrot-img')}>
-                            <Link onClick={() => getParrots()}>
-                                <img src={parrot.img} alt="parrot" />
+                            <Link>
+                                <img className={cx('img')} src={parrot.img} alt="parrot" />
                             </Link>
                             <Link to="/payment">
                                 <FontAwesomeIcon className={cx('buy-btn')} icon={faCashRegister} />
@@ -151,6 +150,7 @@ function ParrotList() {
                             </div>
                             <div className={cx('parrot-color')}>
                                 <input
+                                    key={index}
                                     className={cx('parrot-color-item')}
                                     onClick={() => handleColorSelection('red')}
                                     style={{ backgroundColor: parrot.color1 }}
@@ -166,7 +166,16 @@ function ParrotList() {
                                     style={{ backgroundColor: parrot.color3 }}
                                 ></input>
                             </div>
-                            <input className={cx('parrot-input-quantity')} type="number" defaultValue={1} min={1} />
+                            {/* <input className={cx('parrot-input-quantity')} type="number" defaultValue={1} min={1} /> */}
+                            <div className={cx('quantity-input-container')}>
+                                <button className={cx('quantity-input-btn')} onClick={handleQuantityDecrease}>
+                                    -
+                                </button>
+                                <input type="number" value={quantity} min={1} />
+                                <button className={cx('quantity-input-btn')} onClick={handleQuantityIncrease}>
+                                    +
+                                </button>
+                            </div>
                             <strong className={cx('parrot-price')}>{parrot.price}</strong>
                         </div>
                     </Link>

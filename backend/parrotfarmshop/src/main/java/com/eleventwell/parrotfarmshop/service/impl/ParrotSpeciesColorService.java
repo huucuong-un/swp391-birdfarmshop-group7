@@ -10,6 +10,7 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -71,6 +72,7 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     @Override
     public void changeStatus(Long id) {
+
         ParrotSpeciesColorEntity parrotSpeciesColorEntity = parrotSpeciesColorRepository.findOneById(id);
         if(parrotSpeciesColorEntity.getStatus() == true){
             parrotSpeciesColorEntity.setStatus(false);
@@ -79,6 +81,22 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
         }
         parrotSpeciesColorRepository.save(parrotSpeciesColorEntity);
 
+
+
+
+
+    }
+
+
+    public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesId(id);
+        List<ParrotSpeciesColorDTO>  result = new ArrayList<>();
+        for (ParrotSpeciesColorEntity entity:
+             entities) {
+            ParrotSpeciesColorDTO dto = (ParrotSpeciesColorDTO) converter.toDTO(entity, ParrotSpeciesColorDTO.class);
+            result.add(dto);
+        }
+        return result;
     }
 
 }

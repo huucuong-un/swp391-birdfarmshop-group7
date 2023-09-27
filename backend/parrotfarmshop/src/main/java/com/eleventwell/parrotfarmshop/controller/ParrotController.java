@@ -5,8 +5,10 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.ParrotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,8 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/parrot")
 public class ParrotController {
+
      @Autowired
-    private IGenericService parrotService;
+    private ParrotService parrotService;
      
      @GetMapping(value="")
      public ListOutput showParrots(){
@@ -35,6 +38,11 @@ public class ParrotController {
       result.setListResult(parrotService.findAll());
       return  result;
      }
+    @GetMapping(value="/count-available-parrot-quantity-spcies-by-id/{id}")
+    public Long countAvaiableParrotById(@RequestBody @PathVariable("id") long id){
+
+        return parrotService.countAvaiableParrotById(id);
+    }
      
        @PostMapping(value="")
       public ParrotDTO createParrot(@RequestBody ParrotDTO model){
@@ -52,11 +60,13 @@ public class ParrotController {
 //	public void deleteParrot(@RequestBody Long[] ids) {
 //		parrotService.delete(ids);
 //	}
+
     @DeleteMapping(value = "{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
          parrotService.changeStatus(id);
     }
      
+
    
      
      

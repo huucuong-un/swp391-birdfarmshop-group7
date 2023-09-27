@@ -35,7 +35,7 @@ public class OrderController {
 
 
     @PostMapping(value = "/{species}/{product}")
-public void createOrder(@RequestBody OrderDTO dto,@PathVariable String product,@PathVariable Long species) {
+public void createOrder(@RequestBody OrderDTO dto,@PathVariable Long species,@PathVariable String product) {
 
     orderService.createOrderDetail(dto,species,product);
 }

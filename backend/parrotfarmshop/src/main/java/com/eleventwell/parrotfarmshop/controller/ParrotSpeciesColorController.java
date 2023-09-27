@@ -1,11 +1,14 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import com.eleventwell.parrotfarmshop.service.impl.ParrotSpeciesColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -15,19 +18,19 @@ public class ParrotSpeciesColorController {
     private ParrotSpeciesColorService parrotSpeciesColorService;
     
     @GetMapping(value = "") 
-    public ListOutput showParrotSpeciesColors() {
+    public List<ParrotSpeciesColorDTO> showParrotSpeciesColors() {
         ListOutput result = new ListOutput();
         
         result.setListResult(parrotSpeciesColorService.findAll());
-        return result;
+        return result.getListResult();
     }
 
     @GetMapping(value = "find-by-parrot-species-id/{id}")
-    public ListOutput getParrotSpeciesColorsBySpeciesId(@PathVariable("id") Long id) {
+    public List<ParrotSpeciesColorDTO> getParrotSpeciesColorsBySpeciesId(@PathVariable("id") Long id) {
         ListOutput result = new ListOutput();
 
         result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
-        return result;
+        return result.getListResult();
     }
 
     @PostMapping(value = "")
@@ -41,8 +44,8 @@ public class ParrotSpeciesColorController {
         return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);
     }
     
-    @DeleteMapping(value = "")
-    public void deleteaParrotSpeciesColor(@RequestBody Long id) {
+    @DeleteMapping(value = "{id}")
+    public void deleteaParrotSpeciesColor(@RequestBody @PathVariable("id") Long id) {
         parrotSpeciesColorService.changeStatus(id);
     }
 }

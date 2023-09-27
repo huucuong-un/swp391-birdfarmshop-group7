@@ -68,22 +68,22 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 
-    public void createOrderDetail(OrderDTO dto,Long speciesId ,String check) {
-       OrderDTO  orderDTO = save(dto);
+    public void createOrderDetail(OrderDTO dto, Long speciesId, String check) {
+        OrderDTO orderDTO = save(dto);
         Double totalPrice = 0.0;
         Pageable pageable = (Pageable) PageRequest.of(0, orderDTO.getQuantity()); // Create a PageRequest with desired page size
 
         if (check.equals("parrot")) {
-            List<ParrotEntity> parrots = parrotRepository.findTopNByStatusIsTrue(speciesId,  pageable);
+            List<ParrotEntity> parrots = parrotRepository.findTopNByStatusIsTrue(speciesId, pageable);
 
             for (ParrotEntity id : parrots) {
                 orderDetailService.createOrderDetailDTO(orderDTO.getId(), id.getId(), 1);
-                parrotService.changeSaleStatus(id.getId());
+                parrotService.changeStatus(id.getId());
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }
         if (check.equals("nest")) {
-            List<ParrotEggNestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId,pageable);
+            List<ParrotEggNestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
 
             for (ParrotEggNestEntity id : nests) {
                 orderDetailService.createOrderDetailDTO(orderDTO.getId(), id.getId(), 2);

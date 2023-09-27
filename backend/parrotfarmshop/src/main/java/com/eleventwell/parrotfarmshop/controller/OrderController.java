@@ -35,13 +35,13 @@ public class OrderController {
 
 
     @PostMapping(value = "/{species}/{product}")
-public void createOrder(@RequestBody OrderDTO dto,@PathVariable String product,@PathVariable Long species) {
+public void createOrder(@RequestBody OrderDTO dto,@PathVariable Long species,@PathVariable String product) {
 
     orderService.createOrderDetail(dto,species,product);
 }
-    @DeleteMapping(value = "")
-    public void deleteParrot(@RequestBody Long ids) {
-        orderService.changeStatus(ids);
+    @DeleteMapping(value = "{id}")
+    public void deleteParrot(@RequestBody @PathVariable("id") Long id) {
+        orderService.changeStatus(id);
     }
 
 

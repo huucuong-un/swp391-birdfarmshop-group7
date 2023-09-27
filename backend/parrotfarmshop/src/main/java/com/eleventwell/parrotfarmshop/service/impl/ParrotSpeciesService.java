@@ -5,7 +5,10 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericRepository;
@@ -67,7 +70,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     @Override
     public ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO) {
         ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
-
+        if(parrotSpeciesDTO.getStatus() == null){
+            parrotSpeciesDTO.setStatus(false);
+        }
         if (parrotSpeciesDTO.getId() != null) {
             ParrotSpeciesEntity oldEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
             parrotSpeciesEntity = (ParrotSpeciesEntity) genericConverter.updateEntity(parrotSpeciesDTO, oldEntity);
@@ -79,16 +84,19 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
         return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesEntity,parrotSpeciesDTO.getClass());
 
     }
-
+public ParrotSpeciesDTO findOneSpeciesById (Long id){
+        ParrotSpeciesEntity entity =parrotSpeciesRepository.findOneById(id);
+        ParrotSpeciesDTO dto = (ParrotSpeciesDTO) genericConverter.toDTO(entity,ParrotSpeciesDTO.class);
+        return dto;
+}
     @Override
     public void changeStatus(Long ids) {
-        List<Long> idList = Arrays.asList(ids);
-        parrotSpeciesRepository.deleteAllById((idList));
-
-
-//        for (long item : ids) {
-//            parrotSpeciesRepository.deleteById(item);
-//        }
-
+       ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(ids);
+       if(parrotSpeciesEntity.getStatus() == true){
+           parrotSpeciesEntity.setStatus(false);
+       }else{
+           parrotSpeciesEntity.setStatus(true);
+       }
+       parrotSpeciesRepository.save(parrotSpeciesEntity);
     }
 }

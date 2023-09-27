@@ -39,7 +39,10 @@ import lombok.ToString;
 public class ParrotEggNestEntity extends BaseEntity {
 
     @Column(name = "status")
-    private String status;
+    private Boolean status;
+
+    @Column(name="breed_status")
+    private String breedStatus;
 
     @Column(name = "sale_status")
     private Boolean saleStatus;

@@ -33,4 +33,9 @@ public class SpeciesEggPriceController {
         model.setId(id);
         return (RoleDTO) speciesEggPriceService.save(model);
     }
+
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") long id){
+        speciesEggPriceService.changeStatus(id);
+    }
 }

@@ -55,7 +55,13 @@ public class RoleService implements IGenericService<RoleDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-
+        RoleEntity roleEntity = roleRepository.findOneById(ids);
+        if(roleEntity.getStatus() == true){
+            roleEntity.setStatus(false);
+        }else{
+            roleEntity.setStatus(true);
+        }
+        roleRepository.save(roleEntity);
     }
 
 }

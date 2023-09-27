@@ -36,6 +36,10 @@ public class PostAPI {
 //    public void deletePost(@RequestBody long[] ids){
 //        postService.delete(ids);
 //    }
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") Long id){
+        postService.changeStatus(id);
+    }
 }
 
 

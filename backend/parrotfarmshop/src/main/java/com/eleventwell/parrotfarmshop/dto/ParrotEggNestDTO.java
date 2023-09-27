@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class ParrotEggNestDTO extends BaseDTO{
 
-    private String status;
+    private Boolean status;
 
 
     private Long orderDetailId;
@@ -31,4 +31,7 @@ public class ParrotEggNestDTO extends BaseDTO{
     private Boolean saleStatus;
 
     private Long speciesEggPriceId;
+
+    private String breedStatus;
+
 }

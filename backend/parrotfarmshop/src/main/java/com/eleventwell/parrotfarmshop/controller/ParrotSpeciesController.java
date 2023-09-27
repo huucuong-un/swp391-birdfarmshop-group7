@@ -8,7 +8,10 @@ import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 //import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.eleventwell.parrotfarmshop.service.impl.ParrotSpeciesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/parrot-species")
 public class ParrotSpeciesController {
     @Autowired
-    private IGenericService parrotSpeciesService;
+    private ParrotSpeciesService parrotSpeciesService;
     
     @GetMapping(value = "") 
     public List<ParrotSpeciesDTO> showParrotSpecies() {
@@ -37,6 +40,13 @@ public class ParrotSpeciesController {
         
         result.setListResult(parrotSpeciesService.findAll());
         return result.getListResult();
+    }
+
+    @GetMapping(value = "find-one-species-by-id/{id}")
+    public List<ParrotSpeciesDTO> findOneSpeciesById(@RequestBody @PathVariable("id") long id) {
+List<ParrotSpeciesDTO> list = new ArrayList<>();
+list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
+        return list;
     }
     @PostMapping(value = "")
 	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
@@ -47,8 +57,8 @@ public class ParrotSpeciesController {
 		model.setId(id);
 		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
 	}
-        @DeleteMapping(value = "")
-	public void deleteParrotSpecies(@RequestBody Long ids) {
+        @DeleteMapping(value = "{ids}")
+	public void deleteParrotSpecies(@RequestBody @PathVariable("ids") Long ids) {
 		parrotSpeciesService.changeStatus(ids);
 	}
 }

@@ -35,4 +35,9 @@ public class UserController {
 
         return  userService.save(model);
     }
+
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") Long id){
+        userService.changeStatus(id);
+    }
 }

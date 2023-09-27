@@ -72,7 +72,17 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     @Override
     public void changeStatus(Long id) {
-        ParrotSpeciesColorEntity entity = parrotSpeciesColorRepository.findOneById(id);
+
+        ParrotSpeciesColorEntity parrotSpeciesColorEntity = parrotSpeciesColorRepository.findOneById(id);
+        if(parrotSpeciesColorEntity.getStatus() == true){
+            parrotSpeciesColorEntity.setStatus(false);
+        }else{
+            parrotSpeciesColorEntity.setStatus(true);
+        }
+        parrotSpeciesColorRepository.save(parrotSpeciesColorEntity);
+
+
+
 
 
     }

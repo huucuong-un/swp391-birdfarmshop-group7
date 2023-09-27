@@ -27,4 +27,7 @@ public class SpeciesEggPriceEntity extends BaseEntity {
   @Column(name="quantity")
   private Integer quantity;
 
+  @Column(name = "status")
+  private Boolean status;
+
 }

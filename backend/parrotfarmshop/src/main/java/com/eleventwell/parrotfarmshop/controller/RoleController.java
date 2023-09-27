@@ -33,5 +33,10 @@ public class RoleController {
         return (RoleDTO) roleService.save(model);
     }
 
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") Long id){
+        roleService.changeStatus(id);
+    }
+
 
 }

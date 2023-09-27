@@ -2,6 +2,7 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.UserDTO;
+import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.UserEntity;
 import com.eleventwell.parrotfarmshop.repository.UserRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -52,6 +53,14 @@ public class UserService implements IGenericService<UserDTO> {
 
     @Override
     public void changeStatus(Long ids) {
+        UserEntity userEntity = userRepository.findOneById(ids);
+        if (userEntity.getStatus() == true) {
+            userEntity.setStatus(false);
+        } else {
+            userEntity.setStatus(true);
+        }
+        userRepository.save(userEntity);
+
 
     }
 }

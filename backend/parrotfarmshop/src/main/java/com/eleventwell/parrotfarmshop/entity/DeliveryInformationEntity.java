@@ -40,10 +40,12 @@ public class DeliveryInformationEntity extends BaseEntity {
 	@Column(name = "address")
 	private String address;
 	
-	
-	
+
 	@ManyToOne
     @JoinColumn(name = "userID")
     private UserEntity user;
-	
+
+	@Column(name = "status")
+	private Boolean status;
+
 }

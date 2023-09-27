@@ -8,11 +8,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 /**
  *
  * @author Admin
  */
+@ToString
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+
 @Entity
 @Table(name="FAQs")
 public class FAQEntity extends BaseEntity {
@@ -25,9 +34,9 @@ public class FAQEntity extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    @NotBlank
+
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
 
 }

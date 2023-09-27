@@ -23,4 +23,5 @@ public class SpeciesEggPriceDTO extends BaseDTO {
 
     private Integer quantity;
 
+    private Boolean status;
 }

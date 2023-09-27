@@ -49,7 +49,13 @@ public class PromotionService implements IGenericService<PromotionDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-
+        PromotionEntity promotionEntity = promotionRepository.findOneById(ids);
+        if(promotionEntity.getStatus() == true){
+            promotionEntity.setStatus(false);
+        }else{
+            promotionEntity.setStatus(true);
+        }
+        promotionRepository.save(promotionEntity);
     }
 
 

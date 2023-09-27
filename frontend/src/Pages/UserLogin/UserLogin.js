@@ -13,8 +13,9 @@ function UserLogin() {
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 <form className={cx('inner')}>
-                    <Title className={cx('login-title')}>Login here.</Title>
-
+                    <div className={cx('login-title-container')}>
+                        <Title className={cx('login-title')}>Login here.</Title>
+                    </div>
                     <div className={cx('notification-container')}>
                         {/* <div className={cx('notification')}>
                             <Title children={'Wrong username or password'}></Title>
@@ -39,7 +40,9 @@ function UserLogin() {
                         <Button className={cx('forgot')}>Forgot password</Button>
                     </div>
 
-                    <Button loginSystemBtn>Login</Button>
+                    <Button classname={cx('login-btn')} loginSystemBtn>
+                        Login
+                    </Button>
                     <Title className={cx('google-title')}>Or use your account</Title>
                     <Button className={cx('google')}>
                         <img src={googleLogo} />
@@ -47,10 +50,10 @@ function UserLogin() {
                 </form>
 
                 <div className={cx('register')}>
-                    <Title className={cx('register-title')}>Welcome to my bird farm shop</Title>
-                    <Button className={cx('register-btn')} loginSystemBtn>
-                        Register
-                    </Button>
+                    <div>
+                        <Title className={cx('register-title')}>Welcome to my bird farm shop</Title>
+                    </div>
+                    <Button loginSystemBtn>Register</Button>
                 </div>
             </div>
         </div>

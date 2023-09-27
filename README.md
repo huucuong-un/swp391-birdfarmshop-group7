@@ -1,1 +1,9 @@
-# SWP391 - BIRD FARM SHOP
+# Welcome to Parrot Farm Shop Repository
+
+### This repo can give you
+* Coming soon...
+
+### Images
+* Coming soon...
+
+

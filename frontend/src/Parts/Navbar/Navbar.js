@@ -163,7 +163,7 @@ function Navbar() {
                         ABOUT
                     </Button>
 
-                    <Button className={cx('nav-bottom-item')} text>
+                    <Button to="/faq" className={cx('nav-bottom-item')} text>
                         FAQS
                     </Button>
                 </div>

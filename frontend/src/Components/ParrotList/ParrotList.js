@@ -14,6 +14,33 @@ import { useState, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
+const parrotSpeciesURL = 'http://localhost:8086/api/parrot-species';
+
+// Make an HTTP GET request to the API endpoint
+const datas = () => {
+    fetch(parrotSpeciesURL)
+        .then((response) => {
+            // Check if the response status is OK (200)
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            // Parse the JSON response
+            return response.json();
+        })
+        .then((data) => {
+            // Store the fetched data in a constant variable
+            const parrotSpeciesData = data;
+
+            // You can now use parrotSpeciesData as needed
+            console.log(parrotSpeciesData);
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the fetch
+            console.error('Fetch error:', error);
+        });
+};
+console.log(datas);
+
 function ParrotList() {
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [combineData, setCombineData] = useState([]);

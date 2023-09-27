@@ -39,9 +39,9 @@ public void createOrder(@RequestBody OrderDTO dto,@PathVariable String product,@
 
     orderService.createOrderDetail(dto,species,product);
 }
-    @DeleteMapping(value = "")
-    public void deleteParrot(@RequestBody Long ids) {
-        orderService.changeStatus(ids);
+    @DeleteMapping(value = "{id}")
+    public void deleteParrot(@RequestBody @PathVariable("id") Long id) {
+        orderService.changeStatus(id);
     }
 
 

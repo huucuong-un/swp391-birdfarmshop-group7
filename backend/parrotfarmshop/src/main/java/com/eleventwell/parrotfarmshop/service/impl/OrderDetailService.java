@@ -66,6 +66,5 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-
     }
 }

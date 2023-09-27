@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PostService  implements IGenericService<PostDTO> {
-
+public class PostService implements IGenericService<PostDTO> {
 
 
     @Autowired
@@ -28,7 +27,7 @@ public class PostService  implements IGenericService<PostDTO> {
         List<PostDTO> result = new ArrayList<>();
         List<PostEntity> entities = postRepository.findAll();
 
-        for (PostEntity entity : entities){
+        for (PostEntity entity : entities) {
             PostDTO postDTO = (PostDTO) genericConverter.toDTO(entity, PostDTO.class);
             result.add(postDTO);
         }
@@ -38,10 +37,10 @@ public class PostService  implements IGenericService<PostDTO> {
     @Override
     public PostDTO save(PostDTO postDTO) {
         PostEntity postEntity = new PostEntity();
-        if(postDTO.getId() != null){
+        if (postDTO.getId() != null) {
             PostEntity oldEntity = postRepository.findOneById(postDTO.getId());
             postEntity = (PostEntity) genericConverter.updateEntity(postDTO, oldEntity);
-        }else{
+        } else {
             postEntity = (PostEntity) genericConverter.toEntity(postDTO, PostEntity.class);
         }
         postRepository.save(postEntity);
@@ -50,7 +49,13 @@ public class PostService  implements IGenericService<PostDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-
+        PostEntity postEntity = postRepository.findOneById(ids);
+        if (postEntity.getStatus() == true) {
+            postEntity.setStatus(false);
+        } else {
+            postEntity.setStatus(true);
+        }
+        postRepository.save(postEntity);
     }
 
 

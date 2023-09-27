@@ -67,7 +67,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     @Override
     public ParrotSpeciesDTO save(ParrotSpeciesDTO parrotSpeciesDTO) {
         ParrotSpeciesEntity parrotSpeciesEntity = new ParrotSpeciesEntity();
-
+        if(parrotSpeciesDTO.getStatus() == null){
+            parrotSpeciesDTO.setStatus(false);
+        }
         if (parrotSpeciesDTO.getId() != null) {
             ParrotSpeciesEntity oldEntity = parrotSpeciesRepository.findOneById(parrotSpeciesDTO.getId());
             parrotSpeciesEntity = (ParrotSpeciesEntity) genericConverter.updateEntity(parrotSpeciesDTO, oldEntity);
@@ -82,13 +84,12 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-        List<Long> idList = Arrays.asList(ids);
-        parrotSpeciesRepository.deleteAllById((idList));
-
-
-//        for (long item : ids) {
-//            parrotSpeciesRepository.deleteById(item);
-//        }
-
+       ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(ids);
+       if(parrotSpeciesEntity.getStatus() == true){
+           parrotSpeciesEntity.setStatus(false);
+       }else{
+           parrotSpeciesEntity.setStatus(true);
+       }
+       parrotSpeciesRepository.save(parrotSpeciesEntity);
     }
 }

@@ -47,8 +47,8 @@ public class ParrotSpeciesController {
 		model.setId(id);
 		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
 	}
-        @DeleteMapping(value = "")
-	public void deleteParrotSpecies(@RequestBody Long ids) {
+        @DeleteMapping(value = "{ids}")
+	public void deleteParrotSpecies(@RequestBody @PathVariable("ids") Long ids) {
 		parrotSpeciesService.changeStatus(ids);
 	}
 }

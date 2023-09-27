@@ -37,6 +37,10 @@ public class PromotionAPI {
 //    public void delete(@RequestBody long[] ids){
 //        promotionService.delete(ids);
 //    }
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") Long id){
+        promotionService.changeStatus(id);
+    }
 
 
 }

@@ -32,8 +32,8 @@ public class ParrotSpeciesColorController {
         return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);
     }
     
-    @DeleteMapping(value = "")
-    public void deleteaParrotSpeciesColor(@RequestBody Long id) {
+    @DeleteMapping(value = "{id}")
+    public void deleteaParrotSpeciesColor(@RequestBody @PathVariable("id") Long id) {
         parrotSpeciesColorService.changeStatus(id);
     }
 }

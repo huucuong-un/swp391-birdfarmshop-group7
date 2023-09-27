@@ -35,8 +35,8 @@ public class ParrotEggNestController {
        return (ParrotEggNestDTO) parrotEggNestService.save(model);
     }
 
-    @DeleteMapping(value = "")
-    public void deleteParrotEggNest(@RequestBody Long ids){
-        parrotEggNestService.changeStatus(ids);
+    @DeleteMapping(value = "{id}")
+    public void deleteParrotEggNest(@RequestBody @PathVariable("id") Long id){
+        parrotEggNestService.changeStatus(id);
     }
 }

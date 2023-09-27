@@ -71,14 +71,14 @@ public class ParrotService implements IGenericService<ParrotDTO> {
     }
 
     @Override
-    public void changeStatus(Long ids) {
-
-    }
-
-    public void changeSaleStatus(Long id){
-        ParrotEntity entity = parrotRepository.findOneById(id);
-        entity.setSaleStatus(true);
-        parrotRepository.save(entity);
+    public void changeStatus(Long id){
+        ParrotEntity parrotEntity = parrotRepository.findOneById(id);
+        if(parrotEntity.getStatus() == true){
+            parrotEntity.setStatus(false);
+        }else{
+            parrotEntity.setStatus(true);
+        }
+        parrotRepository.save(parrotEntity);
     }
 
     

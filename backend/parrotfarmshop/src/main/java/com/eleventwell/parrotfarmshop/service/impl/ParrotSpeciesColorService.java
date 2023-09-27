@@ -5,6 +5,7 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 //import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesColorConverter;
+
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
@@ -15,11 +16,11 @@ import com.eleventwell.parrotfarmshop.service.IGenericService;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Admin
  */
 @Service
@@ -36,7 +37,6 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     @Autowired
     private GenericConverter converter;
-
 
 
     @Override
@@ -71,8 +71,13 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     @Override
     public void changeStatus(Long id) {
-ParrotSpeciesColorEntity entity = parrotSpeciesColorRepository.findOneById(id);
-
+        ParrotSpeciesColorEntity parrotSpeciesColorEntity = parrotSpeciesColorRepository.findOneById(id);
+        if(parrotSpeciesColorEntity.getStatus() == true){
+            parrotSpeciesColorEntity.setStatus(false);
+        }else{
+            parrotSpeciesColorEntity.setStatus(true);
+        }
+        parrotSpeciesColorRepository.save(parrotSpeciesColorEntity);
 
     }
 

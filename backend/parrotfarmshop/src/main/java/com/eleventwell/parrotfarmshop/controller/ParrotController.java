@@ -52,6 +52,10 @@ public class ParrotController {
 //	public void deleteParrot(@RequestBody Long[] ids) {
 //		parrotService.delete(ids);
 //	}
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changeStatus(id);
+    }
      
    
      

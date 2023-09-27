@@ -27,7 +27,7 @@ public class FAQEntity extends BaseEntity {
 
     @NotBlank
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
 
 }

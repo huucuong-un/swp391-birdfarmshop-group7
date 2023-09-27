@@ -26,11 +26,11 @@ public class ParrotSpeciesColorController {
     }
 
     @GetMapping(value = "find-by-parrot-species-id/{id}")
-    public ListOutput getParrotSpeciesColorsBySpeciesId(@PathVariable("id") Long id) {
+    public List<ParrotSpeciesColorDTO> getParrotSpeciesColorsBySpeciesId(@PathVariable("id") Long id) {
         ListOutput result = new ListOutput();
 
         result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
-        return result;
+        return result.getListResult();
     }
 
     @PostMapping(value = "")

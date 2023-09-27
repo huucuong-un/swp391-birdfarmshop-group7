@@ -17,4 +17,7 @@ public interface ParrotEggNestRepository extends JpaRepository<ParrotEggNestEnti
 
     @Query("SELECT u FROM ParrotEggNestEntity u WHERE u.status = 'Done' AND u.saleStatus = false AND u.speciesEggPrice.parrotSpecies.id = :speciesId")
     List<ParrotEggNestEntity> findTopNByStatusIsTrue(@Param("speciesId") Long speciesId,Pageable pageable);
+
+    Long countAllBySaleStatusAndStatusAndSpeciesEggPriceParrotSpeciesId(Boolean saleStatus, String status, Long id);
+
 }

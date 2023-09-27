@@ -26,10 +26,10 @@ public class DeliveryInformationController {
     }
 
     @PutMapping(value = "{id}")
-    public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model, @RequestBody Long id) {
+    public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return deliveryInformationService.save(model);
 
-    } 
+    }
 
 }

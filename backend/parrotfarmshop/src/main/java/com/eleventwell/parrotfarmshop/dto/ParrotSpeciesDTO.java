@@ -41,5 +41,7 @@ public class ParrotSpeciesDTO extends BaseDTO {
 	private Double nestAverageRating;
 
 	private String img;
+
+	private Boolean status;
 	
 }

@@ -78,7 +78,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
             for (ParrotEntity id : parrots) {
                 orderDetailService.createOrderDetailDTO(orderDTO.getId(), id.getId(), 1);
-                parrotService.changeSaleStatus(id.getId());
+                parrotService.changeStatus(id.getId());
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }

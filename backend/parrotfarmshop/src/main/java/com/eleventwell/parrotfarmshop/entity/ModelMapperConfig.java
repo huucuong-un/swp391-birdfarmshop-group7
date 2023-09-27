@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.config;
+package com.eleventwell.parrotfarmshop.entity;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

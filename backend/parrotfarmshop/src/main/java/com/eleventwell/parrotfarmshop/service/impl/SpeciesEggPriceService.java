@@ -14,19 +14,19 @@ import java.util.List;
 
 @Service
 public class SpeciesEggPriceService implements IGenericService<SpeciesEggPriceDTO> {
-@Autowired
+    @Autowired
     SpeciesEggPriceRepository speciesEggPriceRepository;
 
     @Autowired
     ParrotSpeciesRepository parrotSpeciesRepository;
 
-@Autowired
-GenericConverter converter;
+    @Autowired
+    GenericConverter converter;
 
     @Override
     public List<SpeciesEggPriceDTO> findAll() {
         List<SpeciesEggPriceEntity> speciesEggPrices = speciesEggPriceRepository.findAll();
-        List<SpeciesEggPriceDTO> speciesEggPriceDTOs =  new ArrayList<>();
+        List<SpeciesEggPriceDTO> speciesEggPriceDTOs = new ArrayList<>();
 
         for (SpeciesEggPriceEntity entity : speciesEggPrices) {
             SpeciesEggPriceDTO dto = (SpeciesEggPriceDTO) converter.toDTO(entity, SpeciesEggPriceDTO.class);
@@ -38,20 +38,29 @@ GenericConverter converter;
 
     @Override
     public SpeciesEggPriceDTO save(SpeciesEggPriceDTO dto) {
-SpeciesEggPriceEntity speciesEggPriceEntity = new SpeciesEggPriceEntity();
-if(dto.getId() !=null){
-    SpeciesEggPriceEntity oldEntity = speciesEggPriceRepository.findOneById(dto.getId());
-    speciesEggPriceEntity = (SpeciesEggPriceEntity) converter.updateEntity(dto,oldEntity);
-}else{
-    speciesEggPriceEntity = (SpeciesEggPriceEntity) converter.toEntity(dto,speciesEggPriceEntity.getClass());
-}
-speciesEggPriceEntity.setParrotSpecies(parrotSpeciesRepository.findOneById(dto.getSpeciesId()));
-speciesEggPriceRepository.save(speciesEggPriceEntity);
-return (SpeciesEggPriceDTO) converter.toDTO(speciesEggPriceEntity, SpeciesEggPriceDTO.class);
+        SpeciesEggPriceEntity speciesEggPriceEntity = new SpeciesEggPriceEntity();
+        if(dto.getStatus() == null){
+            dto.setStatus(false);
+        }
+        if (dto.getId() != null) {
+            SpeciesEggPriceEntity oldEntity = speciesEggPriceRepository.findOneById(dto.getId());
+            speciesEggPriceEntity = (SpeciesEggPriceEntity) converter.updateEntity(dto, oldEntity);
+        } else {
+            speciesEggPriceEntity = (SpeciesEggPriceEntity) converter.toEntity(dto, speciesEggPriceEntity.getClass());
+        }
+        speciesEggPriceEntity.setParrotSpecies(parrotSpeciesRepository.findOneById(dto.getSpeciesId()));
+        speciesEggPriceRepository.save(speciesEggPriceEntity);
+        return (SpeciesEggPriceDTO) converter.toDTO(speciesEggPriceEntity, SpeciesEggPriceDTO.class);
     }
 
     @Override
     public void changeStatus(Long ids) {
-
+        SpeciesEggPriceEntity speciesEggPriceEntity = speciesEggPriceRepository.findOneById(ids);
+        if (speciesEggPriceEntity.getStatus() == true) {
+            speciesEggPriceEntity.setStatus(false);
+        } else {
+            speciesEggPriceEntity.setStatus(true);
+        }
+        speciesEggPriceRepository.save(speciesEggPriceEntity);
     }
 }

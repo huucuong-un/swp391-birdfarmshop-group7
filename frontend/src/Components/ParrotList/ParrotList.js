@@ -16,81 +16,109 @@ import { useState, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
-const PARROT_ITEMS = [
-    {
-        name: 'Grey Parrot',
-        img: parrot,
-        like: 15,
-        price: '1 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
+const PARROT_ITEMS = () => {};
+// const PARROT_ITEMS = [
+//     {
+//         name: 'Grey Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '1 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
 
-    {
-        name: 'Black Parrot',
-        img: parrot,
-        like: 15,
-        price: '2 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-    {
-        name: 'Red Parrot',
-        img: parrot,
-        like: 15,
-        price: '3 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-    {
-        name: 'Pink Parrot',
-        img: parrot,
-        like: 15,
-        price: '4 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-    {
-        name: 'Pink Parrot',
-        img: parrot,
-        like: 15,
-        price: '4 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-    {
-        name: 'Pink Parrot',
-        img: parrot,
-        like: 15,
-        price: '4 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-    {
-        name: 'Pink Parrot',
-        img: parrot,
-        like: 15,
-        price: '4 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-    {
-        name: 'Pink Parrot',
-        img: parrot,
-        like: 15,
-        price: '4 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-];
+//     {
+//         name: 'Black Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '2 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+//     {
+//         name: 'Red Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '3 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+//     {
+//         name: 'Pink Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '4 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+//     {
+//         name: 'Pink Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '4 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+//     {
+//         name: 'Pink Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '4 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+//     {
+//         name: 'Pink Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '4 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+//     {
+//         name: 'Pink Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '4 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+// ];
+
+const parrotSpeciesURL = 'http://localhost:8086/api/parrot-species';
+
+// Make an HTTP GET request to the API endpoint
+const datas = () => {
+    fetch(parrotSpeciesURL)
+        .then((response) => {
+            // Check if the response status is OK (200)
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            // Parse the JSON response
+            return response.json();
+        })
+        .then((data) => {
+            // Store the fetched data in a constant variable
+            const parrotSpeciesData = data;
+
+            // You can now use parrotSpeciesData as needed
+            console.log(parrotSpeciesData);
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the fetch
+            console.error('Fetch error:', error);
+        });
+};
+console.log(datas);
 
 function ParrotList() {
     const [color, setColor] = useState(null);

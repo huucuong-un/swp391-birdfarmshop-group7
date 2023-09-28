@@ -35,13 +35,15 @@ public class SliderEntity extends BaseEntity {
 	@NotBlank
 	@Size(max=100)
 	@Column(name = "slider_name")
-	private String SliderName;
+	private String sliderName;
 
 	@NotBlank
 	@Lob
 	@Column(name = "slider_imageURL")
-	private String SliderImageURL;
-	
+	private String sliderImageURL;
+
+	@Column(name = "status")
+	private Boolean status;
 	
  
 

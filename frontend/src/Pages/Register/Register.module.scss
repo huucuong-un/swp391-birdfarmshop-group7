@@ -29,24 +29,6 @@
     flex-wrap: wrap;
 }
 
-.gender-container {
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    align-items: center;
-}
-
-.gender-title {
-    width: 100%;
-    h1 {
-        padding: 0;
-        margin: 0;
-        display: inline-block;
-        font-size: 20px;
-        overflow: hidden;
-    }
-}
-
 .dob-container {
     display: flex;
     justify-content: center;
@@ -62,11 +44,6 @@
     }
 }
 
-.gender {
-    display: flex;
-    width: 100%;
-    gap: 111px;
-}
 .input-radio {
     padding-top: 3px;
     margin: 0 0 0 0;
@@ -78,26 +55,12 @@
     width: 100%;
     align-items: center;
 }
-.gender-input {
-    display: flex;
-    width: 20%;
-    height: 100%;
-
-    h1 {
-        font-weight: 100;
-        margin: 0;
-        padding: 0;
-        font-size: 20px;
-        width: 150px;
-    }
-}
 
 .input-container {
     width: 50%;
     padding: 100px 100px 0 100px;
     display: flex;
-    justify-content: space-between;
-
+    gap: 40px;
     flex-direction: column;
 }
 .dob-container {
@@ -111,14 +74,55 @@
     }
 }
 
-.register-btn {
-    width: 20%;
-    height: 30%;
-    margin: 0;
-}
 .register-container {
     display: flex;
+    // justify-content: center;
+    // align-items: center;
+}
+
+.register-btn {
+    width: 20%;
+    padding: 15px 10px;
+    margin-top: 30px;
+}
+
+.dob-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    gap: 5px;
+}
+
+.dob-title h2 {
+    overflow: hidden;
+}
+
+.dob-date {
+    padding: 20px;
+}
+
+.gender-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+.gender-container h2 {
+    overflow: hidden;
+}
+
+.gender-input {
+    display: flex;
     align-items: center;
-    width: 100%;
+    gap: 30px;
+}
+
+.gender-input-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }

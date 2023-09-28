@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = "com.eleventwell.parrotfarmshop")
-
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 
 public class ParrotfarmshopApplication {

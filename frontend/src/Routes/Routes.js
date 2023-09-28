@@ -11,22 +11,25 @@ import UserLogin from '~/Pages/UserLogin/UserLogin';
 import OrderHistory from '~/Pages/OrderHistory/OrderHistory';
 import FAQs from '~/Pages/FAQs/FAQs';
 import Register from '~/Pages/Register/Register';
+import DeliveryInformation from '~/Pages/DeliveryInformation/DeliveryInformation';
 import ParrotDetail from '~/Pages/ParrotDetail/ParrotDetail';
 import AddParotSpecies from '~/Pages/AddParrotSpecies/AddParrotSpecies';
+
 import AddParrot from '~/Pages/AddParrot/AddParrot';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
     { path: '/parrotProduct', component: ParrotProduct },
     { path: '/nest', component: Nest },
-    { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/payment', component: Payment },
+    { path: '/parrotdetail/:id', component: ParrotDetail },
+    { path: '/orderhistory', component: OrderHistory },
+    { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/parrotdetail', component: ParrotDetail },
-    { path: '/orderhistory', component: OrderHistory },
     { path: '/faq', component: FAQs },
     { path: '/addparrotspecies', component: AddParotSpecies, layout: LoginSystemLayout },
     { path: '/addparrot', component: AddParrot, layout: SystemLayout },

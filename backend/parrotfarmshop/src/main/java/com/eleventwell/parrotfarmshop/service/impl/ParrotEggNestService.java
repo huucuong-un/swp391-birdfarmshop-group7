@@ -60,9 +60,13 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
         return (ParrotEggNestDTO) genericConverter.toDTO(parrotEggNestEntity, ParrotEggNestDTO.class);
     }
     public void changeSaleStatus(Long id){
-        ParrotEggNestEntity entity = parrotEggNestRepository.findOneById(id);
-        entity.setSaleStatus(true);
-        parrotEggNestRepository.save(entity);
+        ParrotEggNestEntity parrotEggNestEntity = parrotEggNestRepository.findOneById(id);
+        if(parrotEggNestEntity.getSaleStatus() == true){
+            parrotEggNestEntity.setSaleStatus(false);
+        }else{
+            parrotEggNestEntity.setSaleStatus(true);
+        }
+        parrotEggNestRepository.save(parrotEggNestEntity);
     }
 
     public Long countAvaiableNestById(Long id){
@@ -80,4 +84,18 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
        }
        parrotEggNestRepository.save(parrotEggNestEntity);
     }
+
+//    public void changeBreedStatus(Long id){
+//        ParrotEggNestEntity parrotEggNestEntity = parrotEggNestRepository.findOneById(id);
+//        if(parrotEggNestEntity.getBreedStatus() == true){
+//            parrotEggNestEntity.setBreedStatus(false);
+//        }else{
+//            parrotEggNestEntity.setBreedStatus(true);
+//        }
+//        parrotEggNestRepository.save(parrotEggNestEntity);
+//    }
+
+//    public void changeSaleStatus(Long id){
+
+//    }
 }

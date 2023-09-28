@@ -66,8 +66,19 @@ public class ParrotController {
          parrotService.changeStatus(id);
     }
      
+    @DeleteMapping(value = "change-sale-status/{id}")
+    public void changeSaleStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changeSaleStatus(id);
+    }
 
-   
+    @DeleteMapping(value = "change-health-status/{id}")
+    public void changeHealthStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changeHealthStatus(id);
+    }
+    @DeleteMapping(value = "change-pregnancy-status/{id}")
+    public void changePregnancyStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changePregnancyStatus(id);
+    }
      
      
 }

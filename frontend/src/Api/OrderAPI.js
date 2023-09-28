@@ -1,30 +1,30 @@
 import axiosClinet from './AxiosClient';
 
-const ParrotSpeciesColorAPI = {
+const OrderAPI = {
     getAll(params) {
-        const url = '/parrot-species-color';
+        const url = '/order';
         return axiosClinet.get(url, { params });
     },
 
     get(id) {
-        const url = `/parrot-species-color/${id}`;
+        const url = `/parrot-species/find-one-species-by-id/${id}`;
         return axiosClinet.get(url);
-    },
+    }, //chua co
 
-    add(data) {
-        const url = `/parrot-species-color`;
+    add(data, id) {
+        const url = `/order/${id}/parrot`;
         return axiosClinet.post(url, data);
     },
 
     update(data) {
-        const url = `/parrot-species-color/${data.id}`;
+        const url = `/parrot-species/${data.id}`;
         return axiosClinet.put(url, data);
     },
 
     remove(id) {
-        const url = `/parrot-species-color/${id}`;
+        const url = `/parrot-species/${id}`;
         return axiosClinet.delete(url);
     },
 };
 
-export default ParrotSpeciesColorAPI;
+export default OrderAPI;

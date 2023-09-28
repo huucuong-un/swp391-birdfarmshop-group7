@@ -1,0 +1,79 @@
+.edit-button {
+    color: #f57c7c;
+    font-weight: 500;
+    margin-top: 0.5%;
+    cursor: pointer;
+}
+.edit-button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.wrapper {
+    padding: 2% 10%;
+}
+
+.delivery-info-item {
+    margin: 2% 0;
+
+    padding: 0 3%;
+    background-color: #ddd;
+    width: 100%;
+    height: 100px;
+    color: black;
+    cursor: pointer;
+}
+
+.delivery-info-item:hover {
+    margin: 2% 0;
+
+    padding: 0 3%;
+    background-color: #ddd;
+    width: 100%;
+    height: 100%;
+    color: black;
+    cursor: pointer;
+}
+
+.add-button {
+    color: #f57c7c;
+    float: right;
+    margin: 2% 0 4% 0;
+}
+
+.add-button:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+.container {
+    height: 1000px;
+    display: flex;
+    justify-content: start;
+}
+
+.fade-container {
+    margin-top: 7%;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease, transition-delay 0.5s;
+}
+
+.fade-container.show {
+    opacity: 1;
+    max-height: 1000px; /* Adjust this value based on your content height */
+    transition-delay: 0s; /* No delay when showing */
+}
+.fade-container.showUpdate {
+    opacity: 1;
+    max-height: 1000px; /* Adjust this value based on your content height */
+    transition-delay: 0s;
+    margin-top: 2px;
+}
+
+.fade-container.hide {
+    opacity: 0;
+    max-height: 0;
+    transition-delay: 0.3s; /* Delay when hiding */
+}

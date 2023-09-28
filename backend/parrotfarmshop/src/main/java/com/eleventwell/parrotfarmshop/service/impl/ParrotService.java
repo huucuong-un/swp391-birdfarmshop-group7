@@ -90,5 +90,25 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         parrotRepository.save(entity);
     }
 
+    public void changeHealthStatus(Long id){
+        ParrotEntity parrotEntity = parrotRepository.findOneById(id);
+        if (parrotEntity.getHealthStatus() == true) {
+            parrotEntity.setHealthStatus(false);
+        } else {
+            parrotEntity.setHealthStatus(true);
+        }
+        parrotRepository.save(parrotEntity);
+    }
+
+    public void changePregnancyStatus(Long id){
+        ParrotEntity parrotEntity = parrotRepository.findOneById(id);
+        if(parrotEntity.getPregnancyStatus() == true){
+            parrotEntity.setHealthStatus(false);
+        }else{
+            parrotEntity.setHealthStatus(true);
+        }
+        parrotRepository.save(parrotEntity);
+    }
+
     
 }

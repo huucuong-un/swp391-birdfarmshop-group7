@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import styles from '~/Components/Breadcrumbs/Breadcrumbs.module.scss';
+import styles from '~/Pages/ParrotProduct/ParrotProduct.module.scss';
 
 import Breadcrumbs from '~/Components/Breadcrumbs/Breadcrumbs';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';

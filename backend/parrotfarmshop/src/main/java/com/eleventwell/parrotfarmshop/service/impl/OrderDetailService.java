@@ -11,7 +11,7 @@ import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -63,7 +63,19 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         save(orderDetailDTO);
     }
 
+public List<OrderDetailDTO> findAllByOrderId(Long id){
 
+    List<OrderDetailDTO> result = new ArrayList<>();
+    List<OrderDetailEntity> orderDetailEntities = orderDetailRepository.findAllByOrderIdId(id);
+
+    for (OrderDetailEntity entity : orderDetailEntities) {
+        OrderDetailDTO orderDetailDTO = (OrderDetailDTO) converter.toDTO(entity, OrderDetailDTO.class);
+        result.add(orderDetailDTO);
+    }
+
+    return result;
+
+}
     @Override
     public void changeStatus(Long ids) {
     }

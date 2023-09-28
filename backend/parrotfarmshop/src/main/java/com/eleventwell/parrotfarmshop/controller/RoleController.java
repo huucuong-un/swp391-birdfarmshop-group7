@@ -1,10 +1,11 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
-import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -14,11 +15,9 @@ public class RoleController {
     private IGenericService roleService;
 
     @GetMapping
-    public ListOutput showRoles() {
-        ListOutput results = new ListOutput();
-
-        results.setListResult(roleService.findAll());
-        return results;
+    public List<RoleDTO> showRoles() {
+      List<RoleDTO> list = roleService.findAll();
+        return list;
     }
 
     @PostMapping

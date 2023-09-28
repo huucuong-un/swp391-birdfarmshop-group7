@@ -15,8 +15,8 @@ public class DeliveryInformationController {
    @Autowired
     private DeliveryInformationService deliveryInformationService;
 
-    @GetMapping(value = "{userid}")
-    public List<DeliveryInformationDTO> showDeliveryInformationByCustomerId(@PathVariable("userid") Long customerId) {
+    @GetMapping(value = "{customerid}")
+    public List<DeliveryInformationDTO> showDeliveryInformationByCustomerId(@PathVariable("customerid") Long customerId) {
         return deliveryInformationService.getDeliveryInformationByCustomerId(customerId);
     }
 

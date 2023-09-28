@@ -11,6 +11,7 @@ import UserLogin from '~/Pages/UserLogin/UserLogin';
 import OrderHistory from '~/Pages/OrderHistory/OrderHistory';
 import FAQs from '~/Pages/FAQs/FAQs';
 import Register from '~/Pages/Register/Register';
+import DeliveryInformation from '~/Pages/DeliveryInformation/DeliveryInformation';
 
 import ParrotDetail from '~/Pages/ParrotDetail/ParrotDetail';
 
@@ -28,6 +29,7 @@ const publicRoutes = [
     { path: '/parrotdetail', component: ParrotDetail },
     { path: '/orderhistory', component: OrderHistory },
     { path: '/faq', component: FAQs },
+    { path: '/delivery-information', component: DeliveryInformation },
 ];
 
 //Dành cho những người đăng nhập mới coi được

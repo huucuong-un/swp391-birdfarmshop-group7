@@ -10,6 +10,11 @@ const DeliveryInformation = {
         const url = `/delivery-information`;
         return axiosClient.post(url, data);
     },
+
+    updateDeliveryInfo(data) {
+        const url = `/delivery-information/${data.id}`;
+        return axiosClient.put(url, data);
+    },
 };
 
 export default DeliveryInformation;

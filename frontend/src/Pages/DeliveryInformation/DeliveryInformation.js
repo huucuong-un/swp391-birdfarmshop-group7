@@ -1,4 +1,4 @@
-import { Table, Box, Center, Flex, Radio, Square, Text } from '@chakra-ui/react';
+import { Table, Box, Center, Flex, Radio, Square, Text, textDecoration } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import classNames from 'classnames/bind';
@@ -8,6 +8,7 @@ import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import Title from '~/Components/Title/Title';
 import AddMoreDeliveryInfo from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo';
+import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo';
 
 const cx = classNames.bind(styles);
 
@@ -15,14 +16,41 @@ const DeliveryInformation = (customerid) => {
     const [deliveryInfo, setDeliveryInfo] = useState([]);
     const [selectedDeliveryId, setSelectedDeliveryId] = useState();
     const [show, setShow] = useState(false);
-    const [showUpdate, setShowUpdate] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(Array(deliveryInfo.length).fill(false)); // Initialize with false for each item
 
     const handleShow = () => {
         setShow(!show);
     };
 
-    const handleShowUpdate = () => {
-        setShowUpdate(!showUpdate);
+    const handleShowUpdate = (index) => {
+        const updatedShowUpdate = [...showUpdate]; // Create a copy of showUpdate array
+        updatedShowUpdate[index] = !updatedShowUpdate[index]; // Toggle the value
+        setShowUpdate(updatedShowUpdate); // Update the state
+    };
+
+    const handleUpdate = (updatedInfo) => {
+        // Find the index of the updated item in the deliveryInfo array
+        const index = deliveryInfo.findIndex((item) => item.id === updatedInfo.id);
+
+        // Create a copy of the deliveryInfo array
+        const updatedDeliveryInfo = [...deliveryInfo];
+
+        // Update the item with the new data
+        updatedDeliveryInfo[index] = updatedInfo;
+
+        // Update the state
+        setDeliveryInfo(updatedDeliveryInfo);
+    };
+
+    const handleAdd = (newInfo) => {
+        // Create a copy of the deliveryInfo array
+        const updatedDeliveryInfo = [...deliveryInfo];
+
+        // Add the new info to the array
+        updatedDeliveryInfo.push(newInfo);
+
+        // Update the state
+        setDeliveryInfo(updatedDeliveryInfo);
     };
 
     useEffect(() => {
@@ -42,51 +70,45 @@ const DeliveryInformation = (customerid) => {
         <Box className={cx('wrapper')}>
             <FontAwesomeIcon onClick={handleShow} icon={faCirclePlus} size="2xl" className={cx('add-button')} />
             <div className={cx('fade-container', { show: show })}>
-                {show && <AddMoreDeliveryInfo w={100}></AddMoreDeliveryInfo>}
+                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
             </div>
             {deliveryInfo.map((item, itemIndex) => (
                 <>
-                    <Box className={cx('delivery-info-item-container')}>
-                        <Flex className={cx('delivery-info-item')} key={item.id}>
-                            <Center w="100px">
-                                <Text fontWeight="700" opacity={0.6}>
-                                    {item.name}
-                                </Text>
-                            </Center>
-                            <Square size="150px">
-                                <Text>{item.phoneNumber}</Text>
-                            </Square>
-                            <Center flex="1">
-                                <Text>{item.address}</Text>
-                            </Center>
-
-                            <Radio
-                                name="delivery-info-item-radio"
-                                backgroundColor="white"
-                                size="lg"
-                                colorScheme="orange"
-                                value={item.id}
-                                isChecked={selectedDeliveryId === item.id}
-                                onChange={() => setSelectedDeliveryId(item.id)}
-                                display="flex"
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                p={5}
-                            />
-                            <Text
-                                color="#f57c7c"
-                                fontWeight={500}
-                                marginTop={3}
-                                onClick={handleShowUpdate}
-                                cursor={'pointer'}
-                            >
-                                Edit
+                    <Flex className={cx('delivery-info-item')} id={item.id} onClick={() => handleShowUpdate(itemIndex)}>
+                        <Center w="100px">
+                            <Text fontWeight="700" opacity={0.6}>
+                                {item.name}
                             </Text>
-                        </Flex>
-                        <div className={cx('fade-container', { showUpdate: showUpdate })}>
-                            {showUpdate && <AddMoreDeliveryInfo w={100}></AddMoreDeliveryInfo>}
-                        </div>
-                    </Box>
+                        </Center>
+                        <Square size="150px">
+                            <Text>{item.phoneNumber}</Text>
+                        </Square>
+                        <Center flex="1">
+                            <Text>{item.address}</Text>
+                        </Center>
+
+                        <Radio
+                            name="delivery-info-item-radio"
+                            backgroundColor="white"
+                            size="lg"
+                            colorScheme="orange"
+                            value={item.id}
+                            isChecked={selectedDeliveryId === item.id}
+                            onChange={() => setSelectedDeliveryId(item.id)}
+                            display="flex"
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            p={5}
+                        />
+                        <Text onClick={() => handleShowUpdate(itemIndex)} className={cx('edit-button')}>
+                            Edit
+                        </Text>
+                    </Flex>
+                    <div className={cx('fade-container ', { showUpdate: showUpdate[itemIndex] })}>
+                        {showUpdate[itemIndex] && (
+                            <UpdateDeliveryInfo deliveryInfo={item} onUpdate={handleUpdate} w={100} />
+                        )}
+                    </div>
                 </>
             ))}
         </Box>

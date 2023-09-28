@@ -16,18 +16,19 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo.module.scss';
+import styles from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo.module.scss';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 
 const cx = classNames.bind(styles);
 
-function AddMoreDeliveryInfo(props) {
-    const [newDeliveryInfo, setNewDeliveryInfo] = useState({ name: '', phoneNumber: '', address: '', status: true });
+function UpdateDeliveryInfo(props) {
+    const [newDeliveryInfo, setNewDeliveryInfo] = useState(props.deliveryInfo);
 
-    const addNewDeliveryInfo = async () => {
+    const updateDeliveryInfo = async () => {
         try {
             setLoading(true);
-            const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo({
+            const updatedInfo = await DeliveryInformationAPI.updateDeliveryInfo({
+                id: newDeliveryInfo.id,
                 name: newDeliveryInfo.name,
                 phoneNumber: newDeliveryInfo.phoneNumber,
                 address: newDeliveryInfo.address,
@@ -36,9 +37,8 @@ function AddMoreDeliveryInfo(props) {
             });
             setLoading(false);
             setSubmissionStatus(true);
-            setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
 
-            props.onAdd(deliveryInformation);
+            props.onUpdate(updatedInfo);
         } catch (error) {
             setSubmissionStatus(false);
             setLoading(false);
@@ -55,13 +55,13 @@ function AddMoreDeliveryInfo(props) {
                     <Alert status="success" fontSize={12}>
                         <AlertIcon />
                         <AlertTitle>Success!</AlertTitle>
-                        <AlertDescription>Add successfully.</AlertDescription>
+                        <AlertDescription>Update successfully.</AlertDescription>
                     </Alert>
                 )) ||
                     (submissionStatus === false && (
                         <Alert status="error" fontSize={12}>
                             <AlertIcon />
-                            <AlertTitle>Failed to add new delivery!! - </AlertTitle>
+                            <AlertTitle>Failed to update!!- </AlertTitle>
                             <AlertDescription>Please check again!!!</AlertDescription>
                         </Alert>
                     ))}
@@ -69,12 +69,6 @@ function AddMoreDeliveryInfo(props) {
 
             <TableContainer className={cx('table-container')}>
                 <Table size="xs ">
-                    <Thead>
-                        <Tr>
-                            <Th>Title</Th>
-                            <Th>Input</Th>
-                        </Tr>
-                    </Thead>
                     <Tbody>
                         <Tr>
                             <Td>Contact name</Td>
@@ -139,11 +133,14 @@ function AddMoreDeliveryInfo(props) {
                                     width="100%"
                                     style={{ marginTop: 15 }}
                                     margin="8px"
-                                    onClick={addNewDeliveryInfo}
+                                    onClick={() => {
+                                        updateDeliveryInfo();
+                                        // window.location.reload();
+                                    }}
                                     isLoading={loading}
                                     backgroundColor={'#f57c7c'}
                                 >
-                                    Add
+                                    Save Change
                                 </Button>
                             </Td>
                         </Tr>
@@ -154,4 +151,4 @@ function AddMoreDeliveryInfo(props) {
     );
 }
 
-export default AddMoreDeliveryInfo;
+export default UpdateDeliveryInfo;

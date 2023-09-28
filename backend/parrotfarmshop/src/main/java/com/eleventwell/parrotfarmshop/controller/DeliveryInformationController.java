@@ -15,8 +15,8 @@ public class DeliveryInformationController {
    @Autowired
     private DeliveryInformationService deliveryInformationService;
 
-    @GetMapping(value = "{userid}")
-    public List<DeliveryInformationDTO> showDeliveryInformationByCustomerId(@PathVariable("userid") Long customerId) {
+    @GetMapping(value = "{customerid}")
+    public List<DeliveryInformationDTO> showDeliveryInformationByCustomerId(@PathVariable("customerid") Long customerId) {
         return deliveryInformationService.getDeliveryInformationByCustomerId(customerId);
     }
 
@@ -26,10 +26,10 @@ public class DeliveryInformationController {
     }
 
     @PutMapping(value = "{id}")
-    public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model, @RequestBody Long id) {
+    public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return deliveryInformationService.save(model);
 
-    } 
+    }
 
 }

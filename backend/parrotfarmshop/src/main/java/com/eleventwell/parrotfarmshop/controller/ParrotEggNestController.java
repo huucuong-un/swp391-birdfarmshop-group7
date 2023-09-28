@@ -45,4 +45,17 @@ public class ParrotEggNestController {
     public void deleteParrotEggNest(@RequestBody @PathVariable("id") Long id){
         parrotEggNestService.changeStatus(id);
     }
+
+
+
+//    @DeleteMapping(value = "change-sale-status/{id}")
+//    public void changeSaleStatus(@RequestBody @PathVariable("id") Long id){
+//        parrotEggNestService.changeSaleStatus(id);
+//    }
+
+//    @DeleteMapping(value = "change-breed-status/{id}")
+//    public void changeBreedStatus(@RequestBody @PathVariable("id") Long id){
+//        parrotEggNestService.changeBreedStatus(id);
+//    }
 }
+

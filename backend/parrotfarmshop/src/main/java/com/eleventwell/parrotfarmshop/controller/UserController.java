@@ -17,9 +17,8 @@ public class UserController {
     IGenericService<UserDTO> userService;
 
     @GetMapping(value = "")
-    public ListOutput showUsers() {
-        ListOutput results = new ListOutput();
-        results.setListResult(userService.findAll()) ;
+    public List<UserDTO> showUsers() {
+        List<UserDTO> results = userService.findAll();
 
         return results;
     }

@@ -50,10 +50,12 @@ function UserLogin() {
                 </form>
 
                 <div className={cx('register')}>
-                    <div>
+                    <div className={cx('register-title-container')}>
                         <Title className={cx('register-title')}>Welcome to my bird farm shop</Title>
                     </div>
-                    <Button loginSystemBtn>Register</Button>
+                    <Button loginSystemBtn className={cx('register-btn')}>
+                        Register
+                    </Button>
                 </div>
             </div>
         </div>

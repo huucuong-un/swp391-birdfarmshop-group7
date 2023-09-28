@@ -24,10 +24,10 @@ function Payment() {
     // console.log(totalPrice);
     // console.log(receivedData);
 
-    for (const key in receivedData) {
-        const value = receivedData[key];
-        console.log(`${key}: ${value}`);
-    }
+    // for (const key in receivedData) {
+    //     const value = receivedData[key];
+    //     console.log(`${key}: ${value}`);
+    // }
 
     // console.log(receivedData.selectedColor[1].price);
 
@@ -36,31 +36,31 @@ function Payment() {
         console.log(paymentMethod);
     };
 
-    const handlePayStatus = () => {
+    const handlePayStatus = async () => {
         setPayStatus(true);
-        console.log(payStatus);
+        console.log('click');
     };
 
     useEffect(() => {
         const addOrders = async () => {
             try {
-                const addOrder = await OrderAPI.add(
-                    {
-                        userID: 1,
-                        address: 'helo',
-                        promotionID: 1,
-                        status: true,
-                        quantity: 3,
-                    },
-                    1,
-                );
+                const data = {
+                    userID: 1,
+                    address: 'heslo',
+                    promotionID: 1,
+                    status: true,
+                    quantity: quantity,
+                };
+                const addOrder = await OrderAPI.add(data, 1);
+                console.log('Order added:', addOrder);
             } catch (error) {
                 console.error(error);
             }
         };
 
-        // Gọi hàm getParrots khi component được mount
-        addOrders();
+        if (payStatus) {
+            addOrders();
+        }
     }, [payStatus]);
 
     return (

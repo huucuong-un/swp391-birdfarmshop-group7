@@ -13,6 +13,7 @@ import FAQs from '~/Pages/FAQs/FAQs';
 import Register from '~/Pages/Register/Register';
 import ParrotDetail from '~/Pages/ParrotDetail/ParrotDetail';
 import AddParotSpecies from '~/Pages/AddParrotSpecies/AddParrotSpecies';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -21,7 +22,6 @@ const publicRoutes = [
     { path: '/payment', component: Payment },
     { path: '/parrotdetail/:id', component: ParrotDetail },
     { path: '/orderhistory', component: OrderHistory },
-
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },

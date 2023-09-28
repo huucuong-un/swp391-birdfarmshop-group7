@@ -99,6 +99,12 @@
     gap: 5px;
 }
 
+.quanity-space {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .quantity-container input {
     min-height: 35px;
     max-width: 65px;

@@ -13,27 +13,31 @@ import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIco
 import { useState, useEffect } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
+import ParrotAPI from '~/Api/ParrotAPI';
 
 const cx = classNames.bind(styles);
 
-const PARROT_ITEMS = [
-    {
-        name: 'Grey Parrot',
-        img: parrot,
-        like: 15,
-        price: '1 500 000 VNĐ',
-        color1: '#ce2133',
-        color2: '#3c65c5',
-        color3: '#484848',
-    },
-];
+// const PARROT_ITEMS = [
+//     {
+//         name: 'Grey Parrot',
+//         img: parrot,
+//         like: 15,
+//         price: '1 500 000 VNĐ',
+//         color1: '#ce2133',
+//         color2: '#3c65c5',
+//         color3: '#484848',
+//     },
+// ];
 
 function ParrotDetail() {
     const { id } = useParams();
-    const [selectedColor, setSelectedColor] = useState({});
+    const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedColorId, setSelectedColorId] = useState({});
     const [quantities, setQuantities] = useState({});
     const [combineData, setCombineData] = useState([]);
     const [parrotSpecies, setParrotSpecies] = useState([]);
+
+    const [countParrot, setCountParrot] = useState(null);
 
     const dataToPass = {
         id,
@@ -42,21 +46,27 @@ function ParrotDetail() {
         combineData,
     };
 
-    const handleColorSelection = (parrotId, color, price) => {
+    const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
             ...selectedColor,
             [parrotId]: {
                 color: color,
                 price: price,
+                colorId: colorId,
             },
         });
+        // console.log('Selected colorId:', colorId);
+        setSelectedColorId(colorId);
+        // console.log(selectedColorId);
     };
 
     const handleQuantityIncrease = (parrotId) => {
-        setQuantities((prevQuantities) => ({
-            ...prevQuantities,
-            [parrotId]: (prevQuantities[parrotId] || 0) + 1, // Tăng quantity cho parrot cụ thể
-        }));
+        if (quantities[parrotId] < countParrot) {
+            setQuantities((prevQuantities) => ({
+                ...prevQuantities,
+                [parrotId]: (prevQuantities[parrotId] || 0) + 1, // Tăng quantity cho parrot cụ thể
+            }));
+        }
     };
 
     const handleQuantityDecrease = (parrotId) => {
@@ -80,6 +90,19 @@ function ParrotDetail() {
         // Gọi hàm getParrots khi component được mount
         getParrotsSpecies();
     }, []);
+
+    useEffect(() => {
+        const getCountAvailableParrotId = async () => {
+            try {
+                const availableParrot = await ParrotAPI.countAvailableParrotId(selectedColorId);
+                setCountParrot(availableParrot);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getCountAvailableParrotId();
+    }, [selectedColorId]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -161,7 +184,9 @@ function ParrotDetail() {
                                             className={cx('parrot-color-item', {
                                                 selected: color.color === selectedColor[parrot.id]?.color,
                                             })}
-                                            onClick={() => handleColorSelection(parrot.id, color.color, color.price)}
+                                            onClick={() =>
+                                                handleColorSelection(parrot.id, color.color, color.price, color.id)
+                                            }
                                             style={{ backgroundColor: color.color }}
                                         ></button>
                                     ))}
@@ -169,20 +194,24 @@ function ParrotDetail() {
                             </div>
                             <div className={cx('quantity-container')}>
                                 <p className={cx('quantity-title')}>Quantity</p>
-                                <div className={cx('quantity-input-container')}>
-                                    <button
-                                        className={cx('quantity-input-btn')}
-                                        onClick={() => handleQuantityDecrease(parrot.id)}
-                                    >
-                                        -
-                                    </button>
-                                    <input type="number" value={quantities[parrot.id] || 1} min={1} />
-                                    <button
-                                        className={cx('quantity-input-btn')}
-                                        onClick={() => handleQuantityIncrease(parrot.id)}
-                                    >
-                                        +
-                                    </button>
+                                <div className={cx('quanity-space')}>
+                                    <div className={cx('quantity-input-container')}>
+                                        <button
+                                            className={cx('quantity-input-btn')}
+                                            onClick={() => handleQuantityDecrease(parrot.id)}
+                                        >
+                                            -
+                                        </button>
+                                        <input type="number" value={quantities[parrot.id] || 1} min={1} max={2} />
+                                        <button
+                                            className={cx('quantity-input-btn')}
+                                            onClick={() => handleQuantityIncrease(parrot.id)}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+
+                                    <p>{countParrot} avaiable</p>
                                 </div>
                             </div>
                             <Accordion defaultIndex={[0]} allowMultiple>

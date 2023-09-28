@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faBagShopping, faCashRegister } from '@fortawesome/free-solid-svg-icons';
 
-import axios from 'axios';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 import { useState, useEffect } from 'react';
@@ -46,6 +45,12 @@ function ParrotList() {
     const [combineData, setCombineData] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});
+
+    const dataToPass = {
+        selectedColor,
+        quantities,
+        combineData,
+    };
 
     const handleColorSelection = (parrotId, color, price) => {
         setSelectedColor({
@@ -134,7 +139,7 @@ function ParrotList() {
                             <Link to={`/parrotdetail/${parrot.id}`}>
                                 <img className={cx('img')} src={parrot.img} alt="parrot" />
                             </Link>
-                            <Link to="/payment">
+                            <Link to="/payment" state={dataToPass}>
                                 <FontAwesomeIcon className={cx('buy-btn')} icon={faCashRegister} />
                             </Link>
                             <Link to="">

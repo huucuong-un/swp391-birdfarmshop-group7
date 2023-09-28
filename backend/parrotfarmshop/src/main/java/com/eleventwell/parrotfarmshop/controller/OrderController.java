@@ -5,6 +5,7 @@ import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
 import com.eleventwell.parrotfarmshop.service.impl.OrderService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,8 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping(value = "")
-    public ListOutput showParrots() {
-        ListOutput result = new ListOutput();
-        result.setListResult(orderService.findAll());
+    public List<OrderDTO> showParrots() {
+        List<OrderDTO> result = orderService.findAll();
         return result;
     }
 

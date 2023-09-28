@@ -3,6 +3,8 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +16,8 @@ public class RoleController {
     private IGenericService roleService;
 
     @GetMapping
-    public ListOutput showRoles() {
-        ListOutput results = new ListOutput();
-
-        results.setListResult(roleService.findAll());
+    public List<RoleDTO> showRoles() {
+        List<RoleDTO> results = roleService.findAll();
         return results;
     }
 

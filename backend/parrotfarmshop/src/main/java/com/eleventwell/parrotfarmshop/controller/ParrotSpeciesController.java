@@ -8,6 +8,7 @@ import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 //import com.eleventwell.parrotfarmshop.service.IParrotSpeciesService;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.eleventwell.parrotfarmshop.service.impl.ParrotSpeciesService;
@@ -42,9 +43,10 @@ public class ParrotSpeciesController {
     }
 
     @GetMapping(value = "find-one-species-by-id/{id}")
-    public ParrotSpeciesDTO findOneSpeciesById(@RequestBody @PathVariable("id") long id) {
-
-        return (ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id);
+    public List<ParrotSpeciesDTO> findOneSpeciesById(@RequestBody @PathVariable("id") long id) {
+List<ParrotSpeciesDTO> list = new ArrayList<>();
+list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
+        return list;
     }
     @PostMapping(value = "")
 	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {

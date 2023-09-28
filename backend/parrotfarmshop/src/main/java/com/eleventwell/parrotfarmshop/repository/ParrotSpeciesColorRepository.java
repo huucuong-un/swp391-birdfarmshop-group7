@@ -5,7 +5,6 @@
 package com.eleventwell.parrotfarmshop.repository;
 
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

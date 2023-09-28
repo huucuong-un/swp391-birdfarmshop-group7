@@ -1,14 +1,11 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
-import com.eleventwell.parrotfarmshop.output.ListOutput;
-import com.eleventwell.parrotfarmshop.service.IGenericService;
-
 import com.eleventwell.parrotfarmshop.service.impl.OrderService;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -20,8 +17,16 @@ public class OrderController {
 
     @GetMapping(value = "")
     public List<OrderDTO> showParrots() {
-        List<OrderDTO> result = orderService.findAll();
-        return result;
+        List<OrderDTO> list = orderService.findAll();
+        return list;
+    }
+
+    @GetMapping(value="findAllByUserId/{id}")
+    public List<OrderDTO> findAllByOrderId(@RequestBody @PathVariable Long id){
+
+
+        return orderService.findAllByUserId(id);
+
     }
 
 //    @PostMapping(value = "/{parrotIds}/{nestIds}")

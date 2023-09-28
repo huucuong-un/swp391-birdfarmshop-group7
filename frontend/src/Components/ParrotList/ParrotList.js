@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faBagShopping, faCashRegister } from '@fortawesome/free-solid-svg-icons';
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import ParrotAPI from '~/Api/ParrotAPI';
 
 import { useState, useEffect } from 'react';
 
@@ -45,6 +46,8 @@ function ParrotList() {
     const [combineData, setCombineData] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});
+    const [countParrot, setCountParrot] = useState(null);
+    const [selectedColorId, setSelectedColorId] = useState({});
 
     const dataToPass = {
         selectedColor,
@@ -52,21 +55,25 @@ function ParrotList() {
         combineData,
     };
 
-    const handleColorSelection = (parrotId, color, price) => {
+    const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
             ...selectedColor,
             [parrotId]: {
                 color: color,
                 price: price,
+                colorId: colorId,
             },
         });
+        setSelectedColorId(colorId);
     };
 
     const handleQuantityIncrease = (parrotId) => {
-        setQuantities((prevQuantities) => ({
-            ...prevQuantities,
-            [parrotId]: (prevQuantities[parrotId] || 0) + 1, // Tăng quantity cho parrot cụ thể
-        }));
+        if (quantities[parrotId] < countParrot) {
+            setQuantities((prevQuantities) => ({
+                ...prevQuantities,
+                [parrotId]: (prevQuantities[parrotId] || 0) + 1, // Tăng quantity cho parrot cụ thể
+            }));
+        }
     };
 
     const handleQuantityDecrease = (parrotId) => {
@@ -90,6 +97,19 @@ function ParrotList() {
 
         getParrotsSpecies();
     }, []);
+
+    useEffect(() => {
+        const getCountAvailableParrotId = async () => {
+            try {
+                const availableParrot = await ParrotAPI.countAvailableParrotId(selectedColorId);
+                setCountParrot(availableParrot);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getCountAvailableParrotId();
+    }, [selectedColorId]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -158,7 +178,9 @@ function ParrotList() {
                                             className={cx('parrot-color-item', {
                                                 selected: color.color === selectedColor[parrot.id]?.color,
                                             })}
-                                            onClick={() => handleColorSelection(parrot.id, color.color, color.price)}
+                                            onClick={() =>
+                                                handleColorSelection(parrot.id, color.color, color.price, color.id)
+                                            }
                                             style={{ backgroundColor: color.color }}
                                         ></button>
                                     </div>
@@ -178,6 +200,7 @@ function ParrotList() {
                                 >
                                     +
                                 </button>
+                                <p>{countParrot} avaiable</p>
                             </div>
                             <strong className={cx('parrot-price')}>
                                 {/* {selectedColor[parrot.id] && selectedColor[parrot.id].price} */}$

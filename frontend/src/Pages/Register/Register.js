@@ -2,19 +2,51 @@ import classNames from 'classnames/bind';
 import styles from './Register.module.scss';
 import Inputs from '~/Components/Input/Input';
 import Line from '~/Components/Line/Line';
-import Title from '~/Components/Title/Title';
 import Button from '~/Components/Button/Button';
 
 import { Input } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import RegisterAPI from '~/Api/RegisterAPI';
 
 const cx = classNames.bind(styles);
 
 function Register() {
+    const [userName, setUserName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullname, setFullName] = useState('');
+    const [registerStatus, setRegisterStatus] = useState(false);
+
+    const handleRegisterStatus = async () => {
+        setRegisterStatus(true);
+        console.log('click');
+    };
+
+    useEffect(() => {
+        const registers = async () => {
+            try {
+                const data = {
+                    userName: 'hucunnnnnn',
+                    email: 'lehuucuong27060333333@gmail.com',
+                    password: '123456',
+                    fullName: 'Le Huu Cuong',
+                };
+                const register = await RegisterAPI.add(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (registerStatus) {
+            registers();
+        }
+    }, [registerStatus]);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 {/* Form */}
-                <form className={cx('inner')}>
+                <div className={cx('inner')}>
                     {/* Container 2 */}
                     <div className={cx('input-container')}>
                         <div>
@@ -86,10 +118,10 @@ function Register() {
                         </div>
                     </div>
                     <div className={cx('register-container')}></div>
-                    <Button className={cx('register-btn')} register>
+                    <Button className={cx('register-btn')} register onClick={() => handleRegisterStatus()} to="">
                         Register
                     </Button>
-                </form>
+                </div>
             </div>
         </div>
     );

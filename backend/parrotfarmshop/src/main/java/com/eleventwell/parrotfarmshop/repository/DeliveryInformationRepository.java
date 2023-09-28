@@ -1,6 +1,5 @@
 package com.eleventwell.parrotfarmshop.repository;
 
-import com.eleventwell.parrotfarmshop.dto.DeliveryInformationDTO;
 import com.eleventwell.parrotfarmshop.entity.DeliveryInformationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

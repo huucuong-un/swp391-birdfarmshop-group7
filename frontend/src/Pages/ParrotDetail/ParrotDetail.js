@@ -202,7 +202,7 @@ function ParrotDetail() {
                                         >
                                             -
                                         </button>
-                                        <input type="number" value={quantities[parrot.id] || 1} min={1} max={2} />
+                                        <input type="number" value={quantities[parrot.id] || 1} min={1} />
                                         <button
                                             className={cx('quantity-input-btn')}
                                             onClick={() => handleQuantityIncrease(parrot.id)}

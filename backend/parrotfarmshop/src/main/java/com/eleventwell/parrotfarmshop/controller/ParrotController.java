@@ -9,7 +9,6 @@ import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import com.eleventwell.parrotfarmshop.service.impl.ParrotService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,8 +33,9 @@ public class ParrotController {
     private ParrotService parrotService;
      
      @GetMapping(value="")
-     public List<ParrotDTO> showParrots(){
-      List<ParrotDTO> result = parrotService.findAll();
+     public ListOutput showParrots(){
+      ListOutput result = new ListOutput();
+      result.setListResult(parrotService.findAll());
       return  result;
      }
     @GetMapping(value="/count-available-parrot-quantity-spcies-by-id/{id}")
@@ -66,8 +66,19 @@ public class ParrotController {
          parrotService.changeStatus(id);
     }
      
+    @DeleteMapping(value = "change-sale-status/{id}")
+    public void changeSaleStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changeSaleStatus(id);
+    }
 
-   
+    @DeleteMapping(value = "change-health-status/{id}")
+    public void changeHealthStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changeHealthStatus(id);
+    }
+    @DeleteMapping(value = "change-pregnancy-status/{id}")
+    public void changePregnancyStatus(@RequestBody @PathVariable("id") Long id){
+         parrotService.changePregnancyStatus(id);
+    }
      
      
 }

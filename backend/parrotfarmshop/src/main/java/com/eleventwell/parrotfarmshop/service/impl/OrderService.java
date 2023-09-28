@@ -3,20 +3,17 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
-
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
-
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
-//import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +96,17 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 
+public List<OrderDTO> findAllByUserId(Long id){
+    List<OrderDTO> result = new ArrayList<>();
+    List<OrderEntity> orderEntities = orderRepository.findAllByUserId(id);
 
+    for (OrderEntity entity : orderEntities) {
+        OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
+        result.add(orderDTO);
+    }
+
+    return result;
+}
     @Override
     public void changeStatus(Long ids) {
         OrderEntity orderEntity = orderRepository.findOneById(ids);

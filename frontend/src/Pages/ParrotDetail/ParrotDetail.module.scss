@@ -1,5 +1,6 @@
 .wrapper {
     padding-bottom: 30px;
+    padding: 0 50px 30px 50px;
 }
 
 .inner {
@@ -35,7 +36,7 @@
 .main-img img {
     width: 100%;
     height: 100%;
-    padding: 20px;
+    // padding: 20px;
 }
 
 .parrot-detail-container {
@@ -60,23 +61,36 @@
     font-size: 2rem;
 }
 
+.choose-color {
+    display: flex;
+    flex-direction: column;
+}
+
 .parrot-color {
     display: flex;
     gap: 10px;
 }
 
 .parrot-color-item {
-    max-width: 25px;
-    max-height: 25px;
+    min-width: 25px;
+    min-height: 25px;
     border-radius: 50%;
     cursor: pointer;
     border: 1px solid var(--black);
     // background-color: #ce2133;
 
-    &:focus {
-        caret-color: transparent;
-        border: 3px solid var(--black);
+    &:hover {
+        opacity: 0.9;
     }
+}
+
+.selected {
+    min-width: 25px;
+    min-height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    border: 3.5px solid #2b2c30;
 }
 
 .quantity-container {
@@ -109,6 +123,20 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+}
+
+.active-zone a {
+    text-align: center;
+    color: var(--white);
+    border-radius: 15px;
+    padding: 5px 0;
+    font-size: 2rem;
+    min-width: 100%;
+    background-color: var(--btn-color);
+
+    &:hover {
+        opacity: 0.9;
+    }
 }
 
 .active-zone button {

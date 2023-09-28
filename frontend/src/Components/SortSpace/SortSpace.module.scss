@@ -29,6 +29,12 @@
     width: 100%;
 }
 
+.search-input::placeholder {
+    color: black;
+    font-weight: 450;
+    opacity: 1;
+}
+
 .search-btn {
     background-color: transparent;
     font-size: 2rem;

@@ -1,7 +1,7 @@
 import Title from '~/Components/Title/Title';
 
 import Button from '~/Components/Button/Button';
-
+import AddParrotSpecies from '~/Pages/AddParrotSpecies/AddParrotSpecies';
 import { Switch, Stack } from '@chakra-ui/react';
 
 import styles from '~/Pages/AdParrotSpecies/AdParrotSpecies.module.scss';
@@ -16,9 +16,12 @@ function AdParrotSpecies() {
 
             <div className={cx('active')}>
                 <div className={cx('add-btn')}>
-                    <Button to="/add-parrot-species" add>
+                    <Button to="/addparrotspecies" add>
                         Add
                     </Button>
+                    <div>
+                        <AddParrotSpecies></AddParrotSpecies>
+                    </div>
                 </div>
                 <div className={cx('sort-space')}>
                     <form className={cx('sort-space-form')}>

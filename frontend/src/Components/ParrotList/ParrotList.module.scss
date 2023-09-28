@@ -30,7 +30,7 @@
     position: relative;
 
     &:hover {
-        opacity: 0.8;
+        opacity: 0.9;
     }
 }
 
@@ -55,7 +55,7 @@
 .parrot-img:hover .buy-btn {
     display: block;
     position: absolute;
-    top: 30%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -73,7 +73,7 @@
 .parrot-img:hover .cart-btn {
     display: block;
     position: absolute;
-    top: 55%;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -83,6 +83,7 @@
     border-radius: 10px;
     height: 300px !important;
     padding: 20px;
+    padding-bottom: 5px;
     // margin-top: 16px;
     // border: 4px solid var(--black);
 }
@@ -92,26 +93,30 @@
     flex-direction: column;
     justify-content: center;
     // align-items: center;
-    gap: 8px;
+    gap: 5px;
     width: 100%;
-    padding: 5px 20px;
+    padding: 0px 20px 10px 20px;
 
     p {
         margin: 0;
-        font-weight: 700;
-        font-size: 1.9rem;
+        font-weight: 500;
+        font-size: 1.7rem;
     }
 }
 
 .parrot-like {
     display: flex;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     align-items: center;
 
     p {
         margin: 0;
         font-weight: 400;
     }
+}
+
+.parrot-like p {
+    font-size: 1.4rem;
 }
 
 .parrot-like-icon {
@@ -124,31 +129,26 @@
 }
 
 .parrot-color-item {
-    max-width: 25px;
-    max-height: 25px;
+    min-width: 28px;
+    min-height: 28px;
     border-radius: 50%;
     cursor: pointer;
-    border: 1px solid var(--black);
-    // background-color: #ce2133;
+    border: 3px solid white;
+    overflow: hidden;
 
-    &:focus {
-        caret-color: transparent;
-        border: 3px solid var(--black);
+    &:hover {
+        opacity: 0.9;
     }
 }
 
-// input[type='radio'] {
-//     display: none;
-// }
-
-// .parrot-input-quantity {
-//     border: 2px solid #ccc;
-//     text-align: center;
-//     width: 50%;
-//     margin-top: 5px;
-//     padding-left: 15px;
-//     border-radius: 30px;
-// }
+.selected {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    border: 3.5px solid #2b2c30;
+}
 
 .quantity-input-container input {
     min-height: 30px;

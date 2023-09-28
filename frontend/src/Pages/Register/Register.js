@@ -36,13 +36,12 @@ function Register() {
                         </div>
 
                         <div className={cx('dob-container')}>
-                            <Title dob>Date of birth</Title>
+                            <div>
+                                <Title dob>Date of birth</Title>
+                            </div>
+
                             {/* <Inputs dob type={'date'} placeholder="Date of birth"></Inputs> */}
-                            <Input
-                                placeholder="Select Date and Time"
-                                className={cx('dob-date')}
-                                type="datetime-local"
-                            />
+                            <Input className={cx('dob-date')} placeholder="Select Date and Time" type="date" />
                         </div>
                     </div>
                     {/*End container 1  */}

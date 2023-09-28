@@ -22,14 +22,13 @@ const publicRoutes = [
     { path: '/payment', component: Payment },
     { path: '/parrotdetail/:id', component: ParrotDetail },
     { path: '/orderhistory', component: OrderHistory },
-
+    { path: '/payment/delivery-information', component: DeliveryInformation },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faq', component: FAQs },
-    { path: '/delivery-information', component: DeliveryInformation },
     { path: '/addparrotspecies', component: AddParotSpecies },
 ];
 

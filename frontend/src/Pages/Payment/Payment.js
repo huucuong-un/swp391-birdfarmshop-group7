@@ -6,8 +6,13 @@ import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 
 import { useEffect, useState } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import OrderAPI from '~/Api/OrderAPI';
+import { Center, Flex, Radio, Square, Text } from '@chakra-ui/react';
+import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +24,9 @@ function Payment() {
     const quantity = receivedData.quantities[1];
     const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
+    const dataToPass = receivedData;
+    const [deliveryInfo, setDeliveryInfo] = useState([]);
+    const [selectedDelivery, setSelectedDelivery] = useState({});
 
     const totalPrice = quantity * pricePerItem;
     // console.log(totalPrice);
@@ -82,7 +90,7 @@ function Payment() {
                         </button>
                     </div>
 
-                    <div className={cx('payment-method-input-container')}>
+                    {/* <div className={cx('payment-method-input-container')}>
                         <div className={cx('payment-method-input')}>
                             <p>Contact</p>
                             <input placeholder="Name" type="text" required />
@@ -94,6 +102,9 @@ function Payment() {
                             <input placeholder="City, district" type="text" required />
                             <input placeholder="Address" type="text" required />
                         </div>
+                    </div> */}
+                    <div className={cx('delivery-info-component')}>
+                        <DeliveryInformation></DeliveryInformation>
                     </div>
 
                     <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>

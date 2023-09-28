@@ -19,13 +19,19 @@
     padding: 0 3%;
     background-color: #ddd;
     width: 100%;
-    height: 100%;
+    height: 100px;
     color: black;
     cursor: pointer;
 }
 
 .delivery-info-item:hover {
-    opacity: 0.9;
+    margin: 2% 0;
+
+    padding: 0 3%;
+    background-color: #ddd;
+    width: 100%;
+    height: 100%;
+    color: black;
     cursor: pointer;
 }
 

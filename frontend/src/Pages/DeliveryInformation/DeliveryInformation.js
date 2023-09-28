@@ -1,3 +1,4 @@
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Table, Box, Center, Flex, Radio, Square, Text, textDecoration } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
@@ -5,8 +6,6 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/DeliveryInformation/DeliveryInformation.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import StartPartPage from '~/Components/StartPartPage/StartPartPage';
-import Title from '~/Components/Title/Title';
 import AddMoreDeliveryInfo from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo';
 import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo';
 
@@ -80,7 +79,7 @@ const DeliveryInformation = (customerid) => {
                                 {item.name}
                             </Text>
                         </Center>
-                        <Square size="150px">
+                        <Square size="100px">
                             <Text>{item.phoneNumber}</Text>
                         </Square>
                         <Center flex="1">
@@ -94,12 +93,16 @@ const DeliveryInformation = (customerid) => {
                             colorScheme="orange"
                             value={item.id}
                             isChecked={selectedDeliveryId === item.id}
-                            onChange={() => setSelectedDeliveryId(item.id)}
+                            onChange={() => {
+                                setSelectedDeliveryId(item.id);
+                                // handleRedirectToPayment(); // Redirect to Payment
+                            }}
                             display="flex"
                             justifyContent={'center'}
                             alignItems={'center'}
                             p={5}
                         />
+
                         <Text onClick={() => handleShowUpdate(itemIndex)} className={cx('edit-button')}>
                             Edit
                         </Text>

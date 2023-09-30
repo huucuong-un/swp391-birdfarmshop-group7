@@ -91,7 +91,7 @@ function AddParrotSpecies() {
             return;
         }
 
-        if (pic.type === 'image/jpeg' || pic.type === 'image/png') {
+        if (pic.type === 'image/jpeg' || pic.type === 'image/png' || pic.type === 'image/jpg') {
             const data = new FormData();
             data.append('file', pic);
             data.append('upload_preset', 'parrotfarmshop');
@@ -137,6 +137,7 @@ function AddParrotSpecies() {
                 nestAverageRating: parrotSpecies.nestAverageRating,
                 origin: parrotSpecies.origin,
                 averageWeight: parrotSpecies.averageWeight,
+                img: img,
                 // Add other fields you want to send to the first API
             });
             if (responseSpecies.status === 200) {
@@ -368,15 +369,15 @@ function AddParrotSpecies() {
                                 <Tr>
                                     <Td>Parrot image</Td>
                                     <Td>
-                                        {/* <Input
-                                        type="file"
-                                        p={1.5}
-                                        id="image"
-                                        name="image"
-                                        accept="image/*"
-                                        onChange={(e) => postDetails(e.target.files[0])}
-                                        required
-                                    /> */}
+                                        <Input
+                                            type="file"
+                                            p={1.5}
+                                            id="image"
+                                            name="image"
+                                            accept="image/*"
+                                            onChange={(e) => postDetails(e.target.files[0])}
+                                            required
+                                        />
                                     </Td>
                                 </Tr>
                             </Tbody>

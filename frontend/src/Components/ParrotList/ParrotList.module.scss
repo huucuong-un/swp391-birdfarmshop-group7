@@ -17,6 +17,7 @@
     background-color: #f8f8f8 !important;
     max-width: 300px;
     // padding: 10px;
+    // position: relative;
 }
 
 .parrot-img a {
@@ -30,51 +31,62 @@
     position: relative;
 
     &:hover {
-        opacity: 0.9;
+        // opacity: 0.9;
     }
 }
 
 .buy-btn {
     display: none;
-    padding: 22px 24px;
+    font-size: 3rem;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: var(--btn-color);
     color: #fff;
     font-size: 2rem;
+    line-height: 100%;
+    text-align: center;
+    opacity: 0.9;
 }
 
 .cart-btn {
     display: none;
-    padding: 22px 24px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: var(--btn-color);
     color: #fff;
-    font-size: 2rem;
+    font-size: 3rem;
+    text-align: center;
+    line-height: 100%;
+    opacity: 0.9;
 }
 
 .parrot-img:hover .buy-btn {
     display: block;
     position: absolute;
-    top: 40%;
-    left: 50%;
+    top: 10%;
+    left: 92%;
     transform: translate(-50%, -50%);
 }
 
 .buy-btn:hover {
-    padding: 24px 26px;
-    font-size: 2.2rem;
+    width: 42px;
+    height: 42px;
+    // font-size: 3rem;
 }
 
 .cart-btn:hover {
-    padding: 24px 26px;
-    font-size: 2.2rem;
+    width: 42px;
+    height: 42px;
+    font-size: 3rem;
 }
 
 .parrot-img:hover .cart-btn {
     display: block;
     position: absolute;
-    top: 65%;
-    left: 50%;
+    top: 25%;
+    left: 92%;
     transform: translate(-50%, -50%);
 }
 
@@ -99,8 +111,8 @@
 
     p {
         margin: 0;
-        font-weight: 500;
-        font-size: 1.7rem;
+        font-weight: 600;
+        font-size: 1.6rem;
     }
 }
 
@@ -108,11 +120,15 @@
     display: flex;
     font-size: 1.4rem;
     align-items: center;
+}
 
-    p {
-        margin: 0;
-        font-weight: 400;
-    }
+.parrot-name {
+    font-weight: 400 !important;
+    margin: 0;
+}
+
+.parrot-like-quantity {
+    font-size: 400 !important;
 }
 
 .parrot-like p {
@@ -126,6 +142,7 @@
 .parrot-color {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 .parrot-color-item {
@@ -173,11 +190,6 @@
     min-height: 30px;
 }
 
-.parrot-price {
-    font-size: 1.9rem;
-    margin-top: 5px;
-}
-
 .parrot-active {
     margin-top: 10px;
     display: flex;
@@ -212,4 +224,8 @@
     &:hover {
         opacity: 0.9;
     }
+}
+
+.parrot-price strong {
+    font-size: 1.6rem;
 }

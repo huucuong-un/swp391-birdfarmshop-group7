@@ -133,12 +133,13 @@
 
 .active-zone a {
     text-align: center;
-    color: var(--white);
-    border-radius: 15px;
-    padding: 5px 0;
-    font-size: 2rem;
+    color: var(--black);
+    border-radius: 50px;
+    font-size: 1.6rem;
+    font-weight: 600;
     min-width: 100%;
-    background-color: var(--btn-color);
+    padding: 11px 25px;
+    background-color: #f6c504;
 
     &:hover {
         opacity: 0.9;
@@ -146,12 +147,14 @@
 }
 
 .active-zone button {
-    color: var(--white);
-    border-radius: 15px;
-    padding: 5px 0;
-    font-size: 2rem;
+    color: var(--black);
+    border-radius: 50px;
+    font-weight: 600;
+
+    padding: 11px 25px;
+    font-size: 1.6rem;
     min-width: 100%;
-    background-color: var(--btn-color);
+    border: 1px solid black;
 
     &:hover {
         opacity: 0.9;

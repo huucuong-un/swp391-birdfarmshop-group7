@@ -9,6 +9,7 @@ import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import com.eleventwell.parrotfarmshop.service.impl.ParrotService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,9 +34,8 @@ public class ParrotController {
     private ParrotService parrotService;
      
      @GetMapping(value="")
-     public ListOutput showParrots(){
-      ListOutput result = new ListOutput();
-      result.setListResult(parrotService.findAll());
+     public List<ParrotDTO> showParrots(){
+      List<ParrotDTO> result = parrotService.findAll();
       return  result;
      }
     @GetMapping(value="/count-available-parrot-quantity-spcies-by-id/{id}")

@@ -55,7 +55,6 @@ function Payment() {
                 const data = {
                     userID: 1,
                     address: description,
-                    promotionID: 1,
                     status: true,
                     quantity: quantity,
                 };

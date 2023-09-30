@@ -91,7 +91,7 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     }
     public  ParrotSpeciesColorDTO findOneByParrotId(Long id) {
-        return (ParrotSpeciesColorDTO) converter.toDTO(parrotSpeciesColorRepository.findOneById(parrotRepository.findOneById(id).getId()), ParrotSpeciesColorDTO.class);
+        return (ParrotSpeciesColorDTO) converter.toDTO(parrotSpeciesColorRepository.findOneById(parrotRepository.findOneById(id).getParrotSpeciesColor().getId()), ParrotSpeciesColorDTO.class);
     }
 
     public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {

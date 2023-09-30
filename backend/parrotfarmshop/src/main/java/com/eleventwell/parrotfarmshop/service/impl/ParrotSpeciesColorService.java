@@ -48,7 +48,7 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
     public List<ParrotSpeciesColorDTO> findAll() {
         // Implement logic to retrieve all ParrotSpeciesColor entities and convert them to DTOs
         List<ParrotSpeciesColorDTO> results = new ArrayList<>();
-        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAll();
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByOrderByIdDesc();
 
         for (ParrotSpeciesColorEntity entity : entities) {
             ParrotSpeciesColorDTO parrotSpeciesColorDTO = (ParrotSpeciesColorDTO) converter.toDTO(entity, ParrotSpeciesColorDTO.class);
@@ -95,7 +95,7 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
     }
 
     public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {
-        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesId(id);
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesIdOrderByIdDesc(id);
         List<ParrotSpeciesColorDTO>  result = new ArrayList<>();
         for (ParrotSpeciesColorEntity entity:
              entities) {

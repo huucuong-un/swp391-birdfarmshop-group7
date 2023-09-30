@@ -23,7 +23,7 @@ public class SliderService implements IGenericService<SliderDTO> {
     @Override
     public List<SliderDTO> findAll() {
         List<SliderDTO> result = new ArrayList<>();
-        List<SliderEntity> sliderEntities = sliderRepository.findAll();
+        List<SliderEntity> sliderEntities = sliderRepository.findAllByOrderByIdDesc();
 
         for (SliderEntity entity : sliderEntities
         ) {

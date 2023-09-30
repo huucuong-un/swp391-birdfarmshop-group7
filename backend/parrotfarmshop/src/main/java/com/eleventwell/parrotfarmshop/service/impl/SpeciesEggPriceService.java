@@ -25,7 +25,7 @@ public class SpeciesEggPriceService implements IGenericService<SpeciesEggPriceDT
 
     @Override
     public List<SpeciesEggPriceDTO> findAll() {
-        List<SpeciesEggPriceEntity> speciesEggPrices = speciesEggPriceRepository.findAll();
+        List<SpeciesEggPriceEntity> speciesEggPrices = speciesEggPriceRepository.findAllByOrderByIdDesc();
         List<SpeciesEggPriceDTO> speciesEggPriceDTOs = new ArrayList<>();
 
         for (SpeciesEggPriceEntity entity : speciesEggPrices) {

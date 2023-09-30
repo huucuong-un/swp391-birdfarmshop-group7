@@ -51,7 +51,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     @Override
     public List<ParrotSpeciesDTO> findAll() {
         List<ParrotSpeciesDTO> results = new ArrayList<>();
-        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAll();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByOrderByIdDesc();
 
         for (ParrotSpeciesEntity entity : entities) {
             //NOTE

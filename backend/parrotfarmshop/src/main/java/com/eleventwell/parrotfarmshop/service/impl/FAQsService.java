@@ -24,7 +24,7 @@ public class FAQsService  implements IGenericService<FAQsDTO> {
     @Override
     public List findAll() {
         List<FAQsDTO> result = new ArrayList<>();
-        List<FAQEntity> entities = faQsRepositoty.findAll();
+        List<FAQEntity> entities = faQsRepositoty.findAllByOrderByIdDesc();
 
         for (FAQEntity entity: entities
              ) {

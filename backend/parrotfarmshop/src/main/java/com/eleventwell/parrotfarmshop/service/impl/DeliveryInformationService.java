@@ -26,7 +26,7 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
     @Override
     public List<DeliveryInformationDTO> findAll() {
         List<DeliveryInformationDTO> results = new ArrayList<>();
-        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAll();
+        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAllByOrderByIdDesc();
 
         for (DeliveryInformationEntity entity:
              entities) {

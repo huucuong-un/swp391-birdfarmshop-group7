@@ -32,6 +32,14 @@ public class ParrotSpeciesColorController {
         result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
         return result.getListResult();
     }
+    @GetMapping(value = "find-by-parrot-id/{id}")
+    public List<ParrotSpeciesColorDTO> getParrotSpeciesColorByParrotId(@PathVariable("id") Long id) {
+        ListOutput result = new ListOutput();
+
+        result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
+        return result.getListResult();
+    }
+
 
     @PostMapping(value = "")
     public ParrotSpeciesColorDTO createaPrrotSpeciesColor(@RequestBody ParrotSpeciesColorDTO model) {

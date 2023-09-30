@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
+import com.eleventwell.parrotfarmshop.Cart.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
@@ -96,17 +97,69 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 
-public List<OrderDTO> findAllByUserId(Long id){
-    List<OrderDTO> result = new ArrayList<>();
-    List<OrderEntity> orderEntities = orderRepository.findAllByUserId(id);
 
-    for (OrderEntity entity : orderEntities) {
-        OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
-        result.add(orderDTO);
+    //Tinh totalprice va tra ve totalprice, dong thoi tao orderdetail ung voi dieu kien
+    public Double createOrderDetailByCartModel(Long orderId, Long speciesId, String check, Pageable pageable) {
+
+        Double totalPrice = 0.0;
+
+        if (check.equals("parrot")) {
+            List<ParrotEntity> parrots = parrotRepository.findTopNByStatusIsTrue(speciesId, pageable);
+
+            for (ParrotEntity id : parrots) {
+                orderDetailService.createOrderDetailDTO(orderId, id.getId(), 1);
+                parrotService.changeStatus(id.getId());
+                totalPrice += id.getParrotSpeciesColor().getPrice();
+            }
+        }
+        if (check.equals("nest")) {
+            List<ParrotEggNestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
+
+            for (ParrotEggNestEntity id : nests) {
+                orderDetailService.createOrderDetailDTO(orderId, id.getId(), 2);
+
+                parrotEggNestService.changeSaleStatus(id.getId());
+                totalPrice += id.getSpeciesEggPrice().getPrice();
+
+
+            }
+        }
+        return totalPrice;
+
+    }
+//Duyet list cartModel, moi vao lap truyen vao quantity de lay dung so luong, tinh totalprice va goi ham  createOrderDetailByCartModel de tao orderdetail
+    public void createOrderDetailsByCart(OrderDTO dto, List<CartModel> cartModels) {
+        OrderDTO orderDTO = save(dto);
+        Double totalPrice = 0.0;
+        Pageable pageable;
+
+
+        for (CartModel carts : cartModels) {
+            pageable = (Pageable) PageRequest.of(0, carts.getQuantity()); // Create a PageRequest with desired page size
+
+            totalPrice += createOrderDetailByCartModel(orderDTO.getId(), carts.getSpeicesId(), carts.getType(), pageable);
+
+
+        }
+
+
+        orderDTO.setTotalPrice(totalPrice);
+        save(orderDTO);
+
     }
 
-    return result;
-}
+    public List<OrderDTO> findAllByUserId(Long id) {
+        List<OrderDTO> result = new ArrayList<>();
+        List<OrderEntity> orderEntities = orderRepository.findAllByUserId(id);
+
+        for (OrderEntity entity : orderEntities) {
+            OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
+            result.add(orderDTO);
+        }
+
+        return result;
+    }
+
     @Override
     public void changeStatus(Long ids) {
         OrderEntity orderEntity = orderRepository.findOneById(ids);

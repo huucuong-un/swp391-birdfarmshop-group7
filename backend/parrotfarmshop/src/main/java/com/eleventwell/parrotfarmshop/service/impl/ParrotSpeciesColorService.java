@@ -11,6 +11,7 @@ import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
+import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -35,6 +36,9 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
     //@Autowired
     //private ParrotSpeciesColorConverter parrotSpeciesColorConverter;
+
+    @Autowired
+    private ParrotRepository parrotRepository;
 
     @Autowired
     private GenericConverter converter;
@@ -86,7 +90,9 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
 
     }
-
+    public  ParrotSpeciesColorDTO findOneByParrotId(Long id) {
+        return (ParrotSpeciesColorDTO) converter.toDTO(parrotSpeciesColorRepository.findOneById(parrotRepository.findOneById(id).getId()), ParrotSpeciesColorDTO.class);
+    }
 
     public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {
         List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesId(id);

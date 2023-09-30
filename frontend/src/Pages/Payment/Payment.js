@@ -24,9 +24,7 @@ function Payment() {
     const quantity = receivedData.quantities[1];
     const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
-    const [deliveryInfo, setDeliveryInfo] = useState([]);
     const [selectedDelivery, setSelectedDelivery] = useState({});
-    const [description, setDescription] = useState('');
 
     const totalPrice = quantity * pricePerItem;
     // console.log(totalPrice);
@@ -54,11 +52,13 @@ function Payment() {
             try {
                 const data = {
                     userID: 1,
-                    address: description,
-                    promotionID: 1,
+                    address: selectedDelivery.address,
+                    // promotionID: 1,
                     status: true,
                     quantity: quantity,
                 };
+
+                await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
                 const addOrder = await OrderAPI.add(data, 1);
                 console.log('Order added:', addOrder);
             } catch (error) {
@@ -90,7 +90,7 @@ function Payment() {
                         </button>
                     </div>
 
-                    <div className={cx('payment-method-input-container')}>
+                    {/* <div className={cx('payment-method-input-container')}>
                         <div className={cx('payment-method-input')}>
                             <p>Contact</p>
                             <input placeholder="Name" type="text" required />
@@ -108,14 +108,13 @@ function Payment() {
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-                    </div>
-                    {/* <div className={cx('delivery-info-component')}>
-                        <DeliveryInformation></DeliveryInformation>
                     </div> */}
-
-                    <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>
-                        Pay now
-                    </Button>
+                    <div className={cx('delivery-info-component')}>
+                        <DeliveryInformation
+                            selectedDelivery={selectedDelivery}
+                            setSelectedDelivery={setSelectedDelivery}
+                        />
+                    </div>
                 </div>
                 <div className={cx('payment-detail', 'col-md-4')}>
                     <div className={cx('payment-detail-items')}>
@@ -147,6 +146,9 @@ function Payment() {
                             <p className={cx('payment-detail-money-item-price')}>{totalPrice} VNĐ</p>
                         </div>
                     </div>
+                    <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>
+                        Pay
+                    </Button>
                 </div>
             </div>
         </div>

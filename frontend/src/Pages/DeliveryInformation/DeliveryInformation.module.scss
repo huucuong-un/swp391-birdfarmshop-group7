@@ -35,15 +35,29 @@
     cursor: pointer;
 }
 
+.information {
+    display: flex;
+
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    border-top: 3px solid #ccc;
+    padding: 3%;
+    margin-top: 3%;
+}
+
 .add-button {
     color: #f57c7c;
-    float: right;
-    margin: 2% 0 4% 0;
 }
 
 .add-button:hover {
-    color: gray;
+    opacity: 0.8;
     cursor: pointer;
+}
+
+.add-button-text:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .container {
@@ -53,7 +67,6 @@
 }
 
 .fade-container {
-    margin-top: 7%;
     opacity: 0;
     max-height: 0;
     overflow: hidden;

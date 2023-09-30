@@ -11,7 +11,7 @@ import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryIn
 
 const cx = classNames.bind(styles);
 
-const DeliveryInformation = (customerid) => {
+const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     const [deliveryInfo, setDeliveryInfo] = useState([]);
     const [selectedDeliveryId, setSelectedDeliveryId] = useState();
     const [show, setShow] = useState(false);
@@ -56,8 +56,16 @@ const DeliveryInformation = (customerid) => {
         const getAllDeliveryInfoByCustomerId = async () => {
             try {
                 const data = await DeliveryInformationAPI.getAll(1);
+                const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(1);
                 setDeliveryInfo(data);
-                setSelectedDeliveryId(data[0].id);
+
+                var index = 0;
+                for (const deliInfo of data) {
+                    if (deliInfo.id === nowDeliInfo.id) break;
+                    index++;
+                }
+                setSelectedDelivery(data[index]);
+                setSelectedDeliveryId(data[index].id);
             } catch (error) {
                 console.error(error);
             }
@@ -67,10 +75,6 @@ const DeliveryInformation = (customerid) => {
 
     return (
         <Box className={cx('wrapper')}>
-            <FontAwesomeIcon onClick={handleShow} icon={faCirclePlus} size="2xl" className={cx('add-button')} />
-            <div className={cx('fade-container', { show: show })}>
-                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
-            </div>
             {deliveryInfo.map((item, itemIndex) => (
                 <>
                     <Flex className={cx('delivery-info-item')} id={item.id} onClick={() => handleShowUpdate(itemIndex)}>
@@ -95,6 +99,7 @@ const DeliveryInformation = (customerid) => {
                             isChecked={selectedDeliveryId === item.id}
                             onChange={() => {
                                 setSelectedDeliveryId(item.id);
+                                setSelectedDelivery(item);
                                 // handleRedirectToPayment(); // Redirect to Payment
                             }}
                             display="flex"
@@ -114,6 +119,16 @@ const DeliveryInformation = (customerid) => {
                     </div>
                 </>
             ))}
+
+            <div className={cx('information')}>
+                <FontAwesomeIcon onClick={handleShow} icon={faCirclePlus} size="xl" className={cx('add-button')} />
+                <Text onClick={handleShow} className={cx('add-button-text')}>
+                    Add new contact
+                </Text>
+            </div>
+            <div className={cx('fade-container', { show: show })}>
+                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
+            </div>
         </Box>
     );
 };

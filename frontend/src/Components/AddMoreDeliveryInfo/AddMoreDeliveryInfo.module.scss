@@ -1,8 +1,54 @@
+// .table-container {
+//     width: 100%;
+//     table {
+//         width: 100%;
+//         height: 300px;
+//     }
+//     input {
+//         width: 100%;
+//         height: 60%;
+//         font-size: 16px;
+//         display: flex;
+//         align-items: center;
+//     }
+//     tfoot {
+//         text-align: center;
+//     }
+//     td {
+//         font-size: 16px;
+//         padding: 0;
+//     }
+//     th {
+//         background-color: #f9ede9;
+//         font-size: 16px;
+//         padding: 0;
+//         text-align: center;
+//         color: var(--black);
+//     }
+//     button {
+//         font-size: 16px;
+//         padding: 20px;
+//         width: 50%;
+//         color: white;
+//         border-radius: 15px;
+//     }
+// }
+// .btn {
+//     &:hover {
+//         opacity: 0.8;
+//         background-color: #f57c7c;
+//     }
+// }
+// .submit-btn {
+//     text-align: center;
+// }
+
 .table-container {
-    width: 100%;
+    width: 70%;
+    margin: auto auto;
     table {
         width: 100%;
-        height: 300px;
+        height: 200px;
     }
     input {
         width: 100%;
@@ -26,16 +72,16 @@
         color: var(--black);
     }
     button {
-        font-size: 20px;
+        font-size: 16px;
         padding: 20px;
         width: 50%;
+        border-radius: 15px;
+        color: white;
     }
 }
-.btn {
-    &:hover {
-        opacity: 0.8;
-        background-color: #f57c7c;
-    }
+.btn:hover {
+    opacity: 0.8;
+    background-color: #f57c7c;
 }
 .submit-btn {
     text-align: center;

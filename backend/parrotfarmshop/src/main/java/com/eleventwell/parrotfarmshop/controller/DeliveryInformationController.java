@@ -20,6 +20,11 @@ public class DeliveryInformationController {
         return deliveryInformationService.getDeliveryInformationByCustomerId(customerId);
     }
 
+    @GetMapping(value = "/picking-status/{customerid}")
+    public DeliveryInformationDTO findDeliveryInfoWithTruePickStatus(@PathVariable("customerid") Long customerId) {
+        return deliveryInformationService.getDeliveryInformationByCustomerIdWithTruePickingStatus(customerId);
+    }
+
     @PostMapping(value = "")
     public DeliveryInformationDTO createDeliveryInformation(@RequestBody DeliveryInformationDTO model) {
         return deliveryInformationService.save(model);
@@ -29,7 +34,11 @@ public class DeliveryInformationController {
     public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return deliveryInformationService.save(model);
+    }
 
+    @PutMapping(value = "/update-picking-status/{customerid}")
+    public DeliveryInformationDTO updatePickingStatus(@RequestBody DeliveryInformationDTO deliveryInfo, @PathVariable("customerid") Long customerId) {
+        return deliveryInformationService.updatePickingStatus(deliveryInfo.getId(), customerId);
     }
 
 }

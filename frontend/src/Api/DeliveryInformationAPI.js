@@ -15,6 +15,16 @@ const DeliveryInformation = {
         const url = `/delivery-information/${data.id}`;
         return axiosClient.put(url, data);
     },
+
+    getDeliveryInfoWithTruePickingStatusByCustomerId(customerid) {
+        const url = `/delivery-information/picking-status/${customerid}`;
+        return axiosClient.get(url);
+    },
+
+    updatePickingStatus(customerid, data) {
+        const url = `/delivery-information/update-picking-status/${customerid}`;
+        return axiosClient.put(url, data);
+    },
 };
 
 export default DeliveryInformation;

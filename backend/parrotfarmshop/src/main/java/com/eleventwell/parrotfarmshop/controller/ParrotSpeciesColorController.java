@@ -8,6 +8,7 @@ import com.eleventwell.parrotfarmshop.service.impl.ParrotSpeciesColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -34,10 +35,10 @@ public class ParrotSpeciesColorController {
     }
     @GetMapping(value = "find-by-parrot-id/{id}")
     public List<ParrotSpeciesColorDTO> getParrotSpeciesColorByParrotId(@PathVariable("id") Long id) {
-        ListOutput result = new ListOutput();
+        List<ParrotSpeciesColorDTO> list = new ArrayList<>();
 
-        result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
-        return result.getListResult();
+        list.add(parrotSpeciesColorService.findOneByParrotId(id));
+        return list;
     }
 
 

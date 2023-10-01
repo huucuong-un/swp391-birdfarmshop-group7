@@ -1,16 +1,19 @@
 // import 'bootstrap/dist/css/bootstrap.min.css
-import styles from '~/Components/ParrotList/ParrotList.module.scss';
-import classNames from 'classnames/bind';
 
 import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faBagShopping, faCashRegister } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
 
 import { useState, useEffect } from 'react';
+
+import { Tooltip } from '@chakra-ui/react';
+
+import styles from '~/Components/ParrotList/ParrotList.module.scss';
+import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
@@ -47,12 +50,13 @@ function ParrotList() {
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});
     const [countParrot, setCountParrot] = useState(null);
-    const [selectedColorId, setSelectedColorId] = useState({});
+    const [selectedColorId, setSelectedColorId] = useState(1);
 
     const dataToPass = {
         selectedColor,
         quantities,
         combineData,
+        selectedColorId,
     };
 
     const handleColorSelection = async (parrotId, color, price, colorId) => {
@@ -156,14 +160,21 @@ function ParrotList() {
                 return (
                     <div className={cx('parrot-card')} key={index}>
                         <div className={cx('parrot-img')}>
-                            <Link to={`/parrotdetail/${parrot.id}`}>
+                            <Link to={`/parrotdetail/${parrot.id}`} state={dataToPass}>
                                 <img className={cx('img')} src={parrot.img} alt="parrot" />
                             </Link>
                             <Link to="/payment" state={dataToPass}>
-                                <FontAwesomeIcon className={cx('buy-btn')} icon={faCashRegister} />
+                                <Tooltip label="Check to compare" aria-label="A tooltip" fontSize="lg" placement="auto">
+                                    <button className={cx('buy-btn')}>
+                                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                    </button>
+                                </Tooltip>
                             </Link>
                             <Link to="">
-                                <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} />
+                                <Tooltip label="Add to cart" aria-label="A tooltip" fontSize="lg" placement="auto">
+                                    {/* <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} /> */}
+                                    <button className={cx('cart-btn')}>+</button>
+                                </Tooltip>
                             </Link>
                         </div>
 
@@ -186,14 +197,14 @@ function ParrotList() {
                                     </div>
                                 ))}
                             </div>
-                            <div className={cx('quantity-input-container')}>
+                            {/* <div className={cx('quantity-input-container')}>
                                 <button
                                     className={cx('quantity-input-btn')}
                                     onClick={() => handleQuantityDecrease(parrot.id)}
                                 >
                                     -
                                 </button>
-                                <input type="number" value={quantities[parrot.id] || 1} min={1} />
+                                <input type="number" value={quantities[parrot.id] || 1} min={0} />
                                 <button
                                     className={cx('quantity-input-btn')}
                                     onClick={() => handleQuantityIncrease(parrot.id)}
@@ -201,11 +212,13 @@ function ParrotList() {
                                     +
                                 </button>
                                 <p>{countParrot} avaiable</p>
+                            </div> */}
+                            <div className={cx('parrot-price')}>
+                                <p>
+                                    {/* {selectedColor[parrot.id] && selectedColor[parrot.id].price} */}$
+                                    {selectedColor[parrot.id]?.price}
+                                </p>
                             </div>
-                            <strong className={cx('parrot-price')}>
-                                {/* {selectedColor[parrot.id] && selectedColor[parrot.id].price} */}$
-                                {selectedColor[parrot.id]?.price}
-                            </strong>
                             <div className={cx('parrot-like')}>
                                 <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
                                 <p className={cx('parrot-like-quantity')}>15 reviews</p>

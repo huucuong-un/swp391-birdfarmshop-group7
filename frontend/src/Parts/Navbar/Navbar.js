@@ -69,7 +69,7 @@ function Navbar() {
                         <Button className={cx('nav-top-btn-left-register')} to="/register">
                             Register
                         </Button>
-                        <Button className={cx('nav-top-btn-left-login')} text>
+                        <Button className={cx('nav-top-btn-left-login')} text to="/loginUser">
                             Login
                         </Button>
                     </div>
@@ -77,14 +77,14 @@ function Navbar() {
                     <div className={cx('active-right')}>
                         <Button
                             text
-                            className={cx('language-anf-cart')}
+                            className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
                             Language
                         </Button>
                         <Button
                             text
-                            className={cx('language-anf-cart')}
+                            className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
                         >
                             Cart

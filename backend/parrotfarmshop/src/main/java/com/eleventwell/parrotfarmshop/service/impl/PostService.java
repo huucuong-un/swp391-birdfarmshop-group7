@@ -25,7 +25,7 @@ public class PostService implements IGenericService<PostDTO> {
     @Override
     public List<PostDTO> findAll() {
         List<PostDTO> result = new ArrayList<>();
-        List<PostEntity> entities = postRepository.findAll();
+        List<PostEntity> entities = postRepository.findAllByOrderByIdDesc();
 
         for (PostEntity entity : entities) {
             PostDTO postDTO = (PostDTO) genericConverter.toDTO(entity, PostDTO.class);

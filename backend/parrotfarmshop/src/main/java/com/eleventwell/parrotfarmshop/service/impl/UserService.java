@@ -24,7 +24,7 @@ public class UserService implements IGenericService<UserDTO> {
     @Override
     public List<UserDTO> findAll() {
         List<UserDTO> results = new ArrayList<>();
-        List<UserEntity> entities = userRepository.findAll();
+        List<UserEntity> entities = userRepository.findAllByOrderByIdDesc();
         for (UserEntity entity:
              entities) {
             UserDTO userDTO = (UserDTO) genericConverter.toDTO(entity, UserDTO.class);

@@ -2,21 +2,20 @@
     width: 100%;
 }
 
-.active {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+.span-icon {
+    transition: transform 10s ease-in; /* Add a transition for the transform property */
+    margin-left: 10px;
 }
 
-.add-btn {
-    padding: 0 20px;
+.rotate-icon {
+    transform: rotate(180deg); /* Rotate the icon when clicked */
 }
 
 .sort-space-form {
     display: flex;
     gap: 10px;
     padding: 0 20px;
+    justify-content: end;
 }
 
 .sort-space-form input {
@@ -72,4 +71,25 @@ input.editable-input {
 .actions {
     display: flex;
     gap: 10px;
+}
+
+/* Define CSS classes for the transition */
+.rotate-icon {
+    transition: transform 0.3s ease-in-out; /* Add a transition for the transform property */
+}
+
+.rotate-icon-enter {
+    transform: rotate(0deg);
+}
+
+.rotate-icon-enter-active {
+    transform: rotate(180deg);
+}
+
+.rotate-icon-exit {
+    transform: rotate(180deg);
+}
+
+.rotate-icon-exit-active {
+    transform: rotate(0deg);
 }

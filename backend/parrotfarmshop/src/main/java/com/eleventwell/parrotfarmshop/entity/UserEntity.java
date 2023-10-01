@@ -80,8 +80,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
 
 
-
-
  //====================================================================================
     @OneToMany(mappedBy = "user")
     private List<OrderEntity> order = new ArrayList<>();

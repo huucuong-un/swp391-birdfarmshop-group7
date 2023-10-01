@@ -11,6 +11,7 @@ import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
+import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -37,6 +38,9 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
     //private ParrotSpeciesColorConverter parrotSpeciesColorConverter;
 
     @Autowired
+    private ParrotRepository parrotRepository;
+
+    @Autowired
     private GenericConverter converter;
 
 
@@ -44,7 +48,7 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
     public List<ParrotSpeciesColorDTO> findAll() {
         // Implement logic to retrieve all ParrotSpeciesColor entities and convert them to DTOs
         List<ParrotSpeciesColorDTO> results = new ArrayList<>();
-        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAll();
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByOrderByIdDesc();
 
         for (ParrotSpeciesColorEntity entity : entities) {
             ParrotSpeciesColorDTO parrotSpeciesColorDTO = (ParrotSpeciesColorDTO) converter.toDTO(entity, ParrotSpeciesColorDTO.class);
@@ -86,10 +90,14 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
 
 
     }
+    public  ParrotSpeciesColorDTO findOneByParrotId(Long id) {
 
+        return (ParrotSpeciesColorDTO) converter.toDTO(parrotSpeciesColorRepository.findOneById(parrotRepository.findOneById(id).getParrotSpeciesColor().getId()), ParrotSpeciesColorDTO.class);
+
+    }
 
     public List<ParrotSpeciesColorDTO> findAllBySpeciesId(Long id) {
-        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesId(id);
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAllByParrotSpeciesIdOrderByIdDesc(id);
         List<ParrotSpeciesColorDTO>  result = new ArrayList<>();
         for (ParrotSpeciesColorEntity entity:
              entities) {

@@ -7,11 +7,13 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericRepository;
+import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
@@ -32,6 +34,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     private ParrotSpeciesRepository parrotSpeciesRepository;
 
     @Autowired
+    private ParrotRepository parrotRepository;
+
+    @Autowired
     private GenericConverter genericConverter;
 
 //    @Autowired
@@ -46,7 +51,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     @Override
     public List<ParrotSpeciesDTO> findAll() {
         List<ParrotSpeciesDTO> results = new ArrayList<>();
-        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAll();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByOrderByIdDesc();
 
         for (ParrotSpeciesEntity entity : entities) {
             //NOTE
@@ -88,6 +93,11 @@ public ParrotSpeciesDTO findOneSpeciesById (Long id){
         ParrotSpeciesEntity entity =parrotSpeciesRepository.findOneById(id);
         ParrotSpeciesDTO dto = (ParrotSpeciesDTO) genericConverter.toDTO(entity,ParrotSpeciesDTO.class);
         return dto;
+}
+public ParrotSpeciesDTO findOneSpeciesParrotById(Long id){
+    ParrotDTO parrotDTO = (ParrotDTO) genericConverter.toDTO(parrotRepository.findOneById(id), ParrotDTO.class);
+    return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesRepository.findOneById(parrotRepository.findOneById(id).getParrotSpeciesColor().getParrotSpecies().getId()), ParrotSpeciesColorDTO.class);
+
 }
     @Override
     public void changeStatus(Long ids) {

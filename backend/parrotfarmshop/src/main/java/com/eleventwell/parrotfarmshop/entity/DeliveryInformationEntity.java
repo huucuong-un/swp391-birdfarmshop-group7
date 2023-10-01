@@ -48,4 +48,7 @@ public class DeliveryInformationEntity extends BaseEntity {
 	@Column(name = "status")
 	private Boolean status;
 
+	@Column(name = "picking_status")
+	private Boolean pickingStatus;
+
 }

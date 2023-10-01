@@ -23,7 +23,7 @@ public class PromotionService implements IGenericService<PromotionDTO> {
     @Override
     public List<PromotionDTO> findAll() {
         List<PromotionDTO> result = new ArrayList<>();
-        List<PromotionEntity> entities = promotionRepository.findAll();
+        List<PromotionEntity> entities = promotionRepository.findAllByOrderByIdDesc();
 
         for (PromotionEntity entity: entities
              ) {

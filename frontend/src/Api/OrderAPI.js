@@ -11,6 +11,16 @@ const OrderAPI = {
         return axiosClinet.get(url);
     }, //chua co
 
+    findAllByUserId() {
+        const url = `/order/findAllByUserId/1`;
+        return axiosClinet.get(url);
+    },
+
+    findAllByOrderId(id) {
+        const url = `/orderdetail/findAllByOrderId/${id}`;
+        return axiosClinet.get(url);
+    },
+
     add(data, id) {
         const url = `/order/${id}/parrot`;
         return axiosClinet.post(url, data);

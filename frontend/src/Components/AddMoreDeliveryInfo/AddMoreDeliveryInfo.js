@@ -69,12 +69,6 @@ function AddMoreDeliveryInfo(props) {
 
             <TableContainer className={cx('table-container')}>
                 <Table size="xs ">
-                    <Thead>
-                        <Tr>
-                            <Th>Title</Th>
-                            <Th>Input</Th>
-                        </Tr>
-                    </Thead>
                     <Tbody>
                         <Tr>
                             <Td>Contact name</Td>

@@ -17,7 +17,9 @@ public interface ParrotSpeciesColorRepository extends JpaRepository<ParrotSpecie
     
        	ParrotSpeciesColorEntity findOneById(long id);
 
-		List<ParrotSpeciesColorEntity> findAllByParrotSpeciesId(Long parrotSpecies_id);
+		   List<ParrotSpeciesColorEntity> findAllByOrderByIdDesc();
+
+		List<ParrotSpeciesColorEntity> findAllByParrotSpeciesIdOrderByIdDesc(Long parrotSpecies_id);
 
     
 }

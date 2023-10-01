@@ -31,23 +31,23 @@ import lombok.ToString;
 public class FeedbackEntity extends BaseEntity {
 
 	@NotBlank
-	@Column(name = "feedback_content")
-	private String feedbackContent;
+	@Column(name = "content")
+	private String content;
 	
 	@Unsigned
-	@Column(name = "feedback_rating")
-	private Integer feedbackRating;
+	@Column(name = "rating")
+	private Integer rating;
 
 	@Unsigned
 	@Column(name = "belong_to")
-	private Integer belongTo;
+	private String belongTo;
 	
 	@ManyToOne
-    @JoinColumn(name = "userID")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 	
 	@ManyToOne
-    @JoinColumn(name = "parrotSpeciesID")
+    @JoinColumn(name = "species_id")
     private ParrotSpeciesEntity parrotSpecies;
 	
 	

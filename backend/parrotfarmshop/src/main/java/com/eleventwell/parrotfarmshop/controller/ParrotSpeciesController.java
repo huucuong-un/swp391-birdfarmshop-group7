@@ -48,6 +48,13 @@ List<ParrotSpeciesDTO> list = new ArrayList<>();
 list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
         return list;
     }
+
+    @GetMapping(value = "find-one-species-by-parrot-id/{id}")
+    public List<ParrotSpeciesDTO> findOneSpeciesByParrotId(@RequestBody @PathVariable("id") long id) {
+        List<ParrotSpeciesDTO> list = new ArrayList<>();
+        list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesParrotById(id));
+        return list;
+    }
     @PostMapping(value = "")
 	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
 		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);

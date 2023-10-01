@@ -40,7 +40,7 @@ public class ParrotService implements IGenericService<ParrotDTO> {
     @Override
     public List<ParrotDTO> findAll() {
        List<ParrotDTO> result = new ArrayList<>();
-       List<ParrotEntity> entities = parrotRepository.findAll();
+       List<ParrotEntity> entities = parrotRepository.findAllByOrderByIdDesc();
        
         for (ParrotEntity entity : entities) {
             ParrotDTO dto = (ParrotDTO) parrotConverter.toDTO(entity, ParrotDTO.class);

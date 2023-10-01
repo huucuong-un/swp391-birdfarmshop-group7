@@ -23,7 +23,7 @@ public class RoleService implements IGenericService<RoleDTO> {
     public List<RoleDTO> findAll() {
         List<RoleDTO> results = new ArrayList<>();
 
-        List<RoleEntity> entities = roleRepository.findAll();
+        List<RoleEntity> entities = roleRepository.findAllByOrderByIdDesc();
         for (RoleEntity entity :
                 entities) {
             RoleDTO roleDTO = (RoleDTO) roleConverter.toDTO(entity, RoleDTO.class);

@@ -32,7 +32,6 @@ const cx = classNames.bind(styles);
 function ParrotDetail() {
     const location = useLocation();
     const receivedData = location.state;
-    console.log(receivedData);
     const { id } = useParams();
     const [selectedColor, setSelectedColor] = useState(receivedData.selectedColor);
     const [selectedColorId, setSelectedColorId] = useState(receivedData.selectedColorId);

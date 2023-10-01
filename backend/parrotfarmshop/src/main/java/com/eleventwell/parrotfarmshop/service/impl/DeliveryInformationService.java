@@ -26,7 +26,7 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
     @Override
     public List<DeliveryInformationDTO> findAll() {
         List<DeliveryInformationDTO> results = new ArrayList<>();
-        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAll();
+        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAllByOrderByIdDesc();
 
         for (DeliveryInformationEntity entity:
              entities) {
@@ -76,5 +76,28 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
         }
 
         return results;
+    }
+    public DeliveryInformationDTO findDeliveryInfoById(Long id) {
+        return (DeliveryInformationDTO)converter.toDTO(deliveryInformationRepository.findOneById(id), DeliveryInformationDTO.class);
+    }
+
+
+    public DeliveryInformationDTO getDeliveryInformationByCustomerIdWithTruePickingStatus(Long customerId) {
+        return (DeliveryInformationDTO)converter.toDTO(deliveryInformationRepository.findOneByIdWithTruePickStatus(customerId), DeliveryInformationDTO.class) ; //Find delivery info with picking status true/ just one true/time/user
+    }
+
+    public DeliveryInformationDTO updatePickingStatus(Long deliveryInfoId, Long customerId) {
+        List<DeliveryInformationDTO> list = getDeliveryInformationByCustomerId(customerId);
+        DeliveryInformationDTO deliveryInformationDTO = findDeliveryInfoById(deliveryInfoId);
+        for (DeliveryInformationDTO dto:
+             list) {
+            dto.setPickingStatus(false);
+            deliveryInformationRepository.save((DeliveryInformationEntity) converter.toEntity(dto, DeliveryInformationEntity.class));
+        }
+
+        deliveryInformationDTO.setPickingStatus(true);
+        deliveryInformationRepository.save((DeliveryInformationEntity) converter.toEntity(deliveryInformationDTO, DeliveryInformationEntity.class));
+
+        return  deliveryInformationDTO;
     }
 }

@@ -16,6 +16,11 @@ const ParrotSpeciesColorAPI = {
         return axiosClinet.get(url);
     },
 
+    findOneSpeciesByParrotID(id) {
+        const url = `/parrot-species/find-one-species-by-id/${id}`;
+        return axiosClinet.get(url);
+    },
+
     add(data) {
         const url = '/parrot-species-color';
         return axiosClinet.post(url, data);

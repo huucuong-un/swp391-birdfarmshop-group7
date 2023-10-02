@@ -1,9 +1,9 @@
-import axiosClinet from './AxiosClient';
+import axiosClient from './AxiosClient';
 
 const RegisterAPI = {
-    add(data) {
+    register(data, config) {
         const url = '/user/register';
-        return axiosClinet.post(url, data);
+        return axiosClient.post(url, data, config);
     },
 };
 

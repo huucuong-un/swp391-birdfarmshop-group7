@@ -28,7 +28,7 @@ const publicRoutes = [
     { path: '/orderhistory', component: OrderHistory },
     { path: '/paidsuccess', component: PaidSuccess },
     { path: '/register', component: Register, layout: LoginSystemLayout },
-    { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
+    { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },

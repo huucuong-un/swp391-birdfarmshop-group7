@@ -1,6 +1,6 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.Cart.CartModel;
+import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
@@ -147,6 +147,7 @@ public class OrderService implements IGenericService<OrderDTO> {
         save(orderDTO);
 
     }
+
 
     public List<OrderDTO> findAllByUserId(Long id) {
         List<OrderDTO> result = new ArrayList<>();

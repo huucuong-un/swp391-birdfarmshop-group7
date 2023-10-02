@@ -1,6 +1,7 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 
+import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
 import com.eleventwell.parrotfarmshop.service.impl.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,13 @@ public class OderDetailController {
 
 
         return orderDetailService.findAllByOrderId(id);
+
+    }
+
+    @GetMapping(value="find-all-model-order-detail-by-id/{id}")
+    public List<OrderDetailHistoryModel> findAllModelByOrderId(@RequestBody @PathVariable Long id){
+
+        return orderDetailService.createOrderDetailHistoryModelList(id);
 
     }
 

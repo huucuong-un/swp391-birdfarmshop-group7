@@ -1,6 +1,6 @@
 package com.eleventwell.parrotfarmshop.Request;
 
-import com.eleventwell.parrotfarmshop.Cart.CartModel;
+import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import lombok.*;
 

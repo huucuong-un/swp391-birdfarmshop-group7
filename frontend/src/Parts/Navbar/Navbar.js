@@ -18,9 +18,6 @@ import { useEffect, useState } from 'react';
 import { ShopState } from '~/context/ShopProvider';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
@@ -269,7 +266,7 @@ function Navbar() {
                                 <PopperWrapper>
                                     {MENU_ITEMS_PRODUCT.map((item, index) => {
                                         return (
-                                            <Button className={cx('mini-nav-result-item')} to={item.to}>
+                                            <Button key={index} className={cx('mini-nav-result-item')} to={item.to}>
                                                 {item.title}
                                             </Button>
                                         );

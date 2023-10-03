@@ -17,6 +17,9 @@ import AddParotSpecies from '~/Pages/AddParrotSpecies/AddParrotSpecies';
 
 import AddParrot from '~/Pages/AddParrot/AddParrot';
 import PaidSuccess from '~/Pages/PaidSuccess/PaidSuccess';
+import ShoppingCart from '~/Pages/ShoppingCart/ShoppingCart';
+import PostDetail from '~/Pages/PostDetail/PostDetail';
+import AboutUs from '~/Pages/AboutUs/AboutUs';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -27,6 +30,9 @@ const publicRoutes = [
     { path: '/parrotdetail/:id', component: ParrotDetail },
     { path: '/orderhistory', component: OrderHistory },
     { path: '/paidsuccess', component: PaidSuccess },
+    { path: '/shoppingcart', component: ShoppingCart },
+    { path: '/postdetail', component: PostDetail },
+    { path: '/aboutus', component: AboutUs },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },

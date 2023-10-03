@@ -21,7 +21,7 @@ function Payment() {
 
     const location = useLocation();
     const receivedData = location.state;
-    console.log(receivedData);
+    console.log(receivedData.id);
     const quantity = receivedData.quantities[1];
     const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
@@ -52,16 +52,29 @@ function Payment() {
         const addOrders = async () => {
             try {
                 const data = {
-                    userID: 1,
+                    // userID: 1,
 
-                    address: selectedDelivery.address,
-                    // promotionID: 1,
-                    status: true,
-                    quantity: quantity,
+                    // address: selectedDelivery.address,
+                    // // promotionID: 1,
+                    // status: true,
+                    // quantity: quantity,
+                    orderDTO: {
+                        userID: 1,
+                        address: selectedDelivery.address,
+                        status: true,
+                    },
+                    cartList: [
+                        {
+                            speicesId: receivedData.id,
+                            quantity: 1,
+                            type: 'parrot',
+                        },
+                        // Add more CartModel objects to the list as needed
+                    ],
                 };
 
                 await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-                const addOrder = await OrderAPI.add(data, 1);
+                const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
             } catch (error) {
                 console.error(error);

@@ -8,11 +8,30 @@
 
 .product-hover-effect-container {
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-parrot {
+    max-width: 600px;
+    max-height: 600px;
+}
+
+.item-parrot img {
+    width: 100%;
+}
+
+.item {
+    max-width: 500px;
+}
+
+.item img {
+    width: 100%;
 }
 
 .nest-img {
     width: 100%;
-    height: 80%;
+    height: 50%;
 
     &:hover {
         // border: 3px solid black;
@@ -21,8 +40,8 @@
 }
 
 .parrot-img {
-    width: 100%;
-    height: 80%;
+    width: 90%;
+    height: 50%;
     border: 3px solid transparent;
 
     &:hover {

@@ -1,6 +1,8 @@
 import styles from '~/Parts/Navbar/Navbar.module.scss';
 import classNames from 'classnames/bind';
 
+import { Button as Buttons, ButtonGroup } from '@chakra-ui/react';
+
 //tippy
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/Components/Popper';
@@ -12,6 +14,9 @@ import logo from '~/Assets/image/Logo/2(5).png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/Components/Button/Button';
+
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -61,6 +66,50 @@ function Navbar() {
                                 );
                             })} */
 
+    const [carts, setCarts] = useState([]);
+
+    useEffect(() => {
+        const dataJSON = localStorage.getItem('parrot');
+        const data = JSON.parse(dataJSON);
+        setCarts(data);
+    }, []);
+
+    const handleIncreaseQuantity = (index) => {
+        const updatedCarts = [...carts];
+        updatedCarts[index].quantity += 1;
+        setCarts(updatedCarts);
+        // Cập nhật local storage
+        updateLocalStorage(updatedCarts);
+    };
+
+    // Hàm giảm số lượng
+    const handleDecreaseQuantity = (index) => {
+        const updatedCarts = [...carts];
+        if (updatedCarts[index].quantity > 1) {
+            updatedCarts[index].quantity -= 1;
+            setCarts(updatedCarts);
+            // Cập nhật local storage
+            updateLocalStorage(updatedCarts);
+        }
+    };
+
+    // Hàm cập nhật local storage với dữ liệu mới
+    const updateLocalStorage = (updatedCarts) => {
+        localStorage.setItem('parrot', JSON.stringify(updatedCarts));
+    };
+
+    // Tạo biến để lưu tổng giá
+    let totalPrice = 0;
+
+    // Duyệt qua mảng carts và tính tổng giá
+    carts.forEach((cartItem) => {
+        // Tính giá của một cart-left-item
+        const itemPrice = cartItem.price * cartItem.quantity;
+
+        // Cộng vào tổng giá
+        totalPrice += itemPrice;
+    });
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -82,13 +131,78 @@ function Navbar() {
                         >
                             Language
                         </Button>
-                        <Button
-                            text
-                            className={cx('language-and-cart')}
-                            leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
+                        <Tippy
+                            interactive
+                            // delay={[0, 700]}
+                            placement="bottom"
+                            render={(attrs) => (
+                                <div className={cx('mini-nav-result')} tabIndex="-1" {...attrs}>
+                                    <PopperWrapper>
+                                        <div className={cx('cart-item-container')}>
+                                            <div className={cx('cart-up')}>
+                                                {carts.map((cartItem, index) => (
+                                                    <div key={index} className={cx('cart-item')}>
+                                                        <div className={cx('cart-item-img')}>
+                                                            <img src={cartItem.img} alt="cart-item-img" />
+                                                        </div>
+                                                        <div className={cx('cart-item-info')}>
+                                                            <p className={cx('cart-item-name')}>{cartItem.name}</p>
+                                                            <p className={cx('cart-item-qty')}>{cartItem.color}</p>
+                                                            <p className={cx('cart-item-qty')}>x{cartItem.quantity}</p>
+                                                        </div>
+                                                        <div className={cx('cart-item-price')}>
+                                                            <p>$ {cartItem.price}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className={cx('cart-down')}>
+                                                <div className={cx('cart-down-header')}>
+                                                    <div className={cx('cart-down-header-tilte')}>
+                                                        <p>Subtotal</p>
+                                                    </div>
+                                                    <div className={cx('cart-down-header-total-price')}>
+                                                        <p>$ {totalPrice.toFixed(2)}</p>
+                                                    </div>
+                                                </div>
+                                                <Link to="/shoppingcart">
+                                                    <Buttons
+                                                        colorScheme="blue"
+                                                        size="lg"
+                                                        width={400}
+                                                        height={45}
+                                                        fontSize={16}
+                                                    >
+                                                        View Cart
+                                                    </Buttons>
+                                                </Link>
+                                                <Link to="">
+                                                    <Buttons
+                                                        colorScheme="yellow"
+                                                        size="lg"
+                                                        width={400}
+                                                        height={45}
+                                                        fontSize={16}
+                                                    >
+                                                        Check Out
+                                                    </Buttons>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </PopperWrapper>
+                                </div>
+                            )}
                         >
-                            Cart
-                        </Button>
+                            <div>
+                                <Button
+                                    text
+                                    className={cx('language-and-cart')}
+                                    leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
+                                >
+                                    Cart
+                                </Button>
+                            </div>
+                        </Tippy>
                     </div>
                 </div>
                 <div className={cx('nav-bottom')}>
@@ -113,12 +227,12 @@ function Navbar() {
                     >
                         <div>
                             {/* {activeNavs.map((activeNav, index) => {
-                                return (
-                                    <Button className={cx('nav-bottom-item')} text key={index}>
-                                        {activeNav.title}
-                                    </Button>
-                                );
-                            })} */}
+                                    return (
+                                        <Button className={cx('nav-bottom-item')} text key={index}>
+                                            {activeNav.title}
+                                        </Button>
+                                    );
+                                })} */}
 
                             <Button className={cx('nav-bottom-item')} text>
                                 PRODUCT
@@ -159,7 +273,7 @@ function Navbar() {
                         </div>
                     </Tippy>
 
-                    <Button className={cx('nav-bottom-item')} text>
+                    <Button className={cx('nav-bottom-item')} text to="/aboutus">
                         ABOUT
                     </Button>
 

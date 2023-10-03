@@ -1,8 +1,9 @@
 import Slider from '~/Components/Slider/Slider';
 import ChooseProduct from '~/Components/ChooseProduct/ChooseProduct';
+import Post from '~/Components/Post/Post';
+
 import styles from '~/Pages/HomePage/HomePage.module.scss';
 import classNames from 'classnames/bind';
-import Post from '~/Components/Post/Post';
 
 const cx = classNames.bind(styles);
 

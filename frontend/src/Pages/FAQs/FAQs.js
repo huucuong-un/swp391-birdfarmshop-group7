@@ -9,20 +9,22 @@ const cx = classNames.bind(styles);
 function Faq() {
     return (
         <div className={cx('wrapper')}>
-            <StartPartPage></StartPartPage>
+            <StartPartPage>FAQS</StartPartPage>
             <div className={cx('container')}>
-                <Title>Read answers to what most people ask us</Title>
+                <div className={cx('faqs-title')}>
+                    <h1>Read answers to what most people ask us</h1>
+                </div>
 
                 <Accordion className={cx('accordion')} allowToggle>
                     <AccordionItem className={cx('accord-item')}>
-                        <h2>
+                        <h3>
                             <AccordionButton>
                                 <Box as="span" flex="1" textAlign="left">
                                     DO YOU HAVE PARROTS AVAILABLE?
                                 </Box>
                                 <AccordionIcon />
                             </AccordionButton>
-                        </h2>
+                        </h3>
                         <AccordionPanel pb={4}>
                             Yes, it depends on the age range you want. you can place your order on our website if you
                             found the perfect parrot for you, if not you can contact us to inquire on the availability

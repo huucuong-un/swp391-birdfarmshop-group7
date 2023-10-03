@@ -34,7 +34,7 @@ const publicRoutes = [
     { path: '/postdetail', component: PostDetail },
     { path: '/aboutus', component: AboutUs },
     { path: '/register', component: Register, layout: LoginSystemLayout },
-    { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
+    { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },

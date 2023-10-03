@@ -16,9 +16,9 @@ const LoginAPI = {
         return axiosClinet.get(url);
     },
 
-    add(data) {
+    login(data, config) {
         const url = `/user/authenticate`;
-        return axiosClinet.post(url, data);
+        return axiosClinet.post(url, data, config);
     },
 
     update(data) {

@@ -14,6 +14,11 @@ import logo from '~/Assets/image/Logo/2(5).png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/Components/Button/Button';
+import { useEffect, useState } from 'react';
+import { ShopState } from '~/context/ShopProvider';
+import { useNavigate } from 'react-router-dom';
+import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -21,6 +26,20 @@ import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function Navbar() {
+    const [loggedUser, setLoggedUser] = useState();
+    const { user } = ShopState();
+
+    const navigate = useNavigate();
+
+    const logoutHandler = () => {
+        localStorage.removeItem('userInfo');
+        navigate('/login-user');
+    };
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
+
     const activeNavs = [
         {
             title: 'PRODUCT',
@@ -49,8 +68,8 @@ function Navbar() {
 
     const MENU_ITEMS_SERVICE = [
         {
-            title: 'Haching',
-            to: '/haching',
+            title: 'Hatching',
+            to: '/hatching',
         },
         {
             title: 'Bird Care',
@@ -115,12 +134,46 @@ function Navbar() {
             <div className={cx('inner')}>
                 <div className={cx('nav-top')}>
                     <div className={cx('nav-top-btn-left')}>
-                        <Button className={cx('nav-top-btn-left-register')} to="/register">
-                            Register
-                        </Button>
-                        <Button className={cx('nav-top-btn-left-login')} text to="/loginUser">
-                            Login
-                        </Button>
+                        {user ? (
+                            <>
+                                <Box
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    w="50%"
+                                    p="5px 10px 5px 10px"
+                                >
+                                    <Menu>
+                                        <MenuButton as={Button}>
+                                            <Avatar size="lg" cursor="pointer" name={user.name} />
+                                        </MenuButton>
+                                        <MenuList mt={20} ml={20} className={cx('profile-list')}>
+                                            <MenuItem padding={5}>My Profile</MenuItem>
+                                            <MenuDivider color={'#ccc'} />
+                                            <MenuItem onClick={logoutHandler} padding={5}>
+                                                Logout
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                </Box>
+
+                                {/* <Button className={cx('nav-top-btn-left-register')} to="/register">
+                                    View Profile
+                                </Button>
+                                <Button className={cx('nav-top-btn-left-login')} text to="/loginUser">
+                                    Logout
+                                </Button> */}
+                            </>
+                        ) : (
+                            <>
+                                <Button className={cx('nav-top-btn-left-register')} to="/register">
+                                    Register
+                                </Button>
+                                <Button className={cx('nav-top-btn-left-login')} text to="/login-user">
+                                    Login
+                                </Button>
+                            </>
+                        )}
                     </div>
                     <img className={cx('logo')} src={logo} alt="Logo" />
                     <div className={cx('active-right')}>

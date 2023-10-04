@@ -2,10 +2,13 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
+import com.eleventwell.parrotfarmshop.dto.SliderDTO;
 import com.eleventwell.parrotfarmshop.entity.RoleEntity;
+import com.eleventwell.parrotfarmshop.entity.SliderEntity;
 import com.eleventwell.parrotfarmshop.repository.RoleRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -62,6 +65,24 @@ public class RoleService implements IGenericService<RoleDTO> {
             roleEntity.setStatus(true);
         }
         roleRepository.save(roleEntity);
+    }
+
+    @Override
+    public List<RoleDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<RoleDTO> results = new ArrayList();
+        List<RoleEntity> entities = roleRepository.findAll(pageable).getContent();
+
+        for(RoleEntity item : entities) {
+            RoleDTO newDTO = (RoleDTO) roleConverter.toDTO(item,RoleDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)roleRepository.count();
     }
 
 }

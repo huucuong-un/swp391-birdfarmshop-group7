@@ -1,13 +1,16 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.FAQsDTO;
 import com.eleventwell.parrotfarmshop.dto.FeedbackDTO;
+import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
 import com.eleventwell.parrotfarmshop.repository.FeedbackRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -65,5 +68,25 @@ public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto)
     @Override
     public void changeStatus(Long ids) {
 
+    }
+
+    @Override
+    public List<FeedbackDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<FeedbackDTO> results = new ArrayList();
+        List<FeedbackEntity> entities = feedbackRepository.findAll(pageable).getContent();
+
+        for(FeedbackEntity item : entities) {
+            FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item,FeedbackDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)feedbackRepository.count();
     }
 }

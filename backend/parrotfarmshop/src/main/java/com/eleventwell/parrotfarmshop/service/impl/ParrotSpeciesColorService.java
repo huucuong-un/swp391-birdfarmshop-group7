@@ -7,7 +7,9 @@ package com.eleventwell.parrotfarmshop.service.impl;
 //import com.eleventwell.parrotfarmshop.converter.ParrotSpeciesColorConverter;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -106,5 +109,22 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
         }
         return result;
     }
+    @Override
+    public List<ParrotSpeciesColorDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<ParrotSpeciesColorDTO> results = new ArrayList();
+        List<ParrotSpeciesColorEntity> entities = parrotSpeciesColorRepository.findAll(pageable).getContent();
 
+        for(ParrotSpeciesColorEntity item : entities) {
+            ParrotSpeciesColorDTO newDTO = (ParrotSpeciesColorDTO) converter.toDTO(item, ParrotSpeciesColorDTO.class);
+            results.add(newDTO);
+        }
+
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)parrotSpeciesColorRepository.count();
+    }
 }

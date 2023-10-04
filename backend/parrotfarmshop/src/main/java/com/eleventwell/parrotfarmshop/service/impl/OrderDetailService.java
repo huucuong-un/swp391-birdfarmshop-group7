@@ -2,7 +2,9 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.FeedbackDTO;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
+import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
@@ -10,6 +12,7 @@ import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -80,38 +83,33 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
     }
 
 
-
     public List<OrderDetailHistoryModel> createOrderDetailHistoryModelList(Long id) {
         List<OrderDetailEntity> listEntity = orderDetailRepository.findAllByOrderIdId(id);
         List<OrderDetailHistoryModel> listModel = new ArrayList<>();
-        int count =0;
+        int count = 0;
         for (OrderDetailEntity entity : listEntity) {
 
 
-                for (OrderDetailHistoryModel models : listModel) {
-                    if (models.getColor().equals(entity.getParrot().getParrotSpeciesColor().getColor()) && models.getSpeciesName().equals(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName())) {
-                        models.setQuantity(models.getQuantity() + 1);
-                        models.setTotalPrice(
-                                models.getTotalPrice()+entity.getParrot().getParrotSpeciesColor().getPrice());
-                   count=1;
-                     break;
-                    }
-
-
+            for (OrderDetailHistoryModel models : listModel) {
+                if (models.getColor().equals(entity.getParrot().getParrotSpeciesColor().getColor()) && models.getSpeciesName().equals(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName())) {
+                    models.setQuantity(models.getQuantity() + 1);
+                    models.setTotalPrice(
+                            models.getTotalPrice() + entity.getParrot().getParrotSpeciesColor().getPrice());
+                    count = 1;
+                    break;
+                }
 
             }
-if(count ==0) {
-    OrderDetailHistoryModel model = new OrderDetailHistoryModel();
-    model.setImg(entity.getParrot().getParrotSpeciesColor().getImageUrl());
-    model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
-    model.setSpeciesName(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName());
-    model.setTotalPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
-    model.setQuantity(1);
-    listModel.add(model);
-}
-count=0;
-
-
+            if (count == 0) {
+                OrderDetailHistoryModel model = new OrderDetailHistoryModel();
+                model.setImg(entity.getParrot().getParrotSpeciesColor().getImageUrl());
+                model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
+                model.setSpeciesName(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName());
+                model.setTotalPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
+                model.setQuantity(1);
+                listModel.add(model);
+            }
+            count = 0;
 
 
         }
@@ -120,5 +118,25 @@ count=0;
 
     @Override
     public void changeStatus(Long ids) {
+    }
+
+    @Override
+    public List<OrderDetailDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<OrderDetailDTO> results = new ArrayList();
+        List<OrderDetailEntity> entities = orderDetailRepository.findAll(pageable).getContent();
+
+        for(OrderDetailEntity item : entities) {
+            OrderDetailDTO newDTO = (OrderDetailDTO) converter.toDTO(item,OrderDetailDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)orderDetailRepository.count();
     }
 }

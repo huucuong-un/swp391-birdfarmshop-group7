@@ -1,12 +1,15 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.entity.SpeciesEggPriceEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.repository.SpeciesEggPriceRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -62,5 +65,23 @@ public class SpeciesEggPriceService implements IGenericService<SpeciesEggPriceDT
             speciesEggPriceEntity.setStatus(true);
         }
         speciesEggPriceRepository.save(speciesEggPriceEntity);
+    }
+
+    @Override
+    public List<SpeciesEggPriceDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<SpeciesEggPriceDTO> results = new ArrayList();
+        List<SpeciesEggPriceEntity> entities = speciesEggPriceRepository.findAll(pageable).getContent();
+
+        for(SpeciesEggPriceEntity item : entities) {
+            SpeciesEggPriceDTO newDTO = (SpeciesEggPriceDTO) converter.toDTO(item,SpeciesEggPriceDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)speciesEggPriceRepository.count();
     }
 }

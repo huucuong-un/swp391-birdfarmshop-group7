@@ -2,10 +2,13 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
+import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.entity.PromotionEntity;
+import com.eleventwell.parrotfarmshop.entity.RoleEntity;
 import com.eleventwell.parrotfarmshop.repository.PromotionRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,6 +68,26 @@ public class PromotionService implements IGenericService<PromotionDTO> {
             promotionEntity.setStatus(true);
         }
         promotionRepository.save(promotionEntity);
+    }
+
+
+    @Override
+    public List<PromotionDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<PromotionDTO> results = new ArrayList();
+        List<PromotionEntity> entities = promotionRepository.findAll(pageable).getContent();
+
+        for(PromotionEntity item : entities) {
+            PromotionDTO newDTO = (PromotionDTO) converter.toDTO(item,PromotionDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)promotionRepository.count();
+
     }
 
 

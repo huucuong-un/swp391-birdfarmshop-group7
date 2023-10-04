@@ -117,14 +117,18 @@ function Navbar() {
     // Tạo biến để lưu tổng giá
     let totalPrice = 0;
 
-    // Duyệt qua mảng carts và tính tổng giá
-    carts.forEach((cartItem) => {
-        // Tính giá của một cart-left-item
-        const itemPrice = cartItem.price * cartItem.quantity;
+    if (carts != null) {
+        // Duyệt qua mảng carts và tính tổng giá
+        carts.forEach((cartItem) => {
+            // Tính giá của một cart-left-item
+            const itemPrice = cartItem.price * cartItem.quantity;
 
-        // Cộng vào tổng giá
-        totalPrice += itemPrice;
-    });
+            // Cộng vào tổng giá
+            totalPrice += itemPrice;
+        });
+    } else {
+        totalPrice = 0;
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -190,21 +194,24 @@ function Navbar() {
                                     <PopperWrapper>
                                         <div className={cx('cart-item-container')}>
                                             <div className={cx('cart-up')}>
-                                                {carts.map((cartItem, index) => (
-                                                    <div key={index} className={cx('cart-item')}>
-                                                        <div className={cx('cart-item-img')}>
-                                                            <img src={cartItem.img} alt="cart-item-img" />
+                                                {carts &&
+                                                    carts.map((cartItem, index) => (
+                                                        <div key={index} className={cx('cart-item')}>
+                                                            <div className={cx('cart-item-img')}>
+                                                                <img src={cartItem.img} alt="cart-item-img" />
+                                                            </div>
+                                                            <div className={cx('cart-item-info')}>
+                                                                <p className={cx('cart-item-name')}>{cartItem.name}</p>
+                                                                <p className={cx('cart-item-qty')}>{cartItem.color}</p>
+                                                                <p className={cx('cart-item-qty')}>
+                                                                    x{cartItem.quantity}
+                                                                </p>
+                                                            </div>
+                                                            <div className={cx('cart-item-price')}>
+                                                                <p>$ {cartItem.price}</p>
+                                                            </div>
                                                         </div>
-                                                        <div className={cx('cart-item-info')}>
-                                                            <p className={cx('cart-item-name')}>{cartItem.name}</p>
-                                                            <p className={cx('cart-item-qty')}>{cartItem.color}</p>
-                                                            <p className={cx('cart-item-qty')}>x{cartItem.quantity}</p>
-                                                        </div>
-                                                        <div className={cx('cart-item-price')}>
-                                                            <p>$ {cartItem.price}</p>
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                                    ))}
                                             </div>
                                             <div className={cx('cart-down')}>
                                                 <div className={cx('cart-down-header')}>

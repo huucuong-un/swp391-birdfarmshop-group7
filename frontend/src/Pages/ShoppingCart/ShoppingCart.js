@@ -13,6 +13,7 @@ const cx = classNames.bind(styles);
 
 function ShoppingCart() {
     const [carts, setCarts] = useState([]);
+    const [choosenCart, setChoosenCart] = useState([]);
 
     useEffect(() => {
         const dataJSON = localStorage.getItem('parrot');
@@ -44,17 +45,24 @@ function ShoppingCart() {
         localStorage.setItem('parrot', JSON.stringify(updatedCarts));
     };
 
-    // Tạo biến để lưu tổng giá
     let totalPrice = 0;
 
-    // Duyệt qua mảng carts và tính tổng giá
-    carts.forEach((cartItem) => {
-        // Tính giá của một cart-left-item
-        const itemPrice = cartItem.price * cartItem.quantity;
+    if (carts != null) {
+        // Duyệt qua mảng carts và tính tổng giá
+        carts.forEach((cartItem) => {
+            // Tính giá của một cart-left-item
+            const itemPrice = cartItem.price * cartItem.quantity;
 
-        // Cộng vào tổng giá
-        totalPrice += itemPrice;
-    });
+            // Cộng vào tổng giá
+            totalPrice += itemPrice;
+        });
+    } else {
+        totalPrice = 0;
+    }
+
+    const handleCheckBoxOnClick = ({ img, name, color, price, quantity }) => {
+        setChoosenCart(...{ img, name, color, price, quantity }, { img, name, color, price, quantity });
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -67,43 +75,44 @@ function ShoppingCart() {
                             <h1>My Cart</h1>
                         </div>
                         <div className={cx('cart-left-header-total-quantity')}>
-                            <p>{carts.length} items</p>
+                            <p>{carts ? carts.length : 0} items</p>
                         </div>
                     </div>
-                    {carts.map((cartItem, index) => (
-                        <div key={index} className={cx('carft-left-item')}>
-                            <input className={cx('carft-left-item-checkbox')} type="checkbox" />
-                            <div className={cx('cart-left-item-image')}>
-                                <img src={cartItem.img} alt="cart-left-item-img" />
-                            </div>
-                            <div className={cx('cart-left-item-info')}>
-                                <div className={cx('cart-left-item-info-name')}>
-                                    <p>{cartItem.name}</p>
+                    {carts &&
+                        carts.map((cartItem, index) => (
+                            <div key={index} className={cx('carft-left-item')}>
+                                <input className={cx('carft-left-item-checkbox')} type="checkbox" />
+                                <div className={cx('cart-left-item-image')}>
+                                    <img src={cartItem.img} alt="cart-left-item-img" />
+                                </div>
+                                <div className={cx('cart-left-item-info')}>
+                                    <div className={cx('cart-left-item-info-name')}>
+                                        <p>{cartItem.name}</p>
+                                    </div>
+
+                                    <div className={cx('cart-left-item-info-color')}>
+                                        <p>{cartItem.color}</p>
+                                    </div>
                                 </div>
 
-                                <div className={cx('cart-left-item-info-color')}>
-                                    <p>{cartItem.color}</p>
+                                <div className={cx('cart-left-item-price')}>
+                                    <p>$ {cartItem.price}</p>
+                                </div>
+                                <div className={cx('cart-left-item-quantity-btn')}>
+                                    <button onClick={() => handleDecreaseQuantity(index)}>-</button>
+                                    <input type="number" value={cartItem.quantity} />
+                                    <button onClick={() => handleIncreaseQuantity(index)}>+</button>
+                                </div>
+
+                                <div className={cx('cart-left-item-price-with-quantity')}>
+                                    <p>$ {cartItem.quantity * cartItem.price}</p>
+                                </div>
+
+                                <div className={cx('carft-left-item-remove-btn')}>
+                                    <button>x</button>
                                 </div>
                             </div>
-
-                            <div className={cx('cart-left-item-price')}>
-                                <p>$ {cartItem.price}</p>
-                            </div>
-                            <div className={cx('cart-left-item-quantity-btn')}>
-                                <button onClick={() => handleDecreaseQuantity(index)}>-</button>
-                                <input type="number" value={cartItem.quantity} />
-                                <button onClick={() => handleIncreaseQuantity(index)}>+</button>
-                            </div>
-
-                            <div className={cx('cart-left-item-price-with-quantity')}>
-                                <p>$ {cartItem.quantity * cartItem.price}</p>
-                            </div>
-
-                            <div className={cx('carft-left-item-remove-btn')}>
-                                <button>x</button>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
 
                 <div className={cx('inner-right', 'col-lg-3')}>
@@ -114,7 +123,7 @@ function ShoppingCart() {
                     <div className={cx('cart-right-content')}>
                         <div className={cx('cart-right-total')}>
                             <div className={cx('cart-right-total-product')}>
-                                <p>{carts.length} items</p>
+                                <p>{carts ? carts.length : 0} items</p>
                             </div>
 
                             <div className={cx('cart-right-total-price')}>

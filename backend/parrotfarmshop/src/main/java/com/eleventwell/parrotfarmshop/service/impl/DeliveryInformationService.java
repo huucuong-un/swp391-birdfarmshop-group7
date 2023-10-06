@@ -3,12 +3,15 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.DeliveryInformationDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.DeliveryInformationEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.DeliveryInformationRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import jakarta.persistence.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
     @Override
     public List<DeliveryInformationDTO> findAll() {
         List<DeliveryInformationDTO> results = new ArrayList<>();
-        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAll();
+        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAllByOrderByIdDesc();
 
         for (DeliveryInformationEntity entity:
              entities) {
@@ -77,4 +80,51 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
 
         return results;
     }
+    public DeliveryInformationDTO findDeliveryInfoById(Long id) {
+        return (DeliveryInformationDTO)converter.toDTO(deliveryInformationRepository.findOneById(id), DeliveryInformationDTO.class);
+    }
+
+
+    public DeliveryInformationDTO getDeliveryInformationByCustomerIdWithTruePickingStatus(Long customerId) {
+        return (DeliveryInformationDTO)converter.toDTO(deliveryInformationRepository.findOneByIdWithTruePickStatus(customerId), DeliveryInformationDTO.class) ; //Find delivery info with picking status true/ just one true/time/user
+    }
+
+    public DeliveryInformationDTO updatePickingStatus(Long deliveryInfoId, Long customerId) {
+        List<DeliveryInformationDTO> list = getDeliveryInformationByCustomerId(customerId);
+        DeliveryInformationDTO deliveryInformationDTO = findDeliveryInfoById(deliveryInfoId);
+        for (DeliveryInformationDTO dto:
+             list) {
+            dto.setPickingStatus(false);
+            deliveryInformationRepository.save((DeliveryInformationEntity) converter.toEntity(dto, DeliveryInformationEntity.class));
+        }
+
+        deliveryInformationDTO.setPickingStatus(true);
+        deliveryInformationRepository.save((DeliveryInformationEntity) converter.toEntity(deliveryInformationDTO, DeliveryInformationEntity.class));
+
+        return  deliveryInformationDTO;
+    }
+
+
+    @Override
+    public List<DeliveryInformationDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<DeliveryInformationDTO> results = new ArrayList();
+        List<DeliveryInformationEntity> entities = deliveryInformationRepository.findAll(pageable).getContent();
+
+        for(DeliveryInformationEntity item : entities) {
+            DeliveryInformationDTO newDTO = (DeliveryInformationDTO) converter.toDTO(item,DeliveryInformationDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)deliveryInformationRepository.count();
+    }
+
+
+
 }

@@ -11,8 +11,18 @@ const OrderAPI = {
         return axiosClinet.get(url);
     }, //chua co
 
-    add(data, id) {
-        const url = `/order/${id}/parrot`;
+    findAllByUserId() {
+        const url = `/order/findAllByUserId/1`;
+        return axiosClinet.get(url);
+    },
+
+    findAllByOrderId(id) {
+        const url = `/orderdetail/findAllByOrderId/${id}`;
+        return axiosClinet.get(url);
+    },
+
+    add(data) {
+        const url = `/order/cart`;
         return axiosClinet.post(url, data);
     },
 

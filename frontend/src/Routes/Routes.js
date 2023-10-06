@@ -22,22 +22,26 @@ import MngVoucherPromotion from '~/Pages/MngVoucherPromotion/MngVoucherPromotion
 import MngOrder from '~/Pages/MngOrder/MngOrder';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 import AddSlider from '~/Pages/AddSlider/AddSlider';
+import PaidSuccess from '~/Pages/PaidSuccess/PaidSuccess';
+import ShoppingCart from '~/Pages/ShoppingCart/ShoppingCart';
+import PostDetail from '~/Pages/PostDetail/PostDetail';
+import AboutUs from '~/Pages/AboutUs/AboutUs';
+import AddRole from '~/Pages/AddRole/AddRole';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
-    { path: '/parrotProduct', component: ParrotProduct },
+    { path: '/parrot-product', component: ParrotProduct },
     { path: '/nest', component: Nest },
     { path: '/payment', component: Payment },
-    { path: '/parrotdetail/:id', component: ParrotDetail },
-    { path: '/orderhistory', component: OrderHistory },
+    { path: '/parrot-detail/:id', component: ParrotDetail },
+    { path: '/order-history', component: OrderHistory },
+    { path: '/paid-success', component: PaidSuccess },
+    { path: '/shopping-cart', component: ShoppingCart },
+    { path: '/post-detail', component: PostDetail },
+    { path: '/about-us', component: AboutUs },
     { path: '/register', component: Register, layout: LoginSystemLayout },
-    { path: '/loginUser', component: UserLogin, layout: LoginSystemLayout },
-    { path: '/adparrotspecies', component: AdParrotSpecies, layout: SystemLayout },
-    { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
-    { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/faq', component: FAQs },
-    { path: '/addparrotspecies', component: AddParotSpecies, layout: LoginSystemLayout },
-    { path: '/addparrot', component: AddParrot, layout: SystemLayout },
+
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
     { path: '/addpost', component: AddPost, layout: SystemLayout },
     { path: '/stafffeedback', component: StaffFeedback, layout: SystemLayout },
@@ -45,6 +49,14 @@ const publicRoutes = [
     { path: '/mngorder', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
     { path: '/addslider', component: AddSlider, layout: SystemLayout },
+
+    { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
+    { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
+    { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
+    { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
+    { path: '/faq', component: FAQs },
+    { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
+    { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

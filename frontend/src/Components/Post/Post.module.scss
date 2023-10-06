@@ -1,5 +1,6 @@
 .wrapper {
     margin-bottom: 5%;
+    overflow: hidden;
     overflow-y: hidden;
 }
 
@@ -7,8 +8,80 @@
     padding: 0;
 }
 
+.post-container {
+    padding: 20px 60px;
+}
+
+.post-item {
+    // opacity: 0.12;
+    // position: relative;
+    display: flex;
+}
+
+.post-inner {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    max-width: 450px;
+    min-height: 492px;
+    background-color: #f7ede9;
+    border-radius: 15px;
+    gap: 10px;
+    // filter: blur(5px);
+}
+
+.scheme-swirl {
+    position: absolute;
+    background-image: url(~/src/Assets/image/Post-background/swirl.svg);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.12;
+}
+
+.post-title {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.post-content {
+    padding: 0 25px;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+.post-img {
+    overflow: hidden;
+    max-width: 400px;
+    max-height: 225px;
+    margin-top: 20px;
+}
+
+.post-img img {
+    width: 100%;
+}
+
+.shop-sale-btn {
+    overflow: hidden;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50px;
+    padding: 5px 10px;
+}
+
+.post-item-link {
+    overflow: hidden;
+}
+
 .post-item-img {
     width: 100%;
-    padding: 0 50px;
-    border-radius: 15%;
+    padding: 0 60px;
+    overflow: hidden;
+    border-radius: 28% !important;
 }

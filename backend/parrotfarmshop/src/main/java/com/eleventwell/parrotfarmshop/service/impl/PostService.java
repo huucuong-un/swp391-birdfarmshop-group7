@@ -2,10 +2,13 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
+import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.entity.PostEntity;
+import com.eleventwell.parrotfarmshop.entity.PromotionEntity;
 import com.eleventwell.parrotfarmshop.repository.PostRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ public class PostService implements IGenericService<PostDTO> {
     @Override
     public List<PostDTO> findAll() {
         List<PostDTO> result = new ArrayList<>();
-        List<PostEntity> entities = postRepository.findAll();
+        List<PostEntity> entities = postRepository.findAllByOrderByIdDesc();
 
         for (PostEntity entity : entities) {
             PostDTO postDTO = (PostDTO) genericConverter.toDTO(entity, PostDTO.class);
@@ -56,6 +59,26 @@ public class PostService implements IGenericService<PostDTO> {
             postEntity.setStatus(true);
         }
         postRepository.save(postEntity);
+    }
+
+
+    @Override
+    public List<PostDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<PostDTO> results = new ArrayList();
+        List<PostEntity> entities = postRepository.findAll(pageable).getContent();
+
+        for(PostEntity item : entities) {
+            PostDTO newDTO = (PostDTO) genericConverter.toDTO(item,PostDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)postRepository.count();
+
     }
 
 

@@ -18,27 +18,59 @@ import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo.module.scss';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
 function AddMoreDeliveryInfo(props) {
     const [newDeliveryInfo, setNewDeliveryInfo] = useState({ name: '', phoneNumber: '', address: '', status: true });
-
+    const { user } = ShopState();
     const addNewDeliveryInfo = async () => {
         try {
             setLoading(true);
-            const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo({
-                name: newDeliveryInfo.name,
-                phoneNumber: newDeliveryInfo.phoneNumber,
-                address: newDeliveryInfo.address,
-                status: newDeliveryInfo.status,
-                userId: 1,
-            });
-            setLoading(false);
-            setSubmissionStatus(true);
-            setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
 
-            props.onAdd(deliveryInformation);
+            const data = await DeliveryInformationAPI.getAll(user.userId, config);
+
+            if (data === null || data === '' || data.length === 0) {
+                const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
+                    {
+                        name: newDeliveryInfo.name,
+                        phoneNumber: newDeliveryInfo.phoneNumber,
+                        address: newDeliveryInfo.address,
+                        status: newDeliveryInfo.status,
+                        userId: user.userId,
+                        pickingStatus: true,
+                    },
+                    config,
+                );
+                setLoading(false);
+                setSubmissionStatus(true);
+                setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
+
+                props.onAdd(deliveryInformation);
+            } else {
+                const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
+                    {
+                        name: newDeliveryInfo.name,
+                        phoneNumber: newDeliveryInfo.phoneNumber,
+                        address: newDeliveryInfo.address,
+                        status: newDeliveryInfo.status,
+                        userId: user.userId,
+                        pickingStatus: false,
+                    },
+                    config,
+                );
+                setLoading(false);
+                setSubmissionStatus(true);
+                setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
+
+                props.onAdd(deliveryInformation);
+            }
         } catch (error) {
             setSubmissionStatus(false);
             setLoading(false);
@@ -69,12 +101,6 @@ function AddMoreDeliveryInfo(props) {
 
             <TableContainer className={cx('table-container')}>
                 <Table size="xs ">
-                    <Thead>
-                        <Tr>
-                            <Th>Title</Th>
-                            <Th>Input</Th>
-                        </Tr>
-                    </Thead>
                     <Tbody>
                         <Tr>
                             <Td>Contact name</Td>

@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/ParrotDetail/ParrotDetail.module.scss';
 
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
-import parrot from '~/Assets/image/SelectProduct/Grey-Parrot-PNG-Download-Image.png';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,8 +11,10 @@ import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIco
 
 import { useState, useEffect } from 'react';
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
+import Button from '~/Components/Button/Button';
+import Feedback from '~/Components/Feedback/Feedback';
 
 const cx = classNames.bind(styles);
 
@@ -30,14 +31,16 @@ const cx = classNames.bind(styles);
 // ];
 
 function ParrotDetail() {
+    const location = useLocation();
+    const receivedData = location.state;
     const { id } = useParams();
-    const [selectedColor, setSelectedColor] = useState(null);
-    const [selectedColorId, setSelectedColorId] = useState({});
+    const [selectedColor, setSelectedColor] = useState(receivedData.selectedColor);
+    const [selectedColorId, setSelectedColorId] = useState(receivedData.selectedColorId);
     const [quantities, setQuantities] = useState({});
     const [combineData, setCombineData] = useState([]);
     const [parrotSpecies, setParrotSpecies] = useState([]);
 
-    const [countParrot, setCountParrot] = useState(null);
+    const [countParrot, setCountParrot] = useState('Check the color to see ');
 
     const dataToPass = {
         id,
@@ -117,17 +120,17 @@ function ParrotDetail() {
                 }
             }
 
-            const initialSelectedColor = {};
-            data.forEach((parrot) => {
-                if (parrot.colors.length > 0) {
-                    initialSelectedColor[parrot.id] = {
-                        color: parrot.colors[0].color,
-                        price: parrot.colors[0].price,
-                    };
-                }
-            });
+            // const initialSelectedColor = {};
+            // data.forEach((parrot) => {
+            //     if (parrot.colors.length > 0) {
+            //         initialSelectedColor[parrot.id] = {
+            //             color: parrot.colors[0].color,
+            //             price: parrot.colors[0].price,
+            //         };
+            //     }
+            // });
 
-            setSelectedColor(initialSelectedColor);
+            // setSelectedColor(initialSelectedColor);
 
             const initialQuantities = {};
             data.forEach((parrot) => {
@@ -143,6 +146,32 @@ function ParrotDetail() {
 
         fetchData();
     }, [parrotSpecies]);
+
+    const handleAddToCart = ({ name, img, quantity, price, color }) => {
+        const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
+        const existingItem = existingCart.find((item) => item.name === name && item.color === color);
+        if (existingItem) {
+            // Nếu mục đã tồn tại, tăng số lượng lên 1
+            existingItem.quantity += 1;
+        } else {
+            // Nếu mục chưa tồn tại, thêm nó vào danh sách
+            existingCart.push({
+                name,
+                img,
+                quantity: 1,
+                price,
+                color,
+            });
+        }
+        const newCart = [...existingCart];
+        localStorage.setItem('parrot', JSON.stringify(newCart));
+        // localStorage.clear();
+        const deleteAfterMilliseconds = 365 * 24 * 60 * 60 * 1000; // 1 năm
+        // const deleteAfterMilliseconds = 1 * 60 * 1000; // 1 phút
+        setTimeout(() => {
+            localStorage.removeItem('parrot'); // Xóa dữ liệu sau khoảng thời gian đã đặt
+        }, deleteAfterMilliseconds);
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -218,7 +247,7 @@ function ParrotDetail() {
                                 <AccordionItem w={500}>
                                     <h2>
                                         <AccordionButton>
-                                            <Box as="span" flex="1" textAlign="left" fontSize={15}>
+                                            <Box as="span" flex="1" textAlign="left" fontSize={16} fontWeight={500}>
                                                 Description
                                             </Box>
                                             <AccordionIcon />
@@ -226,17 +255,58 @@ function ParrotDetail() {
                                     </h2>
                                     <AccordionPanel pb={4}>{parrot.description}</AccordionPanel>
                                 </AccordionItem>
+                                <AccordionItem w={500}>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Box as="span" flex="1" textAlign="left" fontSize={16} fontWeight={500}>
+                                                Shipping & Return
+                                            </Box>
+                                            <AccordionIcon />
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel pb={4}>
+                                        Please Note: There is no restocking fee for this item. However, customers
+                                        interested in a return for a refund must pay for the return shipping costs.
+                                    </AccordionPanel>
+                                </AccordionItem>
                             </Accordion>
                             <div className={cx('active-zone')}>
-                                <Link to={`/payment`} state={dataToPass}>
-                                    Buy
-                                </Link>
-                                <button>Add to cart</button>
+                                {countParrot === 0 ? (
+                                    <button>Contact</button>
+                                ) : (
+                                    <button
+                                        onClick={() =>
+                                            handleAddToCart({
+                                                name: parrot.name,
+                                                img: parrot.img,
+                                                quantity: 1,
+                                                price: selectedColor[parrot.id]?.price,
+                                                color: selectedColor[parrot.id]?.color,
+                                            })
+                                        }
+                                    >
+                                        Add to cart
+                                    </button>
+                                )}
+                                {countParrot === 0 ? (
+                                    <Link to={``} className={cx('buy-btn')} state={dataToPass}>
+                                        Contact
+                                    </Link>
+                                ) : countParrot === 'Check the color to see ' ? (
+                                    <Link to={``} className={cx('buy-btn')} state={dataToPass}>
+                                        Please choose color
+                                    </Link>
+                                ) : (
+                                    <Link to={`/payment`} className={cx('buy-btn')} state={dataToPass}>
+                                        Buy
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>
                 );
             })}
+            <Feedback></Feedback>
         </div>
     );
 }

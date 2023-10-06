@@ -1,6 +1,8 @@
 import styles from '~/Parts/Navbar/Navbar.module.scss';
 import classNames from 'classnames/bind';
 
+import { Button as Buttons, ButtonGroup } from '@chakra-ui/react';
+
 //tippy
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper } from '~/Components/Popper';
@@ -12,10 +14,29 @@ import logo from '~/Assets/image/Logo/2(5).png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/Components/Button/Button';
+import { useEffect, useState } from 'react';
+import { ShopState } from '~/context/ShopProvider';
+import { useNavigate } from 'react-router-dom';
+import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function Navbar() {
+    const [loggedUser, setLoggedUser] = useState();
+    const { user } = ShopState();
+
+    const navigate = useNavigate();
+
+    const logoutHandler = () => {
+        localStorage.removeItem('userInfo');
+        navigate('/login-user');
+    };
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
+
     const activeNavs = [
         {
             title: 'PRODUCT',
@@ -34,7 +55,7 @@ function Navbar() {
     const MENU_ITEMS_PRODUCT = [
         {
             title: 'Parrot',
-            to: '/parrotProduct',
+            to: '/parrot-product',
         },
         {
             title: 'Nest',
@@ -44,8 +65,8 @@ function Navbar() {
 
     const MENU_ITEMS_SERVICE = [
         {
-            title: 'Haching',
-            to: '/haching',
+            title: 'Hatching',
+            to: '/hatching',
         },
         {
             title: 'Bird Care',
@@ -61,34 +82,184 @@ function Navbar() {
                                 );
                             })} */
 
+    const [carts, setCarts] = useState([]);
+
+    useEffect(() => {
+        const dataJSON = localStorage.getItem('parrot');
+        const data = JSON.parse(dataJSON);
+        setCarts(data);
+    }, []);
+
+    const handleIncreaseQuantity = (index) => {
+        const updatedCarts = [...carts];
+        updatedCarts[index].quantity += 1;
+        setCarts(updatedCarts);
+        // Cập nhật local storage
+        updateLocalStorage(updatedCarts);
+    };
+
+    // Hàm giảm số lượng
+    const handleDecreaseQuantity = (index) => {
+        const updatedCarts = [...carts];
+        if (updatedCarts[index].quantity > 1) {
+            updatedCarts[index].quantity -= 1;
+            setCarts(updatedCarts);
+            // Cập nhật local storage
+            updateLocalStorage(updatedCarts);
+        }
+    };
+
+    // Hàm cập nhật local storage với dữ liệu mới
+    const updateLocalStorage = (updatedCarts) => {
+        localStorage.setItem('parrot', JSON.stringify(updatedCarts));
+    };
+
+    // Tạo biến để lưu tổng giá
+    let totalPrice = 0;
+
+    if (carts != null) {
+        // Duyệt qua mảng carts và tính tổng giá
+        carts.forEach((cartItem) => {
+            // Tính giá của một cart-left-item
+            const itemPrice = cartItem.price * cartItem.quantity;
+
+            // Cộng vào tổng giá
+            totalPrice += itemPrice;
+        });
+    } else {
+        totalPrice = 0;
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <div className={cx('nav-top')}>
                     <div className={cx('nav-top-btn-left')}>
-                        <Button className={cx('nav-top-btn-left-register')} to="/register">
-                            Register
-                        </Button>
-                        <Button className={cx('nav-top-btn-left-login')} text>
-                            Login
-                        </Button>
+                        {user ? (
+                            <>
+                                <Box
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    w="50%"
+                                    p="5px 10px 5px 10px"
+                                >
+                                    <Menu>
+                                        <MenuButton as={Button}>
+                                            <Avatar size="lg" cursor="pointer" name={user.name} src={user.imgUrl} />
+                                        </MenuButton>
+                                        <MenuList mt={20} ml={20} className={cx('profile-list')}>
+                                            <MenuItem padding={5}>My Profile</MenuItem>
+                                            <MenuDivider color={'#ccc'} />
+                                            <MenuItem onClick={logoutHandler} padding={5}>
+                                                Logout
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                </Box>
+
+                                {/* <Button className={cx('nav-top-btn-left-register')} to="/register">
+                                    View Profile
+                                </Button>
+                                <Button className={cx('nav-top-btn-left-login')} text to="/loginUser">
+                                    Logout
+                                </Button> */}
+                            </>
+                        ) : (
+                            <>
+                                <Button className={cx('nav-top-btn-left-register')} to="/register">
+                                    Register
+                                </Button>
+                                <Button className={cx('nav-top-btn-left-login')} text to="/login-user">
+                                    Login
+                                </Button>
+                            </>
+                        )}
                     </div>
                     <img className={cx('logo')} src={logo} alt="Logo" />
                     <div className={cx('active-right')}>
                         <Button
                             text
-                            className={cx('language-anf-cart')}
+                            className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
                             Language
                         </Button>
-                        <Button
-                            text
-                            className={cx('language-anf-cart')}
-                            leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
+                        <Tippy
+                            interactive
+                            // delay={[0, 700]}
+                            placement="bottom"
+                            render={(attrs) => (
+                                <div className={cx('mini-nav-result')} tabIndex="-1" {...attrs}>
+                                    <PopperWrapper>
+                                        <div className={cx('cart-item-container')}>
+                                            <div className={cx('cart-up')}>
+                                                {carts &&
+                                                    carts.map((cartItem, index) => (
+                                                        <div key={index} className={cx('cart-item')}>
+                                                            <div className={cx('cart-item-img')}>
+                                                                <img src={cartItem.img} alt="cart-item-img" />
+                                                            </div>
+                                                            <div className={cx('cart-item-info')}>
+                                                                <p className={cx('cart-item-name')}>{cartItem.name}</p>
+                                                                <p className={cx('cart-item-qty')}>{cartItem.color}</p>
+                                                                <p className={cx('cart-item-qty')}>
+                                                                    x{cartItem.quantity}
+                                                                </p>
+                                                            </div>
+                                                            <div className={cx('cart-item-price')}>
+                                                                <p>$ {cartItem.price}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                            <div className={cx('cart-down')}>
+                                                <div className={cx('cart-down-header')}>
+                                                    <div className={cx('cart-down-header-tilte')}>
+                                                        <p>Subtotal</p>
+                                                    </div>
+                                                    <div className={cx('cart-down-header-total-price')}>
+                                                        <p>$ {totalPrice.toFixed(2)}</p>
+                                                    </div>
+                                                </div>
+                                                <Link to="/shoppingcart">
+                                                    <Buttons
+                                                        colorScheme="blue"
+                                                        size="lg"
+                                                        width={400}
+                                                        height={45}
+                                                        fontSize={16}
+                                                    >
+                                                        View Cart
+                                                    </Buttons>
+                                                </Link>
+                                                <Link to="">
+                                                    <Buttons
+                                                        colorScheme="yellow"
+                                                        size="lg"
+                                                        width={400}
+                                                        height={45}
+                                                        fontSize={16}
+                                                    >
+                                                        Check Out
+                                                    </Buttons>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </PopperWrapper>
+                                </div>
+                            )}
                         >
-                            Cart
-                        </Button>
+                            <div>
+                                <Button
+                                    text
+                                    className={cx('language-and-cart')}
+                                    leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
+                                >
+                                    Cart
+                                </Button>
+                            </div>
+                        </Tippy>
                     </div>
                 </div>
                 <div className={cx('nav-bottom')}>
@@ -102,7 +273,7 @@ function Navbar() {
                                 <PopperWrapper>
                                     {MENU_ITEMS_PRODUCT.map((item, index) => {
                                         return (
-                                            <Button className={cx('mini-nav-result-item')} to={item.to}>
+                                            <Button key={index} className={cx('mini-nav-result-item')} to={item.to}>
                                                 {item.title}
                                             </Button>
                                         );
@@ -113,12 +284,12 @@ function Navbar() {
                     >
                         <div>
                             {/* {activeNavs.map((activeNav, index) => {
-                                return (
-                                    <Button className={cx('nav-bottom-item')} text key={index}>
-                                        {activeNav.title}
-                                    </Button>
-                                );
-                            })} */}
+                                    return (
+                                        <Button className={cx('nav-bottom-item')} text key={index}>
+                                            {activeNav.title}
+                                        </Button>
+                                    );
+                                })} */}
 
                             <Button className={cx('nav-bottom-item')} text>
                                 PRODUCT
@@ -159,7 +330,7 @@ function Navbar() {
                         </div>
                     </Tippy>
 
-                    <Button className={cx('nav-bottom-item')} text>
+                    <Button className={cx('nav-bottom-item')} text to="/about-us">
                         ABOUT
                     </Button>
 

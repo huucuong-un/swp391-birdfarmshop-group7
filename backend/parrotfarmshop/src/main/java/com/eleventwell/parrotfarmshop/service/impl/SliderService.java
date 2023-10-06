@@ -2,10 +2,13 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.SliderDTO;
+import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.entity.SliderEntity;
+import com.eleventwell.parrotfarmshop.entity.SpeciesEggPriceEntity;
 import com.eleventwell.parrotfarmshop.repository.SliderRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,7 +26,7 @@ public class SliderService implements IGenericService<SliderDTO> {
     @Override
     public List<SliderDTO> findAll() {
         List<SliderDTO> result = new ArrayList<>();
-        List<SliderEntity> sliderEntities = sliderRepository.findAll();
+        List<SliderEntity> sliderEntities = sliderRepository.findAllByOrderByIdDesc();
 
         for (SliderEntity entity : sliderEntities
         ) {
@@ -56,5 +59,23 @@ public class SliderService implements IGenericService<SliderDTO> {
             sliderEntity.setStatus(true);
         }
         sliderRepository.save(sliderEntity);
+    }
+
+    @Override
+    public List<SliderDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<SliderDTO> results = new ArrayList();
+        List<SliderEntity> entities = sliderRepository.findAll(pageable).getContent();
+
+        for(SliderEntity item : entities) {
+            SliderDTO newDTO = (SliderDTO) genericConverter.toDTO(item,SliderDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)sliderRepository.count();
     }
 }

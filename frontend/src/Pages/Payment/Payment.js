@@ -13,6 +13,7 @@ import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -24,9 +25,7 @@ function Payment() {
     const quantity = receivedData.quantities[1];
     const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
-    const [deliveryInfo, setDeliveryInfo] = useState([]);
     const [selectedDelivery, setSelectedDelivery] = useState({});
-    const [description, setDescription] = useState('');
 
     const totalPrice = quantity * pricePerItem;
     // console.log(totalPrice);
@@ -38,6 +37,13 @@ function Payment() {
     // }
 
     // console.log(receivedData.selectedColor[1].price);
+
+    const [loggedUser, setLoggedUser] = useState();
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
+    const { user } = ShopState();
 
     const handlePaymentSelection = (paymentMethod) => {
         setPaymentMethod(paymentMethod);
@@ -53,13 +59,33 @@ function Payment() {
         const addOrders = async () => {
             try {
                 const data = {
-                    userID: 1,
-                    address: description,
-                    promotionID: 1,
-                    status: true,
-                    quantity: quantity,
+                    // userID: 1,
+
+                    // address: selectedDelivery.address,
+                    // // promotionID: 1,
+                    // status: true,
+                    // quantity: quantity,
+                    orderDTO: {
+                        userID: user.userId,
+                        address: selectedDelivery.address,
+                        status: true,
+                    },
+                    cartList: [
+                        {
+                            speicesId: receivedData.id,
+                            quantity: 1,
+                            type: 'parrot',
+                        },
+                        // Add more CartModel objects to the list as needed
+                    ],
                 };
-                const addOrder = await OrderAPI.add(data, 1);
+                const config = {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                };
+                await DeliveryInformationAPI.updatePickingStatus(user.userId, selectedDelivery, config);
+                const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
             } catch (error) {
                 console.error(error);
@@ -90,7 +116,7 @@ function Payment() {
                         </button>
                     </div>
 
-                    <div className={cx('payment-method-input-container')}>
+                    {/* <div className={cx('payment-method-input-container')}>
                         <div className={cx('payment-method-input')}>
                             <p>Contact</p>
                             <input placeholder="Name" type="text" required />
@@ -108,14 +134,13 @@ function Payment() {
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-                    </div>
-                    {/* <div className={cx('delivery-info-component')}>
-                        <DeliveryInformation></DeliveryInformation>
                     </div> */}
-
-                    <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>
-                        Pay now
-                    </Button>
+                    <div className={cx('delivery-info-component')}>
+                        <DeliveryInformation
+                            selectedDelivery={selectedDelivery}
+                            setSelectedDelivery={setSelectedDelivery}
+                        />
+                    </div>
                 </div>
                 <div className={cx('payment-detail', 'col-md-4')}>
                     <div className={cx('payment-detail-items')}>
@@ -147,6 +172,9 @@ function Payment() {
                             <p className={cx('payment-detail-money-item-price')}>{totalPrice} VNĐ</p>
                         </div>
                     </div>
+                    <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>
+                        Pay
+                    </Button>
                 </div>
             </div>
         </div>

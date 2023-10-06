@@ -51,12 +51,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 })
 public class UserEntity extends BaseEntity implements UserDetails {
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 20)
     @Column(name = "user_name")
     private String userName;
 
     @NotBlank
-    @Size(min = 6, max = 100)
     @JsonIgnore
     @Column
     private String password;
@@ -71,6 +70,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(name = "img_url")
+    private String imgUrl;
+
     @Column
     private Boolean status;
 
@@ -78,8 +80,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 
+    @Column
+    private Boolean gender;
 
-
+    @Column
+    private String dob;
 
 
  //====================================================================================

@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,8 +34,10 @@ public class DeliveryInformationEntity extends BaseEntity {
 	private String name;
 	
 	@NotBlank
+	//@Size(min = 10, max = 11)
 	@Column(name = "phone_number")
 	private String phoneNumber;
+
 
 	@NotBlank
 	@Column(name = "address")
@@ -47,5 +50,8 @@ public class DeliveryInformationEntity extends BaseEntity {
 
 	@Column(name = "status")
 	private Boolean status;
+
+	@Column(name = "picking_status")
+	private Boolean pickingStatus;
 
 }

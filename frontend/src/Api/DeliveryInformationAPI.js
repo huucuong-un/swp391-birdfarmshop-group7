@@ -1,19 +1,29 @@
 import axiosClient from './AxiosClient';
 
 const DeliveryInformation = {
-    getAll(customerid) {
+    getAll(customerid, config) {
         const url = `/delivery-information/${customerid}`;
-        return axiosClient.get(url);
+        return axiosClient.get(url, config);
     },
 
-    addNewDeliveryInfo(data) {
+    addNewDeliveryInfo(data, config) {
         const url = `/delivery-information`;
-        return axiosClient.post(url, data);
+        return axiosClient.post(url, data, config);
     },
 
-    updateDeliveryInfo(data) {
+    updateDeliveryInfo(data, config) {
         const url = `/delivery-information/${data.id}`;
-        return axiosClient.put(url, data);
+        return axiosClient.put(url, data, config);
+    },
+
+    getDeliveryInfoWithTruePickingStatusByCustomerId(customerid, config) {
+        const url = `/delivery-information/picking-status/${customerid}`;
+        return axiosClient.get(url, config);
+    },
+
+    updatePickingStatus(customerid, data, config) {
+        const url = `/delivery-information/update-picking-status/${customerid}`;
+        return axiosClient.put(url, data, config);
     },
 };
 

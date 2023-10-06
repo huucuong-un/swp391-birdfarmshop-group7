@@ -8,14 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import AddMoreDeliveryInfo from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo';
 import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
-const DeliveryInformation = (customerid) => {
+const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     const [deliveryInfo, setDeliveryInfo] = useState([]);
     const [selectedDeliveryId, setSelectedDeliveryId] = useState();
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(Array(deliveryInfo.length).fill(false)); // Initialize with false for each item
+    const { user } = ShopState();
 
     const handleShow = () => {
         setShow(!show);
@@ -50,14 +52,37 @@ const DeliveryInformation = (customerid) => {
 
         // Update the state
         setDeliveryInfo(updatedDeliveryInfo);
+        if (deliveryInfo.length === 1) {
+            setSelectedDeliveryId(deliveryInfo[0].id);
+            selectedDelivery(deliveryInfo[0]);
+        }
     };
 
     useEffect(() => {
         const getAllDeliveryInfoByCustomerId = async () => {
             try {
-                const data = await DeliveryInformationAPI.getAll(1);
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                const data = await DeliveryInformationAPI.getAll(user.userId, config);
+
+                const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                    user.userId,
+                    config,
+                );
                 setDeliveryInfo(data);
-                setSelectedDeliveryId(data[0].id);
+
+                var index = 0;
+                for (const deliInfo of data) {
+                    if (deliInfo.id === nowDeliInfo.id) break;
+                    index++;
+                }
+                setSelectedDeliveryId(data[index].id);
+                setSelectedDelivery(data[index]);
+
+                // console.log(data[index].id);
             } catch (error) {
                 console.error(error);
             }
@@ -67,10 +92,6 @@ const DeliveryInformation = (customerid) => {
 
     return (
         <Box className={cx('wrapper')}>
-            <FontAwesomeIcon onClick={handleShow} icon={faCirclePlus} size="2xl" className={cx('add-button')} />
-            <div className={cx('fade-container', { show: show })}>
-                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
-            </div>
             {deliveryInfo.map((item, itemIndex) => (
                 <>
                     <Flex className={cx('delivery-info-item')} id={item.id} onClick={() => handleShowUpdate(itemIndex)}>
@@ -95,6 +116,7 @@ const DeliveryInformation = (customerid) => {
                             isChecked={selectedDeliveryId === item.id}
                             onChange={() => {
                                 setSelectedDeliveryId(item.id);
+                                setSelectedDelivery(item);
                                 // handleRedirectToPayment(); // Redirect to Payment
                             }}
                             display="flex"
@@ -114,6 +136,16 @@ const DeliveryInformation = (customerid) => {
                     </div>
                 </>
             ))}
+
+            <div className={cx('information')}>
+                <FontAwesomeIcon onClick={handleShow} icon={faCirclePlus} size="xl" className={cx('add-button')} />
+                <Text onClick={handleShow} className={cx('add-button-text')}>
+                    Add new contact
+                </Text>
+            </div>
+            <div className={cx('fade-container', { show: show })}>
+                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
+            </div>
         </Box>
     );
 };

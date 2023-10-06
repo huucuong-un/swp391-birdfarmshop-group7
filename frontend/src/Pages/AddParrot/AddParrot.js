@@ -19,6 +19,9 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import Title from '~/Components/Title/Title';
 

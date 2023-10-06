@@ -7,14 +7,18 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericRepository;
+import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +36,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     private ParrotSpeciesRepository parrotSpeciesRepository;
 
     @Autowired
+    private ParrotRepository parrotRepository;
+
+    @Autowired
     private GenericConverter genericConverter;
 
 //    @Autowired
@@ -45,8 +52,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     * */
     @Override
     public List<ParrotSpeciesDTO> findAll() {
+        Pageable pageable =null;
         List<ParrotSpeciesDTO> results = new ArrayList<>();
-        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAll();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByOrderByIdDesc(pageable);
 
         for (ParrotSpeciesEntity entity : entities) {
             //NOTE
@@ -55,6 +63,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
         }
 
         return results;
+
     }
 /*
 * Save()
@@ -89,6 +98,14 @@ public ParrotSpeciesDTO findOneSpeciesById (Long id){
         ParrotSpeciesDTO dto = (ParrotSpeciesDTO) genericConverter.toDTO(entity,ParrotSpeciesDTO.class);
         return dto;
 }
+public ParrotSpeciesDTO findOneSpeciesParrotById(Long id){
+    ParrotDTO parrotDTO = (ParrotDTO) genericConverter.toDTO(parrotRepository.findOneById(id), ParrotDTO.class);
+    return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesRepository.findOneById(parrotRepository.findOneById(id).getParrotSpeciesColor().getParrotSpecies().getId()), ParrotSpeciesColorDTO.class);
+
+}
+
+
+
     @Override
     public void changeStatus(Long ids) {
        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(ids);
@@ -98,5 +115,25 @@ public ParrotSpeciesDTO findOneSpeciesById (Long id){
            parrotSpeciesEntity.setStatus(true);
        }
        parrotSpeciesRepository.save(parrotSpeciesEntity);
+    }
+
+    @Override
+    public List<ParrotSpeciesDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<ParrotSpeciesDTO> results = new ArrayList();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByOrderByIdDesc(pageable);
+
+        for(ParrotSpeciesEntity item : entities) {
+            ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item,ParrotSpeciesDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+      	return (int)parrotSpeciesRepository.count();
     }
 }

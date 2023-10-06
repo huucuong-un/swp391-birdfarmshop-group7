@@ -14,6 +14,6 @@ public class DeliveryInformationDTO extends BaseDTO {
     private String address;
     private Long userId;
     private Boolean status;
-
+    private Boolean pickingStatus;
 
 }

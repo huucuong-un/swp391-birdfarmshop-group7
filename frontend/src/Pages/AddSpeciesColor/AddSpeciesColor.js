@@ -2,15 +2,13 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddSpeciesColor/AddSpeciesColor.module.scss';
 import Buttons from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
 import {
     Input,
     Table,
-    Thead,
     Tbody,
     Tfoot,
     Tr,
-    Th,
     Td,
     TableContainer,
     Button,
@@ -238,7 +236,7 @@ function AddSpeciesColor() {
                                 {data.colors.map((childObj) => (
                                     <div className={cx('item-container')}>
                                         <TableContainer key={childObj.id}>
-                                            <Table size="xs" className={cx('data-child')}>
+                                            <Table size="sm" className={cx('data-child')}>
                                                 <Tbody>
                                                     <Tr>
                                                         <Td className={cx('td-image')}>
@@ -261,12 +259,12 @@ function AddSpeciesColor() {
                                 ))}
                                 <div className={cx('add-btn')}>
                                     <Buttons onClick={handleShow} add>
-                                        ADD SPECIES COLOR
+                                        Add new color
                                         <span className={cx('span-icon', { 'rotate-icon': show })}>
                                             {show ? (
-                                                <FontAwesomeIcon icon={faArrowUp} />
+                                                <FontAwesomeIcon icon={faMinus} />
                                             ) : (
-                                                <FontAwesomeIcon icon={faArrowDown} />
+                                                <FontAwesomeIcon icon={faPlus} />
                                             )}
                                         </span>
                                     </Buttons>
@@ -315,7 +313,7 @@ function AddSpeciesColor() {
                                                     <h1>Add species color</h1>
                                                 </div>
                                             </div>
-                                            <Table className={cx('table-specie-color')} size="sm ">
+                                            <Table className={cx('table-specie-color')} size="md">
                                                 <Tbody>
                                                     <Tr>
                                                         <Td>Color {data.id}</Td>
@@ -390,8 +388,6 @@ function AddSpeciesColor() {
                                                             />
                                                         </Td>
                                                     </Tr>
-                                                </Tbody>
-                                                <Tfoot>
                                                     <Tr>
                                                         <Td></Td>
                                                         <Td className={cx('submit-btn')}>
@@ -407,7 +403,7 @@ function AddSpeciesColor() {
                                                             </Button>
                                                         </Td>
                                                     </Tr>
-                                                </Tfoot>
+                                                </Tbody>
                                             </Table>
                                         </TableContainer>
 

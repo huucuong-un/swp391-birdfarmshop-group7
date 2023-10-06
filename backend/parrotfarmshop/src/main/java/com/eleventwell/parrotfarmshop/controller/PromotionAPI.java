@@ -2,6 +2,7 @@ package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class PromotionAPI {
 
     @Autowired
-    IGenericService promotionService;
+    PromotionService promotionService;
 
     @GetMapping(value= "")
     public List<PromotionDTO> show(){
@@ -22,6 +23,14 @@ public class PromotionAPI {
         return list;
 
     }
+
+    @GetMapping(value= "find-one-by-code/{code}")
+    public PromotionDTO findOneByCode(@RequestBody @PathVariable("code") String code){
+
+      return promotionService.findOneByCode(code);
+
+    }
+
 
     @PostMapping(value= "")
     public PromotionDTO create(@RequestBody PromotionDTO model){

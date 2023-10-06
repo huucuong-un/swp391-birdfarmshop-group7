@@ -26,7 +26,7 @@ import Buttons from '~/Components/Button/Button';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 
@@ -205,7 +205,7 @@ function AddParrotSpecies() {
                 <Buttons onClick={handleShow} add>
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faArrowUp} /> : <FontAwesomeIcon icon={faArrowDown} />}
+                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
                 </Buttons>
                 <div className={cx('sort-space')}>
@@ -256,7 +256,7 @@ function AddParrotSpecies() {
                             ))}
                         <div className={cx('title-post')}>
                             <div className={cx('title')}>
-                                <h1>Post</h1>
+                                <h1>Add species</h1>
                             </div>
                         </div>
 

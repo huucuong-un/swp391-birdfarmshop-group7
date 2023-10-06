@@ -20,6 +20,7 @@ import PaidSuccess from '~/Pages/PaidSuccess/PaidSuccess';
 import ShoppingCart from '~/Pages/ShoppingCart/ShoppingCart';
 import PostDetail from '~/Pages/PostDetail/PostDetail';
 import AboutUs from '~/Pages/AboutUs/AboutUs';
+import AddRole from '~/Pages/AddRole/AddRole';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -35,7 +36,7 @@ const publicRoutes = [
     { path: '/about-us', component: AboutUs },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
-    { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
+    { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faq', component: FAQs },

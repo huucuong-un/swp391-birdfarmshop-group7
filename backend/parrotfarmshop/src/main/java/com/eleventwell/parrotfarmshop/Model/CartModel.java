@@ -1,4 +1,4 @@
-package com.eleventwell.parrotfarmshop.Cart;
+package com.eleventwell.parrotfarmshop.Model;
 
 import lombok.*;
 

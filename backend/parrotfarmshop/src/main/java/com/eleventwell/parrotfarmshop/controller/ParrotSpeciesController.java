@@ -4,6 +4,8 @@
  */
 package com.eleventwell.parrotfarmshop.controller;
 
+import com.eleventwell.parrotfarmshop.Model.PagingModel;
+import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -13,15 +15,9 @@ import java.util.List;
 
 import com.eleventwell.parrotfarmshop.service.impl.ParrotSpeciesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -34,10 +30,10 @@ public class ParrotSpeciesController {
     @Autowired
     private ParrotSpeciesService parrotSpeciesService;
     
-    @GetMapping(value = "") 
+    @GetMapping(value = "")
     public List<ParrotSpeciesDTO> showParrotSpecies() {
         ListOutput result = new ListOutput();
-        
+
         result.setListResult(parrotSpeciesService.findAll());
         return result.getListResult();
     }
@@ -55,6 +51,24 @@ list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
         list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesParrotById(id));
         return list;
     }
+
+//    @GetMapping(value = "")
+//    public PagingModel showNew(@RequestParam(value ="page",required =false) Integer page, @RequestParam(value ="limit", required = false) Integer limit) {
+//        PagingModel result = new PagingModel();
+//        if(page !=null && limit !=null) {
+//            result.setPage(page);
+//            Pageable pageable = PageRequest.of(page - 1,limit);
+//            result.setListResult(parrotSpeciesService.findAll(pageable));
+//            result.setTotalPage(((int) Math.ceil((double)(parrotSpeciesService.totalItem())/limit)));
+//            result.setLimit(limit);
+//        }else {
+//            result.setListResult(parrotSpeciesService.findAll());
+//        }
+//
+//        return result;
+//    }
+
+
     @PostMapping(value = "")
 	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
 		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);

@@ -1,8 +1,10 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
-import com.eleventwell.parrotfarmshop.Cart.CartModel;
+import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
+import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
+import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
@@ -76,7 +78,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
             for (ParrotEntity id : parrots) {
                 orderDetailService.createOrderDetailDTO(orderDTO.getId(), id.getId(), 1);
-                parrotService.changeStatus(id.getId());
+                parrotService.changeSaleStatus(id.getId());
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }
@@ -108,7 +110,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
             for (ParrotEntity id : parrots) {
                 orderDetailService.createOrderDetailDTO(orderId, id.getId(), 1);
-                parrotService.changeStatus(id.getId());
+                parrotService.changeSaleStatus(id.getId());
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }
@@ -148,6 +150,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 
+
     public List<OrderDTO> findAllByUserId(Long id) {
         List<OrderDTO> result = new ArrayList<>();
         List<OrderEntity> orderEntities = orderRepository.findAllByUserIdOrderByIdDesc(id);
@@ -171,5 +174,24 @@ public class OrderService implements IGenericService<OrderDTO> {
         orderRepository.save(orderEntity);
 
 
+    }
+    @Override
+    public List<OrderDTO> findAll(Pageable pageable){
+        // TODO Auto-generated method stub
+        List<OrderDTO> results = new ArrayList();
+        List<OrderEntity> entities = orderRepository.findAll(pageable).getContent();
+
+        for(OrderEntity item : entities) {
+            OrderDTO newDTO = (OrderDTO) genericConverter.toDTO(item,OrderDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)orderRepository.count();
     }
 }

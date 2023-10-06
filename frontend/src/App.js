@@ -1,12 +1,15 @@
+// Inside App.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DefaultLayout from './Components/DefaultLayout/DefaultLayout';
 import { publicRoutes } from './Routes/Routes';
 import { Fragment } from 'react';
+import ShopProvider from './context/ShopProvider';
 
 function App() {
     return (
         <Router>
             <div className="App">
+                <ShopProvider />
                 <Routes>
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;

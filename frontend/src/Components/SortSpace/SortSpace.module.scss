@@ -18,10 +18,12 @@
 }
 
 .search {
+    overflow: hidden;
     display: flex;
     border: 2px solid var(--black);
     border-radius: 20px;
     min-width: 300px;
+    max-height: 40px;
 }
 
 .search-input {
@@ -31,15 +33,17 @@
 
 .search-input::placeholder {
     color: black;
-    font-weight: 450;
+    font-weight: 400;
     opacity: 1;
 }
 
 .search-btn {
     background-color: transparent;
-    font-size: 2rem;
+    font-size: 1.6rem;
     padding: 10px;
     border-radius: 20px;
+    display: flex;
+    align-items: center;
 
     &:hover {
         background-color: rgb(22, 24, 35, 0.03);

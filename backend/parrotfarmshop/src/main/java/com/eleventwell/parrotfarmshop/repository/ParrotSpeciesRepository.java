@@ -5,6 +5,7 @@
 package com.eleventwell.parrotfarmshop.repository;
 
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,6 +18,6 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
    	ParrotSpeciesEntity findOneById(long id);
 
-	   List<ParrotSpeciesEntity> findAllByOrderByIdDesc();
+	   List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
     
 }

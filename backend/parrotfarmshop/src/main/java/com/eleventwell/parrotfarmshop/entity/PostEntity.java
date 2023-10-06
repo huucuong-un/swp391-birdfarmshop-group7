@@ -45,6 +45,10 @@ public class PostEntity extends BaseEntity {
 	private String content;
 
 	@NotBlank
+	@Column(name = "description")
+	private String description;
+
+	@NotBlank
 	@Lob
 	@Column(name = "image_url")
 	private String imageUrl;

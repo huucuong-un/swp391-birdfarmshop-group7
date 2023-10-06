@@ -19,60 +19,35 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
-import SystemNavbar from '~/Parts/SystemNavbar/SystemNavbar';
+import Title from '~/Components/Title/Title';
 
 const cx = classNames.bind(styles);
 function AddParrot() {
     const [submissionStatus, setSubmissionStatus] = useState();
-    const [parrotSpeciesColor, setParrotSpeciesColor] = useState([]);
-    const [parrotSpecies, setParrotSpecies] = useState([]);
-    const [speciesMapping, setSpeciesMapping] = useState({});
+
+    const [species, setSpecies] = useState([]);
+    const [speciesColor, setSpeciesColor] = useState([]);
+    const [speciesColorByID, setSpeciesColorById] = useState([]);
+    // const [speciesMapping, setSpeciesMapping] = useState({});
     const [saleStatus, setSaleStatus] = useState(false);
     const [pregnancyStatus, setPregnancyStatus] = useState(false);
     const [healthStatus, setHealthStatus] = useState(false);
+
     const handleSaleStatus = () => {
         setSaleStatus(!saleStatus);
     };
+
     const handlePregnancyStatus = () => {
         setPregnancyStatus(!pregnancyStatus);
     };
+
     const handleHealthStatus = () => {
         setHealthStatus(!healthStatus);
     };
-
-    const getParrotsSpeciesColor = async () => {
-        try {
-            const parrotSpeciesList = await ParrotSpeciesColorAPI.getAll();
-            setParrotSpeciesColor(parrotSpeciesList);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    const getParrotsSpecies = async () => {
-        try {
-            const parrotSpeciesList = await ParrotSpeciesAPI.getAll();
-            setParrotSpecies(parrotSpeciesList);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    useEffect(() => {
-        const speciesMappingObj = {};
-        parrotSpeciesColor.forEach((colorItem) => {
-            if (colorItem.speciesID && colorItem.speciesID in parrotSpecies) {
-                speciesMappingObj[colorItem.speciesID] = parrotSpecies[colorItem.speciesID].name;
-            }
-        });
-        setSpeciesMapping(speciesMappingObj);
-    }, [parrotSpeciesColor, parrotSpecies]);
-
-    useEffect(() => {
-        // Gọi hàm getParrots khi component được
-        getParrotsSpeciesColor();
-        getParrotsSpecies();
-    }, []);
 
     const [parrots, setParrots] = useState({
         age: 0,
@@ -104,14 +79,52 @@ function AddParrot() {
             }
 
             setSubmissionStatus(true);
+            setTimeout(() => {
+                setSubmissionStatus(null);
+            }, 5000);
         } catch (error) {
             console.error('Error:', error);
             setSubmissionStatus(false);
         }
     };
 
+    // Add species list
+    useEffect(() => {
+        const fetchParrotSpecies = async () => {
+            try {
+                const parrotSpecie = await ParrotSpeciesAPI.getAll();
+                setSpecies(parrotSpecie);
+            } catch (error) {
+                console.error(error + 'At Add parrot fetch parrot species');
+            }
+        };
+        fetchParrotSpecies();
+    }, [speciesColorByID]);
+
+    // Find species color by species id
+    useEffect(() => {
+        const fetchParrotSpeciesColorbyID = async () => {
+            try {
+                const listSpeciesColorById = await ParrotSpeciesAPI.getListBySpeciesId(speciesColorByID);
+                setSpeciesColor(listSpeciesColorById || []);
+            } catch (error) {
+                console.error(error + 'At Add parrot fetch parrot species color by id');
+            }
+        };
+        fetchParrotSpeciesColorbyID();
+    }, [speciesColorByID]);
+
+    console.log('- species lis - ');
+    console.log(species);
+    console.log('- species color by id  - ');
+    console.log(speciesColorByID);
+    console.log('- species color by id list - ');
+    console.log(speciesColor);
     return (
         <div className={cx('wrapper')}>
+            <div className={cx('title-container')}>
+                <Title system>Add Parrot</Title>
+            </div>
             <form className={cx('inner')} onSubmit={handleSubmit}>
                 <div className={cx('table-container')}>
                     {(submissionStatus === true && (
@@ -139,7 +152,9 @@ function AddParrot() {
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td>Parrot age</Td>
+                                <Td>
+                                    <p>Parrot Age</p>
+                                </Td>
                                 <Td>
                                     <Input
                                         type="number"
@@ -154,7 +169,9 @@ function AddParrot() {
                             </Tr>
 
                             <Tr>
-                                <Td>Sale status</Td>
+                                <Td>
+                                    <p>Sale status</p>
+                                </Td>
                                 <Td>
                                     <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
                                     {saleStatus ? <p>Available</p> : <p>Unavailable</p>}
@@ -170,8 +187,11 @@ function AddParrot() {
                                     />
                                 </Td>
                             </Tr>
+
                             <Tr>
-                                <Td>Pregnancy status</Td>
+                                <Td>
+                                    <p>Pregnancy status</p>
+                                </Td>
                                 <Td>
                                     <Switch onChange={handlePregnancyStatus} size="lg" isChecked={pregnancyStatus} />
                                     {pregnancyStatus ? <p>Available</p> : <p>Unavailable</p>}
@@ -185,8 +205,11 @@ function AddParrot() {
                                     />
                                 </Td>
                             </Tr>
+
                             <Tr>
-                                <Td>Health status</Td>
+                                <Td>
+                                    <p>Health status</p>{' '}
+                                </Td>
                                 <Td>
                                     <Switch onChange={handleHealthStatus} size="lg" isChecked={healthStatus} />
                                     {healthStatus ? <p>Available</p> : <p>Unavailable</p>}
@@ -200,20 +223,49 @@ function AddParrot() {
                                     />
                                 </Td>
                             </Tr>
+
                             <Tr>
-                                <Td>Parrot color</Td>
+                                <Td>
+                                    <p>Parrot species </p>
+                                </Td>
                                 <Td>
                                     <select
-                                        value={parrots.colorID} // Bind the selected value to the state
-                                        onChange={(e) => setParrots({ ...parrots, colorID: e.target.value })} // Update the state when an option is selected
+                                        className={cx('select-btn')}
+                                        onChange={(e) => setSpeciesColorById(e.target.value)}
                                     >
-                                        {parrotSpeciesColor.map((colorItem) => (
-                                            <option key={colorItem.id} value={colorItem.id}>
-                                                {speciesMapping[colorItem.speciesID]} - {colorItem.color} -{' '}
-                                                {colorItem.id}
+                                        <option value="0">Select a species</option>
+                                        {species.map((specie) => (
+                                            <option key={specie.id} value={specie.id}>
+                                                Specie ID: {specie.id} | Specie name: {specie.name}
                                             </option>
                                         ))}
                                     </select>
+                                </Td>
+                            </Tr>
+
+                            <Tr>
+                                <Td>
+                                    <p>Parrot species color </p>
+                                </Td>
+                                <Td>
+                                    {speciesColor.length === 0 ? (
+                                        <p>Species have no color</p>
+                                    ) : (
+                                        <select
+                                            className={cx('select-btn')}
+                                            onChange={(e) => setParrots({ ...parrots, colorID: e.target.value })}
+                                        >
+                                            {speciesColor.map((item) => (
+                                                <option
+                                                    key={item.id}
+                                                    style={{ backgroundColor: item.color, padding: '5px' }}
+                                                    value={item.id}
+                                                >
+                                                    {item.id} - {item.color}{' '}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    )}
                                 </Td>
                             </Tr>
                         </Tbody>

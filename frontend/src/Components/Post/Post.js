@@ -37,7 +37,6 @@ function Post() {
                         </div>
                     </div>
                 </div>
-
                 <div className={cx('post-item', 'col-4')}>
                     {/* <Link className={cx('post-item-link')}>
                         <img

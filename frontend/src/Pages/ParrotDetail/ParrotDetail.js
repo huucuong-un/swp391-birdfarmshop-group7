@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
+import Feedback from '~/Components/Feedback/Feedback';
 
 const cx = classNames.bind(styles);
 
@@ -146,6 +147,32 @@ function ParrotDetail() {
         fetchData();
     }, [parrotSpecies]);
 
+    const handleAddToCart = ({ name, img, quantity, price, color }) => {
+        const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
+        const existingItem = existingCart.find((item) => item.name === name && item.color === color);
+        if (existingItem) {
+            // Nếu mục đã tồn tại, tăng số lượng lên 1
+            existingItem.quantity += 1;
+        } else {
+            // Nếu mục chưa tồn tại, thêm nó vào danh sách
+            existingCart.push({
+                name,
+                img,
+                quantity: 1,
+                price,
+                color,
+            });
+        }
+        const newCart = [...existingCart];
+        localStorage.setItem('parrot', JSON.stringify(newCart));
+        // localStorage.clear();
+        const deleteAfterMilliseconds = 365 * 24 * 60 * 60 * 1000; // 1 năm
+        // const deleteAfterMilliseconds = 1 * 60 * 1000; // 1 phút
+        setTimeout(() => {
+            localStorage.removeItem('parrot'); // Xóa dữ liệu sau khoảng thời gian đã đặt
+        }, deleteAfterMilliseconds);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <StartPartPage>Parrot Details</StartPartPage>
@@ -244,7 +271,23 @@ function ParrotDetail() {
                                 </AccordionItem>
                             </Accordion>
                             <div className={cx('active-zone')}>
-                                <button>Add to cart</button>
+                                {countParrot === 0 ? (
+                                    <button>Contact</button>
+                                ) : (
+                                    <button
+                                        onClick={() =>
+                                            handleAddToCart({
+                                                name: parrot.name,
+                                                img: parrot.img,
+                                                quantity: 1,
+                                                price: selectedColor[parrot.id]?.price,
+                                                color: selectedColor[parrot.id]?.color,
+                                            })
+                                        }
+                                    >
+                                        Add to cart
+                                    </button>
+                                )}
                                 {countParrot === 0 ? (
                                     <Link to={``} className={cx('buy-btn')} state={dataToPass}>
                                         Contact
@@ -263,6 +306,7 @@ function ParrotDetail() {
                     </div>
                 );
             })}
+            <Feedback></Feedback>
         </div>
     );
 }

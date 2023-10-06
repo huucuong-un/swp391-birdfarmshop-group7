@@ -42,10 +42,12 @@ const datas = () => {
             console.error('Fetch error:', error);
         });
 };
+
 console.log(datas);
 
 function ParrotList() {
     const [parrotSpecies, setParrotSpecies] = useState([]);
+
     const [combineData, setCombineData] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});
@@ -100,6 +102,7 @@ function ParrotList() {
         // Gọi hàm getParrots khi component được mount
 
         getParrotsSpecies();
+        console.log(combineData);
     }, []);
 
     useEffect(() => {
@@ -154,13 +157,39 @@ function ParrotList() {
         fetchData();
     }, [parrotSpecies]);
 
+    const handleAddToCart = ({ name, img, quantity, price, color }) => {
+        const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
+        const existingItem = existingCart.find((item) => item.name === name && item.color === color);
+        if (existingItem) {
+            // Nếu mục đã tồn tại, tăng số lượng lên 1
+            existingItem.quantity += 1;
+        } else {
+            // Nếu mục chưa tồn tại, thêm nó vào danh sách
+            existingCart.push({
+                name,
+                img,
+                quantity: 1,
+                price,
+                color,
+            });
+        }
+        const newCart = [...existingCart];
+        localStorage.setItem('parrot', JSON.stringify(newCart));
+        // localStorage.clear();
+        const deleteAfterMilliseconds = 365 * 24 * 60 * 60 * 1000; // 1 năm
+        // const deleteAfterMilliseconds = 1 * 60 * 1000; // 1 phút
+        setTimeout(() => {
+            localStorage.removeItem('parrot'); // Xóa dữ liệu sau khoảng thời gian đã đặt
+        }, deleteAfterMilliseconds);
+    };
+
     return (
         <div className={cx('wrapper')}>
             {combineData.map((parrot, index) => {
                 return (
                     <div className={cx('parrot-card')} key={index}>
                         <div className={cx('parrot-img')}>
-                            <Link to={`/parrotdetail/${parrot.id}`} state={dataToPass}>
+                            <Link to={`/parrot-detail/${parrot.id}`} state={dataToPass}>
                                 <img className={cx('img')} src={parrot.img} alt="parrot" />
                             </Link>
                             <Link to="/payment" state={dataToPass}>
@@ -173,7 +202,20 @@ function ParrotList() {
                             <Link to="">
                                 <Tooltip label="Add to cart" aria-label="A tooltip" fontSize="lg" placement="auto">
                                     {/* <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} /> */}
-                                    <button className={cx('cart-btn')}>+</button>
+                                    <button
+                                        className={cx('cart-btn')}
+                                        onClick={() =>
+                                            handleAddToCart({
+                                                name: parrot.name,
+                                                img: parrot.img,
+                                                quantity: 1,
+                                                price: selectedColor[parrot.id]?.price,
+                                                color: selectedColor[parrot.id]?.color,
+                                            })
+                                        }
+                                    >
+                                        +
+                                    </button>
                                 </Tooltip>
                             </Link>
                         </div>

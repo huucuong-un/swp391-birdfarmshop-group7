@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import Button from '~/Components/Button/Button';
+import { Button as ButtonChakra } from '@chakra-ui/react';
 import Input from '~/Components/Input/Input';
 import Title from '~/Components/Title/Title';
 import googleLogo from '~/Assets/image/Logo/Google.png';
@@ -12,7 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { InputGroup, InputRightElement, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import LoginWithGoogle from '~/Components/LoginWithGoogle/LoginWithGoogle';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash, faFaceGrinTongueSquint } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 function UserLogin() {
@@ -62,9 +64,9 @@ function UserLogin() {
                 isClosable: true,
                 position: 'bottom',
             });
-            setUser(data);
-            localStorage.setItem('userInfo', JSON.stringify(data));
-            console.log(data);
+            setUser(data.data);
+            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            console.log(data.data);
             setLoading(false);
             // // setLoading(false);
             navigate('/');
@@ -107,7 +109,9 @@ function UserLogin() {
                                 required
                             />
                             <InputRightElement className={cx('showHidePasswordBtn')} onClick={handleClick}>
-                                <Button>{show ? 'Hide' : 'Show'}</Button>
+                                <Button>
+                                    {show ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+                                </Button>
                             </InputRightElement>
                         </InputGroup>
 
@@ -115,10 +119,7 @@ function UserLogin() {
                     </div>
 
                     <div className={cx('checkbox-section')}>
-                        <div className={cx('section-remember')}>
-                            <input type="checkbox" />
-                            <p>Remember me</p>
-                        </div>
+                        <div className={cx('section-remember')}></div>
 
                         <Button className={cx('section-forgot')}>Forgot password ?</Button>
                     </div>

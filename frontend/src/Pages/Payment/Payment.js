@@ -13,6 +13,7 @@ import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +22,6 @@ function Payment() {
 
     const location = useLocation();
     const receivedData = location.state;
-    console.log(receivedData.id);
     const quantity = receivedData.quantities[1];
     const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
@@ -37,6 +37,13 @@ function Payment() {
     // }
 
     // console.log(receivedData.selectedColor[1].price);
+
+    const [loggedUser, setLoggedUser] = useState();
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
+    const { user } = ShopState();
 
     const handlePaymentSelection = (paymentMethod) => {
         setPaymentMethod(paymentMethod);
@@ -59,7 +66,7 @@ function Payment() {
                     // status: true,
                     // quantity: quantity,
                     orderDTO: {
-                        userID: 1,
+                        userID: user.userId,
                         address: selectedDelivery.address,
                         status: true,
                     },
@@ -72,8 +79,12 @@ function Payment() {
                         // Add more CartModel objects to the list as needed
                     ],
                 };
-
-                await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+                const config = {
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                };
+                await DeliveryInformationAPI.updatePickingStatus(user.userId, selectedDelivery, config);
                 const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
             } catch (error) {

@@ -70,8 +70,8 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(name = "full_name")
     private String fullName;
 
-
-
+    @Column(name = "img_url")
+    private String imgUrl;
 
     @Column
     private Boolean status;
@@ -80,6 +80,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 
+    @Column
+    private Boolean gender;
+
+    @Column
+    private String dob;
 
 
  //====================================================================================

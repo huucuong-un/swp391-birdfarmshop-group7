@@ -19,7 +19,7 @@ function ChooseProduct() {
                         <img className={cx('nest-img')} src={nest} />
                     </Link>
 
-                    <Link className={cx('item')} to="/parrotProduct">
+                    <Link className={cx('item')} to="/parrot-product">
                         <img className={cx('parrot-img')} src={parrot1} />
                     </Link>
                 </div>

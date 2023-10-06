@@ -187,7 +187,7 @@ function ParrotList() {
                 return (
                     <div className={cx('parrot-card')} key={index}>
                         <div className={cx('parrot-img')}>
-                            <Link to={`/parrotdetail/${parrot.id}`} state={dataToPass}>
+                            <Link to={`/parrot-detail/${parrot.id}`} state={dataToPass}>
                                 <img className={cx('img')} src={parrot.img} alt="parrot" />
                             </Link>
                             <Link to="/payment" state={dataToPass}>

@@ -24,23 +24,23 @@ import AboutUs from '~/Pages/AboutUs/AboutUs';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
-    { path: '/parrotProduct', component: ParrotProduct },
+    { path: '/parrot-product', component: ParrotProduct },
     { path: '/nest', component: Nest },
     { path: '/payment', component: Payment },
-    { path: '/parrotdetail/:id', component: ParrotDetail },
-    { path: '/orderhistory', component: OrderHistory },
-    { path: '/paidsuccess', component: PaidSuccess },
-    { path: '/shoppingcart', component: ShoppingCart },
-    { path: '/postdetail', component: PostDetail },
-    { path: '/aboutus', component: AboutUs },
+    { path: '/parrot-detail/:id', component: ParrotDetail },
+    { path: '/order-history', component: OrderHistory },
+    { path: '/paid-success', component: PaidSuccess },
+    { path: '/shopping-cart', component: ShoppingCart },
+    { path: '/post-detail', component: PostDetail },
+    { path: '/about-us', component: AboutUs },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },
-    { path: '/changePassword', component: ChangePassword, layout: LoginSystemLayout },
+    { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faq', component: FAQs },
-    { path: '/addparrotspecies', component: AddParotSpecies, layout: LoginSystemLayout },
-    { path: '/addparrot', component: AddParrot, layout: SystemLayout },
+    { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
+    { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

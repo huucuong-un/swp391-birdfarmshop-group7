@@ -28,36 +28,22 @@ import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 
 const cx = classNames.bind(styles);
 
 function AddParrotSpecies() {
     // useState for alert status
     const [submissionStatus, setSubmissionStatus] = useState();
-
+    const [isFormVisible, setFormVisibility] = useState(false);
+    const [species, setSpecies] = useState([]);
+    const [addSpeciesColorKey, setAddSpeciesColorKey] = useState(0);
     //these useState for upload image
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState('');
-    const toast = useToast();
-    const [show, setShow] = useState(false);
-    const [species, setSpecies] = useState([]);
+    // Combine data
 
-    const getParrotsSpecies = async () => {
-        try {
-            const parrotSpeciesList = await ParrotSpeciesAPI.getAll();
-            setSpecies(parrotSpeciesList);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        // Gọi hàm getParrots khi component được mount
-        getParrotsSpecies();
-    }, []);
-    // These state to handle data field
-    // State for api parrot species
+    // Parrot Species and species color usestate
     const [parrotSpecies, setParrotSpecies] = useState({
         name: '',
         quantity: 3,
@@ -68,6 +54,7 @@ function AddParrotSpecies() {
         averageWeight: '',
         parrotAverageRating: 4.5,
         nestAverageRating: 4.0,
+        status: true,
     });
     // State for api parrot species color
     const [parrotSpeciesColor, setParrotSpeciesColor] = useState({
@@ -78,6 +65,18 @@ function AddParrotSpecies() {
         speciesID: 0,
     });
 
+    //  State to set show for add btn
+    const [show, setShow] = useState(false);
+    const handleShow = () => {
+        setShow(!show);
+    };
+    // Toast
+    const toast = useToast();
+
+    // These state to handle data field
+    // State for api parrot species
+
+    // Handle posting image
     const postDetails = (pic) => {
         setLoading(true);
         if (pic === undefined) {
@@ -122,6 +121,7 @@ function AddParrotSpecies() {
             return;
         }
     };
+
     // This function to handle the data to submit through the post method
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -132,10 +132,12 @@ function AddParrotSpecies() {
             const responseSpecies = await axios.post('http://localhost:8086/api/parrot-species', {
                 name: parrotSpecies.name,
                 description: parrotSpecies.description,
-                quantity: parrotSpecies.nestQuantity,
+                quantity: parrotSpecies.quantity,
+                nestQuantity: parrotSpecies.nestQuantity,
                 parrotAverageRating: parrotSpecies.parrotAverageRating,
                 nestAverageRating: parrotSpecies.nestAverageRating,
                 origin: parrotSpecies.origin,
+                status: parrotSpecies.status,
                 averageWeight: parrotSpecies.averageWeight,
                 // Add other fields you want to send to the first API
             });
@@ -160,6 +162,8 @@ function AddParrotSpecies() {
             } else {
                 console.error('POST request failed with status code - species color: ', responseSpeciesColor.status);
             }
+            setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
+            reloadAddSpeciesColor();
 
             setParrotSpecies({
                 name: '',
@@ -189,20 +193,19 @@ function AddParrotSpecies() {
         }
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setParrotSpeciesColor({ ...parrotSpeciesColor, image: file });
+    // Function to reload the AddSpeciesColor component
+    const reloadAddSpeciesColor = () => {
+        // Increment the key to trigger a re-render
+        setAddSpeciesColorKey((prevKey) => prevKey + 1);
     };
-    const handleShow = () => {
-        setShow(!show);
-    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('add-btn')}>
                 <Buttons onClick={handleShow} add>
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faArrowDown} /> : <FontAwesomeIcon icon={faArrowUp} />}
+                        {show ? <FontAwesomeIcon icon={faArrowUp} /> : <FontAwesomeIcon icon={faArrowDown} />}
                     </span>
                 </Buttons>
                 <div className={cx('sort-space')}>
@@ -233,6 +236,7 @@ function AddParrotSpecies() {
                 </div>
             </div>
 
+            {/* FORM TO ADD SPECIES  */}
             <form className={cx('inner')} onSubmit={handleSubmit}>
                 {show ? (
                     <TableContainer className={cx('table-container')}>
@@ -250,13 +254,13 @@ function AddParrotSpecies() {
                                     <AlertDescription>Please check your input!!!</AlertDescription>
                                 </Alert>
                             ))}
+                        <div className={cx('title-post')}>
+                            <div className={cx('title')}>
+                                <h1>Post</h1>
+                            </div>
+                        </div>
+
                         <Table size="xs ">
-                            <Thead>
-                                <Tr>
-                                    <Th>Title</Th>
-                                    <Th>Input</Th>
-                                </Tr>
-                            </Thead>
                             <Tbody>
                                 <Tr>
                                     <Td>Parrot species name</Td>
@@ -317,13 +321,17 @@ function AddParrotSpecies() {
                                     <Td>
                                         <Input
                                             type="number"
-                                            max={2}
-                                            min={0}
+                                            min="0"
+                                            max="4"
+                                            step="0.01" // Allows decimal values
                                             id="averageWeight"
                                             name="averageWeight"
                                             value={parrotSpecies.averageWeight}
                                             onChange={(e) =>
-                                                setParrotSpecies({ ...parrotSpecies, averageWeight: e.target.value })
+                                                setParrotSpecies({
+                                                    ...parrotSpecies,
+                                                    averageWeight: parseFloat(e.target.value),
+                                                })
                                             }
                                             variant="filled"
                                             placeholder="Average weight"
@@ -331,6 +339,7 @@ function AddParrotSpecies() {
                                         />
                                     </Td>
                                 </Tr>
+                                {/* Parrot color */}
                                 <Tr>
                                     <Td>Parrot color</Td>
                                     <Td>
@@ -348,6 +357,7 @@ function AddParrotSpecies() {
                                         />
                                     </Td>
                                 </Tr>
+                                {/* Parrot price */}
                                 <Tr>
                                     <Td>Price</Td>
                                     <Td>
@@ -357,7 +367,10 @@ function AddParrotSpecies() {
                                             name="price"
                                             value={parrotSpeciesColor.price}
                                             onChange={(e) =>
-                                                setParrotSpeciesColor({ ...parrotSpeciesColor, price: e.target.value })
+                                                setParrotSpeciesColor({
+                                                    ...parrotSpeciesColor,
+                                                    price: parseFloat(e.target.value),
+                                                })
                                             }
                                             placeholder="Price"
                                             variant="filled"
@@ -368,19 +381,18 @@ function AddParrotSpecies() {
                                 <Tr>
                                     <Td>Parrot image</Td>
                                     <Td>
-                                        {/* <Input
-                                        type="file"
-                                        p={1.5}
-                                        id="image"
-                                        name="image"
-                                        accept="image/*"
-                                        onChange={(e) => postDetails(e.target.files[0])}
-                                        required
-                                    /> */}
+                                        <Input
+                                            type="file"
+                                            p={1.5}
+                                            id="image"
+                                            name="image"
+                                            accept="image/*"
+                                            onChange={(e) => postDetails(e.target.files[0])}
+                                            required
+                                        />
                                     </Td>
                                 </Tr>
                             </Tbody>
-
                             <Tfoot>
                                 <Tr>
                                     <Td></Td>
@@ -392,6 +404,7 @@ function AddParrotSpecies() {
                                             style={{ marginTop: 15 }}
                                             margin="8px"
                                             isLoading={loading}
+                                            onClick={reloadAddSpeciesColor}
                                         >
                                             ADD
                                         </Button>
@@ -401,25 +414,12 @@ function AddParrotSpecies() {
                         </Table>
                     </TableContainer>
                 ) : (
-                    <div></div>
+                    <></>
                 )}
-                <h1>Parrot species</h1>
-                <Accordion className={cx('accordion')} allowToggle>
-                    {species.map((specie) => (
-                        <AccordionItem key={specie.id} className={cx('accord-item')}>
-                            <h2>
-                                <AccordionButton>
-                                    <Box as="span" flex="1" textAlign="left">
-                                        {specie.name}
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                            </h2>
-                            <AccordionPanel pb={4}></AccordionPanel>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
+                {/*END FORM TO ADD SPECIES  */}
             </form>
+            {/* CRUD SPECIES LIST */}
+            <AddSpeciesColor key={addSpeciesColorKey} className={cx('addspeciescolor')}></AddSpeciesColor>
         </div>
     );
 }

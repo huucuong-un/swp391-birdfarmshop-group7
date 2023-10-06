@@ -39,10 +39,12 @@ const datas = () => {
             console.error('Fetch error:', error);
         });
 };
+
 console.log(datas);
 
 function ParrotList() {
     const [parrotSpecies, setParrotSpecies] = useState([]);
+
     const [combineData, setCombineData] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});

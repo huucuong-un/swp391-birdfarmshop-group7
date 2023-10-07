@@ -8,10 +8,7 @@ import { useEffect, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 import OrderAPI from '~/Api/OrderAPI';
-import { Center, Flex, Radio, Square, Text } from '@chakra-ui/react';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 import { ShopState } from '~/context/ShopProvider';
 
@@ -19,24 +16,19 @@ const cx = classNames.bind(styles);
 
 function Payment() {
     const [paymentMethod, setPaymentMethod] = useState(null);
-
+    const [listOrder, setListOrder] = useState([]);
     const location = useLocation();
     const receivedData = location.state;
-    const quantity = receivedData.quantities[1];
-    const pricePerItem = receivedData.selectedColor[1].price;
+
+    // const quantity = receivedData.quantities[1] || 0;
+    // const quantity = receivedData && receivedData.quantities ? receivedData.quantities[1] : 0;
+    // const pricePerItem = receivedData.selectedColor[1].price;
+    // const pricePerItem = receivedData && receivedData.selectedColor ? receivedData.selectedColor[1].price || 0 : 0;
+    // const quantity = receivedData.quantities[1];
+    // const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
-
-    const totalPrice = quantity * pricePerItem;
-    // console.log(totalPrice);
-    // console.log(receivedData);
-
-    // for (const key in receivedData) {
-    //     const value = receivedData[key];
-    //     console.log(`${key}: ${value}`);
-    // }
-
-    // console.log(receivedData.selectedColor[1].price);
+    const [totalPrice, setTotalPrice] = useState(0);
 
     const [loggedUser, setLoggedUser] = useState();
 
@@ -56,35 +48,47 @@ function Payment() {
     };
 
     useEffect(() => {
+        setListOrder(receivedData);
+    }, []);
+
+    useEffect(() => {
+        // Tính tổng giá trị từ các mục trong danh sách đơn hàng
+        let totalPrice = 0;
+        listOrder.forEach((item) => {
+            totalPrice += item.price * item.quantity;
+        });
+
+        // Cập nhật giá trị của totalPrice
+        setTotalPrice(totalPrice);
+    }, [listOrder]);
+
+    console.log(receivedData);
+
+    useEffect(() => {
         const addOrders = async () => {
             try {
-                const data = {
-                    // userID: 1,
+                const cartList = receivedData.map((item, index) => ({
+                    speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
+                    quantity: item.quantity,
+                    type: 'parrot',
+                }));
 
-                    // address: selectedDelivery.address,
-                    // // promotionID: 1,
-                    // status: true,
-                    // quantity: quantity,
+                console.log(cartList);
+                const data = {
                     orderDTO: {
-                        userID: user.userId,
-                        address: selectedDelivery.address,
+                        userID: 1,
+                        // address: selectedDelivery.address,
+                        address: 'haha',
+                        // userID: user.userId,
+                        // address: selectedDelivery.address,
                         status: true,
                     },
-                    cartList: [
-                        {
-                            speicesId: receivedData.id,
-                            quantity: 1,
-                            type: 'parrot',
-                        },
-                        // Add more CartModel objects to the list as needed
-                    ],
+                    cartList: cartList,
                 };
-                const config = {
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                };
-                await DeliveryInformationAPI.updatePickingStatus(user.userId, selectedDelivery, config);
+
+                // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+
+                // await DeliveryInformationAPI.updatePickingStatus(user.userId, selectedDelivery, config);
                 const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
             } catch (error) {
@@ -96,6 +100,8 @@ function Payment() {
             addOrders();
         }
     }, [payStatus]);
+
+    // let totalPrice = 0;
 
     return (
         <div className={cx('wrapper')}>
@@ -143,13 +149,15 @@ function Payment() {
                     </div>
                 </div>
                 <div className={cx('payment-detail', 'col-md-4')}>
-                    <div className={cx('payment-detail-items')}>
-                        <div className={cx('payment-detail-items-img')}>
-                            <img src={receivedData.combineData[0].img} alt="product" />
+                    {listOrder.map((item, index) => (
+                        <div key={index} className={cx('payment-detail-items')}>
+                            <div className={cx('payment-detail-items-img')}>
+                                <img src={item.img} alt="product" />
+                            </div>
+                            <p className={cx('payment-detail-items-quantity')}>x{item.quantity}</p>
+                            <p className={cx('payment-detail-items-price')}>$ {item.price * item.quantity}</p>
                         </div>
-                        <p className={cx('payment-detail-items-quantity')}>x{receivedData.quantities[1]}</p>
-                        <p className={cx('payment-detail-items-price')}>{receivedData.selectedColor[1].price} VNĐ</p>
-                    </div>
+                    ))}
 
                     <div className={cx('payment-detail-promotions')}>
                         <input type="text" placeholder="Discount code" />
@@ -159,17 +167,17 @@ function Payment() {
                     <div className={cx('payment-detail-money')}>
                         <div className={cx('payment-detail-money-item')}>
                             <p className={cx('payment-detail-money-item-title')}>Subtotal</p>
-                            <p className={cx('payment-detail-money-item-price')}>{totalPrice} VNĐ</p>
+                            <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
                         </div>
 
                         <div className={cx('payment-detail-money-item')}>
                             <p className={cx('payment-detail-money-item-title')}>Discount</p>
-                            <p className={cx('payment-detail-money-item-price')}>0</p>
+                            <p className={cx('payment-detail-money-item-price')}>$ 0</p>
                         </div>
 
                         <div className={cx('payment-detail-money-item', 'total')}>
                             <p className={cx('payment-detail-money-item-title', 'bold')}>Total</p>
-                            <p className={cx('payment-detail-money-item-price')}>{totalPrice} VNĐ</p>
+                            <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
                         </div>
                     </div>
                     <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>

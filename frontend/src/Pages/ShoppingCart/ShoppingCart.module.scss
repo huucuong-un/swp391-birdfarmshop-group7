@@ -76,7 +76,8 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    // width: 100%;
+    width: 15%;
+    // max-width: 140px;
 }
 
 .cart-left-item-quantity-btn {
@@ -97,8 +98,9 @@
     min-width: 25px;
 }
 
-.carft-left-item-remove-btn {
+.carft-left-item-remove-btn button {
     // width: 100%;
+    padding: 20px;
 }
 
 .inner-right {
@@ -186,4 +188,12 @@
 .carft-left-item-checkbox {
     width: 20px;
     height: 20px;
+}
+
+.cart-right-total-price {
+    font-weight: 500;
+}
+
+.cart-right-total-product {
+    font-weight: 500;
 }

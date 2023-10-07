@@ -222,7 +222,7 @@ function Navbar() {
                                                         <p>$ {totalPrice.toFixed(2)}</p>
                                                     </div>
                                                 </div>
-                                                <Link to="/shoppingcart">
+                                                <Link to="/shopping-cart">
                                                     <Buttons
                                                         colorScheme="blue"
                                                         size="lg"

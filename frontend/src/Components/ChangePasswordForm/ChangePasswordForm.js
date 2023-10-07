@@ -15,6 +15,7 @@ import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useToast } from '@chakra-ui/react';
 import { ShopState } from '~/context/ShopProvider';
 import axios from 'axios';
+import LoginAPI from '~/Api/LoginAPI';
 
 const cx = classNames.bind(styles);
 
@@ -71,18 +72,26 @@ function ChangePasswordForm() {
                     'Content-type': 'application/json',
                 },
             };
-            var email = user.email;
-            const userData = await axios.post(
-                'http://localhost:8086/api/user/authenticate',
+            const data = await LoginAPI.changePassword(
                 {
-                    email,
-                    password,
+                    currentUsername: user.userName,
+                    currentPassword: password,
+                    newPassword: passwordNew,
+                    confirmNewPassword: confirmPasswordNew,
                 },
                 config,
             );
 
-            if (userData !== null || userData !== '') {
-            }
+            toast({
+                title: 'Change password successfully!!',
+                // description: error.register.message,
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+
+            console.log(data);
         } catch (error) {
             toast({
                 title: 'Error occur!',
@@ -98,7 +107,7 @@ function ChangePasswordForm() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                <form method="" action="" className={cx('inner')}>
+                <div className={cx('inner')}>
                     <Title className={cx('title-login')}>Change password</Title>
                     <div className={cx('notification-container')}>
                         {/* <div className={cx('notification')}>
@@ -165,14 +174,14 @@ function ChangePasswordForm() {
                         </i>
                     </div>
 
-                    <div onClick={handleClick} className={cx('change-btn')}>
-                        <Button type="submit" loginSystemBtn>
-                            Change
+                    <div className={cx('change-btn')}>
+                        <Button loginSystemBtn onClick={handleClick}>
+                            Confirm
                         </Button>
                     </div>
 
                     <Button className={cx('login-btn')}>Forgot password?</Button>
-                </form>
+                </div>
             </div>
         </div>
     );

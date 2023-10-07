@@ -30,13 +30,13 @@ public class ParrotSpeciesController {
     @Autowired
     private ParrotSpeciesService parrotSpeciesService;
     
-    @GetMapping(value = "")
-    public List<ParrotSpeciesDTO> showParrotSpecies() {
-        ListOutput result = new ListOutput();
-
-        result.setListResult(parrotSpeciesService.findAll());
-        return result.getListResult();
-    }
+//    @GetMapping(value = "")
+//    public List<ParrotSpeciesDTO> showParrotSpecies() {
+//        ListOutput result = new ListOutput();
+//
+//        result.setListResult(parrotSpeciesService.findAll());
+//        return result.getListResult();
+//    }
 
     @GetMapping(value = "find-one-species-by-id/{id}")
     public List<ParrotSpeciesDTO> findOneSpeciesById(@RequestBody @PathVariable("id") long id) {
@@ -52,21 +52,21 @@ list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
         return list;
     }
 
-//    @GetMapping(value = "")
-//    public PagingModel showNew(@RequestParam(value ="page",required =false) Integer page, @RequestParam(value ="limit", required = false) Integer limit) {
-//        PagingModel result = new PagingModel();
-//        if(page !=null && limit !=null) {
-//            result.setPage(page);
-//            Pageable pageable = PageRequest.of(page - 1,limit);
-//            result.setListResult(parrotSpeciesService.findAll(pageable));
-//            result.setTotalPage(((int) Math.ceil((double)(parrotSpeciesService.totalItem())/limit)));
-//            result.setLimit(limit);
-//        }else {
-//            result.setListResult(parrotSpeciesService.findAll());
-//        }
-//
-//        return result;
-//    }
+    @GetMapping(value = "")
+    public PagingModel showNew(@RequestParam(value ="page",required =false) Integer page, @RequestParam(value ="limit", required = false) Integer limit) {
+        PagingModel result = new PagingModel();
+        if(page !=null && limit !=null) {
+            result.setPage(page);
+            Pageable pageable = PageRequest.of(page - 1,limit);
+            result.setListResult(parrotSpeciesService.findAll(pageable));
+            result.setTotalPage(((int) Math.ceil((double)(parrotSpeciesService.totalItem())/limit)));
+            result.setLimit(limit);
+        }else {
+            result.setListResult(parrotSpeciesService.findAll());
+        }
+
+        return result;
+    }
 
 
     @PostMapping(value = "")

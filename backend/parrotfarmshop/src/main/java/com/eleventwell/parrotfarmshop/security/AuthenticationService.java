@@ -8,7 +8,10 @@ import com.eleventwell.parrotfarmshop.repository.RoleRepository;
 import com.eleventwell.parrotfarmshop.repository.UserRepository;
 import com.eleventwell.parrotfarmshop.service.impl.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -98,6 +101,30 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .userId(user.getId())
+                .userName(user.getUsername())
+                .userId(user.getId())
+                .fullName(user.getFullName())
+                .status(user.getStatus())
+                .email(user.getEmail())
+                .roleId(user.getRole().getId())
+                .imgUrl(user.getImgUrl())
+                .build();
+    }
+
+    public  AuthenticationResponse changePassword(ChangePasswordRequest request) {
+        var user = repository.findOneByUserName(request.getCurrentUsername());
+        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            return null;
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        repository.save(user);
+
+        var jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .userId(user.getId())

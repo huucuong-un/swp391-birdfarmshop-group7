@@ -33,7 +33,9 @@ function Post() {
                             Our lowest price ever for the ultimate multi-station cat tree - no promo code needed.
                         </div>
                         <div className={cx('shop-sale-btn')}>
-                            <button>Shop sale</button>
+                            <Link to="/postdetail">
+                                <button>Shop sale</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

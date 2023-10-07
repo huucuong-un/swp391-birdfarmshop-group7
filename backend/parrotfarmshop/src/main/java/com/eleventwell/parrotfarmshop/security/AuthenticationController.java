@@ -3,6 +3,7 @@ package com.eleventwell.parrotfarmshop.security;
 import com.eleventwell.parrotfarmshop.dto.UserDTO;
 import com.eleventwell.parrotfarmshop.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/user")
 public class AuthenticationController {
+
 
     @Autowired
     AuthenticationService service;
@@ -39,9 +41,15 @@ return  ResponseEntity.ok(service.register(request));
 
     }
 
-//    @PostMapping(value = "/change-password")
-//    public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest request) {
-//        UserDTO user = userService.findByUsername(request.getCurrentUsername());
-////        if(!)
-//    }
+    @PostMapping(value = "/change-password")
+    public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest request) {
+        UserDTO user = userService.findByUsername(request.getCurrentUsername());
+
+        if(service.changePassword(request) == null) {
+            return null;
+        }
+
+        return ResponseEntity.ok(service.changePassword(request));
+    }
+
 }

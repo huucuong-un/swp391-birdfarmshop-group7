@@ -20,6 +20,8 @@ import PaidSuccess from '~/Pages/PaidSuccess/PaidSuccess';
 import ShoppingCart from '~/Pages/ShoppingCart/ShoppingCart';
 import PostDetail from '~/Pages/PostDetail/PostDetail';
 import AboutUs from '~/Pages/AboutUs/AboutUs';
+import UserProfile from '~/Pages/UserProfile/UserProfile';
+import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -33,6 +35,8 @@ const publicRoutes = [
     { path: '/shoppingcart', component: ShoppingCart },
     { path: '/postdetail', component: PostDetail },
     { path: '/aboutus', component: AboutUs },
+    { path: '/userprofile', component: UserProfile },
+    { path: '/speciesselection', component: SpeciesSelection },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/adParrotSpecies', component: AdParrotSpecies, layout: SystemLayout },

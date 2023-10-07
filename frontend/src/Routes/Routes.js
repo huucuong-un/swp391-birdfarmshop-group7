@@ -14,8 +14,14 @@ import Register from '~/Pages/Register/Register';
 import DeliveryInformation from '~/Pages/DeliveryInformation/DeliveryInformation';
 import ParrotDetail from '~/Pages/ParrotDetail/ParrotDetail';
 import AddParotSpecies from '~/Pages/AddParrotSpecies/AddParrotSpecies';
-
+import TestDontDelete from '~/Pages/TestDontDelete/TestDontDelete';
+import AddPost from '~/Pages/AddPost/AddPost';
 import AddParrot from '~/Pages/AddParrot/AddParrot';
+import StaffFeedback from '~/Pages/StaffFeedBack/StaffFeedback';
+import MngVoucherPromotion from '~/Pages/MngVoucherPromotion/MngVoucherPromotion';
+import MngOrder from '~/Pages/MngOrder/MngOrder';
+import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
+import AddSlider from '~/Pages/AddSlider/AddSlider';
 import PaidSuccess from '~/Pages/PaidSuccess/PaidSuccess';
 import ShoppingCart from '~/Pages/ShoppingCart/ShoppingCart';
 import PostDetail from '~/Pages/PostDetail/PostDetail';
@@ -35,6 +41,15 @@ const publicRoutes = [
     { path: '/post-detail', component: PostDetail },
     { path: '/about-us', component: AboutUs },
     { path: '/register', component: Register, layout: LoginSystemLayout },
+
+    { path: '/test', component: TestDontDelete, layout: SystemLayout },
+    { path: '/addpost', component: AddPost, layout: SystemLayout },
+    { path: '/stafffeedback', component: StaffFeedback, layout: SystemLayout },
+    { path: '/mngvoucherpromotion', component: MngVoucherPromotion, layout: SystemLayout },
+    { path: '/mngorder', component: MngOrder, layout: SystemLayout },
+    { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
+    { path: '/addslider', component: AddSlider, layout: SystemLayout },
+
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },

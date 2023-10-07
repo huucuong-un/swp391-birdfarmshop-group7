@@ -11,6 +11,11 @@ const LoginAPI = {
         const url = `/user/get-user-by-email/${email}`;
         return axiosClient.get(url);
     },
+
+    changePassword(data, config) {
+        const url = `/user/change-password`;
+        return axiosClient.post(url, data, config);
+    },
 };
 
 export default LoginAPI;

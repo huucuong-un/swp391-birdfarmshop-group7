@@ -2,7 +2,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
 .inner {
     display: flex;
@@ -14,7 +13,7 @@
     div {
         overflow: hidden;
         display: flex;
-        justify-content: center;
+        // justify-content: center;
         align-items: center;
         padding: 2px;
     }
@@ -23,21 +22,7 @@
         background-color: #f57c7c;
         color: var(--black);
     }
-    tbody,
-    tr,
-    td {
-        select,
-        option,
-        p {
-            font-size: 1.6rem;
-        }
-    }
-    input {
-        height: 40px;
-        font-size: 1.6rem;
-    }
 }
-
 .table-container {
     width: 50%;
 }
@@ -45,10 +30,7 @@
     display: flex;
     justify-content: center;
     button {
-        width: 70%;
-        font-weight: bold;
-        font-size: 16px;
-        padding: 20px;
+        width: 50%;
         background-color: #f57c7c;
         color: var(--black);
         &:hover {
@@ -57,9 +39,11 @@
         }
     }
 }
-.select-btn {
+
+.haha {
+    display: flex !important;
+    align-items: center !important;
+    // justify-content: start;
     width: 100%;
-}
-.title-container {
-    width: 100%;
+    gap: 5px;
 }

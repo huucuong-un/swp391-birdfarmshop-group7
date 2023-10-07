@@ -23,6 +23,19 @@ public class UserService implements IGenericService<UserDTO> {
     @Autowired
     UserRepository userRepository;
 
+    //find an account by email
+
+    public UserDTO findByUsername(String username) {
+        if (userRepository.findOneByUserName(username) != null) return (UserDTO)genericConverter.toDTO(userRepository.findOneByUserName(username), UserDTO.class);
+        return null;
+    }
+    public UserDTO findByEmail(String email) {
+
+        if (userRepository.findByEmail(email).isPresent()) return (UserDTO)genericConverter.toDTO(userRepository.findByEmail(email).orElseThrow(), UserDTO.class);
+        return null;
+    }
+
+
     //find all users
     @Override
     public List<UserDTO> findAll() {

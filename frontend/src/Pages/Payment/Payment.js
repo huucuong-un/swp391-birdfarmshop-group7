@@ -10,6 +10,7 @@ import { Link, useLocation } from 'react-router-dom';
 import OrderAPI from '~/Api/OrderAPI';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -23,9 +24,18 @@ function Payment() {
     // const quantity = receivedData && receivedData.quantities ? receivedData.quantities[1] : 0;
     // const pricePerItem = receivedData.selectedColor[1].price;
     // const pricePerItem = receivedData && receivedData.selectedColor ? receivedData.selectedColor[1].price || 0 : 0;
+    // const quantity = receivedData.quantities[1];
+    // const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
+
+    const [loggedUser, setLoggedUser] = useState();
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
+    const { user } = ShopState();
 
     const handlePaymentSelection = (paymentMethod) => {
         setPaymentMethod(paymentMethod);
@@ -69,12 +79,16 @@ function Payment() {
                         userID: 1,
                         // address: selectedDelivery.address,
                         address: 'haha',
+                        // userID: user.userId,
+                        // address: selectedDelivery.address,
                         status: true,
                     },
                     cartList: cartList,
                 };
 
                 // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+
+                // await DeliveryInformationAPI.updatePickingStatus(user.userId, selectedDelivery, config);
                 const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
             } catch (error) {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosClinet = axios.create({
+const axiosClient = axios.create({
     baseURL: 'http://localhost:8086/api/',
     headers: {
         'Content-Type': 'application/json',
@@ -8,7 +8,7 @@ const axiosClinet = axios.create({
 });
 
 // Add a request interceptor
-axiosClinet.interceptors.request.use(
+axiosClient.interceptors.request.use(
     function (config) {
         // Do something before request is sent
         return config;
@@ -20,7 +20,7 @@ axiosClinet.interceptors.request.use(
 );
 
 // Add a response interceptor
-axiosClinet.interceptors.response.use(
+axiosClient.interceptors.response.use(
     function (response) {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
@@ -33,4 +33,4 @@ axiosClinet.interceptors.response.use(
     },
 );
 
-export default axiosClinet;
+export default axiosClient;

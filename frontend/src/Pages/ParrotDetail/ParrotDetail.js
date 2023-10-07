@@ -322,39 +322,11 @@ function ParrotDetail() {
                                     </button>
                                 )}
                                 {countParrot === 0 ? (
-                                    <Link
-                                        to={``}
-                                        className={cx('buy-btn')}
-                                        state={[
-                                            {
-                                                name: combineData[0].name,
-                                                quantity: parseInt(quantities[1]),
-                                                img: combineData[0].img,
-                                                // color: selectedColor[1].color,
-                                                // colorID: selectedColor[1].colorId,
-                                                // price: selectedColor[1].price,
-                                            },
-                                        ]}
-                                    >
+                                    <Link to="/" className={cx('buy-btn')}>
                                         Contact
                                     </Link>
                                 ) : countParrot === 'Check the color to see ' ? (
-                                    <Link
-                                        to={``}
-                                        className={cx('buy-btn')}
-                                        state={[
-                                            {
-                                                name: combineData[0].name,
-                                                quantity: parseInt(quantities[1]),
-                                                img: combineData[0].img,
-                                                // color: selectedColor[1].color,
-                                                // colorID: selectedColor[1].colorId,
-                                                // price: selectedColor[1].price,
-                                            },
-                                        ]}
-                                    >
-                                        Please choose color
-                                    </Link>
+                                    <Link className={cx('buy-btn-choose')}>Please choose color</Link>
                                 ) : (
                                     <Link
                                         to={`/payment`}

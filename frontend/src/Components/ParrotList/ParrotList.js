@@ -42,10 +42,12 @@ const datas = () => {
             console.error('Fetch error:', error);
         });
 };
+
 console.log(datas);
 
 function ParrotList() {
     const [parrotSpecies, setParrotSpecies] = useState([]);
+
     const [combineData, setCombineData] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});
@@ -237,7 +239,7 @@ function ParrotList() {
                     return (
                         <div className={cx('parrot-card', 'col-lg-3')} key={index}>
                             <div className={cx('parrot-img')}>
-                                <Link to={`/parrotdetail/${parrot.id}`} state={dataToPass}>
+                                <Link to={`/parrot-detail/${parrot.id}`} state={dataToPass}>
                                     <img className={cx('img')} src={parrot.img} alt="parrot" />
                                 </Link>
                                 <Link to="/payment" state={dataToPass}>
@@ -296,6 +298,7 @@ function ParrotList() {
                                     ))}
                                 </div>
                                 {/* <div className={cx('quantity-input-container')}>
+
                                     <button
                                         className={cx('quantity-input-btn')}
                                         onClick={() => handleQuantityDecrease(parrot.id)}

@@ -4,6 +4,7 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.dto.UserDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,15 @@ import java.util.List;
 public class UserController {
     @Autowired
     IGenericService<UserDTO> userService;
+
+    @Autowired
+    UserService userService1;
+
+    @GetMapping(value = "get-user-by-email/{email}")
+    public UserDTO getUserByEmail(@PathVariable("email") String email) {
+        if (userService1.findByEmail(email) != null) return userService1.findByEmail(email);
+        return null;
+    }
 
     @GetMapping(value = "")
     public List<UserDTO> showUsers() {

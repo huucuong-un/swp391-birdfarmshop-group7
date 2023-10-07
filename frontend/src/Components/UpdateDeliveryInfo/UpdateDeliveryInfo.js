@@ -18,23 +18,32 @@ import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo.module.scss';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
 function UpdateDeliveryInfo(props) {
     const [newDeliveryInfo, setNewDeliveryInfo] = useState(props.deliveryInfo);
-
+    const { user } = ShopState();
     const updateDeliveryInfo = async () => {
         try {
             setLoading(true);
-            const updatedInfo = await DeliveryInformationAPI.updateDeliveryInfo({
-                id: newDeliveryInfo.id,
-                name: newDeliveryInfo.name,
-                phoneNumber: newDeliveryInfo.phoneNumber,
-                address: newDeliveryInfo.address,
-                status: newDeliveryInfo.status,
-                userId: 1,
-            });
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            const updatedInfo = await DeliveryInformationAPI.updateDeliveryInfo(
+                {
+                    id: newDeliveryInfo.id,
+                    name: newDeliveryInfo.name,
+                    phoneNumber: newDeliveryInfo.phoneNumber,
+                    address: newDeliveryInfo.address,
+                    status: newDeliveryInfo.status,
+                    userId: user.userId,
+                },
+                config,
+            );
             setLoading(false);
             setSubmissionStatus(true);
 

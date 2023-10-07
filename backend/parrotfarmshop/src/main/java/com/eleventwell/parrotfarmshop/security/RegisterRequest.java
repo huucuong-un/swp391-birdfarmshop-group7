@@ -18,5 +18,8 @@ public class RegisterRequest {
     private String fullName;
     private Boolean status;
     private Long roleId;
+    private String imgUrl;
+    private Boolean gender;
+    private String dob;
 
 }

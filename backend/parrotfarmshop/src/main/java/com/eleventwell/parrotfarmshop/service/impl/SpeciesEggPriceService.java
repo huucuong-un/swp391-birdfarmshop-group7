@@ -79,7 +79,17 @@ public class SpeciesEggPriceService implements IGenericService<SpeciesEggPriceDT
         }
         return results;
     }
+public List<SpeciesEggPriceDTO> findAllBySpeciesId(Long id){
+    List<SpeciesEggPriceDTO> results = new ArrayList();
+    List<SpeciesEggPriceEntity> entities = speciesEggPriceRepository.findAllByParrotSpeciesIdAndStatusTrueOrderById(id);
 
+    for(SpeciesEggPriceEntity item : entities) {
+        SpeciesEggPriceDTO newDTO = (SpeciesEggPriceDTO) converter.toDTO(item,SpeciesEggPriceDTO.class);
+        results.add(newDTO);
+    }
+    return results;
+
+}
     @Override
     public int totalItem() {
         return (int)speciesEggPriceRepository.count();

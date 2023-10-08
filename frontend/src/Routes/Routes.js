@@ -21,6 +21,8 @@ import ShoppingCart from '~/Pages/ShoppingCart/ShoppingCart';
 import PostDetail from '~/Pages/PostDetail/PostDetail';
 import AboutUs from '~/Pages/AboutUs/AboutUs';
 
+import UserProfile from '~/Pages/UserProfile/UserProfile';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -41,6 +43,7 @@ const publicRoutes = [
     { path: '/faq', component: FAQs },
     { path: '/addparrotspecies', component: AddParotSpecies, layout: LoginSystemLayout },
     { path: '/addparrot', component: AddParrot, layout: SystemLayout },
+    { path: '/userprofile', component: UserProfile },
 ];
 
 //Dành cho những người đăng nhập mới coi được

@@ -8,6 +8,8 @@ import { Input, InputGroup, InputRightElement, useToast } from '@chakra-ui/react
 import { useEffect, useState } from 'react';
 import RegisterAPI from '~/Api/RegisterAPI';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -69,7 +71,7 @@ function Register() {
                 email,
                 password,
                 fullName,
-                status,
+                status: true,
                 roleId: 1,
             };
             const register = await RegisterAPI.register(dataForUser, config);
@@ -83,10 +85,10 @@ function Register() {
                 pickingStatus: true,
             };
 
-            const deliveryInfo = DeliveryInformationAPI.addNewDeliveryInfo(dataForDeliveryInfo);
+            const deliveryInfo = DeliveryInformationAPI.addNewDeliveryInfo(dataForDeliveryInfo, config);
 
             toast({
-                title: 'Registration Successfully',
+                title: 'Register successfully',
                 status: 'success',
                 duration: 5000,
                 isClosable: true,
@@ -195,9 +197,13 @@ function Register() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
-                                <InputRightElement onClick={handleClick}>
-                                    <Button size="xl" className={cx('showPasswordBtn')}>
-                                        {show ? 'Hide' : 'Show'}
+                                <InputRightElement onClick={handleClick} className={cx('showPasswordBtn')}>
+                                    <Button size="xl">
+                                        {show ? (
+                                            <FontAwesomeIcon icon={faEyeSlash} />
+                                        ) : (
+                                            <FontAwesomeIcon icon={faEye} />
+                                        )}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
@@ -214,7 +220,13 @@ function Register() {
                                     required
                                 />
                                 <InputRightElement className={cx('showPasswordBtn')} onClick={handleClick}>
-                                    <Button size="sm">{show ? 'Hide' : 'Show'}</Button>
+                                    <Button size="sm">
+                                        {show ? (
+                                            <FontAwesomeIcon icon={faEyeSlash} />
+                                        ) : (
+                                            <FontAwesomeIcon icon={faEye} />
+                                        )}
+                                    </Button>
                                 </InputRightElement>
                             </InputGroup>
 

@@ -1,34 +1,20 @@
-import axiosClinet from './AxiosClient';
+import axios from 'axios';
+import axiosClient from './AxiosClient';
 
 const LoginAPI = {
-    getAll(params) {
-        const url = '/parrot-species';
-        return axiosClinet.get(url, { params });
-    },
-
-    get(id) {
-        const url = `/parrot-species/find-one-species-by-id/${id}`;
-        return axiosClinet.get(url);
-    },
-
-    getListBySpeciesId(speciesId) {
-        const url = `/parrot-species-color/find-by-parrot-species-id/${speciesId}`;
-        return axiosClinet.get(url);
-    },
-
     login(data, config) {
         const url = `/user/authenticate`;
-        return axiosClinet.post(url, data, config);
+        return axiosClient.post(url, data, config);
     },
 
-    update(data) {
-        const url = `/parrot-species/${data.id}`;
-        return axiosClinet.put(url, data);
+    getUserByEmail(email) {
+        const url = `/user/get-user-by-email/${email}`;
+        return axiosClient.get(url);
     },
 
-    remove(id) {
-        const url = `/parrot-species/${id}`;
-        return axiosClinet.delete(url);
+    changePassword(data, config) {
+        const url = `/user/change-password`;
+        return axiosClient.post(url, data, config);
     },
 };
 

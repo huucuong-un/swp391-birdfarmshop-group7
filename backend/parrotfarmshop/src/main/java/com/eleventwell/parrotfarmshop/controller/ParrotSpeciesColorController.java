@@ -40,6 +40,7 @@ public class ParrotSpeciesColorController {
 
         list.add(parrotSpeciesColorService.findOneByParrotId(id));
         return list;
+
     }
 
 

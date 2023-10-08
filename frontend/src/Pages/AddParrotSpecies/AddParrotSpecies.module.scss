@@ -3,12 +3,13 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    width: 100%;
 }
 .inner {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70%;
+    width: 100%;
     flex-direction: column;
 
     div {
@@ -19,14 +20,17 @@
         padding: 2px;
     }
 }
+.scale-fade {
+    width: 2000px;
+}
 .table-container {
     margin: 20px;
-    width: 100%;
+    width: 50% !important;
     gap: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70%;
+    width: 100%;
     flex-direction: column;
     height: 500px;
     table {
@@ -81,6 +85,7 @@
     justify-content: space-between;
     span {
         margin-left: 10px;
+        font-size: 20px;
     }
 }
 .sort-space-form {
@@ -112,9 +117,117 @@
     margin-bottom: 100px;
 }
 .accord-item {
-    width: 90%;
+    width: 100%;
+    span {
+        overflow: hidden;
+    }
+
     button {
         overflow: hidden;
         font-size: 18px;
     }
+}
+
+.item-container {
+    display: flex;
+    gap: 10px;
+    margin: 5px 0;
+    align-items: center;
+    justify-content: start;
+
+    button {
+        height: 10px !important;
+        width: 10px !important;
+        display: inline-block;
+        padding: 5px 5px; /* Adjust padding to your preferred size */
+        border: none;
+        background-color: #007bff; /* Change the background color as desired */
+        color: #fff; /* Text color */
+        font-size: 16px; /* Font size */
+        border-radius: 50%; /* Makes the button round */
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        border: 1px solid var(--black);
+    }
+    p {
+        margin-bottom: 5px;
+    }
+}
+
+.crud-container {
+    padding: 10px;
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Title row containing header labels */
+.crud-title {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f57c7c;
+    padding: 8px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+}
+
+/* Each data row */
+.crud-data {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    width: 100%;
+}
+
+/* Style individual data fields */
+.data-field {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+/* Color button */
+.item-container {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    td {
+        font-size: 18px;
+        padding: 10px 10px 10px 0;
+        margin: 0;
+        img {
+            width: 150px;
+        }
+    }
+}
+
+.color-wheel {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.color-container {
+    width: 10%;
+    display: flex;
+}
+.addspeciescolor {
+    width: 100%;
+}
+.title-post {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background-color: #f57c7c;
 }

@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 function SystemHeader() {
     return (
         <div className={cx('wrapper')}>
-            <Link className={cx('logo')}>
+            <Link className={cx('logo')} to="/">
                 <img src={logo} alt="logo"></img>
             </Link>
         </div>

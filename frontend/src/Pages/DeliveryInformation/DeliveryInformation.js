@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import AddMoreDeliveryInfo from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo';
 import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     const [selectedDeliveryId, setSelectedDeliveryId] = useState();
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(Array(deliveryInfo.length).fill(false)); // Initialize with false for each item
+    const { user } = ShopState();
 
     const handleShow = () => {
         setShow(!show);
@@ -50,13 +52,26 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
 
         // Update the state
         setDeliveryInfo(updatedDeliveryInfo);
+        if (deliveryInfo.length === 1) {
+            setSelectedDeliveryId(deliveryInfo[0].id);
+            selectedDelivery(deliveryInfo[0]);
+        }
     };
 
     useEffect(() => {
         const getAllDeliveryInfoByCustomerId = async () => {
             try {
-                const data = await DeliveryInformationAPI.getAll(1);
-                const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(1);
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                const data = await DeliveryInformationAPI.getAll(user.userId, config);
+
+                const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                    user.userId,
+                    config,
+                );
                 setDeliveryInfo(data);
 
                 var index = 0;
@@ -64,8 +79,10 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                     if (deliInfo.id === nowDeliInfo.id) break;
                     index++;
                 }
-                setSelectedDelivery(data[index]);
                 setSelectedDeliveryId(data[index].id);
+                setSelectedDelivery(data[index]);
+
+                // console.log(data[index].id);
             } catch (error) {
                 console.error(error);
             }

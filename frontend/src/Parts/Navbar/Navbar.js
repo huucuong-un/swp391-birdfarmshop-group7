@@ -55,7 +55,7 @@ function Navbar() {
     const MENU_ITEMS_PRODUCT = [
         {
             title: 'Parrot',
-            to: '/parrotProduct',
+            to: '/parrot-product',
         },
         {
             title: 'Nest',
@@ -146,7 +146,7 @@ function Navbar() {
                                 >
                                     <Menu>
                                         <MenuButton as={Button}>
-                                            <Avatar size="lg" cursor="pointer" name={user.name} />
+                                            <Avatar size="lg" cursor="pointer" name={user.name} src={user.imgUrl} />
                                         </MenuButton>
                                         <MenuList mt={20} ml={20} className={cx('profile-list')}>
                                             <MenuItem padding={5}>My Profile</MenuItem>
@@ -222,7 +222,7 @@ function Navbar() {
                                                         <p>$ {totalPrice.toFixed(2)}</p>
                                                     </div>
                                                 </div>
-                                                <Link to="/shoppingcart">
+                                                <Link to="/shopping-cart">
                                                     <Buttons
                                                         colorScheme="blue"
                                                         size="lg"
@@ -330,7 +330,7 @@ function Navbar() {
                         </div>
                     </Tippy>
 
-                    <Button className={cx('nav-bottom-item')} text to="/aboutus">
+                    <Button className={cx('nav-bottom-item')} text to="/about-us">
                         ABOUT
                     </Button>
 

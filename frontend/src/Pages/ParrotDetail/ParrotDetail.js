@@ -18,37 +18,21 @@ import Feedback from '~/Components/Feedback/Feedback';
 
 const cx = classNames.bind(styles);
 
-// const PARROT_ITEMS = [
-//     {
-//         name: 'Grey Parrot',
-//         img: parrot,
-//         like: 15,
-//         price: '1 500 000 VNĐ',
-//         color1: '#ce2133',
-//         color2: '#3c65c5',
-//         color3: '#484848',
-//     },
-// ];
-
 function ParrotDetail() {
     const location = useLocation();
     const receivedData = location.state;
+    console.log(receivedData);
     const { id } = useParams();
-    const [selectedColor, setSelectedColor] = useState(receivedData.selectedColor);
-    const [selectedColorId, setSelectedColorId] = useState(receivedData.selectedColorId);
-    const [quantities, setQuantities] = useState({});
+    const [selectedColor, setSelectedColor] = useState({});
+    const [selectedColorId, setSelectedColorId] = useState(receivedData.selectedColor.colorId);
+    const [quantities, setQuantities] = useState(1);
     const [combineData, setCombineData] = useState([]);
     const [parrotSpecies, setParrotSpecies] = useState([]);
+    const [count, setCount] = useState(0);
 
     const [countParrot, setCountParrot] = useState('Check the color to see ');
 
-    const dataToPass = {
-        id,
-        selectedColor,
-        quantities,
-        combineData,
-    };
-
+    console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
             ...selectedColor,
@@ -58,9 +42,8 @@ function ParrotDetail() {
                 colorId: colorId,
             },
         });
-        // console.log('Selected colorId:', colorId);
+
         setSelectedColorId(colorId);
-        // console.log(selectedColorId);
     };
 
     const handleQuantityIncrease = (parrotId) => {
@@ -92,6 +75,7 @@ function ParrotDetail() {
 
         // Gọi hàm getParrots khi component được mount
         getParrotsSpecies();
+        console.log(parrotSpecies);
     }, []);
 
     useEffect(() => {
@@ -132,6 +116,31 @@ function ParrotDetail() {
 
             // setSelectedColor(initialSelectedColor);
 
+            const initialSelectedColor = {};
+            const initialSelectedColorId = {};
+
+            data.forEach((parrot) => {
+                if (parrot.colors.length > 0) {
+                    let maxColorId = parrot.colors[0].id;
+                    let maxColor = parrot.colors[0].color;
+                    parrot.colors.forEach((color) => {
+                        if (color.id > maxColorId) {
+                            maxColorId = color.id;
+                            maxColor = color.color;
+                        }
+                    });
+                    initialSelectedColor[parrot.id] = {
+                        color: maxColor,
+                        price: parrot.colors[0].price,
+                        colorId: maxColorId,
+                    };
+                    initialSelectedColorId[parrot.id] = maxColorId;
+                }
+            });
+
+            setSelectedColor(initialSelectedColor);
+            setSelectedColorId(initialSelectedColorId);
+
             const initialQuantities = {};
             data.forEach((parrot) => {
                 initialQuantities[parrot.id] = 1;
@@ -147,7 +156,12 @@ function ParrotDetail() {
         fetchData();
     }, [parrotSpecies]);
 
-    const handleAddToCart = ({ name, img, quantity, price, color }) => {
+    // useEffect(() => {
+    //     const initialQuantities = new Array(combineData.length).fill(1);
+    //     setQuantities(initialQuantities);
+    // }, [combineData]);
+
+    const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
         const existingItem = existingCart.find((item) => item.name === name && item.color === color);
         if (existingItem) {
@@ -156,12 +170,16 @@ function ParrotDetail() {
         } else {
             // Nếu mục chưa tồn tại, thêm nó vào danh sách
             existingCart.push({
+                id,
                 name,
                 img,
-                quantity: 1,
+                quantity,
                 price,
                 color,
+                colorID,
             });
+
+            setCount((prev) => prev + 1);
         }
         const newCart = [...existingCart];
         localStorage.setItem('parrot', JSON.stringify(newCart));
@@ -173,10 +191,17 @@ function ParrotDetail() {
         }, deleteAfterMilliseconds);
     };
 
+    // console.log(selectedColor);
+
+    useEffect(() => {
+        console.log(quantities);
+    }, [quantities]);
+
     return (
         <div className={cx('wrapper')}>
             <StartPartPage>Parrot Details</StartPartPage>
             {combineData.map((parrot, index) => {
+                const currentParrot = combineData[index];
                 return (
                     <div key={index} className={cx('inner')}>
                         <div className={cx('mini-img-container')}>
@@ -202,6 +227,12 @@ function ParrotDetail() {
                             <div className={cx('parrot-detail-price-container')}>
                                 <p className={cx('parrot-detail-price-title')}>Price</p>
                                 <p className={cx('parrot-detail-price-value')}>{selectedColor[parrot.id]?.price}</p>
+                                {/* <p className={cx('parrot-detail-price-value')}>
+                                    {selectedColor[parrot.id]?.color || 'N/A'}
+                                </p> */}
+                                {/* <p className={cx('parrot-detail-price-value')}>
+                                    {selectedColor[parrot.id]?.color || 'N/A'}
+                                </p> */}
                             </div>
 
                             <div className={cx('choose-color')}>
@@ -240,7 +271,7 @@ function ParrotDetail() {
                                         </button>
                                     </div>
 
-                                    <p>{countParrot} avaiable</p>
+                                    <p>{countParrot} available</p>
                                 </div>
                             </div>
                             <Accordion defaultIndex={[0]} allowMultiple>
@@ -272,16 +303,18 @@ function ParrotDetail() {
                             </Accordion>
                             <div className={cx('active-zone')}>
                                 {countParrot === 0 ? (
-                                    <button>Contact</button>
+                                    <button>Out of stock</button>
                                 ) : (
                                     <button
                                         onClick={() =>
                                             handleAddToCart({
+                                                id: count,
                                                 name: parrot.name,
                                                 img: parrot.img,
-                                                quantity: 1,
+                                                quantity: quantities[parrot.id],
                                                 price: selectedColor[parrot.id]?.price,
                                                 color: selectedColor[parrot.id]?.color,
+                                                colorID: selectedColor[parrot.id]?.colorId,
                                             })
                                         }
                                     >
@@ -289,15 +322,34 @@ function ParrotDetail() {
                                     </button>
                                 )}
                                 {countParrot === 0 ? (
-                                    <Link to={``} className={cx('buy-btn')} state={dataToPass}>
+                                    <Link to="/" className={cx('buy-btn')}>
                                         Contact
                                     </Link>
                                 ) : countParrot === 'Check the color to see ' ? (
-                                    <Link to={``} className={cx('buy-btn')} state={dataToPass}>
-                                        Please choose color
-                                    </Link>
+                                    <Link className={cx('buy-btn-choose')}>Please choose color</Link>
                                 ) : (
-                                    <Link to={`/payment`} className={cx('buy-btn')} state={dataToPass}>
+                                    <Link
+                                        to={`/payment`}
+                                        className={cx('buy-btn')}
+                                        state={[
+                                            {
+                                                // name: combineData[0].name,
+                                                // quantity: parseInt(quantities[1]),
+                                                // img: combineData[0].img,
+
+                                                // color: selectedColor[1].color,
+                                                // colorID: selectedColor[1].colorId,
+                                                // price: selectedColor[1].price,
+
+                                                name: currentParrot.name,
+                                                quantity: parseInt(quantities[currentParrot.id]),
+                                                img: currentParrot.img,
+                                                color: selectedColor[currentParrot.id]?.color,
+                                                colorID: selectedColor[currentParrot.id]?.colorId,
+                                                price: selectedColor[currentParrot.id]?.price,
+                                            },
+                                        ]}
+                                    >
                                         Buy
                                     </Link>
                                 )}

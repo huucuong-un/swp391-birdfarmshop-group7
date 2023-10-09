@@ -22,7 +22,7 @@ function Breadcrumbs() {
                         <li key={name}>{name} / </li>
                     ) : (
                         <li key={name}>
-                            <Link to={routeTo}>{name}</Link>
+                            <Link to={routeTo}>{name} / </Link>
                         </li>
                     );
                 })}

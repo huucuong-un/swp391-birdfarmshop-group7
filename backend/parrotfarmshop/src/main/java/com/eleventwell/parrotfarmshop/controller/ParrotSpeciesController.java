@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 /**
- *
  * @author ASUS
  */
 @CrossOrigin
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class ParrotSpeciesController {
     @Autowired
     private ParrotSpeciesService parrotSpeciesService;
-    
+
 //    @GetMapping(value = "")
 //    public List<ParrotSpeciesDTO> showParrotSpecies() {
 //        ListOutput result = new ListOutput();
@@ -40,8 +39,8 @@ public class ParrotSpeciesController {
 
     @GetMapping(value = "find-one-species-by-id/{id}")
     public List<ParrotSpeciesDTO> findOneSpeciesById(@RequestBody @PathVariable("id") long id) {
-List<ParrotSpeciesDTO> list = new ArrayList<>();
-list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
+        List<ParrotSpeciesDTO> list = new ArrayList<>();
+        list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
         return list;
     }
 
@@ -53,33 +52,55 @@ list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
     }
 
     @GetMapping(value = "")
-    public PagingModel showNew(@RequestParam(value ="page",required =false) Integer page, @RequestParam(value ="limit", required = false) Integer limit) {
+    public PagingModel showNew(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
-        if(page !=null && limit !=null) {
+        if (page != null && limit != null) {
             result.setPage(page);
-            Pageable pageable = PageRequest.of(page - 1,limit);
+            Pageable pageable = PageRequest.of(page - 1, limit);
             result.setListResult(parrotSpeciesService.findAll(pageable));
-            result.setTotalPage(((int) Math.ceil((double)(parrotSpeciesService.totalItem())/limit)));
+            result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
             result.setLimit(limit);
-        }else {
+        } else {
             result.setListResult(parrotSpeciesService.findAll());
         }
 
         return result;
     }
 
+    @GetMapping(value = "sort")
+    public PagingModel showSort(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,  @RequestParam(value = "sortway", required = false) String sortway) {
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if ( sortway == null || sortway.equals("")) {
+            result.setListResult(parrotSpeciesService.findAll(pageable));
+
+
+        } else {
+
+            result.setListResult(parrotSpeciesService.findAllByPriceAndName(sortway, pageable));
+            result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
+            result.setLimit(limit);
+
+        }
+
+
+        return result;
+    }
 
     @PostMapping(value = "")
-	public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
-		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
-	}
-        @PutMapping(value = "{id}")
-	public ParrotSpeciesDTO updateParrotSpecies(@RequestBody ParrotSpeciesDTO model, @PathVariable("id") long id) {
-		model.setId(id);
-		return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
-	}
-        @DeleteMapping(value = "{ids}")
-	public void deleteParrotSpecies(@RequestBody @PathVariable("ids") Long ids) {
-		parrotSpeciesService.changeStatus(ids);
-	}
+    public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
+        return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
+    }
+
+    @PutMapping(value = "{id}")
+    public ParrotSpeciesDTO updateParrotSpecies(@RequestBody ParrotSpeciesDTO model, @PathVariable("id") long id) {
+        model.setId(id);
+        return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
+    }
+
+    @DeleteMapping(value = "{ids}")
+    public void deleteParrotSpecies(@RequestBody @PathVariable("ids") Long ids) {
+        parrotSpeciesService.changeStatus(ids);
+    }
 }

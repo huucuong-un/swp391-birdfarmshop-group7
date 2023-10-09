@@ -59,7 +59,7 @@ function Navbar() {
         },
         {
             title: 'Nest',
-            to: '/nest',
+            to: '/species-selection',
         },
     ];
 

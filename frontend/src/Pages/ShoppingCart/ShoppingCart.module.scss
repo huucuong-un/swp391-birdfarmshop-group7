@@ -33,6 +33,7 @@
 
 .cart-left-header-total-quantity,
 .cart-left-item-info-color,
+.cart-left-item-available,
 .carft-left-item-remove-btn {
     font-size: 1.6rem;
     color: var(--black-old);
@@ -44,7 +45,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 80px;
+    gap: 70px;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 30px;
 }
@@ -68,6 +69,10 @@
     font-weight: 600;
 }
 
+.cart-left-item-price-with-quantity {
+    min-width: 60px;
+}
+
 .cart-left-item-price {
     // width: 100%;
 }
@@ -84,7 +89,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 20px;
     // width: 100%;
+}
+
+.cart-left-item-quantity-btn-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cart-left-item-quantity-btn input {
@@ -183,6 +195,10 @@
 
 .check-out-btn {
     padding-bottom: 30px;
+}
+
+.carft-left-item-checkbox-container {
+    width: 2%;
 }
 
 .carft-left-item-checkbox {

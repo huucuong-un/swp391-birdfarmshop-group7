@@ -15,12 +15,6 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
-    Box,
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
 } from '@chakra-ui/react';
 import Buttons from '~/Components/Button/Button';
 import React, { useState, useEffect } from 'react';
@@ -35,7 +29,6 @@ const cx = classNames.bind(styles);
 function AddParrotSpecies() {
     // useState for alert status
     const [submissionStatus, setSubmissionStatus] = useState();
-    const [isFormVisible, setFormVisibility] = useState(false);
     const [species, setSpecies] = useState([]);
     const [addSpeciesColorKey, setAddSpeciesColorKey] = useState(0);
     //these useState for upload image

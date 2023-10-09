@@ -13,7 +13,17 @@ const DeliveryInformation = {
 
     updateDeliveryInfo(data, config) {
         const url = `/delivery-information/${data.id}`;
-        return axiosClient.put(url, data, config);
+        return axiosClient.put(
+            url,
+            {
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+                address: data.address,
+                status: data.status,
+                userId: data.userId,
+            },
+            config,
+        );
     },
 
     getDeliveryInfoWithTruePickingStatusByCustomerId(customerid, config) {

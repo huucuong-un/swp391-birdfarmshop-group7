@@ -7,7 +7,6 @@ import {
     Input,
     Table,
     Tbody,
-    Tfoot,
     Tr,
     Td,
     TableContainer,
@@ -27,11 +26,12 @@ import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import axios from 'axios';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import UpdateSpecies from '~/Pages/UpdateSpecies/UpdateSpecies';
 const cx = classNames.bind(styles);
 function AddSpeciesColor() {
     // useState for alert status
     const [submissionStatus, setSubmissionStatus] = useState();
-    const [isFormVisible, setFormVisibility] = useState(false);
+    const [updateVisible, setUpdatevisible] = useState(false);
     const [colorExist, setColorExist] = useState();
     const [species, setSpecies] = useState([]);
     const [colorInputs, setColorInputs] = useState([]);
@@ -136,6 +136,18 @@ function AddSpeciesColor() {
             return;
         }
     };
+    const [refreshFlag, setRefreshFlag] = useState(true);
+    const refreshParent = () => {
+        // Toggle the refreshFlag to force a page reload if it's true
+        setRefreshFlag(refreshFlag);
+
+        // Check the value of refreshFlag, and reload the page if it's true
+        setTimeout(() => {
+            if (refreshFlag) {
+                window.location.reload();
+            }
+        }, 2000); // Adjust the delay time in milliseconds as needed
+    };
 
     // This function to handle the data to submit through the post method
 
@@ -146,6 +158,7 @@ function AddSpeciesColor() {
 
             return;
         }
+
         const speciesID = species[index].id;
         const { color, price } = colorInputs[index];
 
@@ -185,6 +198,7 @@ function AddSpeciesColor() {
             console.error(`Error at species ID ${speciesID}: ${error}`);
         }
     };
+    //Function to check is color existed
     function isColorExisted(id, input) {
         for (const parent of combineData) {
             if (id === parent.id) {
@@ -201,7 +215,23 @@ function AddSpeciesColor() {
         }
         return false;
     }
+    //function to handle update form visible
 
+    // Initialize state to keep track of which species' form is currently open for editing
+    const [openSpeciesID, setOpenSpeciesID] = useState(null);
+
+    // Function to toggle the form's visibility for a species
+    const toggleEditForm = (speciesID) => {
+        if (openSpeciesID === speciesID) {
+            // If the form is already open for this species, close it
+            setOpenSpeciesID(null);
+        } else {
+            // Otherwise, open the form for this species
+            setOpenSpeciesID(speciesID);
+        }
+    };
+
+    console.log(updateVisible);
     return (
         <div className={cx('wrapper')}>
             <Accordion className={cx('accordion')} allowToggle>
@@ -229,9 +259,21 @@ function AddSpeciesColor() {
                                             <div className={cx('data-field')}>{data.averageWeight}</div>
                                         </div>
                                     </Box>
+
                                     <AccordionIcon />
                                 </AccordionButton>
+                                <div>
+                                    <Button key={data.id} onClick={() => toggleEditForm(data.id)}>
+                                        {openSpeciesID === data.id ? 'Close Edit' : 'Edit'}
+                                    </Button>
+                                </div>
                             </h2>
+
+                            {/* Conditionally render the UpdateSpecies component based on the openSpeciesID state */}
+                            {openSpeciesID === data.id && (
+                                <UpdateSpecies specieID={data.id} refreshSpeciesColorPage={refreshParent} />
+                            )}
+                            {/* ========================== */}
                             <AccordionPanel>
                                 {data.colors.map((childObj) => (
                                     <div className={cx('item-container')}>

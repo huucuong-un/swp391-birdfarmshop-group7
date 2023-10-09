@@ -1,3 +1,88 @@
+.product-item-cancel-button {
+    border-radius: 50%;
+    background-color: #2b2c30;
+    color: white;
+    width: 24px;
+    text-align: center;
+    font-weight: 900;
+    // position: relative;
+}
+
+.product-item-cancel-button:hover {
+    background-color: #ccc;
+    color: #2b2c30;
+}
+.compare-section {
+    display: none;
+    position: fixed;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    z-index: 1;
+    border-top: 1px #ccc solid;
+}
+
+.compare-container {
+    height: 100%;
+}
+
+.compare-row {
+    height: 100%;
+    align-items: center;
+}
+
+.compare-col {
+    display: flex;
+    text-align: center;
+    height: 100%;
+    align-items: center;
+}
+
+.compare-col-product {
+    justify-content: space-around;
+}
+
+.compare-col-confirm {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.compare-button-confirm {
+    height: 35%;
+    background-color: #ecc94b;
+    color: black;
+    width: 100%;
+    font-weight: 600;
+    border: 2px #2b2c30 solid;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.compare-button-confirm:hover {
+    opacity: 0.7;
+}
+.compare-button-cancel {
+    height: 35%;
+    border: 2px #2b2c30 solid;
+    width: 100%;
+    font-weight: 600;
+}
+.compare-button-cancel:hover {
+    opacity: 0.7;
+}
+
+.product-item {
+    width: 33%;
+    // position: absolute;
+}
+
+.product-item-container {
+    margin: auto auto;
+}
 .wrapper {
     display: flex;
     flex-direction: column;

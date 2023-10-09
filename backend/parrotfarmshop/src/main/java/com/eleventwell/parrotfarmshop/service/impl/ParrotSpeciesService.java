@@ -131,9 +131,9 @@ public ParrotSpeciesDTO findOneSpeciesParrotById(Long id){
 
         return results;
     }
-    public List<ParrotSpeciesDTO> findAllByPriceAndName(String name,String sortWay,Pageable pageable){
+    public List<ParrotSpeciesDTO> findAllByPriceAndName(String sortWay,Pageable pageable){
         List<ParrotSpeciesDTO> results = new ArrayList();
-        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByPriceAndName(name,sortWay,pageable);
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByPriceAndName(sortWay,pageable);
 
         for(ParrotSpeciesEntity item : entities) {
             ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item,ParrotSpeciesDTO.class);
@@ -144,6 +144,22 @@ public ParrotSpeciesDTO findOneSpeciesParrotById(Long id){
         return results;
 
     }
+        public List<ParrotSpeciesDTO> findAllByName(String name,Pageable pageable){
+                List<ParrotSpeciesDTO> results = new ArrayList();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByName(name,pageable);
+
+        for(ParrotSpeciesEntity item : entities) {
+            ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item,ParrotSpeciesDTO.class);
+            results.add(newDTO);
+        }
+
+        return results;
+            
+            
+            
+        }
+
+    
 
     @Override
     public int totalItem() {

@@ -38,8 +38,8 @@ function SortSpace(props) {
                         <option defaultValue selected>
                             Features
                         </option>
-                        <option value="NDESC">A to Z</option>
-                        <option value="NASC">Z to A</option>
+                        <option value="NASC">A to Z</option>
+                        <option value="NDESC">Z to A</option>
                         <option value="PASC">Low to High</option>
                         <option value="PDESC">High to Low</option>
                     </select>

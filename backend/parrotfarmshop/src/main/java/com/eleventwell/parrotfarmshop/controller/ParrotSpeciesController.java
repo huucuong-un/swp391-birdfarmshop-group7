@@ -68,18 +68,36 @@ public class ParrotSpeciesController {
     }
 
     @GetMapping(value = "sort")
-    public PagingModel showSort(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "sortway", required = false) String sortway) {
+    public PagingModel showSort(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,  @RequestParam(value = "sortway", required = false) String sortway) {
         PagingModel result = new PagingModel();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
-        if (name == null && sortway == null) {
+        if ( sortway == null || sortway.equals("")) {
             result.setListResult(parrotSpeciesService.findAll(pageable));
 
 
         } else {
 
+            result.setListResult(parrotSpeciesService.findAllByPriceAndName(sortway, pageable));
+            result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
+            result.setLimit(limit);
 
-            result.setListResult(parrotSpeciesService.findAllByPriceAndName(name, sortway, pageable));
+        }
+
+
+        return result;
+    }
+    
+      @GetMapping(value = "search")
+    public PagingModel showSearch(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,  @RequestParam(value = "name", required = false) String name) {
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if ( name == null || name.equals("")) {
+            result.setListResult(parrotSpeciesService.findAll(pageable));
+
+        } else {
+            result.setListResult(parrotSpeciesService.findAllByName(name, pageable));
             result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
             result.setLimit(limit);
 

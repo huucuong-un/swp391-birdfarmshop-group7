@@ -27,6 +27,6 @@ public class FeedbackDTO extends BaseDTO {
 
     private Integer userId;
 
-    private Integer speciesId;
+    private Integer colorId;
 
 }

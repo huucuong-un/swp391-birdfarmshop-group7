@@ -1,9 +1,9 @@
 // import 'bootstrap/dist/css/bootstrap.min.css
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faMagnifyingGlass, faCircleXmark, faSolid } from '@fortawesome/free-solid-svg-icons';
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
@@ -11,10 +11,30 @@ import SortSpace from '../SortSpace/SortSpace';
 
 import { useState, useEffect } from 'react';
 
-import { Tooltip } from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    Button,
+    Checkbox,
+    Menu,
+    MenuButton,
+    MenuDivider,
+    MenuItem,
+    MenuList,
+    Text,
+    Tooltip,
+} from '@chakra-ui/react';
 
 import styles from '~/Components/ParrotList/ParrotList.module.scss';
 import classNames from 'classnames/bind';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
+import number1 from '~/Assets/image/NumberComparison/number-v4-1.png';
+import number2 from '~/Assets/image/NumberComparison/number-2.png';
+import number3 from '~/Assets/image/NumberComparison/number-3.png';
+import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 
 const cx = classNames.bind(styles);
 
@@ -55,6 +75,7 @@ function ParrotList(props) {
     const [countParrot, setCountParrot] = useState(null);
     const [selectedColorId, setSelectedColorId] = useState({});
     const [count, setCount] = useState(0);
+    const navigate = useNavigate();
     const [pagination, setPagination] = useState({
         page: 1,
         limit: 12,
@@ -88,6 +109,7 @@ function ParrotList(props) {
     }, [props.sortWay]);
 
     // console.log(combineData);
+    const [selectedComparisonProduct, setSelectedComparisonProduct] = useState([]);
 
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
@@ -101,6 +123,60 @@ function ParrotList(props) {
         setSelectedColorId(colorId);
     };
 
+    const handleAddToCompareProducts = (parrot) => {
+        if (selectedComparisonProduct.length >= 0) {
+            let compareSection = document.getElementById('compare-section-id');
+            compareSection.style.display = 'block';
+        }
+        setSelectedComparisonProduct((prevProducts) => {
+            const isParrotAlreadySelected = prevProducts.some((p) => p.id === parrot.id);
+
+            if (isParrotAlreadySelected) {
+                return prevProducts.filter((p) => p.id !== parrot.id);
+            } else {
+                if (selectedComparisonProduct.length === 3) {
+                    return;
+                }
+                return [...prevProducts, parrot];
+            }
+        });
+    };
+
+    const handleRemoveComparisonProduct = (parrot) => {
+        setSelectedComparisonProduct((prevProducts) => {
+            return prevProducts.filter((p) => p.id !== parrot.id);
+        });
+    };
+
+    const handleCancelComparison = () => {
+        let compareSection = document.getElementById('compare-section-id');
+        compareSection.style.display = 'none';
+        setSelectedComparisonProduct([]);
+    };
+
+    useEffect(() => {
+        // console.log(selectedComparisonProduct);
+        if (selectedComparisonProduct.length === 0) {
+            let compareSection = document.getElementById('compare-section-id');
+            compareSection.style.display = 'none';
+        }
+    }, [selectedComparisonProduct]);
+
+    const handleQuantityIncrease = (parrotId) => {
+        if (quantities[parrotId] < countParrot) {
+            setQuantities((prevQuantities) => ({
+                ...prevQuantities,
+                [parrotId]: (prevQuantities[parrotId] || 0) + 1, // Tăng quantity cho parrot cụ thể
+            }));
+        }
+    };
+
+    const handleQuantityDecrease = (parrotId) => {
+        setQuantities((prevQuantities) => ({
+            ...prevQuantities,
+            [parrotId]: Math.max((prevQuantities[parrotId] || 0) - 1, 1), // Giới hạn số lượng tối thiểu là 1
+        }));
+    };
     useEffect(() => {
         const getParrotsSpecies = async () => {
             try {
@@ -250,7 +326,9 @@ function ParrotList(props) {
         console.log(page);
         console.log(pagination);
     };
-
+    const dataCompareToPass = {
+        selectedComparisonProduct,
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner', 'row')}>
@@ -267,15 +345,24 @@ function ParrotList(props) {
                                     <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
                                         <img className={cx('img')} src={parrot.img} alt="parrot" />
                                     </Link>
-                                    <Link to="/payment" state={dataToPass}>
+                                    <Link to="">
                                         <Tooltip
                                             label="Check to compare"
                                             aria-label="A tooltip"
                                             fontSize="lg"
                                             placement="auto"
                                         >
-                                            <button className={cx('buy-btn')}>
-                                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                            <button
+                                                className={cx('buy-btn')}
+                                                onClick={() => {
+                                                    handleAddToCompareProducts(parrot);
+                                                }}
+                                            >
+                                                {selectedComparisonProduct.some((p) => p.id === parrot.id) ? (
+                                                    <FontAwesomeIcon icon={faCircleXmark} />
+                                                ) : (
+                                                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                                )}
                                             </button>
                                         </Tooltip>
                                     </Link>
@@ -344,6 +431,91 @@ function ParrotList(props) {
                             </div>
                         );
                     })}
+            </div>
+
+            <div className={cx('compare-section')} id="compare-section-id">
+                <Container className={cx('compare-container')}>
+                    <Row className={cx('compare-row')}>
+                        <Col className={cx('compare-col')}>
+                            <Text fontSize="4xl" as="b" textAlign={'left'}>
+                                COMPARE UP TO 3 PRODUCTS
+                            </Text>
+                        </Col>
+                        <Col xs={7} className={cx('compare-col', 'compare-col-product')}>
+                            <Menu>
+                                <Box className={cx('product-item')}>
+                                    <button
+                                        className={cx('product-item-cancel-button')}
+                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[0])}
+                                    >
+                                        x
+                                    </button>
+                                    {selectedComparisonProduct.length === 0 ? (
+                                        <Avatar size="2xl" src={number1} />
+                                    ) : (
+                                        <Avatar size="2xl" src={selectedComparisonProduct[0].img} />
+                                    )}
+                                </Box>
+                                <Box className={cx('product-item')}>
+                                    <button
+                                        className={cx('product-item-cancel-button')}
+                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[1])}
+                                    >
+                                        x
+                                    </button>
+                                    {selectedComparisonProduct.length < 2 ? (
+                                        <Avatar size="2xl" src={number2} />
+                                    ) : (
+                                        <Avatar size="2xl" src={selectedComparisonProduct[1].img} />
+                                    )}
+                                </Box>
+                                <Box className={cx('product-item')}>
+                                    <button
+                                        className={cx('product-item-cancel-button')}
+                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[2])}
+                                    >
+                                        x
+                                    </button>
+                                    {selectedComparisonProduct.length < 3 ? (
+                                        <Avatar size="2xl" src={number3} />
+                                    ) : (
+                                        <Avatar size="2xl" src={selectedComparisonProduct[2].img} />
+                                    )}
+                                </Box>
+                            </Menu>
+                        </Col>
+                        <Col className={cx('compare-col', 'compare-col-confirm')}>
+                            {selectedComparisonProduct.length > 1 ? (
+                                <Link
+                                    to={`/compare-products`}
+                                    state={dataCompareToPass}
+                                    class={cx('compare-button-confirm')}
+                                >
+                                    COMPARE SELECTION
+                                </Link>
+                            ) : (
+                                <Button
+                                    size="lg"
+                                    class={cx('compare-button-confirm')}
+                                    disabled={selectedComparisonProduct.length <= 1}
+                                    style={{
+                                        opacity: selectedComparisonProduct.length <= 1 ? '0.5' : '1',
+                                    }}
+                                >
+                                    COMPARE SELECTION
+                                </Button>
+                            )}
+
+                            <Button
+                                size="lg"
+                                class={cx('compare-button-cancel')}
+                                onClick={() => handleCancelComparison()}
+                            >
+                                CANCEL
+                            </Button>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
 
             <div className={cx('button-pagination')}>

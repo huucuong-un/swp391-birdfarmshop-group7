@@ -61,6 +61,7 @@ function ParrotList() {
 
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
+    const [totalParrotsInCart, setTotalParrotsInCart] = useState(0);
 
     const dataToPass = {
         selectedColor,
@@ -193,13 +194,21 @@ function ParrotList() {
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
         const existingItem = existingCart.find((item) => item.name === name && item.color === color);
+        let maxId = 0;
+        if (existingCart.length != 0) {
+            existingCart.forEach((item) => {
+                if (item.id > maxId) {
+                    maxId = item.id;
+                }
+            });
+        }
         if (existingItem) {
             // Nếu mục đã tồn tại, tăng số lượng lên 1
             existingItem.quantity += 1;
         } else {
             // Nếu mục chưa tồn tại, thêm nó vào danh sách
             existingCart.push({
-                id: count,
+                id: existingCart.length == 0 ? 0 : maxId + 1,
                 name,
                 img,
                 quantity: 1,
@@ -208,7 +217,7 @@ function ParrotList() {
                 colorID,
             });
 
-            setCount(count + 1);
+            // setTotalParrotsInCart((prevTotal) => prevTotal + 1);
         }
         // console.log(selectedColor);
         const newCart = [...existingCart];
@@ -239,7 +248,7 @@ function ParrotList() {
                     return (
                         <div className={cx('parrot-card', 'col-lg-3')} key={index}>
                             <div className={cx('parrot-img')}>
-                                <Link to={`/parrot-detail/${parrot.id}`} state={dataToPass}>
+                                <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
                                     <img className={cx('img')} src={parrot.img} alt="parrot" />
                                 </Link>
                                 <Link to="/payment" state={dataToPass}>

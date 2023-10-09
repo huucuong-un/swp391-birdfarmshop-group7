@@ -137,12 +137,12 @@ function CompareParrot() {
                     <Text
                         fontWeight={'600'}
                         ml={3}
+                        mb={0}
                         className={cx('back-to-list')}
                         onClick={() => {
                             navigate('/parrot-product');
                         }}
                     >
-                        {' '}
                         Back To Parrot List
                     </Text>
                 </Col>{' '}

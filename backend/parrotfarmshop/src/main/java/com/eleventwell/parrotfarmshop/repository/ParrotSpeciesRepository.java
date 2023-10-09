@@ -21,12 +21,14 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
     List<ParrotSpeciesEntity> findAllByNameLike(String name);
 
-    @Query("SELECT ps FROM ParrotSpeciesEntity ps WHERE (:name IS NULL OR ps.name LIKE %:name%)  " +
+    @Query("SELECT ps FROM ParrotSpeciesEntity ps " +
             "ORDER BY "+
-            "CASE WHEN :sortPrice = 'ASC'  THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc WHERE ps.id = psc.parrotSpecies.id) END ASC, " +
-            "CASE WHEN :sortPrice = 'DESC' THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc  WHERE ps.id = psc.parrotSpecies.id  ) END DESC "
+            "CASE WHEN :sortWay = 'PASC'  THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc WHERE ps.id = psc.parrotSpecies.id) END ASC, " +
+            "CASE WHEN :sortWay = 'PDESC' THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc  WHERE ps.id = psc.parrotSpecies.id  ) END DESC, "+
+            "CASE WHEN :sortWay = 'NAESC' THEN substring(ps.name,1,1) END ASC , "+
+            "CASE WHEN :sortWay = 'NDESC' THEN substring(ps.name,1,1) END DESC "
     )
-    List<ParrotSpeciesEntity> findAllByPriceAndName(@Param("name") String name,@Param("sortPrice") String sortPrice,Pageable pageable  );
+    List<ParrotSpeciesEntity> findAllByPriceAndName(@Param("sortWay") String sortWay,Pageable pageable  );
 
     List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
 

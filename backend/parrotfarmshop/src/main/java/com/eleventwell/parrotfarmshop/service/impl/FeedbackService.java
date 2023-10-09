@@ -53,9 +53,9 @@ newEntity.setParrotSpecies(parrotSpeciesRepository.findOneById(DTO.getSpeciesId(
 feedbackRepository.save(newEntity);
 return (FeedbackDTO) genericConverter.toDTO(newEntity, FeedbackDTO.class);
     }
-public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto){
+public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto,Pageable pageable){
         List<FeedbackDTO> listDTO = new ArrayList<>();
-        List<FeedbackEntity> listEntity = feedbackRepository.findAllByParrotSpeciesIdAndBelongToOrderByIdDesc(id,belongto);
+        List<FeedbackEntity> listEntity = feedbackRepository.findAllByParrotSpeciesIdAndBelongToOrderByIdDesc(id,belongto,pageable);
 
     for (FeedbackEntity entity:listEntity) {
         FeedbackDTO dto = (FeedbackDTO) genericConverter.toDTO(entity, FeedbackDTO.class);

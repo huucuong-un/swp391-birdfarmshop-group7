@@ -31,7 +31,10 @@ function ParrotDetail() {
     const [count, setCount] = useState(0);
 
     const [countParrot, setCountParrot] = useState('Check the color to see ');
-
+    const feedback = {
+        id: id,
+        type: 'parrot',
+    };
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
@@ -358,7 +361,7 @@ function ParrotDetail() {
                     </div>
                 );
             })}
-            <Feedback></Feedback>
+            <Feedback feedbackType={feedback}></Feedback>
         </div>
     );
 }

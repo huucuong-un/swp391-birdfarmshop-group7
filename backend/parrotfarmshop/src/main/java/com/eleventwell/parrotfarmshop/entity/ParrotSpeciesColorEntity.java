@@ -59,4 +59,7 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
     @OneToMany(mappedBy = "parrotSpeciesColor")
     private List<ParrotEntity> parrots = new ArrayList<>();
 
+    @OneToMany(mappedBy = "parrotSpeciesColor")
+    private List<FeedbackEntity> feedbacks = new ArrayList<>();
+
 }

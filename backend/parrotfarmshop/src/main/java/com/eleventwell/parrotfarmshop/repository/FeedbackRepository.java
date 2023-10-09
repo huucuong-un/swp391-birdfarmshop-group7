@@ -3,6 +3,8 @@ package com.eleventwell.parrotfarmshop.repository;
 import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +13,12 @@ import java.util.List;
 public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
     FeedbackEntity findOneById(Long id);
 
-   List<FeedbackEntity> findAllByParrotSpeciesIdAndBelongToOrderByIdDesc(Long id, String belongTo, Pageable pageable);
 
-  List<FeedbackEntity> findAllByOrderByIdDesc();
+  @Query("SELECT u FROM FeedbackEntity u WHERE u.parrotSpeciesColor.id = :id order by u.id DESC ")
+   List<FeedbackEntity> findAllByParrotSpeciesColorIdAndBelongToOrderByIdDesc(@Param("id")Long id, Pageable pageable);
+
+   @Query("SELECT u FROM FeedbackEntity u where u.parrotSpeciesColor.parrotSpecies.id = :id AND u.belongTo = :belongTo order by u.id DESC ")
+    List<FeedbackEntity> findbyspeciescoloridAndType(@Param("id") Long id,@Param("belongTo") String belongTo, Pageable pageable);
+
+    List<FeedbackEntity> findAllByOrderByIdDesc();
 }

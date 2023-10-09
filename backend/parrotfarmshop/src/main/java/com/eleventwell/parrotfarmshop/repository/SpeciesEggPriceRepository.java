@@ -9,4 +9,6 @@ public interface SpeciesEggPriceRepository extends JpaRepository<SpeciesEggPrice
 
     SpeciesEggPriceEntity findOneById(Long id);
     List<SpeciesEggPriceEntity> findAllByOrderByIdDesc();
+    List<SpeciesEggPriceEntity> findAllByParrotSpeciesIdAndStatusTrueOrderById(Long id);
+
 }

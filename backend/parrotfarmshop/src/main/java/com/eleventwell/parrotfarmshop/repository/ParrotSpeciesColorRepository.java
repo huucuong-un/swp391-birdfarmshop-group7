@@ -16,10 +16,11 @@ import java.util.List;
 public interface ParrotSpeciesColorRepository extends JpaRepository<ParrotSpeciesColorEntity, Long>{
     
        	ParrotSpeciesColorEntity findOneById(long id);
-
 		   List<ParrotSpeciesColorEntity> findAllByOrderByIdDesc();
 
 		List<ParrotSpeciesColorEntity> findAllByParrotSpeciesIdOrderByIdDesc(Long parrotSpecies_id);
+
+
 
     
 }

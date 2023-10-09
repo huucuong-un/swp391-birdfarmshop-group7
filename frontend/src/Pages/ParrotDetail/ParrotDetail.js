@@ -29,9 +29,13 @@ function ParrotDetail() {
     const [combineData, setCombineData] = useState([]);
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [count, setCount] = useState(0);
+    const [totalParrotsInCart, setTotalParrotsInCart] = useState(0);
 
     const [countParrot, setCountParrot] = useState('Check the color to see ');
-
+    const feedback = {
+        id: id,
+        type: 'parrot',
+    };
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
@@ -164,13 +168,21 @@ function ParrotDetail() {
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
         const existingItem = existingCart.find((item) => item.name === name && item.color === color);
+        let maxId = 0;
+        if (existingCart.length != 0) {
+            existingCart.forEach((item) => {
+                if (item.id > maxId) {
+                    maxId = item.id;
+                }
+            });
+        }
         if (existingItem) {
             // Nếu mục đã tồn tại, tăng số lượng lên 1
             existingItem.quantity += 1;
         } else {
             // Nếu mục chưa tồn tại, thêm nó vào danh sách
             existingCart.push({
-                id,
+                id: existingCart.length == 0 ? 0 : maxId + 1,
                 name,
                 img,
                 quantity,
@@ -179,7 +191,7 @@ function ParrotDetail() {
                 colorID,
             });
 
-            setCount((prev) => prev + 1);
+            // setTotalParrotsInCart((prevTotal) => prevTotal + 1);
         }
         const newCart = [...existingCart];
         localStorage.setItem('parrot', JSON.stringify(newCart));
@@ -358,7 +370,7 @@ function ParrotDetail() {
                     </div>
                 );
             })}
-            <Feedback></Feedback>
+            <Feedback feedbackType={feedback}></Feedback>
         </div>
     );
 }

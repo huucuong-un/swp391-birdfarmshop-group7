@@ -31,13 +31,14 @@ import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
     { path: '/parrot-product', component: ParrotProduct },
     { path: '/nest', component: Nest },
     { path: '/payment', component: Payment },
-    { path: '/parrot-detail/:id', component: ParrotDetail },
+    { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
     { path: '/order-history', component: OrderHistory },
     { path: '/paid-success', component: PaidSuccess },
     { path: '/shopping-cart', component: ShoppingCart },

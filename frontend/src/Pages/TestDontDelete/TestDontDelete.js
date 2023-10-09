@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import { useToast } from '@chakra-ui/toast';
-import ParrotAPI from '~/Api/ParrotAPI';
+import { Switch } from '@chakra-ui/react';
 
 function App() {
     const [species, setSpecies] = useState([]);
     const [colorInputs, setColorInputs] = useState([]);
     const [combineData, setCombineData] = useState([]);
+    const initialCombineData = combineData.map((data) => ({
+        ...data,
+        availabilityStatus: data.availabilityStatus,
+    }));
     const [loading, setLoading] = useState(false);
     const [colorExists, setColorExists] = useState(false); // State to track color existence
     const [img, setImg] = useState('');
@@ -144,7 +148,121 @@ function App() {
         }
         return false;
     }
+    const [specieStatus, setSpecieStatus] = useState([]);
+    // const toggleSpeciesStatus = (speciesID) => {
+    //     const updatedSpecies = species.map((item) => {
+    //         if (item.id === speciesID) {
+    //             return {
+    //                 ...item,
+    //                 availabilityStatus: !item.availabilityStatus,
+    //             };
+    //         }
+    //         return item;
+    //     });
+    //     setSpecies(updatedSpecies);
+    // };
+    // const toggleSpeciesStatus = async (speciesID) => {
+    //     try {
+    //         // Make a PUT or PATCH request to update the species status
 
+    //         const response = await ParrotSpeciesAPI.update(speciesID), {
+    //             availabilityStatus: !species.find((item) => item.id === speciesID).availabilityStatus,
+    //         });
+    //         if (response.status === 200) {
+    //             console.log(`Species status updated successfully for ID ${speciesID}!!`);
+    //             // Update the species array with the new status
+    //             const updatedSpecies = species.map((item) => {
+    //                 if (item.id === speciesID) {
+    //                     return {
+    //                         ...item,
+    //                         availabilityStatus: !item.availabilityStatus,
+    //                     };
+    //                 }
+    //                 return item;
+    //             });
+    //             setSpecies(updatedSpecies);
+    //         } else {
+    //             console.error(`PUT request failed with status code - species: ${response.status}`);
+    //         }
+    //     } catch (error) {
+    //         console.error(`Error updating species status for ID ${speciesID}: ${error}`);
+    //     }
+    // };
+    const toggleSpeciesStatus = async (speciesID) => {
+        try {
+            // Find the species objects to update by their ID
+            const speciesWithID = combineData.filter((species) => species.id === speciesID);
+            console.log(speciesWithID);
+            if (speciesWithID.length > 0) {
+                // Calculate the new status
+                const newStatus = !speciesWithID[0].availabilityStatus;
+                const firstName = speciesWithID.name[0]; // Get the first name
+                const firstQuantity = speciesWithID.quantity[0]; // Get the first quantity
+                const firstNestQuantity = speciesWithID.nesQuantity[0]; // Get the first nesQuantity
+                const data = {};
+                // Make a PUT or PATCH request to update the species status
+                const response = await ParrotSpeciesAPI.update(
+                    {
+                        id: speciesID,
+                    },
+                    {
+                        name: firstName,
+                        quantity: firstQuantity,
+                        nesQuantity: firstNestQuantity,
+                        availabilityStatus: newStatus,
+                    },
+                );
+
+                if (response.status === 200) {
+                    console.log(`Species status updated successfully for ID ${speciesID}!!`);
+                    // Update the species array with the new status
+                    const updatedSpecies = species.map((item) => {
+                        if (item.id === speciesID) {
+                            return {
+                                ...item,
+                                availabilityStatus: newStatus,
+                            };
+                        }
+                        return item;
+                    });
+                    setSpecies(updatedSpecies);
+                    // Update the status in the local data as well
+                    const updatedCombineData = combineData.map((item) => {
+                        if (item.id === speciesID) {
+                            return {
+                                ...item,
+                                availabilityStatus: newStatus,
+                            };
+                        }
+                        return item;
+                    });
+                    setCombineData(updatedCombineData);
+                } else {
+                    console.error(`PUT request failed with status code - species: ${response.status}`);
+                }
+            } else {
+                console.error(`Species with ID ${speciesID} not found.`);
+            }
+        } catch (error) {
+            console.error(`Error updating species status for ID ${speciesID}: ${error}`);
+        }
+    };
+
+    // Rest of your code for color handling...
+
+    const handleSpecieStatus = (data) => {
+        // Update the availabilityStatus for the clicked species
+        const updatedCombineData = combineData.map((item) => {
+            if (item.id === data.id) {
+                return {
+                    ...item,
+                    availabilityStatus: !data.availabilityStatus,
+                };
+            }
+            return item;
+        });
+        setCombineData(updatedCombineData);
+    };
     console.log('is colors existed: ' + isExisted(1, 'blue'));
     console.log(colorExists);
     console.log(combineData);
@@ -154,12 +272,16 @@ function App() {
             {combineData.map((data, index) => (
                 <ul key={index}>
                     <li>
-                        Id: {data.id} | {data.name}
-                        {'| colors: '}
+                        Id: {data.id} | {data.name} | Status: {data.availabilityStatus.toString()}
+                        <Switch
+                            onChange={() => toggleSpeciesStatus(data.id)} // Toggle the species status
+                            size="lg"
+                            isChecked={data.availabilityStatus}
+                        />
+                        {data.availabilityStatus ? <p>Available</p> : <p>Unavailable</p>}
                         {data.colors.map((item, colorIndex) => (
                             <span key={colorIndex}>
-                                {' '}
-                                {item.color} | Price: {item.price}
+                                {' colors: '} {item.color} | Price: {item.price} |
                             </span>
                         ))}
                     </li>

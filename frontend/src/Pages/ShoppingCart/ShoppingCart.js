@@ -3,30 +3,75 @@ import { Button, ButtonGroup } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/ShoppingCart/ShoppingCart.module.scss';
+import ParrotAPI from '~/Api/ParrotAPI';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { logDOM } from '@testing-library/react';
 
 const cx = classNames.bind(styles);
 
 function ShoppingCart() {
     const [carts, setCarts] = useState([]);
     const [choosenCart, setChoosenCart] = useState([]);
+    const [updatedCarts, setUpdatedCarts] = useState([]);
+    const [checkboxState, setCheckboxState] = useState({});
 
     useEffect(() => {
-        const dataJSON = localStorage.getItem('parrot');
-        const data = JSON.parse(dataJSON);
-        setCarts(data);
+        const getDataFromLocalStorage = () => {
+            const dataJSON = localStorage.getItem('parrot');
+            const data = JSON.parse(dataJSON);
+            if (data) {
+                setCarts(data);
+            }
+        };
+
+        getDataFromLocalStorage();
     }, []);
 
+    useEffect(() => {
+        if (carts.length > 0) {
+            const getCountAvailableParrotId = async () => {
+                try {
+                    const tempUpdatedCarts = [];
+                    for (const item of carts) {
+                        const availableParrot = await ParrotAPI.countAvailableParrotId(item.colorID);
+                        const updatedCartItem = {
+                            ...item,
+                            available: availableParrot,
+                        };
+                        tempUpdatedCarts.push(updatedCartItem);
+                    }
+                    setUpdatedCarts(tempUpdatedCarts);
+                    console.log(updatedCarts);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            getCountAvailableParrotId();
+        }
+    }, [carts]);
+
+    // useEffect(() => {
+    //     setCarts(updatedCarts);
+    // }, [updatedCarts]);
+
     const handleIncreaseQuantity = (index) => {
-        const updatedCarts = [...carts];
-        updatedCarts[index].quantity += 1;
-        setCarts(updatedCarts);
-        // Cập nhật local storage
-        updateLocalStorage(updatedCarts);
+        const temUpdatedCarts = [...updatedCarts];
+        const cartItem = temUpdatedCarts[index];
+        console.log(cartItem);
+        if (cartItem.quantity < cartItem.available) {
+            cartItem.quantity += 1;
+            setCarts(updatedCarts);
+            // Cập nhật local storage
+            updateLocalStorage(updatedCarts);
+        } else {
+            // Hiển thị thông báo hoặc thực hiện hành động khác khi quantity vượt quá available
+            console.log('Số lượng đã đạt tối đa');
+        }
     };
 
     // Hàm giảm số lượng
@@ -83,35 +128,98 @@ function ShoppingCart() {
         totalPrice = 0;
     }
 
+    // const handleCheckBoxOnClick = (cartItem) => {
+    //     const checkbox = document.getElementById(`checkbox-${cartItem.id}`);
+    //     if (checkbox) {
+    //         if (checkbox.checked) {
+    //             // Nếu checkbox đã được kiểm tra, thêm dữ liệu vào choosenCart
+    //             setChoosenCart([...choosenCart, cartItem]);
+    //         } else {
+    //             // Nếu checkbox đã bị uncheck, loại bỏ dữ liệu khỏi choosenCart
+    //             const updatedChoosenCart = choosenCart.filter((item) => item.id !== cartItem.id);
+    //             setChoosenCart(updatedChoosenCart);
+    //         }
+    //         console.log(choosenCart);
+    //     }
+
+    //     console.log(carts);
+    // };
+
     const handleCheckBoxOnClick = (cartItem) => {
-        const checkbox = document.getElementById(`checkbox-${cartItem.id}`);
-        if (checkbox) {
-            if (checkbox.checked) {
-                // Nếu checkbox đã được kiểm tra, thêm dữ liệu vào choosenCart
-                setChoosenCart([...choosenCart, cartItem]);
-            } else {
-                // Nếu checkbox đã bị uncheck, loại bỏ dữ liệu khỏi choosenCart
-                const updatedChoosenCart = choosenCart.filter((item) => item.id !== cartItem.id);
-                setChoosenCart(updatedChoosenCart);
-            }
+        const updatedCheckboxState = { ...checkboxState };
+        updatedCheckboxState[cartItem.id] = !updatedCheckboxState[cartItem.id];
+        setCheckboxState(updatedCheckboxState);
+
+        if (updatedCheckboxState[cartItem.id]) {
+            // Nếu checkbox đã được đánh dấu, thêm dữ liệu vào choosenCart
+            setChoosenCart([...choosenCart, cartItem]);
+        } else {
+            // Nếu checkbox đã bị bỏ đánh dấu, loại bỏ dữ liệu khỏi choosenCart
+            const updatedChoosenCart = choosenCart.filter((item) => item.id !== cartItem.id);
+            setChoosenCart(updatedChoosenCart);
         }
 
-        console.log(carts);
+        console.log(choosenCart);
     };
 
     useEffect(() => {
         console.log(choosenCart);
     }, [choosenCart]);
 
-    const handleRemoveCart = (index) => {
+    // const handleRemoveCart = async (index) => {
+    //     // Sử dụng filter để tạo một mảng mới loại bỏ đối tượng tại chỉ mục index
+    //     const temUpdatedCarts = carts.filter((_, i) => i !== index);
+
+    //     // Cập nhật mảng carts với mảng mới đã loại bỏ đối tượng
+    //     setUpdatedCarts(temUpdatedCarts);
+
+    //     // Cập nhật Local Storage để đồng bộ hóa dữ liệu
+    //     updateLocalStorage(temUpdatedCarts);
+
+    //     // Tính toán lại thông tin available cho các cartItem còn lại
+    //     const updatedCartsWithAvailable = temUpdatedCarts.map((cartItem) => {
+    //         // Thực hiện logic để cập nhật available cho cartItem ở đây
+    //         const availableParrot = ParrotAPI.countAvailableParrotId(cartItem.colorID);
+    //         return {
+    //             ...cartItem,
+    //             available: availableParrot,
+    //         };
+    //     });
+
+    const handleRemoveCart = async (index, id) => {
+        // const checkbox = document.getElementById(`checkbox-${id}`);
+
+        const updatedChoosenCart = choosenCart.filter((item) => item.id !== id);
+        setChoosenCart(updatedChoosenCart);
         // Sử dụng filter để tạo một mảng mới loại bỏ đối tượng tại chỉ mục index
-        const updatedCarts = carts.filter((_, i) => i !== index);
+        const temUpdatedCarts = carts.filter((_, i) => i !== index);
 
         // Cập nhật mảng carts với mảng mới đã loại bỏ đối tượng
-        setCarts(updatedCarts);
+        setUpdatedCarts(temUpdatedCarts);
 
         // Cập nhật Local Storage để đồng bộ hóa dữ liệu
-        updateLocalStorage(updatedCarts);
+        updateLocalStorage(temUpdatedCarts);
+
+        const promises = temUpdatedCarts.map((cartItem) => ParrotAPI.countAvailableParrotId(cartItem.colorID));
+
+        // Tính toán lại thông tin available cho các cartItem còn lại
+        try {
+            // Chờ cho tất cả các Promise được giải quyết
+            const availableParrots = await Promise.all(promises);
+
+            // Tạo mảng mới đã cập nhật available
+            const updatedCartsWithAvailable = temUpdatedCarts.map((cartItem, i) => ({
+                ...cartItem,
+                available: availableParrots[i],
+            }));
+
+            // Cập nhật state của carts với mảng mới đã cập nhật available
+            setCarts(updatedCartsWithAvailable);
+        } catch (error) {
+            console.error(error);
+        }
+
+        // Cập nhật thông tin available cho tất cả các cartItem còn lại
     };
 
     return (
@@ -128,28 +236,36 @@ function ShoppingCart() {
                             <p>{carts ? carts.length : 0} items</p>
                         </div>
                     </div>
-                    {carts &&
-                        carts.map((cartItem, index) => (
+                    {updatedCarts &&
+                        updatedCarts.map((cartItem, index) => (
                             <div key={index} className={cx('carft-left-item')}>
-                                <input
-                                    id={`checkbox-${index}`}
-                                    className={cx('carft-left-item-checkbox')}
-                                    type="checkbox"
-                                    onChange={() =>
-                                        handleCheckBoxOnClick({
-                                            id: index,
-                                            img: cartItem.img,
-                                            name: cartItem.name,
-                                            quantity: cartItem.quantity,
-                                            price: cartItem.price,
-                                            color: cartItem.color,
-                                            colorID: cartItem.colorID,
-                                        })
-                                    }
-                                />
+                                <div className={cx('carft-left-item-checkbox-container')}>
+                                    {cartItem.available === 0 || cartItem.quantity > cartItem.available ? (
+                                        <input type="checkbox" disabled className={cx('carft-left-item-checkbox')} />
+                                    ) : (
+                                        <input
+                                            id={`checkbox-${cartItem.id}`}
+                                            className={cx('carft-left-item-checkbox')}
+                                            type="checkbox"
+                                            checked={checkboxState[cartItem.id]}
+                                            onChange={() =>
+                                                handleCheckBoxOnClick({
+                                                    id: index,
+                                                    img: cartItem.img,
+                                                    name: cartItem.name,
+                                                    quantity: cartItem.quantity,
+                                                    price: cartItem.price,
+                                                    color: cartItem.color,
+                                                    colorID: cartItem.colorID,
+                                                })
+                                            }
+                                        />
+                                    )}
+                                </div>
                                 <div className={cx('cart-left-item-image')}>
                                     <img src={cartItem.img} alt="cart-left-item-img" />
                                 </div>
+
                                 <div className={cx('cart-left-item-info')}>
                                     <div className={cx('cart-left-item-info-name')}>
                                         <p>{cartItem.name}</p>
@@ -164,9 +280,14 @@ function ShoppingCart() {
                                     <p>$ {cartItem.price}</p>
                                 </div>
                                 <div className={cx('cart-left-item-quantity-btn')}>
-                                    <button onClick={() => handleDecreaseQuantity(index)}>-</button>
-                                    <input type="number" value={cartItem.quantity} />
-                                    <button onClick={() => handleIncreaseQuantity(index)}>+</button>
+                                    <div className={cx('cart-left-item-quantity-btn-input')}>
+                                        <button onClick={() => handleDecreaseQuantity(index)}>-</button>
+                                        <input type="number" value={cartItem.quantity} />
+                                        <button onClick={() => handleIncreaseQuantity(index)}>+</button>
+                                    </div>
+                                    <div className={cx('cart-left-item-available')}>
+                                        <p>{cartItem.available} Available</p>
+                                    </div>
                                 </div>
 
                                 <div className={cx('cart-left-item-price-with-quantity')}>
@@ -174,7 +295,7 @@ function ShoppingCart() {
                                 </div>
 
                                 <div className={cx('carft-left-item-remove-btn')}>
-                                    <button onClick={() => handleRemoveCart(index)}>x</button>
+                                    <button onClick={() => handleRemoveCart(index, cartItem.id)}>x</button>
                                 </div>
                             </div>
                         ))}

@@ -41,6 +41,7 @@ function UpdateDeliveryInfo(props) {
                     address: newDeliveryInfo.address,
                     status: newDeliveryInfo.status,
                     userId: user.userId,
+                    pickingStatus: newDeliveryInfo.pickingStatus,
                 },
                 config,
             );
@@ -147,7 +148,7 @@ function UpdateDeliveryInfo(props) {
                                         // window.location.reload();
                                     }}
                                     isLoading={loading}
-                                    backgroundColor={'#f57c7c'}
+                                    backgroundColor={'#444'}
                                 >
                                     Save Change
                                 </Button>

@@ -6,11 +6,6 @@ const OrderAPI = {
         return axiosClinet.get(url, { params });
     },
 
-    get(id) {
-        const url = `/parrot-species/find-one-species-by-id/${id}`;
-        return axiosClinet.get(url);
-    }, //chua co
-
     findAllByUserId() {
         const url = `/order/findAllByUserId/1`;
         return axiosClinet.get(url);
@@ -24,16 +19,6 @@ const OrderAPI = {
     add(data) {
         const url = `/order/cart`;
         return axiosClinet.post(url, data);
-    },
-
-    update(data) {
-        const url = `/parrot-species/${data.id}`;
-        return axiosClinet.put(url, data);
-    },
-
-    remove(id) {
-        const url = `/parrot-species/${id}`;
-        return axiosClinet.delete(url);
     },
 };
 

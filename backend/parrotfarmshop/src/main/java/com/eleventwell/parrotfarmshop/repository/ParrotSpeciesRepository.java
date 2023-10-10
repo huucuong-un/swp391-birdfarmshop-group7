@@ -25,11 +25,15 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
             "ORDER BY "+
             "CASE WHEN :sortWay = 'PASC'  THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc WHERE ps.id = psc.parrotSpecies.id) END ASC, " +
             "CASE WHEN :sortWay = 'PDESC' THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc  WHERE ps.id = psc.parrotSpecies.id  ) END DESC, "+
-            "CASE WHEN :sortWay = 'NAESC' THEN substring(ps.name,1,1) END ASC , "+
+            "CASE WHEN :sortWay = 'NASC' THEN substring(ps.name,1,1) END ASC , "+
             "CASE WHEN :sortWay = 'NDESC' THEN substring(ps.name,1,1) END DESC "
     )
     List<ParrotSpeciesEntity> findAllByPriceAndName(@Param("sortWay") String sortWay,Pageable pageable  );
 
+    
+    @Query("SELECT ps FROM ParrotSpeciesEntity ps WHERE ps.name LIKE CONCAT('%', :name, '%') ORDER BY ps.name")
+     List<ParrotSpeciesEntity> findAllByName(@Param("name") String name,Pageable pageable );
+    
     List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
 
 

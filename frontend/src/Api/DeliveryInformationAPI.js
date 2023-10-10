@@ -12,15 +12,17 @@ const DeliveryInformation = {
     },
 
     updateDeliveryInfo(data, config) {
-        const url = `/delivery-information/${data.id}`;
+        const url = `/delivery-information`;
         return axiosClient.put(
             url,
             {
+                id: data.id,
                 name: data.name,
                 phoneNumber: data.phoneNumber,
                 address: data.address,
                 status: data.status,
                 userId: data.userId,
+                pickingStatus: data.pickingStatus,
             },
             config,
         );
@@ -31,9 +33,9 @@ const DeliveryInformation = {
         return axiosClient.get(url, config);
     },
 
-    updatePickingStatus(customerid, data, config) {
-        const url = `/delivery-information/update-picking-status/${customerid}`;
-        return axiosClient.put(url, data, config);
+    updatePickingStatus(data) {
+        const url = `/delivery-information/update-picking-status`;
+        return axiosClient.put(url, data);
     },
 };
 

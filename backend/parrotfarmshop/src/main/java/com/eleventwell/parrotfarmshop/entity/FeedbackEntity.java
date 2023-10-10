@@ -2,6 +2,7 @@ package com.eleventwell.parrotfarmshop.entity;
 
 //
 //feedbackId, userID, feedbackContent, feedbackRating, parrotSpeciesID,createdAt, createdBy
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -47,8 +48,8 @@ public class FeedbackEntity extends BaseEntity {
     private UserEntity user;
 	
 	@ManyToOne
-    @JoinColumn(name = "species_id")
-    private ParrotSpeciesEntity parrotSpecies;
+    @JoinColumn(name = "color_id")
+    private ParrotSpeciesColorEntity parrotSpeciesColor;
 	
 	
 	

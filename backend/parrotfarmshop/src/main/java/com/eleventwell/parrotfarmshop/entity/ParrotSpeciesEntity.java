@@ -80,8 +80,6 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@OneToMany(mappedBy = "parrotSpecies")
 	private List<SpeciesEggPriceEntity> speciesEggPrices = new ArrayList<>();
 
-	@OneToMany(mappedBy = "parrotSpecies")
-	private List<FeedbackEntity> feedbacks = new ArrayList<>();
 
 
 //	@NotBlank

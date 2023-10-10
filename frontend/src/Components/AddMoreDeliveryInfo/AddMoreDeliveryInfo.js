@@ -114,6 +114,7 @@ function AddMoreDeliveryInfo(props) {
                                     variant="filled"
                                     placeholder="Contact name"
                                     required
+                                    backgroundColor={'white'}
                                 />
                             </Td>
                         </Tr>
@@ -132,6 +133,7 @@ function AddMoreDeliveryInfo(props) {
                                     variant="filled"
                                     placeholder="Phone number"
                                     required
+                                    backgroundColor={'white'}
                                 />
                             </Td>
                         </Tr>
@@ -150,6 +152,7 @@ function AddMoreDeliveryInfo(props) {
                                     variant="filled"
                                     placeholder="Address"
                                     required
+                                    backgroundColor={'white'}
                                 />
                             </Td>
                         </Tr>
@@ -167,7 +170,7 @@ function AddMoreDeliveryInfo(props) {
                                     margin="8px"
                                     onClick={addNewDeliveryInfo}
                                     isLoading={loading}
-                                    backgroundColor={'#f57c7c'}
+                                    backgroundColor={'#444'}
                                 >
                                     Add
                                 </Button>

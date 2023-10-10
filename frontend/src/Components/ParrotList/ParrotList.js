@@ -7,6 +7,7 @@ import { faHeart, faMagnifyingGlass, faCircleXmark, faSolid } from '@fortawesome
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
+import SortSpace from '../SortSpace/SortSpace';
 
 import { useState, useEffect } from 'react';
 
@@ -64,7 +65,7 @@ const datas = () => {
 
 console.log(datas);
 
-function ParrotList() {
+function ParrotList(props) {
     const [parrotSpecies, setParrotSpecies] = useState([]);
 
     const [combineData, setCombineData] = useState([]);
@@ -78,10 +79,15 @@ function ParrotList() {
         page: 1,
         limit: 12,
     });
+    const [sortWithPagination, setSortWithPagination] = useState({
+        page: 1,
+        limit: 12,
+        sortway: '',
+    });
 
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
-    const [totalParrotsInCart, setTotalParrotsInCart] = useState(0);
+    const [sortType, setSortType] = useState('');
 
     const dataToPass = {
         selectedColor,
@@ -89,6 +95,19 @@ function ParrotList() {
         selectedColorId,
     };
 
+    useEffect(() => {
+        console.log(props.search);
+    }, [props.search]);
+
+    useEffect(() => {
+        setSortWithPagination({
+            page: 1,
+            limit: 12,
+            sortway: props.sortWay,
+        });
+    }, [props.sortWay]);
+
+    // console.log(combineData);
     const [selectedComparisonProduct, setSelectedComparisonProduct] = useState([]);
 
     const handleColorSelection = async (parrotId, color, price, colorId) => {
@@ -158,7 +177,6 @@ function ParrotList() {
             [parrotId]: Math.max((prevQuantities[parrotId] || 0) - 1, 1), // Giới hạn số lượng tối thiểu là 1
         }));
     };
-
     useEffect(() => {
         const getParrotsSpecies = async () => {
             try {
@@ -173,11 +191,26 @@ function ParrotList() {
                 console.error(error);
             }
         };
-
-        // Gọi hàm getParrots khi component được mount
-
         getParrotsSpecies();
     }, [pagination]);
+
+    useEffect(() => {
+        const getSortParrotSpecies = async () => {
+            try {
+                const params = {
+                    page: 1,
+                    limit: 12,
+                    sortway: 'NDESC',
+                };
+                const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
+                console.log(sortList.listResult);
+                setParrotSpecies(sortList.listResult);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getSortParrotSpecies();
+    }, [sortWithPagination]);
 
     useEffect(() => {
         const getCountAvailableParrotId = async () => {
@@ -205,19 +238,6 @@ function ParrotList() {
                 }
             }
 
-            // const initialSelectedColor = {};
-            // const maxColorId = Math.max(...data.flatMap((parrot) => parrot.colors.map((color) => color.colorId)));
-            // data.forEach((parrot) => {
-            //     if (parrot.colors.length > 0) {
-            //         initialSelectedColor[parrot.id] = {
-            //             color: parrot.colors[0].color,
-            //             price: parrot.colors[0].price,
-            //         };
-            //     }
-            // });
-
-            // setSelectedColor(initialSelectedColor);
-
             const initialSelectedColor = {};
             data.forEach((parrot) => {
                 if (parrot.colors.length > 0) {
@@ -242,14 +262,15 @@ function ParrotList() {
                 initialQuantities[parrot.id] = 1;
             });
             setQuantities(initialQuantities);
-
-            // Khi tất cả các Promise đã hoàn thành, combineData sẽ chứa tất cả dữ liệu đã được lưu.
             setCombineData(data);
-            // console.log(combineData[1].colors[0].color);
         };
 
         fetchData();
     }, [parrotSpecies]);
+
+    useEffect(() => {
+        console.log(combineData);
+    }, [combineData]);
 
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
@@ -279,7 +300,6 @@ function ParrotList() {
 
             // setTotalParrotsInCart((prevTotal) => prevTotal + 1);
         }
-        // console.log(selectedColor);
         const newCart = [...existingCart];
         localStorage.setItem('parrot', JSON.stringify(newCart));
         // localStorage.clear();
@@ -296,6 +316,12 @@ function ParrotList() {
             limit: 12,
         });
 
+        setSortWithPagination({
+            page: newPage,
+            limit: 12,
+            sortway: sortWithPagination,
+        });
+
         setPage(newPage);
         console.log(page);
         console.log(pagination);
@@ -306,107 +332,105 @@ function ParrotList() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner', 'row')}>
-                {combineData.map((parrot, index) => {
-                    return (
-                        <div className={cx('parrot-card', 'col-lg-3')} key={index}>
-                            <div className={cx('parrot-img')}>
-                                <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
-                                    <img className={cx('img')} src={parrot.img} alt="parrot" />
-                                </Link>
-
-                                <Link to="">
-                                    <Tooltip
-                                        label="Check to compare"
-                                        aria-label="A tooltip"
-                                        fontSize="lg"
-                                        placement="auto"
-                                    >
-                                        <button
-                                            className={cx('buy-btn')}
-                                            onClick={() => {
-                                                handleAddToCompareProducts(parrot);
-                                            }}
+                {combineData
+                    .filter((parrot) => {
+                        return props.search.toLowerCase() === ''
+                            ? parrot
+                            : parrot.name.toLowerCase().includes(props.search);
+                    })
+                    .map((parrot, index) => {
+                        return (
+                            <div className={cx('parrot-card', 'col-lg-3')} key={index}>
+                                <div className={cx('parrot-img')}>
+                                    <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
+                                        <img className={cx('img')} src={parrot.img} alt="parrot" />
+                                    </Link>
+                                    <Link to="">
+                                        <Tooltip
+                                            label="Check to compare"
+                                            aria-label="A tooltip"
+                                            fontSize="lg"
+                                            placement="auto"
                                         >
-                                            {selectedComparisonProduct.some((p) => p.id === parrot.id) ? (
-                                                <FontAwesomeIcon icon={faCircleXmark} />
-                                            ) : (
-                                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                                            )}
-                                        </button>
-                                    </Tooltip>
-                                </Link>
-
-                                <Link to="">
-                                    <Tooltip label="Add to cart" aria-label="A tooltip" fontSize="lg" placement="auto">
-                                        {/* <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} /> */}
-
-                                        <button
-                                            className={cx('cart-btn')}
-                                            onClick={() =>
-                                                handleAddToCart({
-                                                    id: count,
-                                                    name: parrot.name,
-                                                    img: parrot.img,
-                                                    quantity: 1,
-                                                    price: selectedColor[parrot.id]?.price,
-                                                    color: selectedColor[parrot.id]?.color,
-                                                    colorID: selectedColor[parrot.id]?.colorId,
-                                                })
-                                            }
-                                        >
-                                            +
-                                        </button>
-                                    </Tooltip>
-                                </Link>
-                            </div>
-
-                            <div className={cx('parrot-info')}>
-                                <p className={cx('parrot-name')}>{parrot.name}</p>
-
-                                <div className={cx('parrot-color')}>
-                                    {parrot.colors.map((color, colorIndex) => (
-                                        <div className={cx('cuong')}>
                                             <button
-                                                key={colorIndex}
-                                                className={cx('parrot-color-item', {
-                                                    selected: color.color === selectedColor[parrot.id]?.color,
-                                                })}
-                                                onClick={() =>
-                                                    handleColorSelection(parrot.id, color.color, color.price, color.id)
-                                                }
-                                                style={{ backgroundColor: color.color }}
-                                            ></button>
-                                        </div>
-                                    ))}
-                                </div>
-                                {/* <div className={cx('quantity-input-container')}>
+                                                className={cx('buy-btn')}
+                                                onClick={() => {
+                                                    handleAddToCompareProducts(parrot);
+                                                }}
+                                            >
+                                                {selectedComparisonProduct.some((p) => p.id === parrot.id) ? (
+                                                    <FontAwesomeIcon icon={faCircleXmark} />
+                                                ) : (
+                                                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                                )}
+                                            </button>
+                                        </Tooltip>
+                                    </Link>
+                                    <Link to="">
+                                        <Tooltip
+                                            label="Add to cart"
+                                            aria-label="A tooltip"
+                                            fontSize="lg"
+                                            placement="auto"
+                                        >
+                                            {/* <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} /> */}
 
-                                    <button
-                                        className={cx('quantity-input-btn')}
-                                        onClick={() => handleQuantityDecrease(parrot.id)}
-                                    >
-                                        -
-                                    </button>
-                                    <input type="number" value={quantities[parrot.id] || 1} min={0} />
-                                    <button
-                                        className={cx('quantity-input-btn')}
-                                        onClick={() => handleQuantityIncrease(parrot.id)}
-                                    >
-                                        +
-                                    </button>
-                                    <p>{countParrot} avaiable</p>
-                                </div> */}
-                                <div className={cx('parrot-price')}>
-                                    <p>$ {selectedColor[parrot.id]?.price}</p>
+                                            <button
+                                                className={cx('cart-btn')}
+                                                onClick={() =>
+                                                    handleAddToCart({
+                                                        id: count,
+                                                        name: parrot.name,
+                                                        img: parrot.img,
+                                                        quantity: 1,
+                                                        price: selectedColor[parrot.id]?.price,
+                                                        color: selectedColor[parrot.id]?.color,
+                                                        colorID: selectedColor[parrot.id]?.colorId,
+                                                    })
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </Tooltip>
+                                    </Link>
                                 </div>
-                                <div className={cx('parrot-like')}>
-                                    <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
-                                    <p className={cx('parrot-like-quantity')}>15 reviews</p>
+
+                                <div className={cx('parrot-info')}>
+                                    <p className={cx('parrot-name')}>{parrot.name}</p>
+
+                                    <div className={cx('parrot-color')}>
+                                        {parrot.colors.map((color, colorIndex) => (
+                                            <div className={cx('cuong')}>
+                                                <button
+                                                    key={colorIndex}
+                                                    className={cx('parrot-color-item', {
+                                                        selected: color.color === selectedColor[parrot.id]?.color,
+                                                    })}
+                                                    onClick={() =>
+                                                        handleColorSelection(
+                                                            parrot.id,
+                                                            color.color,
+                                                            color.price,
+                                                            color.id,
+                                                        )
+                                                    }
+                                                    style={{ backgroundColor: color.color }}
+                                                ></button>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className={cx('parrot-price')}>
+                                        <p>$ {selectedColor[parrot.id]?.price}</p>
+                                    </div>
+                                    <div className={cx('parrot-like')}>
+                                        <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
+                                        <p className={cx('parrot-like-quantity')}>15 reviews</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
             </div>
 
             <div className={cx('compare-section')} id="compare-section-id">

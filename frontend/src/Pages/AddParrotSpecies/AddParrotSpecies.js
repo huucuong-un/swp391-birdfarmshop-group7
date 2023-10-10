@@ -204,24 +204,18 @@ function AddParrotSpecies() {
                 <div className={cx('sort-space')}>
                     <form className={cx('sort-space-form')}>
                         <select name="species" id="species">
-                            <option value="" disabled selected>
-                                Species
-                            </option>
+                            <option value="a">Species</option>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
                         <select name="status" id="status">
-                            <option value="" disabled selected>
-                                Status
-                            </option>
+                            <option value="b">Status</option>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
                         <input type="date" />
                         <select name="price" id="price">
-                            <option value="" disabled selected>
-                                Price
-                            </option>
+                            <option value="c">Price</option>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>

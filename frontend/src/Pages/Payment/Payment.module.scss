@@ -15,6 +15,7 @@ p {
 .wrapper {
     width: 100%;
     min-height: 500px;
+    background-color: #e1eff5;
 }
 
 .payment {
@@ -52,18 +53,18 @@ p {
     justify-content: center;
     width: 100%;
     margin-top: 10px;
+    height: 48px;
 }
 
 .payment-method-item {
-    background-color: var(--btn-color);
+    background-color: #ffc439;
     color: var(--white);
     text-align: center;
     caret-color: transparent;
-    min-width: 200px;
+    min-width: 300px;
     margin: 0 10px;
     padding: 5px 0;
-    border-radius: 15px;
-
+    border-radius: 5px;
     &:hover {
         opacity: 0.9;
     }
@@ -95,10 +96,11 @@ p {
 }
 
 .pay-btn {
-    background-color: var(--btn-color);
+    height: 50px;
+    width: 100%;
     color: var(--white);
     padding: 8px 171px;
-    border-radius: 15px;
+    border-radius: 5px;
     margin: 20px 0;
 
     &:hover {
@@ -118,6 +120,17 @@ p {
     flex-direction: column;
     align-items: start;
     gap: 20px;
+    background-color: #fafafa;
+    padding: 2%;
+}
+
+.payment-detail-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 2% 15%;
 }
 
 .payment-detail-items {
@@ -132,7 +145,8 @@ p {
 }
 
 .payment-detail-items-img {
-    width: 8%;
+    width: 20%;
+    border-radius: 10px;
 }
 
 .payment-detail-items-img img {
@@ -141,24 +155,30 @@ p {
 
 .payment-detail-promotions {
     display: flex;
-    justify-content: center;
+    width: 100%;
     gap: 10px;
 }
 
 .payment-detail-promotions input {
     border: 1px solid #ccc;
     min-width: 235px;
-    padding: 7px 2%;
+    padding: 7px 3%;
+    border-radius: 5px;
+    width: 100%;
 }
 
 .payment-detail-promotions button {
-    background-color: var(--btn-color);
-    color: var(--white);
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    color: gray;
     padding: 0 20px;
-    border-radius: 15px;
+    border-radius: 5px;
 
     &:hover {
-        opacity: 0.9;
+        background-color: #ecc94b;
+        color: black;
+        font-weight: 600;
+        border: 2px solid black;
     }
 }
 

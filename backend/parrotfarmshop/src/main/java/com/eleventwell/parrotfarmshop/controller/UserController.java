@@ -25,6 +25,11 @@ public class UserController {
         if (userService1.findByEmail(email) != null) return userService1.findByEmail(email);
         return null;
     }
+    @GetMapping(value = "get-user-by-id")
+    public UserDTO getUserByEmail(@RequestParam("id") Long id) {
+        if (userService1.findOneById(id) != null) return userService1.findOneById(id);
+        return null;
+    }
 
     @GetMapping(value = "")
     public List<UserDTO> showUsers() {

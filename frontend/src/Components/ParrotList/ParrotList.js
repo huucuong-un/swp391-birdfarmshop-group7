@@ -7,6 +7,8 @@ import { faHeart, faMagnifyingGlass, faCircleXmark, faSolid } from '@fortawesome
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
+import FeedbackAPI from '~/Api/FeedbackAPI';
+
 import SortSpace from '../SortSpace/SortSpace';
 
 import { useState, useEffect } from 'react';
@@ -34,7 +36,6 @@ import Col from 'react-bootstrap/Col';
 import number1 from '~/Assets/image/NumberComparison/number-v4-1.png';
 import number2 from '~/Assets/image/NumberComparison/number-2.png';
 import number3 from '~/Assets/image/NumberComparison/number-3.png';
-import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 
 const cx = classNames.bind(styles);
 
@@ -70,6 +71,7 @@ function ParrotList(props) {
     const [parrotSpecies, setParrotSpecies] = useState([]);
 
     const [combineData, setCombineData] = useState([]);
+    const [combineDataWithCountReview, setcombineDataWithCountReview] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
     const [quantities, setQuantities] = useState({});
     const [countParrot, setCountParrot] = useState(null);
@@ -124,18 +126,19 @@ function ParrotList(props) {
     };
 
     const handleAddToCompareProducts = (parrot) => {
-        if (selectedComparisonProduct.length >= 0) {
-            let compareSection = document.getElementById('compare-section-id');
-            compareSection.style.display = 'block';
-        }
         setSelectedComparisonProduct((prevProducts) => {
+            if (prevProducts.length >= 0) {
+                let compareSection = document.getElementById('compare-section-id');
+                compareSection.style.display = 'block';
+            }
+
             const isParrotAlreadySelected = prevProducts.some((p) => p.id === parrot.id);
 
             if (isParrotAlreadySelected) {
                 return prevProducts.filter((p) => p.id !== parrot.id);
             } else {
-                if (selectedComparisonProduct.length === 3) {
-                    return;
+                if (prevProducts.length === 3) {
+                    return prevProducts;
                 }
                 return [...prevProducts, parrot];
             }
@@ -231,7 +234,11 @@ function ParrotList(props) {
             for (const item of parrotSpecies) {
                 const parrot = { ...item };
                 try {
+                    const params = {
+                        id: item.id,
+                    };
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
+                    parrot.countReview = await FeedbackAPI.countReview(params);
                     data.push(parrot);
                 } catch (error) {
                     console.error(error);
@@ -326,9 +333,12 @@ function ParrotList(props) {
         console.log(page);
         console.log(pagination);
     };
+
     const dataCompareToPass = {
         selectedComparisonProduct,
     };
+    console.log(combineData);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner', 'row')}>
@@ -425,7 +435,7 @@ function ParrotList(props) {
                                     </div>
                                     <div className={cx('parrot-like')}>
                                         <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
-                                        <p className={cx('parrot-like-quantity')}>15 reviews</p>
+                                        <p className={cx('parrot-like-quantity')}>{parrot.countReview} reviews</p>
                                     </div>
                                 </div>
                             </div>

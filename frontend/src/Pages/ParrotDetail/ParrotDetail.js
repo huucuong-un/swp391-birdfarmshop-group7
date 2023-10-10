@@ -224,11 +224,24 @@ function ParrotDetail() {
         }
         if (decimalPart > 0) {
             stars.push(<FontAwesomeIcon icon={faStarHalfAlt} key={integerPart} />);
-        }
-        if (integerPart < 5) {
-            for (let i = 0; i < 5 - integerPart - 1; i++) {
-                stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart - 1; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                }
             }
+        }
+
+        if (decimalPart === 0) {
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                }
+            }
+        }
+        if (rating === null) {
+            stars.push(<div>There are no reviews yet</div>);
+        } else {
+            stars.push(<div> ( {rating} / 5 )</div>);
         }
 
         return stars;
@@ -255,7 +268,13 @@ function ParrotDetail() {
                             <p className={cx('parrot-detail-title')}>{parrot.name}</p>
                             <div className={cx('parrot-star')}>
                                 <StarRating rating={parrot.parrotAverageRating}></StarRating>
-                                <div className={cx('parrot-star-number')} >( {parrot.parrotAverageRating} / 5 )</div>
+                                {/* <div className={cx('parrot-star-number')}>
+                                    {parrot.parrotAverageRating !== null ? (
+                                   
+                                    ) : (
+                                        <p>There are no reviews yet</p>
+                                    )} */}
+                                {/* </div> */}
                             </div>
                             <div className={cx('parrot-detail-price-container')}>
                                 <p className={cx('parrot-detail-price-title')}>Price</p>

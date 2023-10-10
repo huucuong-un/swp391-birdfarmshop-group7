@@ -36,7 +36,6 @@ import Col from 'react-bootstrap/Col';
 import number1 from '~/Assets/image/NumberComparison/number-v4-1.png';
 import number2 from '~/Assets/image/NumberComparison/number-2.png';
 import number3 from '~/Assets/image/NumberComparison/number-3.png';
-import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 
 const cx = classNames.bind(styles);
 
@@ -127,18 +126,19 @@ function ParrotList(props) {
     };
 
     const handleAddToCompareProducts = (parrot) => {
-        if (selectedComparisonProduct.length >= 0) {
-            let compareSection = document.getElementById('compare-section-id');
-            compareSection.style.display = 'block';
-        }
         setSelectedComparisonProduct((prevProducts) => {
+            if (prevProducts.length >= 0) {
+                let compareSection = document.getElementById('compare-section-id');
+                compareSection.style.display = 'block';
+            }
+
             const isParrotAlreadySelected = prevProducts.some((p) => p.id === parrot.id);
 
             if (isParrotAlreadySelected) {
                 return prevProducts.filter((p) => p.id !== parrot.id);
             } else {
-                if (selectedComparisonProduct.length === 3) {
-                    return;
+                if (prevProducts.length === 3) {
+                    return prevProducts;
                 }
                 return [...prevProducts, parrot];
             }

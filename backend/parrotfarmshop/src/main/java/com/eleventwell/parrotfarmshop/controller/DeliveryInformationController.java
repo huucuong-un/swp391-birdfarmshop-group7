@@ -30,15 +30,15 @@ public class DeliveryInformationController {
         return deliveryInformationService.save(model);
     }
 
-    @PutMapping(value = "{id}")
-    public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model, @PathVariable("id") Long id) {
-        model.setId(id);
+    @PutMapping(value = "")
+    public DeliveryInformationDTO updateDeliveryInformation(@RequestBody DeliveryInformationDTO model) {
+        model.setId(model.getId());
         return deliveryInformationService.save(model);
     }
 
-    @PutMapping(value = "/update-picking-status/{customerid}")
-    public DeliveryInformationDTO updatePickingStatus(@RequestBody DeliveryInformationDTO deliveryInfo, @PathVariable("customerid") Long customerId) {
-        return deliveryInformationService.updatePickingStatus(deliveryInfo.getId(), customerId);
+    @PutMapping(value = "/update-picking-status")
+    public DeliveryInformationDTO updatePickingStatus(@RequestBody DeliveryInformationDTO deliveryInfo) {
+        return deliveryInformationService.updatePickingStatus(deliveryInfo.getId(), deliveryInfo.getUserId());
     }
 
 }

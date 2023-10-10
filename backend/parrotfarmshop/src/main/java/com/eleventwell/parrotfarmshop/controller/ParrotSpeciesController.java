@@ -87,6 +87,25 @@ public class ParrotSpeciesController {
 
         return result;
     }
+    
+      @GetMapping(value = "search")
+    public PagingModel showSearch(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,  @RequestParam(value = "name", required = false) String name) {
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        if ( name == null || name.equals("")) {
+            result.setListResult(parrotSpeciesService.findAll(pageable));
+
+        } else {
+            result.setListResult(parrotSpeciesService.findAllByName(name, pageable));
+            result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
+            result.setLimit(limit);
+
+        }
+
+
+        return result;
+    }
 
     @PostMapping(value = "")
     public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {

@@ -30,6 +30,10 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
     )
     List<ParrotSpeciesEntity> findAllByPriceAndName(@Param("sortWay") String sortWay,Pageable pageable  );
 
+    
+    @Query("SELECT ps FROM ParrotSpeciesEntity ps WHERE ps.name LIKE CONCAT('%', :name, '%') ORDER BY ps.name")
+     List<ParrotSpeciesEntity> findAllByName(@Param("name") String name,Pageable pageable );
+    
     List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
 
 

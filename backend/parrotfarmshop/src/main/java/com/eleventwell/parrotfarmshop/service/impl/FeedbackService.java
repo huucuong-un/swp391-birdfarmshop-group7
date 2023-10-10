@@ -5,6 +5,8 @@ import com.eleventwell.parrotfarmshop.dto.FAQsDTO;
 import com.eleventwell.parrotfarmshop.dto.FeedbackDTO;
 import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.FeedbackRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
@@ -45,6 +47,8 @@ List<FeedbackEntity> listEntity = feedbackRepository.findAllByOrderByIdDesc();
     @Override
     public FeedbackDTO save(FeedbackDTO DTO) {
 FeedbackEntity newEntity = new FeedbackEntity();
+        ParrotSpeciesColorEntity pcEntity = parrotSpeciesColorRepository.findOneById(DTO.getColorId());
+        ParrotSpeciesEntity pEntity = parrotSpeciesRepository.findOneById(pcEntity.getParrotSpecies().getId());
 
 if(DTO.getId()!=null){
     FeedbackEntity oldEntity = feedbackRepository.findOneById(DTO.getId());
@@ -54,8 +58,13 @@ if(DTO.getId()!=null){
 
     newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
 }
+
 newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
 feedbackRepository.save(newEntity);
+pEntity.setParrotAverageRating(calculateAverageFeedbackRatingBySpeciesId(pEntity.getId()));
+parrotSpeciesRepository.save(pEntity);
+
+
 return (FeedbackDTO) genericConverter.toDTO(newEntity, FeedbackDTO.class);
     }
 public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto,Pageable pageable){
@@ -99,7 +108,18 @@ public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto,
 
         return results;
     }
+public Double calculateAverageFeedbackRatingBySpeciesId(Long id){
 
+        return feedbackRepository.calculateRoundedAverageRating(id);
+
+
+}
+public Integer countBySpeciesId(Long id){
+        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
+}
+    public Integer countBySpeciesColorId(Long id){
+        return feedbackRepository.countAllByParrotSpeciesColorId(id);
+    }
     @Override
     public int totalItem() {
         return (int)feedbackRepository.count();

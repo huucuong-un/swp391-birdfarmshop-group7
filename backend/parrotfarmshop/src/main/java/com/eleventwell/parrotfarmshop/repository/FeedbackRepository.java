@@ -20,5 +20,13 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
    @Query("SELECT u FROM FeedbackEntity u where u.parrotSpeciesColor.parrotSpecies.id = :id AND u.belongTo = :belongTo order by u.id DESC ")
     List<FeedbackEntity> findbyspeciescoloridAndType(@Param("id") Long id,@Param("belongTo") String belongTo, Pageable pageable);
 
+
+    @Query("SELECT ROUND(AVG(f.rating), 1) FROM FeedbackEntity f WHERE f.parrotSpeciesColor.parrotSpecies.id = :colorid")
+    Double calculateRoundedAverageRating(@Param("colorid") Long colorid);
     List<FeedbackEntity> findAllByOrderByIdDesc();
+
+    Integer countAllByParrotSpeciesColorId(Long id);
+    Integer countAllByParrotSpeciesColorParrotSpeciesId(Long id);
+
+
 }

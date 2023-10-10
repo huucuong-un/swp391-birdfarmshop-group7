@@ -21,7 +21,9 @@ public interface ParrotRepository extends JpaRepository<ParrotEntity, Long>{
     List<ParrotEntity> findAllByOrderByIdDesc();
     @Query("SELECT u FROM ParrotEntity u WHERE u.status = true AND u.healthStatus = true AND u.saleStatus = false AND u.parrotSpeciesColor.id = :colorid")
     List<ParrotEntity> findTopNByStatusIsTrue(@Param("colorid") Long colorid, Pageable pageable);
+
     Long countAllBySaleStatusAndStatusAndParrotSpeciesColorId(Boolean saleStatus, Boolean status, Long id);
+
 
 
 }

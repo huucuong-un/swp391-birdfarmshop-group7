@@ -2,8 +2,9 @@ import classNames from 'classnames/bind';
 import styles from '~/Components/Feedback/Feedback.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar,faStarHalf, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import FeedbackAPI from '~/Api/FeedbackAPI';
 import UserAPI from '~/Api/UserAPI';
 
@@ -34,9 +35,14 @@ function Feedback({ feedbackType }) {
         const stars = [];
 
         for (let i = 0; i < rating; i++) {
-            stars.push(<FontAwesomeIcon icon={faStar} key={i} />);
+            stars.push(<FontAwesomeIcon icon={solidStar} key={i} />);
         }
 
+        if (rating < 5) {
+            for (let i = 0; i < 5 - rating; i++) {
+                stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+            }
+        }
         return stars;
     };
 
@@ -119,7 +125,7 @@ function Feedback({ feedbackType }) {
                             <img src={feedback.imgUrl} alt="user-avatar" />
                         </div>
                         <div className={cx('feedback-header-info')}>
-                            <p className={cx('feedback-header-info-name')}>{feedback.userName}</p>
+                            <p className={cx('feedback-header-info-name')}>{feedback.username}</p>
                             <div className={cx('parrot-star')}>
                                 <StarRating rating={feedback.rating}></StarRating>
                             </div>

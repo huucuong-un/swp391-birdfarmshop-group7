@@ -18,6 +18,7 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 const cx = classNames.bind(styles);
 
@@ -33,8 +34,9 @@ function ParrotDetail() {
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [count, setCount] = useState(0);
     const [totalParrotsInCart, setTotalParrotsInCart] = useState(0);
-
     const [countParrot, setCountParrot] = useState('Check the color to see ');
+    const { addToCartStatus, setAddToCartStatus } = useCartStatus();
+
     const feedback = {
         id: id,
         type: 'parrot',
@@ -111,18 +113,6 @@ function ParrotDetail() {
                 }
             }
 
-            // const initialSelectedColor = {};
-            // data.forEach((parrot) => {
-            //     if (parrot.colors.length > 0) {
-            //         initialSelectedColor[parrot.id] = {
-            //             color: parrot.colors[0].color,
-            //             price: parrot.colors[0].price,
-            //         };
-            //     }
-            // });
-
-            // setSelectedColor(initialSelectedColor);
-
             const initialSelectedColor = {};
             const initialSelectedColorId = {};
 
@@ -169,6 +159,7 @@ function ParrotDetail() {
     // }, [combineData]);
 
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
+        setAddToCartStatus((prev) => prev + 1);
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
         const existingItem = existingCart.find((item) => item.name === name && item.color === color);
         let maxId = 0;
@@ -224,11 +215,24 @@ function ParrotDetail() {
         }
         if (decimalPart > 0) {
             stars.push(<FontAwesomeIcon icon={faStarHalfAlt} key={integerPart} />);
-        }
-        if (integerPart < 5) {
-            for (let i = 0; i < 5 - integerPart - 1; i++) {
-                stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart - 1; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                }
             }
+        }
+
+        if (decimalPart === 0) {
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                }
+            }
+        }
+        if (rating === null) {
+            stars.push(<div>There are no reviews yet</div>);
+        } else {
+            stars.push(<div> ( {rating} / 5 )</div>);
         }
 
         return stars;
@@ -255,17 +259,17 @@ function ParrotDetail() {
                             <p className={cx('parrot-detail-title')}>{parrot.name}</p>
                             <div className={cx('parrot-star')}>
                                 <StarRating rating={parrot.parrotAverageRating}></StarRating>
-                                <div className={cx('parrot-star-number')} >( {parrot.parrotAverageRating} / 5 )</div>
+                                {/* <div className={cx('parrot-star-number')}>
+                                    {parrot.parrotAverageRating !== null ? (
+                                   
+                                    ) : (
+                                        <p>There are no reviews yet</p>
+                                    )} */}
+                                {/* </div> */}
                             </div>
                             <div className={cx('parrot-detail-price-container')}>
                                 <p className={cx('parrot-detail-price-title')}>Price</p>
-                                <p className={cx('parrot-detail-price-value')}>{selectedColor[parrot.id]?.price}</p>
-                                {/* <p className={cx('parrot-detail-price-value')}>
-                                    {selectedColor[parrot.id]?.color || 'N/A'}
-                                </p> */}
-                                {/* <p className={cx('parrot-detail-price-value')}>
-                                    {selectedColor[parrot.id]?.color || 'N/A'}
-                                </p> */}
+                                <p className={cx('parrot-detail-price-value')}>$ {selectedColor[parrot.id]?.price}</p>
                             </div>
 
                             <div className={cx('choose-color')}>
@@ -366,14 +370,6 @@ function ParrotDetail() {
                                         className={cx('buy-btn')}
                                         state={[
                                             {
-                                                // name: combineData[0].name,
-                                                // quantity: parseInt(quantities[1]),
-                                                // img: combineData[0].img,
-
-                                                // color: selectedColor[1].color,
-                                                // colorID: selectedColor[1].colorId,
-                                                // price: selectedColor[1].price,
-
                                                 name: currentParrot.name,
                                                 quantity: parseInt(quantities[currentParrot.id]),
                                                 img: currentParrot.img,

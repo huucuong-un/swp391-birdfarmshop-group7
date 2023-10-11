@@ -77,9 +77,7 @@ function Payment() {
                     orderDTO: {
                         // userID: 1,
                         address: selectedDelivery.address,
-                        // address: 'haha',
                         userID: user.userId,
-                        // address: selectedDelivery.address,
                         status: true,
                     },
                     cartList: cartList,
@@ -101,8 +99,6 @@ function Payment() {
     }, [payStatus]);
 
     const handleReloadParent = () => {};
-
-    // let totalPrice = 0;
 
     return (
         <div className={cx('wrapper')}>

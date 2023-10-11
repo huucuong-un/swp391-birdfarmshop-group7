@@ -14,21 +14,27 @@ import classNames from 'classnames/bind';
 import SortSpace from '~/Components/SortSpace/SortSpace';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
+import { ShopState } from '~/context/ShopProvider';
 
 import { useEffect, useState } from 'react';
 
-import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
 function OrderHistory() {
     const [orders, setOrders] = useState([]);
+    // const [loggedUser, setLoggedUser] = useState();
+
+    // useEffect(() => {
+    //     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    // }, []);
+    const { user } = ShopState();
 
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const orderList = await OrderAPI.findAllByUserId();
+                const orderList = await OrderAPI.findAllByUserId(user.userId);
                 setOrders(orderList);
                 console.log(orderList[0].orderDTO.createdDate);
                 console.log(orderList);
@@ -39,6 +45,10 @@ function OrderHistory() {
 
         getOrders();
     }, []);
+
+    useEffect(() => {
+        console.log(user);
+    }, [user]);
 
     return (
         <div className={cx('wrapper')}>

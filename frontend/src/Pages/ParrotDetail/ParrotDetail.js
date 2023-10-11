@@ -5,7 +5,10 @@ import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
+
+// Add the empty star icon to the library
 
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
 
@@ -200,6 +203,40 @@ function ParrotDetail() {
         console.log(quantities);
     }, [quantities]);
 
+    const StarRating = ({ rating }) => {
+        const stars = [];
+
+        const number = rating;
+        const integerPart = Math.floor(number);
+        const decimalPart = (number - integerPart).toFixed(1);
+
+        for (let i = 0; i < integerPart; i++) {
+            stars.push(<FontAwesomeIcon icon={solidStar} key={i} />);
+        }
+        if (decimalPart > 0) {
+            stars.push(<FontAwesomeIcon icon={faStarHalfAlt} key={integerPart} />);
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart - 1; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                }
+            }
+        }
+
+        if (decimalPart === 0) {
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                }
+            }
+        }
+        if (rating === null) {
+            stars.push(<div>There are no reviews yet</div>);
+        } else {
+            stars.push(<div> ( {rating} / 5 )</div>);
+        }
+
+        return stars;
+    };
     return (
         <div className={cx('wrapper')}>
             <StartPartPage>Parrot Details</StartPartPage>
@@ -221,15 +258,18 @@ function ParrotDetail() {
                         <div className={cx('parrot-detail-container')}>
                             <p className={cx('parrot-detail-title')}>{parrot.name}</p>
                             <div className={cx('parrot-star')}>
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
+                                <StarRating rating={parrot.parrotAverageRating}></StarRating>
+                                {/* <div className={cx('parrot-star-number')}>
+                                    {parrot.parrotAverageRating !== null ? (
+                                   
+                                    ) : (
+                                        <p>There are no reviews yet</p>
+                                    )} */}
+                                {/* </div> */}
                             </div>
                             <div className={cx('parrot-detail-price-container')}>
                                 <p className={cx('parrot-detail-price-title')}>Price</p>
-                                <p className={cx('parrot-detail-price-value')}>{selectedColor[parrot.id]?.price}</p>
+                                <p className={cx('parrot-detail-price-value')}>$ {selectedColor[parrot.id]?.price}</p>
                             </div>
 
                             <div className={cx('choose-color')}>

@@ -16,8 +16,17 @@ const ParrotSpeciesColorAPI = {
         return axiosClinet.get(url);
     },
 
+    findByParrotSpecieId(id) {
+        const url = `/parrot-species-color/find-one-by-id/${id}`;
+        return axiosClinet.get(url);
+    },
     findOneSpeciesByParrotID(id) {
-        const url = `/parrot-species/find-one-species-by-id/${id}`;
+        const url = `/parrot-species-color/find-by-parrot-species-id/${id}`;
+        return axiosClinet.get(url);
+    },
+
+    findOneSpeciesColorById(id) {
+        const url = `/parrot-species-color/find-one-by-id/${id}`;
         return axiosClinet.get(url);
     },
 

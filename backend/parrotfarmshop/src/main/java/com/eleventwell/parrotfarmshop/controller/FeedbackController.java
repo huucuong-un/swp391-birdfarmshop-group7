@@ -27,19 +27,34 @@ public class FeedbackController {
 
     }
 
-    @GetMapping(value = "find-all-by-species-id-and-belong-to")
-    public PagingModel findAllBySpeciesIdAndBelongTo(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam("speciesId") Long speciesId, @RequestParam(value = "productType",required = false) String productType) {
+    @GetMapping(value = "calculate-average-rating-by-species-id")
+    public Double calculateAverageRating(@RequestBody @RequestParam(value = "speciesId") Long  speciesId) {
+        return feedbackService.calculateAverageFeedbackRatingBySpeciesId(speciesId);
+
+    }
+    @GetMapping(value = "count-by-species-id")
+    public Integer countBySpeciesId(@RequestBody @RequestParam(value = "id") Long  id) {
+
+           return feedbackService.countBySpeciesId(id);
+
+
+
+    }
+
+    @GetMapping(value = "find-all-by-species-id-and-belong-to-or-rating-or-color-id")
+    public PagingModel findAllBySpeciesIdAndBelongTo(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam("speciesId") Long speciesId, @RequestParam(value = "productType",required = false) String productType,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "colorId",required = false) Long colorId) {
         PagingModel result = new PagingModel();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
 
-        result.setListResult(feedbackService.findAllBySpeciesIdAndBelongto(speciesId, productType, pageable));
-        result.setTotalPage(((int) Math.ceil((double) (feedbackService.totalItem()) / limit)));
+        result.setListResult(feedbackService.findAllBySpeciesIdAndBelongtoOrRatingOrColorId(speciesId, productType, rating,colorId,pageable));
+        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
         result.setLimit(limit);
 
 
         return result;
     }
+
 
     @PostMapping(value = "")
     public FeedbackDTO createFeedback(@RequestBody FeedbackDTO dto) {

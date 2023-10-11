@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from '~/Pages/Payment/Payment.module.scss';
 
-import Button from '~/Components/Button/Button';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 
 import { useEffect, useState } from 'react';
@@ -11,6 +10,9 @@ import OrderAPI from '~/Api/OrderAPI';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 import { ShopState } from '~/context/ShopProvider';
+import { Box, Button, Image } from '@chakra-ui/react';
+import Paypal from '~/Assets/image/Payment/Paypal.svg';
+import VnPay from '~/Assets/image/Payment/vnpay-seeklogo.com.svg';
 
 const cx = classNames.bind(styles);
 
@@ -46,7 +48,6 @@ function Payment() {
         setPayStatus(true);
         console.log('click');
     };
-
     useEffect(() => {
         setListOrder(receivedData);
     }, []);
@@ -62,8 +63,6 @@ function Payment() {
         setTotalPrice(totalPrice);
     }, [listOrder]);
 
-    console.log(receivedData);
-
     useEffect(() => {
         const addOrders = async () => {
             try {
@@ -76,11 +75,9 @@ function Payment() {
                 console.log(cartList);
                 const data = {
                     orderDTO: {
-                        userID: 1,
-                        // address: selectedDelivery.address,
-                        address: 'haha',
-                        // userID: user.userId,
-                        // address: selectedDelivery.address,
+                        // userID: 1,
+                        address: selectedDelivery.address,
+                        userID: user.userId,
                         status: true,
                     },
                     cartList: cartList,
@@ -88,7 +85,7 @@ function Payment() {
 
                 // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
 
-                // await DeliveryInformationAPI.updatePickingStatus(user.userId, selectedDelivery, config);
+                await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                 const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
             } catch (error) {
@@ -101,7 +98,7 @@ function Payment() {
         }
     }, [payStatus]);
 
-    // let totalPrice = 0;
+    const handleReloadParent = () => {};
 
     return (
         <div className={cx('wrapper')}>
@@ -115,10 +112,14 @@ function Payment() {
 
                     <div className={cx('payment-method-item-container')}>
                         <button className={cx('payment-method-item')} onClick={() => handlePaymentSelection('paypal')}>
-                            PayPal
+                            <Box width="100%" height="24px">
+                                <Image src={Paypal} margin="auto auto" height="100%"></Image>
+                            </Box>
                         </button>
-                        <button className={cx('payment-method-item')} onClick={() => handlePaymentSelection('cod')}>
-                            COD
+                        <button className={cx('payment-method-item')} onClick={() => handlePaymentSelection('vnpay')}>
+                            <Box width="100%" height="24px">
+                                <Image src={VnPay} margin="auto auto" height="100%"></Image>
+                            </Box>
                         </button>
                     </div>
 
@@ -149,40 +150,49 @@ function Payment() {
                     </div>
                 </div>
                 <div className={cx('payment-detail', 'col-md-4')}>
-                    {listOrder.map((item, index) => (
-                        <div key={index} className={cx('payment-detail-items')}>
-                            <div className={cx('payment-detail-items-img')}>
-                                <img src={item.img} alt="product" />
+                    <Box className={cx('payment-detail-container')}>
+                        {listOrder.map((item, index) => (
+                            <div key={index} className={cx('payment-detail-items')}>
+                                <div className={cx('payment-detail-items-img')}>
+                                    <img src={item.img} alt="product" />
+                                </div>
+                                <p className={cx('payment-detail-items-quantity')}>x{item.quantity}</p>
+                                <p className={cx('payment-detail-items-price')}>$ {item.price * item.quantity}</p>
                             </div>
-                            <p className={cx('payment-detail-items-quantity')}>x{item.quantity}</p>
-                            <p className={cx('payment-detail-items-price')}>$ {item.price * item.quantity}</p>
-                        </div>
-                    ))}
+                        ))}
 
-                    <div className={cx('payment-detail-promotions')}>
-                        <input type="text" placeholder="Discount code" />
-                        <button>Apply</button>
-                    </div>
-
-                    <div className={cx('payment-detail-money')}>
-                        <div className={cx('payment-detail-money-item')}>
-                            <p className={cx('payment-detail-money-item-title')}>Subtotal</p>
-                            <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
+                        <div className={cx('payment-detail-promotions')}>
+                            <input type="text" placeholder="Discount code" />
+                            <button>Apply</button>
                         </div>
 
-                        <div className={cx('payment-detail-money-item')}>
-                            <p className={cx('payment-detail-money-item-title')}>Discount</p>
-                            <p className={cx('payment-detail-money-item-price')}>$ 0</p>
-                        </div>
+                        <div className={cx('payment-detail-money')}>
+                            <div className={cx('payment-detail-money-item')}>
+                                <p className={cx('payment-detail-money-item-title')}>Subtotal</p>
+                                <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
+                            </div>
 
-                        <div className={cx('payment-detail-money-item', 'total')}>
-                            <p className={cx('payment-detail-money-item-title', 'bold')}>Total</p>
-                            <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
+                            <div className={cx('payment-detail-money-item')}>
+                                <p className={cx('payment-detail-money-item-title')}>Discount</p>
+                                <p className={cx('payment-detail-money-item-price')}>$ 0</p>
+                            </div>
+
+                            <div className={cx('payment-detail-money-item', 'total')}>
+                                <p className={cx('payment-detail-money-item-title', 'bold')}>Total</p>
+                                <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
+                            </div>
                         </div>
-                    </div>
-                    <Button to="" className={cx('pay-btn')} onClick={() => handlePayStatus()}>
-                        Pay
-                    </Button>
+                        <Button
+                            colorScheme="blue"
+                            height="50px"
+                            width="100%"
+                            className={cx('pay-btn')}
+                            fontSize="16px"
+                            onClick={() => handlePayStatus()}
+                        >
+                            Pay
+                        </Button>
+                    </Box>
                 </div>
             </div>
         </div>

@@ -239,7 +239,7 @@ function Navbar() {
                                                         View Cart
                                                     </Buttons>
                                                 </Link>
-                                                <Link to="">
+                                                {/* <Link to="">
                                                     <Buttons
                                                         colorScheme="yellow"
                                                         size="lg"
@@ -249,7 +249,7 @@ function Navbar() {
                                                     >
                                                         Check Out
                                                     </Buttons>
-                                                </Link>
+                                                </Link> */}
                                             </div>
                                         </div>
                                     </PopperWrapper>

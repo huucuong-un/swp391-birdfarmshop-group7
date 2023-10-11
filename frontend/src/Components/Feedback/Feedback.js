@@ -2,9 +2,14 @@ import classNames from 'classnames/bind';
 import styles from '~/Components/Feedback/Feedback.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import FeedbackAPI from '~/Api/FeedbackAPI';
+import UserAPI from '~/Api/UserAPI';
+
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -14,9 +19,10 @@ function Feedback({ feedbackType }) {
     console.log(feedbackType);
     const [feedbackList, setFeedbacksList] = useState([]);
     const [count, setCount] = useState(0);
-
+    const [combineData, setCombineData] = useState([]);
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
+    const [combineDataWithColor, setCombineDataWithColor] = useState([]);
 
     const [param, setParam] = useState({
         page: 1,
@@ -25,6 +31,21 @@ function Feedback({ feedbackType }) {
         productType: feedbackType.type,
     });
 
+    const StarRating = ({ rating }) => {
+        const stars = [];
+
+        for (let i = 0; i < rating; i++) {
+            stars.push(<FontAwesomeIcon icon={solidStar} key={i} />);
+        }
+
+        if (rating < 5) {
+            for (let i = 0; i < 5 - rating; i++) {
+                stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+            }
+        }
+        return stars;
+    };
+
     useEffect(() => {
         const getFeedbackList = async () => {
             try {
@@ -32,10 +53,11 @@ function Feedback({ feedbackType }) {
                 //     page: 1,
                 //     limit: 12,
                 // };
-                const feedbackList = await FeedbackAPI.getAll(param);
-                setFeedbacksList(feedbackList.listResult);
-                setTotalPage(feedbackList.totalPage);
-                console.log(feedbackList);
+
+                const feedbackListp = await FeedbackAPI.getAll(param);
+                setFeedbacksList(feedbackListp.listResult);
+                setTotalPage(feedbackListp.totalPage);
+                console.log(feedbackListp.listResult);
             } catch (error) {
                 console.error(error);
             }
@@ -44,7 +66,51 @@ function Feedback({ feedbackType }) {
         // Gọi hàm getParrots khi component được mount
         getFeedbackList();
     }, [param]);
+    // list feedback => luu no feedbacklist usestate => for lap cai list feedback
+    useEffect(() => {
+        const getUserName = async () => {
+            const data = [];
 
+            try {
+                for (const items of feedbackList) {
+                    const user = { ...items };
+                    const userobject = await UserAPI.getUserById(items.userId);
+                    user.username = userobject[0].userName;
+                    user.imgUrl = userobject[0].imgUrl;
+                    data.push(user);
+                }
+                setCombineData(data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserName();
+    }, [feedbackList]);
+    useEffect(() => {
+        const getColor = async () => {
+            const dataColor = [];
+            try {
+                for (const items of combineData) {
+                    const color = { ...items };
+                    const colorobject = await ParrotSpeciesColorAPI.findOneSpeciesColorById(items.colorId);
+                    console.log(colorobject[0]);
+                    color.color = colorobject[0].color;
+                    dataColor.push(color);
+                }
+                console.log(dataColor);
+
+                setCombineDataWithColor(dataColor);
+            } catch (error) {}
+        };
+        getColor();
+    }, [combineData]);
+
+    useEffect(() => {
+        console.log(combineDataWithColor);
+    }, [combineDataWithColor]);
+
+    console.log(combineData);
+    console.log(combineDataWithColor);
     return (
         <div className={cx('wrapper')}>
             <h1>Feedback</h1>
@@ -52,37 +118,30 @@ function Feedback({ feedbackType }) {
                 <input type="text" placeholder="type your feedback..." />
                 <FontAwesomeIcon icon={faArrowRight} className={cx('icon')} />
             </div>
-            {feedbackList.map((feedback, index) => (
-                <div className={cx('feedback-item')}>
+            {combineDataWithColor.map((feedback, index) => (
+                <div className={cx('feedback-item')} key={index}>
                     <div className={cx('feedback-header')}>
                         <div className={cx('user-avatar')}>
-                            <img
-                                src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                alt="user-avatar"
-                            />
+                            <img src={feedback.imgUrl} alt="user-avatar" />
                         </div>
                         <div className={cx('feedback-header-info')}>
-                            <p className={cx('feedback-header-info-name')}>nguyenthanh</p>
+                            <p className={cx('feedback-header-info-name')}>{feedback.username}</p>
                             <div className={cx('parrot-star')}>
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
-                                <FontAwesomeIcon icon={faStar} />
+                                <StarRating rating={feedback.rating}></StarRating>
                             </div>
                         </div>
                     </div>
                     <div className={cx('feadback-date-and-type-container')}>
                         <div className={cx('feadback-date')}>
-                            <p>feadback.createdDate</p>
+                            <p>{feedback.createdDate}</p>
                         </div>
                         <div className={cx('feadback-type')}>
-                            <p>Green</p>
+                            <p>{feedback.color}</p>
                         </div>
                     </div>
 
                     <div className={cx('feadback-content')}>
-                        <p>feadback.content</p>
+                        <p>{feedback.content}</p>
                     </div>
                 </div>
             ))}

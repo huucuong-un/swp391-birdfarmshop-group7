@@ -18,6 +18,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(Array(deliveryInfo.length).fill(false)); // Initialize with false for each item
     const { user } = ShopState();
+    const [reloadStatus, setReloadStatus] = useState(true);
 
     const handleShow = () => {
         setShow(!show);
@@ -58,6 +59,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
         }
     };
 
+    // Load initial state from localStorage or use an empty array if no data is saved
     useEffect(() => {
         const getAllDeliveryInfoByCustomerId = async () => {
             try {
@@ -87,14 +89,23 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                 console.error(error);
             }
         };
+        if (reloadStatus) {
+            getAllDeliveryInfoByCustomerId();
+            setReloadStatus(false);
+        }
         getAllDeliveryInfoByCustomerId();
-    }, []);
+    }, [reloadStatus]);
 
     return (
         <Box className={cx('wrapper')}>
             {deliveryInfo.map((item, itemIndex) => (
                 <>
-                    <Flex className={cx('delivery-info-item')} id={item.id} onClick={() => handleShowUpdate(itemIndex)}>
+                    <Flex
+                        className={cx('delivery-info-item')}
+                        id={item.id}
+                        onClick={() => handleShowUpdate(itemIndex)}
+                        key={itemIndex}
+                    >
                         <Center w="100px">
                             <Text fontWeight="700" opacity={0.6}>
                                 {item.name}
@@ -111,7 +122,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                             name="delivery-info-item-radio"
                             backgroundColor="white"
                             size="lg"
-                            colorScheme="orange"
+                            colorScheme="gray"
                             value={item.id}
                             isChecked={selectedDeliveryId === item.id}
                             onChange={() => {

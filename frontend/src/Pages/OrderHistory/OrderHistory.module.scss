@@ -98,10 +98,17 @@
 }
 
 .order-bottom {
+    // display: flex;
+    // justify-content: start;
+    // align-items: center;
+    // overflow: hidden;
+}
+
+.order-bottom-left {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     align-items: center;
-    overflow: hidden;
+    width: 100%;
 }
 
 .order-bottom-right {

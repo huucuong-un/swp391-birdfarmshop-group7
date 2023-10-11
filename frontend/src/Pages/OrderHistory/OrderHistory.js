@@ -16,6 +16,16 @@ import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
 import { ShopState } from '~/context/ShopProvider';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+} from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
 
@@ -24,6 +34,7 @@ import OrderAPI from '~/Api/OrderAPI';
 const cx = classNames.bind(styles);
 
 function OrderHistory() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
 
@@ -120,7 +131,7 @@ function OrderHistory() {
                         </Accordion>
 
                         <div className={cx('order-bottom')}>
-                            <div className="order-bottom-left">
+                            <div className={cx('order-bottom-left')}>
                                 <div className={cx('order-total-quantity-and-price')}>
                                     <div className={cx('total-quantity')}>
                                         <h3>Total</h3>
@@ -128,6 +139,33 @@ function OrderHistory() {
                                     <div className={cx('total-price')}>
                                         <p>${order.orderDTO.totalPrice}</p>
                                     </div>
+                                </div>
+                                <div className={cx('rating-btn')}>
+                                    <Button colorScheme="blue" size="lg" fontSize={'15px'} onClick={onOpen}>
+                                        Rate
+                                    </Button>
+                                    <Modal isOpen={isOpen} onClose={onClose}>
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader>Rate Product</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                <div className={cx('product-img')}>
+                                                    <img
+                                                        src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                        alt="product-img"
+                                                    />
+                                                </div>
+                                            </ModalBody>
+
+                                            <ModalFooter>
+                                                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                                    Close
+                                                </Button>
+                                                <Button variant="ghost">Secondary Action</Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal>
                                 </div>
                             </div>
                             {/* <div className={cx('order-bottom-right')}>

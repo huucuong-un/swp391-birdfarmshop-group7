@@ -239,17 +239,6 @@ function Navbar() {
                                                         View Cart
                                                     </Buttons>
                                                 </Link>
-                                                {/* <Link to="">
-                                                    <Buttons
-                                                        colorScheme="yellow"
-                                                        size="lg"
-                                                        width={400}
-                                                        height={45}
-                                                        fontSize={16}
-                                                    >
-                                                        Check Out
-                                                    </Buttons>
-                                                </Link> */}
                                             </div>
                                         </div>
                                     </PopperWrapper>
@@ -274,80 +263,26 @@ function Navbar() {
                     </div>
                 </div>
                 <div className={cx('nav-bottom')}>
-                    <Tippy
-                        interactive
-                        // visible
-                        // delay={[0, 700]}
-                        placement="bottom"
-                        render={(attrs) => (
-                            <div className={cx('mini-nav-result')} tabIndex="-1" {...attrs}>
-                                <PopperWrapper>
-                                    {MENU_ITEMS_PRODUCT.map((item, index) => {
-                                        return (
-                                            <Button key={index} className={cx('mini-nav-result-item')} to={item.to}>
-                                                {item.title}
-                                            </Button>
-                                        );
-                                    })}
-                                </PopperWrapper>
-                            </div>
-                        )}
-                    >
-                        <div>
-                            {/* {activeNavs.map((activeNav, index) => {
-                                    return (
-                                        <Button className={cx('nav-bottom-item')} text key={index}>
-                                            {activeNav.title}
-                                        </Button>
-                                    );
-                                })} */}
-
-                            <Button className={cx('nav-bottom-item')} text>
-                                PRODUCT
-                            </Button>
+                    <div className={cx('subnav')}>
+                        <button className={cx('subnavbtn')}>PRODUCT</button>
+                        <div className={cx('subnav-content-product')}>
+                            <Link>Parrot</Link>
+                            <Link>Nest</Link>
                         </div>
-                    </Tippy>
-
-                    <Tippy
-                        interactive
-                        // visible
-                        placement="bottom"
-                        render={(attrs) => (
-                            <div className={cx('mini-nav-result')} tabIndex="-1" {...attrs}>
-                                <PopperWrapper>
-                                    {MENU_ITEMS_SERVICE.map((item, index) => {
-                                        return (
-                                            <Button className={cx('mini-nav-result-item')} to={item.to}>
-                                                {item.title}
-                                            </Button>
-                                        );
-                                    })}
-                                </PopperWrapper>
-                            </div>
-                        )}
-                    >
-                        <div>
-                            {/* {activeNavs.map((activeNav, index) => {
-                                return (
-                                    <Button className={cx('nav-bottom-item')} text key={index}>
-                                        {activeNav.title}
-                                    </Button>
-                                );
-                            })} */}
-
-                            <Button className={cx('nav-bottom-item')} text>
-                                SERVICE
-                            </Button>
+                    </div>
+                    <div className={cx('subnav')}>
+                        <button className={cx('subnavbtn')}>SERVICE</button>
+                        <div className={cx('subnav-content-service')}>
+                            <a href="#company">Hatching</a>
+                            <a href="#team">Bird Care</a>
                         </div>
-                    </Tippy>
-
-                    <Button className={cx('nav-bottom-item')} text to="/about-us">
-                        ABOUT
-                    </Button>
-
-                    <Button to="/faq" className={cx('nav-bottom-item')} text>
-                        FAQS
-                    </Button>
+                    </div>
+                    <div className={cx('subnav')}>
+                        <button className={cx('subnavbtn')}>About</button>
+                    </div>
+                    <div className={cx('subnav')}>
+                        <button className={cx('subnavbtn')}>FAQS</button>
+                    </div>
                 </div>
             </div>
         </div>

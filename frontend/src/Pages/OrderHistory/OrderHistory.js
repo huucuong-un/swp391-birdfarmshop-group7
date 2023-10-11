@@ -15,6 +15,7 @@ import SortSpace from '~/Components/SortSpace/SortSpace';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
 import { ShopState } from '~/context/ShopProvider';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 import { useEffect, useState } from 'react';
 
@@ -24,12 +25,13 @@ const cx = classNames.bind(styles);
 
 function OrderHistory() {
     const [orders, setOrders] = useState([]);
-    // const [loggedUser, setLoggedUser] = useState();
+    const [loggedUser, setLoggedUser] = useState();
 
-    // useEffect(() => {
-    //     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    // }, []);
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
     const { user } = ShopState();
+    const { addToCartStatus } = useCartStatus();
 
     useEffect(() => {
         const getOrders = async () => {
@@ -43,7 +45,7 @@ function OrderHistory() {
         };
 
         getOrders();
-    }, []);
+    }, [loggedUser]);
 
     useEffect(() => {
         console.log(user);

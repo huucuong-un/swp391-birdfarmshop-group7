@@ -114,10 +114,7 @@ function Feedback({ feedbackType }) {
     return (
         <div className={cx('wrapper')}>
             <h1>Feedback</h1>
-            <div className={cx('feedback-input')}>
-                <input type="text" placeholder="type your feedback..." />
-                <FontAwesomeIcon icon={faArrowRight} className={cx('icon')} />
-            </div>
+
             {combineDataWithColor.map((feedback, index) => (
                 <div className={cx('feedback-item')} key={index}>
                     <div className={cx('feedback-header')}>

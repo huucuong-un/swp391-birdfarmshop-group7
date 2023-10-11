@@ -11,10 +11,10 @@ public class OrderDetailHistoryModel {
 
     String img;
     String SpeciesName;
-
     String color;
     Integer quantity;
     Double totalPrice;
+    Double price;
 
 
 

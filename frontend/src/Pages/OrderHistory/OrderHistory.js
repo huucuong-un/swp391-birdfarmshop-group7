@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Button, ButtonGroup, Text } from '@chakra-ui/react';
 import {
     Accordion,
     AccordionItem,
@@ -39,6 +39,7 @@ function OrderHistory() {
                 const orderList = await OrderAPI.findAllByUserId(user.userId);
                 setOrders(orderList);
                 console.log(orderList[0].orderDTO.createdDate);
+                console.log(orderList);
             } catch (error) {
                 console.error(error);
             }
@@ -61,7 +62,10 @@ function OrderHistory() {
                     <div key={index} className={cx('order-card', 'col-lg-3')}>
                         <div className={cx('order-begin')}>
                             <div className={cx('order-index')}>
-                                <p>Order #{order.orderDTO.id}</p>
+                                <h2>Order #{order.orderDTO.id}</h2>
+                                <Text size="lg" color={'green'}>
+                                    Complete
+                                </Text>
                             </div>
 
                             <div className={cx('order-date')}>
@@ -73,7 +77,7 @@ function OrderHistory() {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex="1" textAlign="left">
-                                            <h5 className="title">Order Items</h5>
+                                            <h4 className="title">Order Items</h4>
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -81,6 +85,8 @@ function OrderHistory() {
                                 <AccordionPanel pb={4}>
                                     {order.listOrderDetailHistoryModel.map((parrot, parrotIndex) => (
                                         <div key={parrotIndex} className={cx('order-item')}>
+                                            <div className={cx('order-item-index')}>{parrotIndex + 1}</div>
+
                                             <div className={cx('order-item-img')}>
                                                 <img
                                                     src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
@@ -99,11 +105,11 @@ function OrderHistory() {
 
                                                 <div className={cx('order-item-info-price-and-quantity')}>
                                                     <div className={cx('price')}>
-                                                        <p>${parrot.totalPrice}</p>
+                                                        <p>${parrot.price}</p>
                                                     </div>
 
                                                     <div className={cx('quantity')}>
-                                                        <p>Qty: {parrot.quantity}</p>
+                                                        <p>x{parrot.quantity}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -117,16 +123,16 @@ function OrderHistory() {
                             <div className="order-bottom-left">
                                 <div className={cx('order-total-quantity-and-price')}>
                                     <div className={cx('total-quantity')}>
-                                        <p>Total</p>
+                                        <h3>Total</h3>
                                     </div>
                                     <div className={cx('total-price')}>
                                         <p>${order.orderDTO.totalPrice}</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className={cx('order-bottom-right')}>
+                            {/* <div className={cx('order-bottom-right')}>
                                 <div className={cx('buy-again-btn')}>
-                                    <Button colorScheme="blue" size="lg">
+                                    <Button colorScheme="blue" size="lg" fontSize={'15px'}>
                                         Buy again
                                     </Button>
                                 </div>
@@ -136,7 +142,7 @@ function OrderHistory() {
                                         Complete
                                     </Button>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 ))}

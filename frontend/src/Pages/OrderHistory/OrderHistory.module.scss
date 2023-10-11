@@ -1,3 +1,9 @@
+.order-item-index {
+    width: 10%;
+}
+.buy-again-btn {
+    font-size: 16px;
+}
 .wrapper {
     width: 100%;
     padding: 0 50px;
@@ -38,6 +44,10 @@
     font-weight: 600 !important;
 }
 
+.order-index {
+    display: flex;
+    justify-content: space-between;
+}
 .order-date,
 .order-item-info-color,
 .total-quantity {
@@ -89,7 +99,7 @@
 
 .order-bottom {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     align-items: center;
     overflow: hidden;
 }

@@ -31,6 +31,7 @@ import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 import Contact from '~/Components/Contact/Contact';
+import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestService';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -46,6 +47,7 @@ const publicRoutes = [
     { path: '/about-us', component: AboutUs },
     { path: '/userprofile', component: UserProfile },
     { path: '/species-selection', component: SpeciesSelection },
+    { path: '/add-parrot-nest-service', component: AddParrotNestService },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
     { path: '/addpost', component: AddPost, layout: SystemLayout },

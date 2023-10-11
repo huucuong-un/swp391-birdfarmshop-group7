@@ -444,42 +444,54 @@ function ParrotList(props) {
                         <Col xs={7} className={cx('compare-col', 'compare-col-product')}>
                             <Menu>
                                 <Box className={cx('product-item')}>
-                                    <button
-                                        className={cx('product-item-cancel-button')}
-                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[0])}
-                                    >
-                                        x
-                                    </button>
                                     {selectedComparisonProduct.length === 0 ? (
                                         <Avatar size="2xl" src={number1} />
                                     ) : (
-                                        <Avatar size="2xl" src={selectedComparisonProduct[0].img} />
+                                        <>
+                                            <button
+                                                className={cx('product-item-cancel-button')}
+                                                onClick={() =>
+                                                    handleRemoveComparisonProduct(selectedComparisonProduct[0])
+                                                }
+                                            >
+                                                x
+                                            </button>
+                                            <Avatar size="2xl" src={selectedComparisonProduct[0].img} />
+                                        </>
                                     )}
                                 </Box>
                                 <Box className={cx('product-item')}>
-                                    <button
-                                        className={cx('product-item-cancel-button')}
-                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[1])}
-                                    >
-                                        x
-                                    </button>
                                     {selectedComparisonProduct.length < 2 ? (
                                         <Avatar size="2xl" src={number2} />
                                     ) : (
-                                        <Avatar size="2xl" src={selectedComparisonProduct[1].img} />
+                                        <>
+                                            <button
+                                                className={cx('product-item-cancel-button')}
+                                                onClick={() =>
+                                                    handleRemoveComparisonProduct(selectedComparisonProduct[1])
+                                                }
+                                            >
+                                                x
+                                            </button>
+                                            <Avatar size="2xl" src={selectedComparisonProduct[1].img} />
+                                        </>
                                     )}
                                 </Box>
                                 <Box className={cx('product-item')}>
-                                    <button
-                                        className={cx('product-item-cancel-button')}
-                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[2])}
-                                    >
-                                        x
-                                    </button>
                                     {selectedComparisonProduct.length < 3 ? (
                                         <Avatar size="2xl" src={number3} />
                                     ) : (
-                                        <Avatar size="2xl" src={selectedComparisonProduct[2].img} />
+                                        <>
+                                            <button
+                                                className={cx('product-item-cancel-button')}
+                                                onClick={() =>
+                                                    handleRemoveComparisonProduct(selectedComparisonProduct[2])
+                                                }
+                                            >
+                                                x
+                                            </button>
+                                            <Avatar size="2xl" src={selectedComparisonProduct[2].img} />
+                                        </>
                                     )}
                                 </Box>
                             </Menu>

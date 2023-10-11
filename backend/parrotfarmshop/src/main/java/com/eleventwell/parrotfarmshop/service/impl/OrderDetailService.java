@@ -106,6 +106,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
                 model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
                 model.setSpeciesName(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName());
                 model.setTotalPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
+                model.setPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
                 model.setQuantity(1);
                 listModel.add(model);
             }

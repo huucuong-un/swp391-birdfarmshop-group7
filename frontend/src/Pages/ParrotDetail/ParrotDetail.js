@@ -231,7 +231,7 @@ function ParrotDetail() {
             }
         }
 
-        if (decimalPart === 0) {
+        if (decimalPart == 0) {
             if (integerPart < 5) {
                 for (let i = 0; i < 5 - integerPart; i++) {
                     stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);

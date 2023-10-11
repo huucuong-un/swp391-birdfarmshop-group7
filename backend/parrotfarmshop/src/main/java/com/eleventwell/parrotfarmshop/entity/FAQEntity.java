@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 /**
@@ -31,6 +32,7 @@ public class FAQEntity extends BaseEntity {
     private String title;
 
     @NotBlank
+    @Size(max=500)
     @Column(name = "content")
     private String content;
 

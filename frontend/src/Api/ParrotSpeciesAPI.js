@@ -37,6 +37,10 @@ const ParrotSpeciesAPI = {
         const url = `/parrot-species/sort`;
         return axiosClinet.get(url, { params });
     },
+    search(params) {
+        const url = `/parrot-species/search`;
+        return axiosClinet.get(url, { params });
+    },
 };
 
 export default ParrotSpeciesAPI;

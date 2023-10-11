@@ -19,6 +19,7 @@ import { ShopState } from '~/context/ShopProvider';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,9 @@ function Navbar() {
     const { user } = ShopState();
 
     const navigate = useNavigate();
+
+    const { addToCartStatus } = useCartStatus();
+    const { removeCartItemStatus } = useCartStatus();
 
     const logoutHandler = () => {
         localStorage.removeItem('userInfo');
@@ -83,31 +87,31 @@ function Navbar() {
                             })} */
 
     const [carts, setCarts] = useState([]);
+    const [quanityOfCart, setQuanityOfCart] = useState(carts ? carts.length : 0);
 
     useEffect(() => {
         const dataJSON = localStorage.getItem('parrot');
         const data = JSON.parse(dataJSON);
         setCarts(data);
-    }, []);
+    }, [addToCartStatus]);
 
-    const handleIncreaseQuantity = (index) => {
-        const updatedCarts = [...carts];
-        updatedCarts[index].quantity += 1;
-        setCarts(updatedCarts);
-        // Cập nhật local storage
-        updateLocalStorage(updatedCarts);
-    };
+    useEffect(() => {
+        setQuanityOfCart(carts ? carts.length : 0);
+    }, [carts]);
 
-    // Hàm giảm số lượng
-    const handleDecreaseQuantity = (index) => {
-        const updatedCarts = [...carts];
-        if (updatedCarts[index].quantity > 1) {
-            updatedCarts[index].quantity -= 1;
-            setCarts(updatedCarts);
-            // Cập nhật local storage
-            updateLocalStorage(updatedCarts);
-        }
-    };
+    useEffect(() => {
+        const dataJSON = localStorage.getItem('parrot');
+        const data = JSON.parse(dataJSON);
+        setCarts(data);
+    }, [removeCartItemStatus]);
+
+    // useEffect(() => {
+    //     console.log(removeCartItemStatus);
+    // }, [removeCartItemStatus]);
+
+    // useEffect(() => {
+    //     console.log(addToCartStatus);
+    // }, [addToCartStatus]);
 
     // Hàm cập nhật local storage với dữ liệu mới
     const updateLocalStorage = (updatedCarts) => {
@@ -176,7 +180,9 @@ function Navbar() {
                             </>
                         )}
                     </div>
-                    <img className={cx('logo')} src={logo} alt="Logo" />
+                    <Link className={cx('logo-container')} to="/">
+                        <img className={cx('logo')} src={logo} alt="Logo" />
+                    </Link>
                     <div className={cx('active-right')}>
                         <Button
                             text
@@ -257,6 +263,11 @@ function Navbar() {
                                     leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
                                 >
                                     Cart
+                                    {quanityOfCart > 0 && (
+                                        <div className={cx('cart-quantity')}>
+                                            <p>{quanityOfCart}</p>
+                                        </div>
+                                    )}
                                 </Button>
                             </div>
                         </Tippy>

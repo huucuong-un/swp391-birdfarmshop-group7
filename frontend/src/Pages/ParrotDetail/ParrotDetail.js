@@ -15,6 +15,7 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 const cx = classNames.bind(styles);
 
@@ -30,8 +31,9 @@ function ParrotDetail() {
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [count, setCount] = useState(0);
     const [totalParrotsInCart, setTotalParrotsInCart] = useState(0);
-
     const [countParrot, setCountParrot] = useState('Check the color to see ');
+    const { addToCartStatus, setAddToCartStatus } = useCartStatus();
+
     const feedback = {
         id: id,
         type: 'parrot',
@@ -108,18 +110,6 @@ function ParrotDetail() {
                 }
             }
 
-            // const initialSelectedColor = {};
-            // data.forEach((parrot) => {
-            //     if (parrot.colors.length > 0) {
-            //         initialSelectedColor[parrot.id] = {
-            //             color: parrot.colors[0].color,
-            //             price: parrot.colors[0].price,
-            //         };
-            //     }
-            // });
-
-            // setSelectedColor(initialSelectedColor);
-
             const initialSelectedColor = {};
             const initialSelectedColorId = {};
 
@@ -166,6 +156,7 @@ function ParrotDetail() {
     // }, [combineData]);
 
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
+        setAddToCartStatus((prev) => prev + 1);
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
         const existingItem = existingCart.find((item) => item.name === name && item.color === color);
         let maxId = 0;
@@ -239,12 +230,6 @@ function ParrotDetail() {
                             <div className={cx('parrot-detail-price-container')}>
                                 <p className={cx('parrot-detail-price-title')}>Price</p>
                                 <p className={cx('parrot-detail-price-value')}>{selectedColor[parrot.id]?.price}</p>
-                                {/* <p className={cx('parrot-detail-price-value')}>
-                                    {selectedColor[parrot.id]?.color || 'N/A'}
-                                </p> */}
-                                {/* <p className={cx('parrot-detail-price-value')}>
-                                    {selectedColor[parrot.id]?.color || 'N/A'}
-                                </p> */}
                             </div>
 
                             <div className={cx('choose-color')}>
@@ -345,14 +330,6 @@ function ParrotDetail() {
                                         className={cx('buy-btn')}
                                         state={[
                                             {
-                                                // name: combineData[0].name,
-                                                // quantity: parseInt(quantities[1]),
-                                                // img: combineData[0].img,
-
-                                                // color: selectedColor[1].color,
-                                                // colorID: selectedColor[1].colorId,
-                                                // price: selectedColor[1].price,
-
                                                 name: currentParrot.name,
                                                 quantity: parseInt(quantities[currentParrot.id]),
                                                 img: currentParrot.img,

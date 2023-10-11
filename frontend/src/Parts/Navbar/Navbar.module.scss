@@ -82,9 +82,32 @@
 
 .language-and-cart {
     font-weight: 500 !important;
+    min-height: 60px;
 
     &:hover {
         text-decoration: underline;
+    }
+    position: relative;
+}
+
+.cart-quantity {
+    overflow: hidden;
+    position: absolute;
+    z-index: 2;
+    top: 15px;
+    left: 8px;
+    background-color: #f79494;
+    font-size: 1.2rem;
+    color: var(--white);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+        margin: 0;
     }
 }
 
@@ -178,4 +201,8 @@
     align-items: center;
     width: 100%;
     justify-content: space-between;
+}
+
+.logo-container {
+    overflow: hidden;
 }

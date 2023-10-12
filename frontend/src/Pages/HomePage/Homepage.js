@@ -13,7 +13,6 @@ function HomePage() {
         <div className={cx('wrapper')}>
             <Slider></Slider>
             <ChooseProduct></ChooseProduct>
-
             <Post></Post>
         </div>
     );

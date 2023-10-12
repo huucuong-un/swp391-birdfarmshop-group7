@@ -60,7 +60,7 @@ const publicRoutes = [
     { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/faq', component: FAQs },
+    { path: '/faqs', component: FAQs },
     { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
     { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
     { path: '/compare-products', component: CompareParrot },

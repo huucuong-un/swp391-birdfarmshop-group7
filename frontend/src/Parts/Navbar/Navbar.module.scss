@@ -25,13 +25,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     min-height: 55px;
 }
 
 .subnav {
     float: left;
     overflow: hidden;
+    padding: 20px 0;
+
+    &:hover {
+        background-color: #fff;
+    }
 }
 
 .subnav .subnavbtn {

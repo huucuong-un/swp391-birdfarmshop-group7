@@ -264,24 +264,24 @@ function Navbar() {
                 </div>
                 <div className={cx('nav-bottom')}>
                     <div className={cx('subnav')}>
-                        <button className={cx('subnavbtn')}>PRODUCT</button>
-                        <div className={cx('subnav-content-product')}>
-                            <Link>Parrot</Link>
-                            <Link>Nest</Link>
-                        </div>
+                        <Link to="/parrot-product" className={cx('subnavbtn')}>
+                            PARROT
+                        </Link>
                     </div>
                     <div className={cx('subnav')}>
-                        <button className={cx('subnavbtn')}>SERVICE</button>
-                        <div className={cx('subnav-content-service')}>
-                            <a href="#company">Hatching</a>
-                            <a href="#team">Bird Care</a>
-                        </div>
+                        <Link to="/add-parrot-nest-service" className={cx('subnavbtn')}>
+                            NEST
+                        </Link>
                     </div>
                     <div className={cx('subnav')}>
-                        <button className={cx('subnavbtn')}>About</button>
+                        <Link to="/about-us" className={cx('subnavbtn')}>
+                            About
+                        </Link>
                     </div>
                     <div className={cx('subnav')}>
-                        <button className={cx('subnavbtn')}>FAQS</button>
+                        <Link to="/faqs" className={cx('subnavbtn')}>
+                            FAQS
+                        </Link>
                     </div>
                 </div>
             </div>

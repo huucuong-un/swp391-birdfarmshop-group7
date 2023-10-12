@@ -32,10 +32,27 @@ public class FeedbackController {
         return feedbackService.calculateAverageFeedbackRatingBySpeciesId(speciesId);
 
     }
+
+    @GetMapping(value = "count-by-rating")
+    public Integer countByRating(@RequestBody @RequestParam(value = "rating") Integer  rating) {
+        return feedbackService.countByRating(rating);
+
+    }
+
+
     @GetMapping(value = "count-by-species-id")
     public Integer countBySpeciesId(@RequestBody @RequestParam(value = "id") Long  id) {
 
            return feedbackService.countBySpeciesId(id);
+
+
+
+    }
+
+    @GetMapping(value = "count-by-species-id-or-species-color-id-and-rating")
+    public Integer countBySpeciesIdSpeciesColorIdAndRating(@RequestBody  @RequestParam(value = "speciesId",required = false) Long  speciesId, @RequestParam(value = "colorId",required = false) Long  colorId,@RequestParam(value = "rating",required = false) Integer  rating) {
+
+        return feedbackService.countBySpeciesIdOrSpeciesColorIdAndRating(speciesId,colorId, rating);
 
 
 
@@ -50,6 +67,7 @@ public class FeedbackController {
         result.setListResult(feedbackService.findAllBySpeciesIdAndBelongtoOrRatingOrColorId(speciesId, productType, rating,colorId,pageable));
         result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
         result.setLimit(limit);
+
 
 
         return result;

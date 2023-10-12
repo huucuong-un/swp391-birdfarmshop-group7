@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from '~/Components/Feedback/Feedback.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import FeedbackAPI from '~/Api/FeedbackAPI';
@@ -109,12 +109,45 @@ function Feedback({ feedbackType }) {
         console.log(combineDataWithColor);
     }, [combineDataWithColor]);
 
-    console.log(combineData);
-    console.log(combineDataWithColor);
     return (
         <div className={cx('wrapper')}>
             <h1>Feedback</h1>
-
+            <div className={cx('sort-feedback-container')}>
+                <div className={cx('sort-item-container')}>
+                    <div className={cx('sort-item')}>
+                        <button>All</button>
+                    </div>
+                    <div className={cx('sort-item')}>
+                        <button>
+                            5 <FontAwesomeIcon icon={solidStar} />
+                        </button>
+                    </div>
+                    <div className={cx('sort-item')}>
+                        <button>
+                            4 <FontAwesomeIcon icon={solidStar} />
+                        </button>
+                    </div>
+                    <div className={cx('sort-item')}>
+                        <button>
+                            3 <FontAwesomeIcon icon={solidStar} />
+                        </button>
+                    </div>
+                    <div className={cx('sort-item')}>
+                        <button>
+                            2 <FontAwesomeIcon icon={solidStar} />
+                        </button>
+                    </div>
+                    <div className={cx('sort-item')}>
+                        <button>
+                            1 <FontAwesomeIcon icon={solidStar} />
+                        </button>
+                    </div>
+                    <select className={cx('sort-feedback-select')}>
+                        <option value="yellow">Yellow</option>
+                        <option value="red">Red</option>
+                    </select>
+                </div>
+            </div>
             {combineDataWithColor.map((feedback, index) => (
                 <div className={cx('feedback-item')} key={index}>
                     <div className={cx('feedback-header')}>

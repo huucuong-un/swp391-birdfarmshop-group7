@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Button, ButtonGroup, Text } from '@chakra-ui/react';
 import {
     Accordion,
     AccordionItem,
@@ -14,30 +14,54 @@ import classNames from 'classnames/bind';
 import SortSpace from '~/Components/SortSpace/SortSpace';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
+import { ShopState } from '~/context/ShopProvider';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+} from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
 
-import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
 function OrderHistory() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [orders, setOrders] = useState([]);
+    const [loggedUser, setLoggedUser] = useState();
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
+    const { user } = ShopState();
+    const { addToCartStatus } = useCartStatus();
 
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const orderList = await OrderAPI.findAllByUserId();
+                const orderList = await OrderAPI.findAllByUserId(user.userId);
                 setOrders(orderList);
                 console.log(orderList[0].orderDTO.createdDate);
+                console.log(orderList);
             } catch (error) {
                 console.error(error);
             }
         };
 
         getOrders();
-    }, []);
+    }, [loggedUser]);
+
+    useEffect(() => {
+        console.log(user);
+    }, [user]);
 
     return (
         <div className={cx('wrapper')}>
@@ -49,7 +73,10 @@ function OrderHistory() {
                     <div key={index} className={cx('order-card', 'col-lg-3')}>
                         <div className={cx('order-begin')}>
                             <div className={cx('order-index')}>
-                                <p>Order #{order.orderDTO.id}</p>
+                                <h2>Order #{order.orderDTO.id}</h2>
+                                <Text size="lg" color={'green'}>
+                                    Complete
+                                </Text>
                             </div>
 
                             <div className={cx('order-date')}>
@@ -61,7 +88,7 @@ function OrderHistory() {
                                 <h2>
                                     <AccordionButton>
                                         <Box as="span" flex="1" textAlign="left">
-                                            <h5 className="title">Order Items</h5>
+                                            <h4 className="title">Order Items</h4>
                                         </Box>
                                         <AccordionIcon />
                                     </AccordionButton>
@@ -69,6 +96,8 @@ function OrderHistory() {
                                 <AccordionPanel pb={4}>
                                     {order.listOrderDetailHistoryModel.map((parrot, parrotIndex) => (
                                         <div key={parrotIndex} className={cx('order-item')}>
+                                            <div className={cx('order-item-index')}>{parrotIndex + 1}</div>
+
                                             <div className={cx('order-item-img')}>
                                                 <img
                                                     src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
@@ -87,11 +116,11 @@ function OrderHistory() {
 
                                                 <div className={cx('order-item-info-price-and-quantity')}>
                                                     <div className={cx('price')}>
-                                                        <p>${parrot.totalPrice}</p>
+                                                        <p>${parrot.price}</p>
                                                     </div>
 
                                                     <div className={cx('quantity')}>
-                                                        <p>Qty: {parrot.quantity}</p>
+                                                        <p>x{parrot.quantity}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -102,19 +131,46 @@ function OrderHistory() {
                         </Accordion>
 
                         <div className={cx('order-bottom')}>
-                            <div className="order-bottom-left">
+                            <div className={cx('order-bottom-left')}>
                                 <div className={cx('order-total-quantity-and-price')}>
                                     <div className={cx('total-quantity')}>
-                                        <p>Total</p>
+                                        <h3>Total</h3>
                                     </div>
                                     <div className={cx('total-price')}>
                                         <p>${order.orderDTO.totalPrice}</p>
                                     </div>
                                 </div>
+                                <div className={cx('rating-btn')}>
+                                    <Button colorScheme="blue" size="lg" fontSize={'15px'} onClick={onOpen}>
+                                        Rate
+                                    </Button>
+                                    <Modal isOpen={isOpen} onClose={onClose}>
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader>Rate Product</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                <div className={cx('product-img')}>
+                                                    <img
+                                                        src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                        alt="product-img"
+                                                    />
+                                                </div>
+                                            </ModalBody>
+
+                                            <ModalFooter>
+                                                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                                    Close
+                                                </Button>
+                                                <Button variant="ghost">Secondary Action</Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal>
+                                </div>
                             </div>
-                            <div className={cx('order-bottom-right')}>
+                            {/* <div className={cx('order-bottom-right')}>
                                 <div className={cx('buy-again-btn')}>
-                                    <Button colorScheme="blue" size="lg">
+                                    <Button colorScheme="blue" size="lg" fontSize={'15px'}>
                                         Buy again
                                     </Button>
                                 </div>
@@ -124,7 +180,7 @@ function OrderHistory() {
                                         Complete
                                     </Button>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 ))}

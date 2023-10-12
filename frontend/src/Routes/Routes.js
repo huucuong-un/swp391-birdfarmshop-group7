@@ -30,7 +30,7 @@ import UserProfile from '~/Pages/UserProfile/UserProfile';
 import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
-
+import Contact from '~/Components/Contact/Contact';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -62,6 +62,7 @@ const publicRoutes = [
     { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
     { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
     { path: '/compare-products', component: CompareParrot },
+    { path: '/contact', component: Contact },
 ];
 
 //Dành cho những người đăng nhập mới coi được

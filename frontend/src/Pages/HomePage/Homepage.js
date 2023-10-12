@@ -4,6 +4,7 @@ import Post from '~/Components/Post/Post';
 
 import styles from '~/Pages/HomePage/HomePage.module.scss';
 import classNames from 'classnames/bind';
+import Contact from '~/Components/Contact/Contact';
 
 const cx = classNames.bind(styles);
 
@@ -12,6 +13,7 @@ function HomePage() {
         <div className={cx('wrapper')}>
             <Slider></Slider>
             <ChooseProduct></ChooseProduct>
+
             <Post></Post>
         </div>
     );

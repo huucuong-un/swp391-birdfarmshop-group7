@@ -2,9 +2,34 @@ import classNames from 'classnames/bind';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/PostDetail/PostDetail.module.scss';
 
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import PostAPI from '~/Api/PostAPI';
+
 const cx = classNames.bind(styles);
 
 function PostDetail() {
+    const location = useLocation();
+    const receivedData = location.state;
+    const [post, setPost] = useState({});
+
+    useEffect(() => {
+        const getPostItem = async () => {
+            try {
+                const params = {
+                    postId: receivedData,
+                };
+                const getPost = PostAPI.get(params);
+                getPost.then((result) => {
+                    setPost(result);
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getPostItem();
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <StartPartPage>Post Details</StartPartPage>
@@ -19,16 +44,10 @@ function PostDetail() {
 
                     <div className={cx('post-info')}>
                         <div className={cx('post-info-title')}>
-                            <h1>Golden Hour</h1>
+                            <h1>{post.title}</h1>
                         </div>
                         <div className={cx('post-info-content')}>
-                            <p>
-                                The Golden Hour at the Bird Shop is a magical and enchanting experience that unfolds
-                                every evening. As the sun begins its slow descent towards the horizon, the cozy little
-                                shop undergoes a stunning transformation. The soft, warm rays of the setting sun filter
-                                through the large windows, casting a golden glow that bathes the entire store in a
-                                radiant light.
-                            </p>
+                            <p>{post.content}</p>
                         </div>
                     </div>
                 </div>

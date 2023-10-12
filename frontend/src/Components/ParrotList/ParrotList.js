@@ -7,6 +7,7 @@ import { faHeart, faMagnifyingGlass, faCircleXmark, faSolid } from '@fortawesome
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import FeedbackAPI from '~/Api/FeedbackAPI';
 
 import SortSpace from '../SortSpace/SortSpace';
@@ -69,7 +70,6 @@ console.log(datas);
 
 function ParrotList(props) {
     const [parrotSpecies, setParrotSpecies] = useState([]);
-
     const [combineData, setCombineData] = useState([]);
     const [combineDataWithCountReview, setcombineDataWithCountReview] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
@@ -88,18 +88,27 @@ function ParrotList(props) {
         sortway: '',
     });
 
+    const [searchWithPagination, setSearchWithPagination] = useState({
+        page: 1,
+        limit: 12,
+        name: '',
+    });
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
-    const [sortType, setSortType] = useState('');
 
     const dataToPass = {
         selectedColor,
         combineData,
         selectedColorId,
     };
+    const { addToCartStatus, setAddToCartStatus } = useCartStatus();
 
     useEffect(() => {
-        console.log(props.search);
+        setSearchWithPagination({
+            page: 1,
+            limit: 12,
+            name: props.search,
+        });
     }, [props.search]);
 
     useEffect(() => {
@@ -200,11 +209,11 @@ function ParrotList(props) {
     useEffect(() => {
         const getSortParrotSpecies = async () => {
             try {
-                const params = {
-                    page: 1,
-                    limit: 12,
-                    sortway: 'NDESC',
-                };
+                // const params = {
+                //     page: 1,
+                //     limit: 12,
+                //     sortway: 'NDESC',
+                // };
                 const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
                 console.log(sortList.listResult);
                 setParrotSpecies(sortList.listResult);
@@ -214,6 +223,28 @@ function ParrotList(props) {
         };
         getSortParrotSpecies();
     }, [sortWithPagination]);
+
+    useEffect(() => {
+        const getSearchParrotSpecies = async () => {
+            try {
+                const params = {
+                    page: 1,
+                    limit: 12,
+                    name: 'c',
+                };
+                const searchList = await ParrotSpeciesAPI.search(searchWithPagination);
+                setParrotSpecies(searchList.listResult);
+                console.log(parrotSpecies);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getSearchParrotSpecies();
+    }, [searchWithPagination]);
+
+    useEffect(() => {
+        console.log(parrotSpecies);
+    }, [parrotSpecies]);
 
     useEffect(() => {
         const getCountAvailableParrotId = async () => {
@@ -280,6 +311,7 @@ function ParrotList(props) {
     }, [combineData]);
 
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
+        setAddToCartStatus((prev) => prev + 1);
         const existingCart = JSON.parse(localStorage.getItem('parrot')) || [];
         const existingItem = existingCart.find((item) => item.name === name && item.color === color);
         let maxId = 0;
@@ -329,6 +361,12 @@ function ParrotList(props) {
             sortway: sortWithPagination,
         });
 
+        setSearchWithPagination({
+            page: newPage,
+            limit: 12,
+            name: searchWithPagination,
+        });
+
         setPage(newPage);
         console.log(page);
         console.log(pagination);
@@ -342,105 +380,109 @@ function ParrotList(props) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner', 'row')}>
-                {combineData
-                    .filter((parrot) => {
-                        return props.search.toLowerCase() === ''
-                            ? parrot
-                            : parrot.name.toLowerCase().includes(props.search);
-                    })
-                    .map((parrot, index) => {
-                        return (
-                            <div className={cx('parrot-card', 'col-lg-3')} key={index}>
-                                <div className={cx('parrot-img')}>
-                                    <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
-                                        <img className={cx('img')} src={parrot.img} alt="parrot" />
-                                    </Link>
-                                    <Link to="">
-                                        <Tooltip
-                                            label="Check to compare"
-                                            aria-label="A tooltip"
-                                            fontSize="lg"
-                                            placement="auto"
+                {combineData.map((parrot, index) => {
+                    return (
+                        <div className={cx('parrot-card', 'col-lg-3')} key={index}>
+                            <div className={cx('parrot-img')}>
+                                <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
+                                    <img className={cx('img')} src={parrot.img} alt="parrot" />
+                                </Link>
+                                <Link to="">
+                                    <Tooltip
+                                        label="Check to compare"
+                                        aria-label="A tooltip"
+                                        fontSize="lg"
+                                        placement="auto"
+                                    >
+                                        <button
+                                            className={cx('buy-btn')}
+                                            onClick={() => {
+                                                handleAddToCompareProducts(parrot);
+                                            }}
                                         >
-                                            <button
-                                                className={cx('buy-btn')}
-                                                onClick={() => {
-                                                    handleAddToCompareProducts(parrot);
-                                                }}
-                                            >
-                                                {selectedComparisonProduct.some((p) => p.id === parrot.id) ? (
-                                                    <FontAwesomeIcon icon={faCircleXmark} />
-                                                ) : (
-                                                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                                                )}
-                                            </button>
-                                        </Tooltip>
-                                    </Link>
-                                    <Link to="">
-                                        <Tooltip
-                                            label="Add to cart"
-                                            aria-label="A tooltip"
-                                            fontSize="lg"
-                                            placement="auto"
-                                        >
-                                            {/* <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} /> */}
+                                            {selectedComparisonProduct.some((p) => p.id === parrot.id) ? (
+                                                <FontAwesomeIcon icon={faCircleXmark} />
+                                            ) : (
+                                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                            )}
+                                        </button>
+                                    </Tooltip>
+                                </Link>
+                                <Link to="">
+                                    <Tooltip label="Add to cart" aria-label="A tooltip" fontSize="lg" placement="auto">
+                                        {/* <FontAwesomeIcon className={cx('cart-btn')} icon={faBagShopping} /> */}
 
+                                        <button
+                                            className={cx('cart-btn')}
+                                            onClick={() =>
+                                                handleAddToCart({
+                                                    id: count,
+                                                    name: parrot.name,
+                                                    img: parrot.img,
+                                                    quantity: 1,
+                                                    price: selectedColor[parrot.id]?.price,
+                                                    color: selectedColor[parrot.id]?.color,
+                                                    colorID: selectedColor[parrot.id]?.colorId,
+                                                })
+                                            }
+                                        >
+                                            +
+                                        </button>
+                                    </Tooltip>
+                                </Link>
+                            </div>
+
+                            {/* <div className={cx('parrot-info')}>
+                                <p className={cx('parrot-name')}>{parrot.name}</p>
+
+                                <div className={cx('parrot-color')}>
+                                    {parrot.colors.map((color, colorIndex) => (
+                                        <div className={cx('cuong')}>
                                             <button
-                                                className={cx('cart-btn')}
+                                                key={colorIndex}
+                                                className={cx('parrot-color-item', {
+                                                    selected: color.color === selectedColor[parrot.id]?.color,
+                                                })}
                                                 onClick={() =>
-                                                    handleAddToCart({
-                                                        id: count,
-                                                        name: parrot.name,
-                                                        img: parrot.img,
-                                                        quantity: 1,
-                                                        price: selectedColor[parrot.id]?.price,
-                                                        color: selectedColor[parrot.id]?.color,
-                                                        colorID: selectedColor[parrot.id]?.colorId,
-                                                    })
+                                                    handleColorSelection(parrot.id, color.color, color.price, color.id)
                                                 }
-                                            >
-                                                +
-                                            </button>
-                                        </Tooltip>
-                                    </Link>
+                                                style={{ backgroundColor: color.color }}
+                                            ></button>
+                                        </div>
+                                    ))}
+                                </div> */}
+
+                            <div className={cx('parrot-info')}>
+                                <p className={cx('parrot-name')}>{parrot.name}</p>
+
+                                <div className={cx('parrot-color')}>
+                                    {parrot.colors.map((color, colorIndex) => (
+                                        <div className={cx('cuong')}>
+                                            <button
+                                                key={colorIndex}
+                                                className={cx('parrot-color-item', {
+                                                    selected: color.color === selectedColor[parrot.id]?.color,
+                                                })}
+                                                onClick={() =>
+                                                    handleColorSelection(parrot.id, color.color, color.price, color.id)
+                                                }
+                                                style={{ backgroundColor: color.color }}
+                                            ></button>
+                                        </div>
+                                    ))}
                                 </div>
 
-                                <div className={cx('parrot-info')}>
-                                    <p className={cx('parrot-name')}>{parrot.name}</p>
-
-                                    <div className={cx('parrot-color')}>
-                                        {parrot.colors.map((color, colorIndex) => (
-                                            <div className={cx('cuong')}>
-                                                <button
-                                                    key={colorIndex}
-                                                    className={cx('parrot-color-item', {
-                                                        selected: color.color === selectedColor[parrot.id]?.color,
-                                                    })}
-                                                    onClick={() =>
-                                                        handleColorSelection(
-                                                            parrot.id,
-                                                            color.color,
-                                                            color.price,
-                                                            color.id,
-                                                        )
-                                                    }
-                                                    style={{ backgroundColor: color.color }}
-                                                ></button>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className={cx('parrot-price')}>
-                                        <p>$ {selectedColor[parrot.id]?.price}</p>
-                                    </div>
-                                    <div className={cx('parrot-like')}>
-                                        <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
-                                        <p className={cx('parrot-like-quantity')}>{parrot.countReview} reviews</p>
-                                    </div>
+                                <div className={cx('parrot-price')}>
+                                    <p>$ {selectedColor[parrot.id]?.price}</p>
+                                </div>
+                                <div className={cx('parrot-like')}>
+                                    <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
+                                    <p className={cx('parrot-like-quantity')}>{parrot.countReview} reviews</p>
                                 </div>
                             </div>
-                        );
-                    })}
+                        </div>
+                    );
+                })}
             </div>
 
             <div className={cx('compare-section')} id="compare-section-id">
@@ -454,42 +496,54 @@ function ParrotList(props) {
                         <Col xs={7} className={cx('compare-col', 'compare-col-product')}>
                             <Menu>
                                 <Box className={cx('product-item')}>
-                                    <button
-                                        className={cx('product-item-cancel-button')}
-                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[0])}
-                                    >
-                                        x
-                                    </button>
                                     {selectedComparisonProduct.length === 0 ? (
                                         <Avatar size="2xl" src={number1} />
                                     ) : (
-                                        <Avatar size="2xl" src={selectedComparisonProduct[0].img} />
+                                        <>
+                                            <button
+                                                className={cx('product-item-cancel-button')}
+                                                onClick={() =>
+                                                    handleRemoveComparisonProduct(selectedComparisonProduct[0])
+                                                }
+                                            >
+                                                x
+                                            </button>
+                                            <Avatar size="2xl" src={selectedComparisonProduct[0].img} />
+                                        </>
                                     )}
                                 </Box>
                                 <Box className={cx('product-item')}>
-                                    <button
-                                        className={cx('product-item-cancel-button')}
-                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[1])}
-                                    >
-                                        x
-                                    </button>
                                     {selectedComparisonProduct.length < 2 ? (
                                         <Avatar size="2xl" src={number2} />
                                     ) : (
-                                        <Avatar size="2xl" src={selectedComparisonProduct[1].img} />
+                                        <>
+                                            <button
+                                                className={cx('product-item-cancel-button')}
+                                                onClick={() =>
+                                                    handleRemoveComparisonProduct(selectedComparisonProduct[1])
+                                                }
+                                            >
+                                                x
+                                            </button>
+                                            <Avatar size="2xl" src={selectedComparisonProduct[1].img} />
+                                        </>
                                     )}
                                 </Box>
                                 <Box className={cx('product-item')}>
-                                    <button
-                                        className={cx('product-item-cancel-button')}
-                                        onClick={() => handleRemoveComparisonProduct(selectedComparisonProduct[2])}
-                                    >
-                                        x
-                                    </button>
                                     {selectedComparisonProduct.length < 3 ? (
                                         <Avatar size="2xl" src={number3} />
                                     ) : (
-                                        <Avatar size="2xl" src={selectedComparisonProduct[2].img} />
+                                        <>
+                                            <button
+                                                className={cx('product-item-cancel-button')}
+                                                onClick={() =>
+                                                    handleRemoveComparisonProduct(selectedComparisonProduct[2])
+                                                }
+                                            >
+                                                x
+                                            </button>
+                                            <Avatar size="2xl" src={selectedComparisonProduct[2].img} />
+                                        </>
                                     )}
                                 </Box>
                             </Menu>

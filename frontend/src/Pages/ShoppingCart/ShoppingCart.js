@@ -4,10 +4,13 @@ import classNames from 'classnames/bind';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/ShoppingCart/ShoppingCart.module.scss';
 import ParrotAPI from '~/Api/ParrotAPI';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
 import { useEffect, useState } from 'react';
+
 import { Link } from 'react-router-dom';
 import { logDOM } from '@testing-library/react';
 
@@ -18,6 +21,7 @@ function ShoppingCart() {
     const [choosenCart, setChoosenCart] = useState([]);
     const [updatedCarts, setUpdatedCarts] = useState([]);
     const [checkboxState, setCheckboxState] = useState({});
+    const { removeCartItemStatus, setRemoveCartItemStatus } = useCartStatus();
 
     useEffect(() => {
         const getDataFromLocalStorage = () => {
@@ -188,7 +192,7 @@ function ShoppingCart() {
 
     const handleRemoveCart = async (index, id) => {
         // const checkbox = document.getElementById(`checkbox-${id}`);
-
+        setRemoveCartItemStatus((prev) => prev + 1);
         const updatedChoosenCart = choosenCart.filter((item) => item.id !== id);
         setChoosenCart(updatedChoosenCart);
         // Sử dụng filter để tạo một mảng mới loại bỏ đối tượng tại chỉ mục index

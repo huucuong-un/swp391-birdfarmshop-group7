@@ -69,6 +69,7 @@ const publicRoutes = [
     { path: '/profile', component: MyAccount },
     { path: '/user-profile', component: UserProfileNew },
     { path: '/contact', component: Contact },
+    { path: '/add-role', component: AddRole },
 ];
 
 //Dành cho những người đăng nhập mới coi được

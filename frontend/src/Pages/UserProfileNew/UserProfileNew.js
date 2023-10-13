@@ -77,6 +77,8 @@ function UserProfileNew() {
         try {
             if (loggedUser !== null) {
                 const updateInfo = await UserAPI.updateUserProfile(loggedUser);
+                localStorage.removeItem('userInfo');
+                localStorage.setItem('userInfo', JSON.stringify(updateInfo));
                 console.log(updateInfo);
             } else {
                 console.log('Error in updateProfile function, loggedUser is null');

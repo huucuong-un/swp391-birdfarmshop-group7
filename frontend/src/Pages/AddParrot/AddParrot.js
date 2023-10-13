@@ -93,7 +93,7 @@ function AddParrot() {
         const fetchParrotSpecies = async () => {
             try {
                 const parrotSpecie = await ParrotSpeciesAPI.getAll();
-                setSpecies(parrotSpecie);
+                setSpecies(parrotSpecie.listResult);
             } catch (error) {
                 console.error(error + 'At Add parrot fetch parrot species');
             }

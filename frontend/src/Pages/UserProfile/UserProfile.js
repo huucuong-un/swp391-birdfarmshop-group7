@@ -33,11 +33,12 @@ import {
     useDisclosure,
     Input,
 } from '@chakra-ui/react';
+import { ShopState } from '~/context/ShopProvider';
+import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 
 const cx = classNames.bind(styles);
 
 function UserProfile() {
-    const UserName = 'Vinh';
     const fileInputRef = useRef(null);
 
     // Function to trigger the file input when the button is clicked
@@ -53,6 +54,8 @@ function UserProfile() {
             console.log('Selected file:', selectedFile.name);
         }
     };
+
+    const { user } = ShopState();
 
     const [showShow, setShowShow] = useState(true);
 
@@ -71,7 +74,7 @@ function UserProfile() {
                         <div className={cx('userprofile-item-header', 'row')}>
                             {/* userprofile-item-header-item */}
                             <div className={cx('userprofile-item-header-item', 'col-md-3', 'col-sm-3')}>
-                                <img src="https://file.vfo.vn/hinh/2014/5/1875.jpg"></img>
+                                <img src={user.imgUrl}></img>
                             </div>
                             {/* userprofile-item-header-item */}
                             <div
@@ -97,7 +100,7 @@ function UserProfile() {
                                 </p>
                                 <div className={cx('userprofile-item-body-item-info', 'row')}>
                                     <input
-                                        value={UserName}
+                                        value={user.userName}
                                         disabled
                                         className={cx(
                                             'userprofile-item-body-item-info-name',
@@ -119,7 +122,7 @@ function UserProfile() {
                                             'information-detail',
                                         )}
                                     >
-                                        Vinh
+                                        {user.fullName}
                                     </p>
                                 </div>
                             </div>
@@ -135,7 +138,7 @@ function UserProfile() {
                                             'information-detail',
                                         )}
                                     >
-                                        Vinh
+                                        {user.email}
                                     </p>
                                 </div>
                             </div>
@@ -151,7 +154,7 @@ function UserProfile() {
                                             'information-detail',
                                         )}
                                     >
-                                        Vinh
+                                        {user.dob}
                                     </p>
                                 </div>
                             </div>
@@ -167,7 +170,7 @@ function UserProfile() {
                                             'information-detail',
                                         )}
                                     >
-                                        Vinh
+                                        {user.gender}
                                     </p>
                                 </div>
                             </div>

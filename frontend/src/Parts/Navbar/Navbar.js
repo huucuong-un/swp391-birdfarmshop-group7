@@ -118,6 +118,10 @@ function Navbar() {
         localStorage.setItem('parrot', JSON.stringify(updatedCarts));
     };
 
+    const showProfile = () => {
+        navigate('/userprofile');
+    };
+
     // Tạo biến để lưu tổng giá
     let totalPrice = 0;
 
@@ -153,7 +157,9 @@ function Navbar() {
                                             <Avatar size="lg" cursor="pointer" name={user.name} src={user.imgUrl} />
                                         </MenuButton>
                                         <MenuList mt={20} ml={20} className={cx('profile-list')}>
-                                            <MenuItem padding={5}>My Profile</MenuItem>
+                                            <MenuItem padding={5} onClick={showProfile}>
+                                                My Profile
+                                            </MenuItem>
                                             <MenuDivider color={'#ccc'} />
                                             <MenuItem onClick={logoutHandler} padding={5}>
                                                 Logout

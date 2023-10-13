@@ -136,6 +136,10 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
         return results;
     }
+    public Integer countByOrderId(Long id){
+
+        return feedbackRepository.countAllByOrderIdId(id);
+    }
 
 
     @Override

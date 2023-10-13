@@ -17,6 +17,7 @@ function Button({
     className,
     onClick,
     key,
+    backgroundColorBlue,
     register,
     ...passProps
 }) {
@@ -52,6 +53,7 @@ function Button({
         register,
         loginSystemBtn,
         editDeteleSwitch,
+        backgroundColorBlue,
     });
     return (
         <Comp className={classes} {...props}>

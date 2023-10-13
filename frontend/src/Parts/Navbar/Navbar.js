@@ -119,7 +119,7 @@ function Navbar() {
     };
 
     const showProfile = () => {
-        navigate('/userprofile');
+        navigate('/profile');
     };
 
     // Tạo biến để lưu tổng giá

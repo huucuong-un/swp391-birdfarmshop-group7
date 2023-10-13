@@ -31,7 +31,6 @@ import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 
-
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -59,7 +58,7 @@ const publicRoutes = [
     { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faq', component: FAQs },
-    { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
+    { path: '/add-parrot-species', component: AddParotSpecies, layout: SystemLayout },
     { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
     { path: '/compare-products', component: CompareParrot },
 ];

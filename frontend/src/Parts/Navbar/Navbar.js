@@ -119,7 +119,7 @@ function Navbar() {
     };
 
     const showProfile = () => {
-        navigate('/userprofile');
+        navigate('/profile');
     };
 
     // Tạo biến để lưu tổng giá
@@ -281,7 +281,7 @@ function Navbar() {
                     </div>
                     <div className={cx('subnav')}>
                         <Link to="/about-us" className={cx('subnavbtn')}>
-                            About
+                            ABOUT
                         </Link>
                     </div>
                     <div className={cx('subnav')}>

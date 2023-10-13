@@ -14,6 +14,7 @@ import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIco
 
 import { useState, useEffect } from 'react';
 
+import { Button as Buttons } from '@chakra-ui/react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';

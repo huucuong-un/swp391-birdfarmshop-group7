@@ -1,8 +1,6 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
 
-import classNames from 'classnames/bind';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
-import styles from '~/Pages/ShoppingCart/ShoppingCart.module.scss';
 import ParrotAPI from '~/Api/ParrotAPI';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
@@ -13,6 +11,9 @@ import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { logDOM } from '@testing-library/react';
+
+import classNames from 'classnames/bind';
+import styles from '~/Pages/ShoppingCart/ShoppingCart.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -321,7 +322,7 @@ function ShoppingCart() {
                             </div>
                         </div>
 
-                        <div className={cx('cart-right-code')}>
+                        {/* <div className={cx('cart-right-code')}>
                             <p>Give Code</p>
                             <div className={cx('input-container')}>
                                 <input type="text" placeholder="Enter code..." />
@@ -329,7 +330,7 @@ function ShoppingCart() {
                                     <FontAwesomeIcon icon={faArrowRight} />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className={cx('cart-right-final')}>
                             <div className={cx('cart-right-final-title')}>
@@ -341,11 +342,27 @@ function ShoppingCart() {
                         </div>
                     </div>
                     <div className={cx('check-out-btn')}>
-                        <Link to="/payment" state={choosenCart}>
-                            <Button colorScheme="yellow" size="lg" width={300} height={20} fontSize={16}>
-                                Check Out
-                            </Button>
-                        </Link>
+                        {choosenCart.length === 0 ? (
+                            <Link to="" state={choosenCart}>
+                                <Button
+                                    className={cx('check-out-disable')}
+                                    colorScheme="yellow"
+                                    size="lg"
+                                    width={300}
+                                    height={20}
+                                    fontSize={16}
+                                    disabled
+                                >
+                                    Check Out
+                                </Button>
+                            </Link>
+                        ) : (
+                            <Link to="/payment" state={choosenCart}>
+                                <Button colorScheme="yellow" size="lg" width={300} height={20} fontSize={16}>
+                                    Check Out
+                                </Button>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

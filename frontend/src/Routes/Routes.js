@@ -32,6 +32,8 @@ import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
 import MyAccount from '~/Pages/MyAccount/MyAccount';
 import UserProfileNew from '~/Pages/UserProfileNew/UserProfileNew';
+import Contact from '~/Components/Contact/Contact';
+import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestService';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -47,6 +49,7 @@ const publicRoutes = [
     { path: '/about-us', component: AboutUs },
     { path: '/userprofile', component: UserProfile },
     { path: '/species-selection', component: SpeciesSelection },
+    { path: '/add-parrot-nest-service', component: AddParrotNestService },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
     { path: '/addpost', component: AddPost, layout: SystemLayout },
@@ -59,12 +62,13 @@ const publicRoutes = [
     { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/faq', component: FAQs },
+    { path: '/faqs', component: FAQs },
     { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
     { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
     { path: '/compare-products', component: CompareParrot },
     { path: '/profile', component: MyAccount },
     { path: '/user-profile', component: UserProfileNew },
+    { path: '/contact', component: Contact },
 ];
 
 //Dành cho những người đăng nhập mới coi được

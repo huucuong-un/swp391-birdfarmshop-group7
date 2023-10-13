@@ -13,6 +13,7 @@ import { ShopState } from '~/context/ShopProvider';
 import { Box, Button, Image } from '@chakra-ui/react';
 import Paypal from '~/Assets/image/Payment/Paypal.svg';
 import VnPay from '~/Assets/image/Payment/vnpay-seeklogo.com.svg';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 const cx = classNames.bind(styles);
 
@@ -31,8 +32,8 @@ function Payment() {
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
-
     const [loggedUser, setLoggedUser] = useState();
+    const { paymentStatus, setPaymentStatus } = useCartStatus;
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
@@ -66,6 +67,7 @@ function Payment() {
     useEffect(() => {
         const addOrders = async () => {
             try {
+                // setPaymentStatus((prev) => prev + 1);
                 const cartList = receivedData.map((item, index) => ({
                     speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
                     quantity: item.quantity,

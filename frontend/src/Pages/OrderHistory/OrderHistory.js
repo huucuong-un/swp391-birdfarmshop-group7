@@ -9,27 +9,48 @@ import {
     MinusIcon,
     AddIcon,
 } from '@chakra-ui/react';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+} from '@chakra-ui/react';
 
-import classNames from 'classnames/bind';
 import SortSpace from '~/Components/SortSpace/SortSpace';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
-import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
-import { ShopState } from '~/context/ShopProvider';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import { useEffect, useState } from 'react';
+import classNames from 'classnames/bind';
+import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
+
+import { ShopState } from '~/context/ShopProvider';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+
+import React, { useEffect, useState } from 'react';
 
 import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
 function OrderHistory() {
-    const [orders, setOrders] = useState([]);
-    // const [loggedUser, setLoggedUser] = useState();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
-    // useEffect(() => {
-    //     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    // }, []);
+    const [orders, setOrders] = useState([]);
+    const [loggedUser, setLoggedUser] = useState();
+
+    const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
+    const [overlay, setOverlay] = React.useState(<OverlayOne />);
+
+    useEffect(() => {
+        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    }, []);
     const { user } = ShopState();
+    const { addToCartStatus } = useCartStatus();
 
     useEffect(() => {
         const getOrders = async () => {
@@ -44,7 +65,7 @@ function OrderHistory() {
         };
 
         getOrders();
-    }, []);
+    }, [loggedUser]);
 
     useEffect(() => {
         console.log(user);
@@ -118,7 +139,7 @@ function OrderHistory() {
                         </Accordion>
 
                         <div className={cx('order-bottom')}>
-                            <div className="order-bottom-left">
+                            <div className={cx('order-bottom-left')}>
                                 <div className={cx('order-total-quantity-and-price')}>
                                     <div className={cx('total-quantity')}>
                                         <h3>Total</h3>
@@ -126,6 +147,85 @@ function OrderHistory() {
                                     <div className={cx('total-price')}>
                                         <p>${order.orderDTO.totalPrice}</p>
                                     </div>
+                                </div>
+                                <div className={cx('rating-btn')}>
+                                    <Button
+                                        colorScheme="blue"
+                                        size="lg"
+                                        fontSize={'15px'}
+                                        onClick={() => {
+                                            setOverlay(<OverlayOne />);
+                                            onOpen();
+                                        }}
+                                    >
+                                        Feedback
+                                    </Button>
+                                    <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
+                                        {overlay}
+                                        <ModalContent>
+                                            <ModalHeader>Rate Product</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                <div className={cx('rate-area')}>
+                                                    <div className={cx('product-container')}>
+                                                        <div className={cx('product-img')}>
+                                                            <img
+                                                                src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                                alt="product-img"
+                                                            />
+                                                        </div>
+                                                        <div className={cx('product-info')}>
+                                                            <div className={cx('product-title')}>
+                                                                <p>Ronaldo</p>
+                                                            </div>
+                                                            <div className={cx('product-type')}>
+                                                                <p>Category: yellow</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={cx('rating-star-container')}>
+                                                        <div className={cx('rating-star-title')}>
+                                                            <p>Product Quality:</p>
+                                                        </div>
+                                                        <div className={cx('rating-star-icon')}>
+                                                            <FontAwesomeIcon icon={faStar} />
+                                                            <FontAwesomeIcon icon={faStar} />
+                                                            <FontAwesomeIcon icon={faStar} />
+                                                            <FontAwesomeIcon icon={faStar} />
+                                                            <FontAwesomeIcon icon={faStar} />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={cx('rating-input')}>
+                                                        <p>Description:</p>
+                                                        <textarea maxLength={100} />
+                                                    </div>
+                                                </div>
+                                            </ModalBody>
+                                            <ModalFooter className={cx('button-footer')}>
+                                                <Button>Save</Button>
+                                                <Button onClick={onClose}>Close</Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal>
+                                    {/* <Modal isOpen={isOpen} onClose={onClose} w>
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader>Rate Product</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                
+                                            </ModalBody>
+
+                                            <ModalFooter>
+                                                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                                    Close
+                                                </Button>
+                                                <Button variant="ghost">Secondary Action</Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal> */}
                                 </div>
                             </div>
                             {/* <div className={cx('order-bottom-right')}>

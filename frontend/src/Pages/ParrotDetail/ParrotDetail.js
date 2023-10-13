@@ -36,11 +36,12 @@ function ParrotDetail() {
     const [totalParrotsInCart, setTotalParrotsInCart] = useState(0);
     const [countParrot, setCountParrot] = useState('Check the color to see ');
     const { addToCartStatus, setAddToCartStatus } = useCartStatus();
-
+    const [colorSortList, setColorSortList] = useState([]);
     const feedback = {
         id: id,
         type: 'parrot',
     };
+
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
@@ -107,6 +108,7 @@ function ParrotDetail() {
                 const parrot = { ...item };
                 try {
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
+                    setColorSortList(parrot.colors);
                     data.push(parrot);
                 } catch (error) {
                     console.error(error);
@@ -146,6 +148,7 @@ function ParrotDetail() {
 
             // Khi tất cả các Promise đã hoàn thành, combineData sẽ chứa tất cả dữ liệu đã được lưu.
             setCombineData(data);
+
             console.log(combineData);
             // console.log(combineData[1].colors[0].color);
         };
@@ -205,38 +208,43 @@ function ParrotDetail() {
 
     const StarRating = ({ rating }) => {
         const stars = [];
-
+        if (rating === null) {
+            return <div>There are no reviews yet</div>;
+        }
         const number = rating;
         const integerPart = Math.floor(number);
         const decimalPart = (number - integerPart).toFixed(1);
-
+        var count = 0;
         for (let i = 0; i < integerPart; i++) {
-            stars.push(<FontAwesomeIcon icon={solidStar} key={i} />);
+            stars.push(<FontAwesomeIcon icon={solidStar} key={count} />);
+            count = count + 1;
         }
         if (decimalPart > 0) {
-            stars.push(<FontAwesomeIcon icon={faStarHalfAlt} key={integerPart} />);
+            stars.push(<FontAwesomeIcon icon={faStarHalfAlt} key={count} />);
+            count = count + 1;
             if (integerPart < 5) {
                 for (let i = 0; i < 5 - integerPart - 1; i++) {
-                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={count} />);
+                    count = count + 1;
                 }
             }
         }
 
-        if (decimalPart === 0) {
+        if (decimalPart == 0) {
             if (integerPart < 5) {
                 for (let i = 0; i < 5 - integerPart; i++) {
-                    stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={count} />);
+                    count = count + 1;
                 }
             }
         }
-        if (rating === null) {
-            stars.push(<div>There are no reviews yet</div>);
-        } else {
-            stars.push(<div> ( {rating} / 5 )</div>);
-        }
 
+        if (rating !== null) {
+            stars.push(<div key={count}> ( {rating} / 5 )</div>);
+        }
         return stars;
     };
+
     return (
         <div className={cx('wrapper')}>
             <StartPartPage>Parrot Details</StartPartPage>
@@ -387,7 +395,7 @@ function ParrotDetail() {
                     </div>
                 );
             })}
-            <Feedback feedbackType={feedback}></Feedback>
+            <Feedback feedbackType={feedback} colorSortList={colorSortList}></Feedback>
         </div>
     );
 }

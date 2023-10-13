@@ -15,7 +15,7 @@ function ChooseProduct() {
             <Title>Parrot Or Nest</Title>
             <div className="container">
                 <div className={cx('product-hover-effect-container')}>
-                    <Link className={cx('item-parrot')} to="/nest">
+                    <Link className={cx('item-parrot')} to="/add-parrot-nest-service">
                         <img className={cx('nest-img')} src={nest} />
                     </Link>
 

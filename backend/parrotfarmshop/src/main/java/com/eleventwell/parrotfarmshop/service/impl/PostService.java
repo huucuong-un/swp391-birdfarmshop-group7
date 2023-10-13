@@ -74,6 +74,12 @@ public class PostService implements IGenericService<PostDTO> {
         }
         return results;
     }
+    
+    public PostDTO findOneById(Long id){
+        
+        return (PostDTO) genericConverter.toDTO(postRepository.findOneById(id),PostDTO.class);
+        
+    }
 
     @Override
     public int totalItem() {

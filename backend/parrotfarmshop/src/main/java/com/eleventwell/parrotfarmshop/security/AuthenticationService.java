@@ -138,5 +138,29 @@ public class AuthenticationService {
                 .build();
     }
 
+    public  AuthenticationResponse updateProfile(UpdateProfileRequest request) {
+        UserEntity user = repository.findOneByUserName(request.getUserName());
+
+        user.setFullName(request.getFullName());
+        user.setGender(request.getGender());
+        user.setImgUrl(request.getImgUrl());
+        user.setDob(request.getDob());
+
+        repository.save(user);
+
+
+        return AuthenticationResponse.builder()
+                .token(request.getToken())
+                .userId(user.getId())
+                .userName(user.getUsername())
+                .userId(user.getId())
+                .fullName(user.getFullName())
+                .status(user.getStatus())
+                .email(user.getEmail())
+                .roleId(user.getRole().getId())
+                .imgUrl(user.getImgUrl())
+                .build();
+    }
+
 
 }

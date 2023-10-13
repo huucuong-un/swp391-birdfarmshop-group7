@@ -6,8 +6,8 @@ const OrderAPI = {
         return axiosClinet.get(url, { params });
     },
 
-    findAllByUserId() {
-        const url = `/order/findAllByUserId/1`;
+    findAllByUserId(id) {
+        const url = `/order/findAllByUserId/${id}`;
         return axiosClinet.get(url);
     },
 

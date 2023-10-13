@@ -41,6 +41,7 @@ public class PostEntity extends BaseEntity {
 	private String title;
 
 	@NotBlank
+
 	@Column(name = "content")
 	private String content;
 

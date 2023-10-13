@@ -112,12 +112,16 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
     }
 
+
+    public Integer countByRating(Integer rating) {
+        return feedbackRepository.countAllByRating(rating);
+    }
     public Integer countBySpeciesId(Long id) {
         return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
     }
 
-    public Integer countBySpeciesColorId(Long id) {
-        return feedbackRepository.countAllByParrotSpeciesColorId(id);
+    public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId,Long colorId, Integer rating) {
+        return feedbackRepository.countAllByParrotSpeciesColorIdAndRating(speciesId,colorId,rating);
     }
 
     public List<FeedbackDTO> findByRatingAndColorId(Integer rating, Long colorId, Pageable pageable) {

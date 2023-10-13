@@ -2,7 +2,7 @@ package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
-import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +12,19 @@ import org.springframework.web.bind.annotation.*;
 public class PostAPI {
 
     @Autowired
-    IGenericService postService;
+    PostService postService;
 
     @GetMapping(value="")
     public ListOutput showPosts() {
         ListOutput result = new ListOutput();
         result.setListResult(postService.findAll());
         return  result;
+    }
+    
+     @GetMapping(value="find-one-by-id")
+    public PostDTO showPosts(@RequestBody @RequestParam("postId") Long id) {
+        
+       return postService.findOneById(id);
     }
 
     @PostMapping(value="")

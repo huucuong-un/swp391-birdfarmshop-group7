@@ -8,7 +8,7 @@ const FeedbackAPI = {
     },
 
     countReview(params) {
-        const url = '/feedback/count-by-species-id';
+        const url = '/feedback/count-by-species-id-or-species-color-id-and-rating';
         return axiosClinet.get(url, { params });
     },
 };

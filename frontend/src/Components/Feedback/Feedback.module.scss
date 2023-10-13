@@ -8,6 +8,33 @@
     gap: 10px;
 }
 
+.sort-item-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.sort-item {
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    padding: 5px 20px;
+    border-radius: 50px;
+    p {
+        margin: 0;
+    }
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.sort-feedback-select {
+    border: 2px solid var(--black);
+    border-radius: 20px;
+    max-width: 150px;
+    text-align: center;
+    padding: 0 5px;
+}
+
 .feedback-input {
     display: flex;
     align-items: center;

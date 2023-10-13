@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from '~/Components/Feedback/Feedback.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import FeedbackAPI from '~/Api/FeedbackAPI';
@@ -15,35 +15,69 @@ import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
-function Feedback({ feedbackType }) {
+function Feedback({ feedbackType, colorSortList }) {
     console.log(feedbackType);
+    console.log(colorSortList);
+
     const [feedbackList, setFeedbacksList] = useState([]);
     const [count, setCount] = useState(0);
     const [combineData, setCombineData] = useState([]);
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
     const [combineDataWithColor, setCombineDataWithColor] = useState([]);
-
+    const [colorSort, setColorSort] = useState([]);
+    const [ratingSort, setRatingSort] = useState(null);
+    const [colorSortSelect, setcolorSortSelect] = useState(null);
+    const [runOnce, setRunOnce] = useState(0);
     const [param, setParam] = useState({
         page: 1,
         limit: 6,
         speciesId: feedbackType.id,
         productType: feedbackType.type,
+        rating: null,
+        colorId: null,
+    });
+    const [paramCount, setParamCount] = useState({
+        rating: null,
+        colorId: null,
     });
 
     const StarRating = ({ rating }) => {
         const stars = [];
 
+        var count = 0;
         for (let i = 0; i < rating; i++) {
-            stars.push(<FontAwesomeIcon icon={solidStar} key={i} />);
+            stars.push(<FontAwesomeIcon icon={solidStar} key={count} />);
+            count = count + 1;
         }
 
         if (rating < 5) {
             for (let i = 0; i < 5 - rating; i++) {
-                stars.push(<FontAwesomeIcon icon={regularStar} key={i} />);
+                stars.push(<FontAwesomeIcon icon={regularStar} key={count} />);
+                count = count + 1;
             }
         }
         return stars;
+    };
+
+    const sortFeedbackByRating = ({ rating, id, color }) => {
+        setRatingSort(rating);
+        setcolorSortSelect(color);
+        for (let i = 0; i <= 5; i++) {
+            const aliasId = 'rs' + i;
+            document.getElementById(aliasId).style.backgroundColor = '';
+        }
+        document.getElementById(id).style.backgroundColor = '#f6c504';
+        console.log(id);
+        const param = {
+            page: 1,
+            limit: 6,
+            speciesId: feedbackType.id,
+            productType: feedbackType.type,
+            rating: rating,
+            colorId: color,
+        };
+        setParam(param);
     };
 
     useEffect(() => {
@@ -109,14 +143,84 @@ function Feedback({ feedbackType }) {
         console.log(combineDataWithColor);
     }, [combineDataWithColor]);
 
-    console.log(combineData);
-    console.log(combineDataWithColor);
+    useEffect(() => {
+        const createColorSort = async () => {
+            const colorSorts = [];
+            const rs = 'rs';
+            const aliasIdO = 'rs0';
+            colorSorts.push(
+                <div id={aliasIdO} className={cx('sort-item')}>
+                    <button
+                        onClick={() => sortFeedbackByRating({ rating: null, id: aliasIdO, color: colorSortSelect })}
+                    >
+                        All
+                    </button>
+                </div>,
+            );
+            for (let i = 5; i >= 1; i--) {
+                const aliasId = rs + i;
+                var params = {
+                    rating: i,
+                    colorId: colorSortSelect,
+                };
+                const numberOfFeedback = await FeedbackAPI.countReview(params);
+
+                if (numberOfFeedback === 0) {
+                    colorSorts.push(
+                        <div style={{ opacity: '0.7' }} id={aliasId} key={i} className={cx('sort-item')}>
+                            <button
+                                style={{ cursor: 'default' }}
+                                disabled
+                                onClick={() => sortFeedbackByRating({ rating: i, id: aliasId })}
+                            >
+                                {i} <FontAwesomeIcon icon={solidStar} /> ( {numberOfFeedback} )
+                            </button>
+                        </div>,
+                    );
+                } else {
+                    colorSorts.push(
+                        <div id={aliasId} key={i} className={cx('sort-item')}>
+                            <button
+                                onClick={() => sortFeedbackByRating({ rating: i, id: aliasId, color: colorSortSelect })}
+                            >
+                                {i} <FontAwesomeIcon icon={solidStar} /> ( {numberOfFeedback} )
+                            </button>
+                        </div>,
+                    );
+                }
+            }
+            setColorSort(colorSorts);
+            console.log(colorSortSelect);
+        };
+        createColorSort();
+    }, [feedbackList]);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            sortFeedbackByRating({ raing: null, id: 'rs0', color: colorSortSelect });
+        }, 200);
+
+        return () => clearTimeout(timer);
+    }, []);
     return (
         <div className={cx('wrapper')}>
             <h1>Feedback</h1>
-            <div className={cx('feedback-input')}>
-                <input type="text" placeholder="type your feedback..." />
-                <FontAwesomeIcon icon={faArrowRight} className={cx('icon')} />
+            <div className={cx('sort-feedback-container')}>
+                <div className={cx('sort-item-container')}>
+                    {colorSort}
+                    <select
+                        value={colorSortSelect}
+                        style={{
+                            cursor: 'pointer',
+                            border: '0.5px solid rgba(0, 0, 0, 0.1)',
+                        }}
+                        onChange={(e) => sortFeedbackByRating({ rating: null, id: 'rs0', color: e.target.value })}
+                    >
+                        <option value="">Colors</option>
+                        {colorSortList.map((color, index) => (
+                            <option value={color.id}>{color.color}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
             {combineDataWithColor.map((feedback, index) => (
                 <div className={cx('feedback-item')} key={index}>

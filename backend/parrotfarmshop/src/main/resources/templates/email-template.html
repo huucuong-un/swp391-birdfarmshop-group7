@@ -62,7 +62,8 @@
         </tbody>
     </table>
 
-    <p>Total Amount: <span th:text="${totalAmount}"></span></p>
+    <h4>Total Amount: <span th:text="${totalAmount}"></span></h4>
+    <h4>Total Price: <span th:text="${totalAmount * price}"></span></h4>
 
     <p>Thank you for shopping with us!</p>
     <a th:href="${shopLink}" class="button">Visit Our Shop</a>

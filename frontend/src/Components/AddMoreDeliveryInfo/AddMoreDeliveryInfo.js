@@ -93,7 +93,7 @@ function AddMoreDeliveryInfo(props) {
                     (submissionStatus === false && (
                         <Alert status="error" fontSize={12}>
                             <AlertIcon />
-                            <AlertTitle>Failed to add new delivery!! - </AlertTitle>
+                            <AlertTitle>Failed to add new delivery!!</AlertTitle>
                             <AlertDescription>Please check again!!!</AlertDescription>
                         </Alert>
                     ))}

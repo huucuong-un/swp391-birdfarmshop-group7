@@ -88,14 +88,14 @@ function AddSpeciesColor() {
         () => {
             const fetchData = async () => {
                 const data = [];
-                for (const specie of species) {
-                    const parrot = { ...specie };
-                    parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(parrot.id);
-                    data.push(parrot);
-                    try {
-                    } catch (error) {
-                        console.error(error);
+                try {
+                    for (const specie of species) {
+                        const parrot = { ...specie };
+                        parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(parrot.id);
+                        data.push(parrot);
                     }
+                } catch (error) {
+                    console.error(error);
                 }
                 setCombineData(data);
             };

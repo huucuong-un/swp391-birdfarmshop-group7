@@ -57,7 +57,13 @@ public class FeedbackController {
 
 
     }
+    @GetMapping(value = "count-by-orderId")
+    public Integer countByOrderId(@RequestBody @RequestParam(value = "orderId") Long  orderId) {
 
+        return feedbackService.countByOrderId(orderId);
+
+
+    }
     @GetMapping(value = "find-all-by-species-id-and-belong-to-or-rating-or-color-id")
     public PagingModel findAllBySpeciesIdAndBelongTo(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam("speciesId") Long speciesId, @RequestParam(value = "productType",required = false) String productType,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "colorId",required = false) Long colorId) {
         PagingModel result = new PagingModel();

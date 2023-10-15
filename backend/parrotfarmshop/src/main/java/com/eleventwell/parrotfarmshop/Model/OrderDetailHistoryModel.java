@@ -12,6 +12,7 @@ public class OrderDetailHistoryModel {
     String img;
     String SpeciesName;
     String color;
+    Long colorId;
     Integer quantity;
     Double totalPrice;
     Double price;

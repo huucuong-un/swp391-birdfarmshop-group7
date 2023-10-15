@@ -44,8 +44,10 @@ public class OrderEntity extends BaseEntity {
 	@ManyToOne
     @JoinColumn(name = "promotionID",nullable = true)
     private PromotionEntity promotion;
-	
-	
+
+	@OneToOne(mappedBy = "orderId")
+	@PrimaryKeyJoinColumn
+	private FeedbackEntity feedback;
 	
 
 

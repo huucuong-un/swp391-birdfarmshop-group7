@@ -29,4 +29,6 @@ public class FeedbackDTO extends BaseDTO {
 
     private Integer colorId;
 
+    private Long orderId;
+
 }

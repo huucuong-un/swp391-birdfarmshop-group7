@@ -19,6 +19,7 @@ import { ShopState } from '~/context/ShopProvider';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,9 @@ function Navbar() {
     const { user } = ShopState();
 
     const navigate = useNavigate();
+
+    const { addToCartStatus } = useCartStatus();
+    const { removeCartItemStatus } = useCartStatus();
 
     const logoutHandler = () => {
         localStorage.removeItem('userInfo');
@@ -83,35 +87,39 @@ function Navbar() {
                             })} */
 
     const [carts, setCarts] = useState([]);
+    const [quanityOfCart, setQuanityOfCart] = useState(carts ? carts.length : 0);
 
     useEffect(() => {
         const dataJSON = localStorage.getItem('parrot');
         const data = JSON.parse(dataJSON);
         setCarts(data);
-    }, []);
+    }, [addToCartStatus]);
 
-    const handleIncreaseQuantity = (index) => {
-        const updatedCarts = [...carts];
-        updatedCarts[index].quantity += 1;
-        setCarts(updatedCarts);
-        // Cập nhật local storage
-        updateLocalStorage(updatedCarts);
-    };
+    useEffect(() => {
+        setQuanityOfCart(carts ? carts.length : 0);
+    }, [carts]);
 
-    // Hàm giảm số lượng
-    const handleDecreaseQuantity = (index) => {
-        const updatedCarts = [...carts];
-        if (updatedCarts[index].quantity > 1) {
-            updatedCarts[index].quantity -= 1;
-            setCarts(updatedCarts);
-            // Cập nhật local storage
-            updateLocalStorage(updatedCarts);
-        }
-    };
+    useEffect(() => {
+        const dataJSON = localStorage.getItem('parrot');
+        const data = JSON.parse(dataJSON);
+        setCarts(data);
+    }, [removeCartItemStatus]);
+
+    // useEffect(() => {
+    //     console.log(removeCartItemStatus);
+    // }, [removeCartItemStatus]);
+
+    // useEffect(() => {
+    //     console.log(addToCartStatus);
+    // }, [addToCartStatus]);
 
     // Hàm cập nhật local storage với dữ liệu mới
     const updateLocalStorage = (updatedCarts) => {
         localStorage.setItem('parrot', JSON.stringify(updatedCarts));
+    };
+
+    const showProfile = () => {
+        navigate('/profile');
     };
 
     // Tạo biến để lưu tổng giá
@@ -149,7 +157,9 @@ function Navbar() {
                                             <Avatar size="lg" cursor="pointer" name={user.name} src={user.imgUrl} />
                                         </MenuButton>
                                         <MenuList mt={20} ml={20} className={cx('profile-list')}>
-                                            <MenuItem padding={5}>My Profile</MenuItem>
+                                            <MenuItem padding={5} onClick={showProfile}>
+                                                My Profile
+                                            </MenuItem>
                                             <MenuDivider color={'#ccc'} />
                                             <MenuItem onClick={logoutHandler} padding={5}>
                                                 Logout
@@ -176,7 +186,9 @@ function Navbar() {
                             </>
                         )}
                     </div>
-                    <img className={cx('logo')} src={logo} alt="Logo" />
+                    <Link className={cx('logo-container')} to="/">
+                        <img className={cx('logo')} src={logo} alt="Logo" />
+                    </Link>
                     <div className={cx('active-right')}>
                         <Button
                             text
@@ -233,17 +245,6 @@ function Navbar() {
                                                         View Cart
                                                     </Buttons>
                                                 </Link>
-                                                <Link to="">
-                                                    <Buttons
-                                                        colorScheme="yellow"
-                                                        size="lg"
-                                                        width={400}
-                                                        height={45}
-                                                        fontSize={16}
-                                                    >
-                                                        Check Out
-                                                    </Buttons>
-                                                </Link>
                                             </div>
                                         </div>
                                     </PopperWrapper>
@@ -257,86 +258,37 @@ function Navbar() {
                                     leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />}
                                 >
                                     Cart
+                                    {quanityOfCart > 0 && (
+                                        <div className={cx('cart-quantity')}>
+                                            <p>{quanityOfCart}</p>
+                                        </div>
+                                    )}
                                 </Button>
                             </div>
                         </Tippy>
                     </div>
                 </div>
                 <div className={cx('nav-bottom')}>
-                    <Tippy
-                        interactive
-                        // visible
-                        // delay={[0, 700]}
-                        placement="bottom"
-                        render={(attrs) => (
-                            <div className={cx('mini-nav-result')} tabIndex="-1" {...attrs}>
-                                <PopperWrapper>
-                                    {MENU_ITEMS_PRODUCT.map((item, index) => {
-                                        return (
-                                            <Button key={index} className={cx('mini-nav-result-item')} to={item.to}>
-                                                {item.title}
-                                            </Button>
-                                        );
-                                    })}
-                                </PopperWrapper>
-                            </div>
-                        )}
-                    >
-                        <div>
-                            {/* {activeNavs.map((activeNav, index) => {
-                                    return (
-                                        <Button className={cx('nav-bottom-item')} text key={index}>
-                                            {activeNav.title}
-                                        </Button>
-                                    );
-                                })} */}
-
-                            <Button className={cx('nav-bottom-item')} text>
-                                PRODUCT
-                            </Button>
-                        </div>
-                    </Tippy>
-
-                    <Tippy
-                        interactive
-                        // visible
-                        placement="bottom"
-                        render={(attrs) => (
-                            <div className={cx('mini-nav-result')} tabIndex="-1" {...attrs}>
-                                <PopperWrapper>
-                                    {MENU_ITEMS_SERVICE.map((item, index) => {
-                                        return (
-                                            <Button className={cx('mini-nav-result-item')} to={item.to}>
-                                                {item.title}
-                                            </Button>
-                                        );
-                                    })}
-                                </PopperWrapper>
-                            </div>
-                        )}
-                    >
-                        <div>
-                            {/* {activeNavs.map((activeNav, index) => {
-                                return (
-                                    <Button className={cx('nav-bottom-item')} text key={index}>
-                                        {activeNav.title}
-                                    </Button>
-                                );
-                            })} */}
-
-                            <Button className={cx('nav-bottom-item')} text>
-                                SERVICE
-                            </Button>
-                        </div>
-                    </Tippy>
-
-                    <Button className={cx('nav-bottom-item')} text to="/about-us">
-                        ABOUT
-                    </Button>
-
-                    <Button to="/faq" className={cx('nav-bottom-item')} text>
-                        FAQS
-                    </Button>
+                    <div className={cx('subnav')}>
+                        <Link to="/parrot-product" className={cx('subnavbtn')}>
+                            PARROT
+                        </Link>
+                    </div>
+                    <div className={cx('subnav')}>
+                        <Link to="/add-parrot-nest-service" className={cx('subnavbtn')}>
+                            NEST
+                        </Link>
+                    </div>
+                    <div className={cx('subnav')}>
+                        <Link to="/about-us" className={cx('subnavbtn')}>
+                            About
+                        </Link>
+                    </div>
+                    <div className={cx('subnav')}>
+                        <Link to="/faqs" className={cx('subnavbtn')}>
+                            FAQS
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

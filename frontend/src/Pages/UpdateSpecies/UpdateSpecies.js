@@ -25,7 +25,7 @@ import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 /////
 
 const cx = classNames.bind(styles);
-function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
+function UpdateSpecies({ specieID, onUpdateSuccess }) {
     const [specie, setSpecie] = useState();
     const [submissionStatus, setSubmissionStatus] = useState();
     const [species, setSpecies] = useState([]);
@@ -47,10 +47,10 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
         nestAverageRating: 4.0,
         status: true,
     });
-    const handleRefreshClick = () => {
-        // Call the refreshParent function to trigger a page reload
-        refreshSpeciesColorPage();
-    };
+    // const handleRefreshClick = () => {
+    //     // Call the refreshParent function to trigger a page reload
+    //     refreshSpeciesColorPage();
+    // };
     // Toast
     const toast = useToast();
 
@@ -58,6 +58,8 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
         const fetchSpeciesByID = async () => {
             try {
                 const specieById = await ParrotSpeciesAPI.get(specieID);
+                const myObject = {};
+
                 setSpecie(specieById);
             } catch (error) {
                 console.log('Error at UpdateSpecies.js fetchSpeciesByID | Error:  ' + error);
@@ -83,7 +85,8 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
     }, [specie]); // Add specie to the dependency array
 
     // This function use to  handle update
-    const handleUpdate = async () => {
+    const handleUpdate = async (e) => {
+        e.preventDefault();
         try {
             // const formData = new FormData();
             // formData.append('image', parrotSpeciesColor.imageUrl); // Append the image file
@@ -111,11 +114,15 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
             }
 
             setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
-            handleRefreshClick();
+            // handleRefreshClick();
 
             setSpecies([...species, responseSpecies.data]);
 
             setSubmissionStatus(true);
+            // Set time out for notification
+            setTimeout(() => {
+                setSubmissionStatus();
+            }, 7000);
         } catch (error) {
             console.error('Error:', error);
             setSubmissionStatus(false);
@@ -173,9 +180,16 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
     console.log(specie);
     console.log('Update species: ' + specieID);
 
+    const handleUpdateParentStatus = () => {
+        // Simulate an update action here
+        // After the update is successful, call the function from the parent to set reloadData to true
+        // This will trigger the parent component to reload its data
+        // setStatus(true); // Update the status to true
+        onUpdateSuccess(); // Call the parent function to set reloadData to true
+    };
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('inner')}>
+            <form onSubmit={handleUpdate} className={cx('inner')}>
                 <TableContainer className={cx('table-container')}>
                     {(submissionStatus === true && (
                         <Alert status="success">
@@ -191,7 +205,6 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
                                 <AlertDescription>Please check your input!!!</AlertDescription>
                             </Alert>
                         ))}
-
                     <div className={cx('title-post')}>
                         <div className={cx('title')}>
                             <h1>Update species</h1>
@@ -288,7 +301,7 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
                         <Tfoot>
                             <Tr>
                                 <Td></Td>
-                                <Td className={cx('submit-btn')}>
+                                <Td className={cx('submit-btn')} onClick={handleUpdateParentStatus}>
                                     <Button
                                         type="submit"
                                         className={cx('btn')}
@@ -296,7 +309,6 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
                                         style={{ marginTop: 15 }}
                                         margin="8px"
                                         isLoading={loading}
-                                        onClick={handleUpdate}
                                     >
                                         Update
                                     </Button>
@@ -305,7 +317,7 @@ function UpdateSpecies({ specieID, refreshSpeciesColorPage }) {
                         </Tfoot>
                     </Table>
                 </TableContainer>
-            </div>
+            </form>
         </div>
     );
 }

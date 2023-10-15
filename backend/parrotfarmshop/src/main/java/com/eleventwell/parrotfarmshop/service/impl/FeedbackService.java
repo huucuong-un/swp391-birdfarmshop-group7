@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class FeedbackService implements IGenericService<FeedbackDTO> {
 
@@ -35,10 +36,10 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
     @Override
     public List<FeedbackDTO> findAll() {
-List<FeedbackDTO> listDTO = new ArrayList<>();
-List<FeedbackEntity> listEntity = feedbackRepository.findAllByOrderByIdDesc();
-        for (FeedbackEntity entity: listEntity) {
-         FeedbackDTO dto = (FeedbackDTO) genericConverter.toDTO(entity,FeedbackDTO.class);
+        List<FeedbackDTO> listDTO = new ArrayList<>();
+        List<FeedbackEntity> listEntity = feedbackRepository.findAllByOrderByIdDesc();
+        for (FeedbackEntity entity : listEntity) {
+            FeedbackDTO dto = (FeedbackDTO) genericConverter.toDTO(entity, FeedbackDTO.class);
             listDTO.add(dto);
         }
         return listDTO;
@@ -46,47 +47,42 @@ List<FeedbackEntity> listEntity = feedbackRepository.findAllByOrderByIdDesc();
 
     @Override
     public FeedbackDTO save(FeedbackDTO DTO) {
-FeedbackEntity newEntity = new FeedbackEntity();
+        FeedbackEntity newEntity = new FeedbackEntity();
         ParrotSpeciesColorEntity pcEntity = parrotSpeciesColorRepository.findOneById(DTO.getColorId());
         ParrotSpeciesEntity pEntity = parrotSpeciesRepository.findOneById(pcEntity.getParrotSpecies().getId());
 
-if(DTO.getId()!=null){
-    FeedbackEntity oldEntity = feedbackRepository.findOneById(DTO.getId());
-    newEntity = (FeedbackEntity) genericConverter.updateEntity(DTO,oldEntity);
+        if (DTO.getId() != null) {
+            FeedbackEntity oldEntity = feedbackRepository.findOneById(DTO.getId());
+            newEntity = (FeedbackEntity) genericConverter.updateEntity(DTO, oldEntity);
 
-}else{
+        } else {
 
-    newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
-}
-
-newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
-feedbackRepository.save(newEntity);
-pEntity.setParrotAverageRating(calculateAverageFeedbackRatingBySpeciesId(pEntity.getId()));
-parrotSpeciesRepository.save(pEntity);
-
-
-return (FeedbackDTO) genericConverter.toDTO(newEntity, FeedbackDTO.class);
-    }
-public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto,Pageable pageable){
-        List<FeedbackDTO> listDTO = new ArrayList<>();
-    List<FeedbackEntity> listEntity= new ArrayList<>();
-    if(belongto!=null){
-
-        listEntity = feedbackRepository.findbyspeciescoloridAndType(id,belongto,pageable);
-
-
-        }else{
-        listEntity = feedbackRepository.findAllByParrotSpeciesColorIdAndBelongToOrderByIdDesc(id,pageable);
-
+            newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
         }
 
+        newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
+        feedbackRepository.save(newEntity);
+        pEntity.setParrotAverageRating(calculateAverageFeedbackRatingBySpeciesId(pEntity.getId()));
+        parrotSpeciesRepository.save(pEntity);
 
-    for (FeedbackEntity entity:listEntity) {
-        FeedbackDTO dto = (FeedbackDTO) genericConverter.toDTO(entity, FeedbackDTO.class);
-        listDTO.add(dto);
+
+        return (FeedbackDTO) genericConverter.toDTO(newEntity, FeedbackDTO.class);
     }
-    return  listDTO;
-}
+
+    public List<FeedbackDTO> findAllBySpeciesIdAndBelongtoOrRatingOrColorId(Long speciesId, String belongto, Integer rating, Long colorId, Pageable pageable) {
+        List<FeedbackDTO> listDTO = new ArrayList<>();
+        List<FeedbackEntity> listEntity = new ArrayList<>();
+
+
+        listEntity = feedbackRepository.findbyspeciesIdAndType(speciesId, belongto, rating, colorId, pageable);
+
+
+        for (FeedbackEntity entity : listEntity) {
+            FeedbackDTO dto = (FeedbackDTO) genericConverter.toDTO(entity, FeedbackDTO.class);
+            listDTO.add(dto);
+        }
+        return listDTO;
+    }
 
 
     @Override
@@ -95,33 +91,61 @@ public List<FeedbackDTO> findAllBySpeciesIdAndBelongto(Long id, String belongto,
     }
 
     @Override
-    public List<FeedbackDTO> findAll(Pageable pageable){
+    public List<FeedbackDTO> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         List<FeedbackDTO> results = new ArrayList();
         List<FeedbackEntity> entities = feedbackRepository.findAll(pageable).getContent();
 
-        for(FeedbackEntity item : entities) {
-            FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item,FeedbackDTO.class);
+        for (FeedbackEntity item : entities) {
+            FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
             results.add(newDTO);
 
         }
 
         return results;
     }
-public Double calculateAverageFeedbackRatingBySpeciesId(Long id){
+
+    public Double calculateAverageFeedbackRatingBySpeciesId(Long id) {
 
         return feedbackRepository.calculateRoundedAverageRating(id);
 
 
-}
-public Integer countBySpeciesId(Long id){
-        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
-}
-    public Integer countBySpeciesColorId(Long id){
-        return feedbackRepository.countAllByParrotSpeciesColorId(id);
     }
+
+
+    public Integer countByRating(Integer rating) {
+        return feedbackRepository.countAllByRating(rating);
+    }
+    public Integer countBySpeciesId(Long id) {
+        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
+    }
+
+    public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId,Long colorId, Integer rating) {
+        return feedbackRepository.countAllByParrotSpeciesColorIdAndRating(speciesId,colorId,rating);
+    }
+
+    public List<FeedbackDTO> findByRatingAndColorId(Integer rating, Long colorId, Pageable pageable) {
+        List<FeedbackDTO> results = new ArrayList();
+        List<FeedbackEntity> entities = feedbackRepository.findAllByRatingAndSpeciesColorId(rating, colorId, pageable);
+
+        for (FeedbackEntity item : entities) {
+            FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+    public Integer countByOrderId(Long id){
+
+        return feedbackRepository.countAllByOrderIdId(id);
+    }
+
+
     @Override
     public int totalItem() {
-        return (int)feedbackRepository.count();
+        return (int) feedbackRepository.count();
     }
+
+
 }

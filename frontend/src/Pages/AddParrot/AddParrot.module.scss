@@ -63,3 +63,17 @@
 .title-container {
     width: 100%;
 }
+.add-btn {
+    margin-top: 20px;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    span {
+        margin-left: 10px;
+        font-size: 20px;
+    }
+}
+.table-list {
+    width: 100%;
+    padding: 10px;
+}

@@ -34,7 +34,7 @@ public class DeliveryInformationEntity extends BaseEntity {
 	private String name;
 	
 	@NotBlank
-	//@Size(min = 10, max = 11)
+	@Size(min = 10, max = 11)
 	@Column(name = "phone_number")
 	private String phoneNumber;
 

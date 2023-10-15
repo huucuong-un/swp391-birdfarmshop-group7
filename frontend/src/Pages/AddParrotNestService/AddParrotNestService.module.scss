@@ -1,0 +1,42 @@
+.inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+}
+
+.icon {
+    font-size: 2rem;
+}
+
+.add-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 10px;
+}
+
+.add-form-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    select {
+        border: 0.5px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50px;
+    }
+
+    label {
+        font-weight: 500;
+    }
+
+    input {
+        border: 0.5px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50px;
+        max-width: 60px;
+        padding: 0 10px;
+    }
+}

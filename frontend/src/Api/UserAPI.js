@@ -1,11 +1,16 @@
 import axios from 'axios';
 
-import axiosClinent from './AxiosClient';
+import axiosClient from './AxiosClient';
 
 const UserAPI = {
     getUserById(param) {
         const url = '/user';
-        return axiosClinent.get(url, { param });
+        return axiosClient.get(url, { param });
+    },
+
+    updateUserProfile(data) {
+        const url = `/user/update-profile`;
+        return axiosClient.put(url, data);
     },
 };
 export default UserAPI;

@@ -1,12 +1,6 @@
 package com.eleventwell.parrotfarmshop.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
@@ -49,6 +43,7 @@ public class OrderDetailEntity extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "nest_id", unique = true)
     private ParrotEggNestEntity parrotEggNest;
+
 
 
 }

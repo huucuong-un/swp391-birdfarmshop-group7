@@ -42,6 +42,12 @@ function ParrotDetail() {
         type: 'parrot',
     };
 
+    // useEffect(() => {
+    //     if (selectedColorId !== null || selectedColorId !== undefined) {
+    //         setSelectedColor(colorSortList[0].id);
+    //     }
+    // }, [colorSortList]);
+
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 import OrderAPI from '~/Api/OrderAPI';
+import PromotionAPI from '~/Api/PromotionAPI';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 import { ShopState } from '~/context/ShopProvider';
@@ -32,8 +33,11 @@ function Payment() {
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
+    const [originTotalPrice, setOriginTotalPrice] = useState(0);
     const [loggedUser, setLoggedUser] = useState();
     const { paymentStatus, setPaymentStatus } = useCartStatus;
+    const [discount, setDiscount] = useState(0);
+    const [promotion, setPromotion] = useState(null);
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
@@ -49,6 +53,23 @@ function Payment() {
         setPayStatus(true);
         console.log('click');
     };
+    const handlePromotionCode = async () => {
+        const code = {
+            code: document.getElementById('promotionCode').value,
+        };
+        console.log(code);
+        const codeValue = await PromotionAPI.getCode(code);
+        if (codeValue.value > 0) {
+            setDiscount(originTotalPrice * codeValue.value);
+            console.log(codeValue.value);
+            setPromotion(codeValue.id);
+        } else {
+            console.log('code not exist');
+        }
+    };
+    useEffect(() => {
+        setTotalPrice(originTotalPrice - discount);
+    }, [discount]);
     useEffect(() => {
         setListOrder(receivedData);
     }, []);
@@ -62,6 +83,7 @@ function Payment() {
 
         // Cập nhật giá trị của totalPrice
         setTotalPrice(totalPrice);
+        setOriginTotalPrice(totalPrice);
     }, [listOrder]);
 
     useEffect(() => {
@@ -79,6 +101,7 @@ function Payment() {
                     orderDTO: {
                         // userID: 1,
                         address: selectedDelivery.address,
+                        promotionID: promotion,
                         userID: user.userId,
                         status: true,
                     },
@@ -164,19 +187,19 @@ function Payment() {
                         ))}
 
                         <div className={cx('payment-detail-promotions')}>
-                            <input type="text" placeholder="Discount code" />
-                            <button>Apply</button>
+                            <input id="promotionCode" type="text" placeholder="Discount code" />
+                            <button onClick={() => handlePromotionCode()}>Apply</button>
                         </div>
 
                         <div className={cx('payment-detail-money')}>
                             <div className={cx('payment-detail-money-item')}>
                                 <p className={cx('payment-detail-money-item-title')}>Subtotal</p>
-                                <p className={cx('payment-detail-money-item-price')}>$ {totalPrice}</p>
+                                <p className={cx('payment-detail-money-item-price')}>$ {originTotalPrice}</p>
                             </div>
 
                             <div className={cx('payment-detail-money-item')}>
                                 <p className={cx('payment-detail-money-item-title')}>Discount</p>
-                                <p className={cx('payment-detail-money-item-price')}>$ 0</p>
+                                <p className={cx('payment-detail-money-item-price')}>$ {discount}</p>
                             </div>
 
                             <div className={cx('payment-detail-money-item', 'total')}>

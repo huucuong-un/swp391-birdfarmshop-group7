@@ -4,6 +4,7 @@ import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
+import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
@@ -31,6 +32,9 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Autowired
     ParrotEggNestRepository parrotEggNestRepository;
+
+    @Autowired
+    PromotionService promotionService;
 
     @Autowired
     ParrotService parrotService;
@@ -143,7 +147,11 @@ public class OrderService implements IGenericService<OrderDTO> {
 
 
         }
-
+        try{
+           PromotionDTO promotionDTO = promotionService.findOneById(dto.getPromotionID());
+            totalPrice = totalPrice- totalPrice*promotionDTO.getValue();
+        }catch (Exception e){
+        }
 
         orderDTO.setTotalPrice(totalPrice);
         save(orderDTO);

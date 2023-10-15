@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/post")
-public class PostAPI {
+public class PostController {
 
     @Autowired
     PostService postService;

@@ -2,6 +2,7 @@ import {
     Box,
     Container,
     Flex,
+    Switch,
     Table,
     TableCaption,
     TableContainer,
@@ -20,12 +21,26 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './AdminRoleList.module.scss';
 import RoleAPI from '~/Api/RoleAPI';
+import AddRole from '../AddRole/AddRole';
 
 const cx = classNames.bind(styles);
 
 const AdminRoleList = () => {
     const [roles, setRoles] = useState([]);
     const toast = useToast();
+    const [show, setShow] = useState(false);
+
+    const handleAdd = (newInfo) => {
+        const updatedRole = [...roles];
+
+        updatedRole.push(newInfo);
+
+        // Update the state
+        setRoles(updatedRole);
+    };
+    const handleShow = () => {
+        setShow(!show);
+    };
     const loadRoles = async () => {
         try {
             const data = await RoleAPI.getRoles();
@@ -55,9 +70,13 @@ const AdminRoleList = () => {
                 </Text>
             </Box>
 
-            <Flex className={cx('add-button')}>
-                <FontAwesomeIcon icon={faCirclePlus} /> <Text className={cx('add-role-text')}>Add role</Text>
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add role</Text>
             </Flex>
+            <div className={cx('fade-container', { show: show })}>
+                {show && <AddRole onAdd={handleAdd} w={100}></AddRole>}
+            </div>
             <TableContainer width="100%" margin="5% 0">
                 <Table variant="simple" fontSize={16}>
                     <TableCaption>Role list</TableCaption>
@@ -77,7 +96,7 @@ const AdminRoleList = () => {
                                     <Td>{role.id}</Td>
                                     <Td>{role.name}</Td>
                                     <Td>{role.description}</Td>
-                                    <Td>{role.status}</Td>
+                                    <Td>{role.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />}</Td>
                                     <Td>Update</Td>
                                 </Tr>
                             );

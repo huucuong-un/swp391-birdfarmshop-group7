@@ -34,6 +34,7 @@ import MyAccount from '~/Pages/MyAccount/MyAccount';
 import UserProfileNew from '~/Pages/UserProfileNew/UserProfileNew';
 import Contact from '~/Components/Contact/Contact';
 import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestService';
+import OrderHistoryNew from '~/Pages/OrderHistoryNew/OrderHistoryNew';
 
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
@@ -43,6 +44,7 @@ const publicRoutes = [
     { path: '/payment', component: Payment },
     { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
     { path: '/order-history', component: OrderHistory },
+    { path: '/order-history-new', component: OrderHistoryNew },
     { path: '/paid-success', component: PaidSuccess },
     { path: '/shopping-cart', component: ShoppingCart },
     { path: '/post-detail', component: PostDetail },

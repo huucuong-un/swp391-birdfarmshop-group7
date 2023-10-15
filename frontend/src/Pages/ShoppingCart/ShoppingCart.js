@@ -343,7 +343,7 @@ function ShoppingCart() {
                     </div>
                     <div className={cx('check-out-btn')}>
                         {choosenCart.length === 0 ? (
-                            <Link to="" state={choosenCart}>
+                            <Link to="">
                                 <Button
                                     className={cx('check-out-disable')}
                                     colorScheme="yellow"

@@ -34,7 +34,8 @@ import MyAccount from '~/Pages/MyAccount/MyAccount';
 import UserProfileNew from '~/Pages/UserProfileNew/UserProfileNew';
 import Contact from '~/Components/Contact/Contact';
 import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestService';
-
+import AdminDashboard from '~/Pages/AdminUserList/AdminDashboard';
+import AdminRoleList from '~/Pages/AdminRoleList/AdminRoleList';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -70,6 +71,8 @@ const publicRoutes = [
     { path: '/user-profile', component: UserProfileNew },
     { path: '/contact', component: Contact },
     { path: '/add-role', component: AddRole },
+    { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
+    { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

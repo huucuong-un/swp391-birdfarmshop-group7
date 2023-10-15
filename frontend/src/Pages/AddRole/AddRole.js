@@ -66,15 +66,16 @@ function AddRole() {
                     <Table size="xs ">
                         <Thead>
                             <Tr>
-                                <Th>Title</Th>
-                                <Th>Input</Th>
+                                <Th fontSize={16}>Add Role</Th>
+                                <Th fontSize={16}></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td>Role name</Td>
+                                <Td fontSize={16}>Role name</Td>
                                 <Td>
                                     <Input
+                                        fontSize={16}
                                         type="text"
                                         id="name"
                                         name="name"
@@ -88,9 +89,10 @@ function AddRole() {
                             </Tr>
 
                             <Tr>
-                                <Td>Description</Td>
+                                <Td fontSize={16}>Description</Td>
                                 <Td>
                                     <Input
+                                        fontSize={16}
                                         type="text"
                                         id="description"
                                         name="description"
@@ -103,11 +105,11 @@ function AddRole() {
                                 </Td>
                             </Tr>
                             <Tr>
-                                <Td>Status</Td>
+                                <Td fontSize={16}>Status</Td>
                                 <Td>
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
-                                        {status ? <p>Available</p> : <p>Unavailable</p>}
+                                        {status ? <p fontSize={16}>Available</p> : <p fontSize={16}>Unavailable</p>}
                                     </div>
                                     <Input
                                         type="hidden"
@@ -126,6 +128,7 @@ function AddRole() {
                                 <Td></Td>
                                 <Td className={cx('submit-btn')}>
                                     <Button
+                                        fontSize={16}
                                         type="submit"
                                         className={cx('btn')}
                                         width="100%"

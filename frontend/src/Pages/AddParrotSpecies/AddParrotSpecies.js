@@ -20,7 +20,7 @@ import Buttons from '~/Components/Button/Button';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 
@@ -247,7 +247,7 @@ function AddParrotSpecies() {
                             </div>
                         </div>
 
-                        <Table size="xs ">
+                        <Table size="xs">
                             <Tbody>
                                 <Tr>
                                     <Td>Parrot species name</Td>

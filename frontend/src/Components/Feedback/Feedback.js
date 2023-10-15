@@ -197,7 +197,7 @@ function Feedback({ feedbackType, colorSortList }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             sortFeedbackByRating({ raing: null, id: 'rs0', color: colorSortSelect });
-        }, 200);
+        }, 2000);
 
         return () => clearTimeout(timer);
     }, []);

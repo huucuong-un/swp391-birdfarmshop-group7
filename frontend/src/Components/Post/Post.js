@@ -34,7 +34,7 @@ function Post() {
             <Title className={cx('title-post')}>Shopping With Fun</Title>
             <div className={cx('post-container', 'row')}>
                 {postList.map((post, index) => (
-                    <div key={index} className={cx('post-item', 'col-4')}>
+                    <div key={index} className={cx('post-item', 'col-lg-4', 'col-md-6')}>
                         <div className={cx('post-inner')}>
                             <div className={cx('scheme-swirl')}></div>
                             <div className={cx('post-img')}>

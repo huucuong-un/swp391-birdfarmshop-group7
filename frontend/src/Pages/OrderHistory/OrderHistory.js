@@ -73,6 +73,7 @@ function OrderHistory() {
             userId: orderId.userID,
             colorId: orderId.colorId,
             orderId: orderId.orderId,
+            status: true,
         };
         console.log(orderId);
         FeedbackAPI.create(feedbackParam);

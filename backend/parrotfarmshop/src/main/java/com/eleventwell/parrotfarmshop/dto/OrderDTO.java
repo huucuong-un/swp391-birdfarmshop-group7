@@ -26,7 +26,7 @@ public class OrderDTO extends BaseDTO {
     private Long userID;
 
 
-    private String address;
+    private Long deliveryInformationId;
 
 
     private Long promotionID;

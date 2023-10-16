@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+
 import styles from '~/Pages/AddPost/AddPost.module.scss';
 import {
     Input,
@@ -16,10 +17,11 @@ import {
     AlertTitle,
     AlertDescription,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import axios from 'axios';
+import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +30,7 @@ function AddPost() {
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState('');
     // Toast
+
     const toast = useToast();
 
     const [post, setPost] = useState({

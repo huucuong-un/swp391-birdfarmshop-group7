@@ -17,10 +17,10 @@ import {
 } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddRole/AddRole.module.scss';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 const cx = classNames.bind(styles);
-function AddRole(props) {
+function AddPromotion() {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [role, setRole] = useState({
         name: '',
@@ -35,9 +35,6 @@ function AddRole(props) {
     const handleStatus = () => {
         setStatus(!status);
     };
-    useEffect(() => {
-        console.log(status);
-    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,14 +44,12 @@ function AddRole(props) {
                 // Add other fields you want to send to the first API
                 name: role.name,
                 description: role.description,
-                status: status,
+                status: role.status,
             });
-            props.onAdd(responseParrots.data);
-            console.log(responseParrots.data);
             if (responseParrots.status === 200) {
-                console.log('POST request was successful at ROLE!!');
+                console.log('POST request was successful at species!!');
             } else {
-                console.error('POST request failed with status code - ROLE: ', responseParrots.status);
+                console.error('POST request failed with status code - species: ', responseParrots.status);
             }
 
             setSubmissionStatus(true);
@@ -114,12 +109,12 @@ function AddRole(props) {
                                 <Td>
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
-                                        {status ? <p fontSize={16}>On Processing</p> : <p fontSize={16}>Disabled</p>}
+                                        {status ? <p fontSize={16}>Available</p> : <p fontSize={16}>Unavailable</p>}
                                     </div>
                                     <Input
                                         type="hidden"
-                                        id="status"
-                                        name="status"
+                                        id="pregnancy"
+                                        name="pregnancy"
                                         variant="filled"
                                         value={status}
                                         onChange={(e) => setRole({ ...role, status: e.target.value })}
@@ -152,4 +147,4 @@ function AddRole(props) {
     );
 }
 
-export default AddRole;
+export default AddPromotion;

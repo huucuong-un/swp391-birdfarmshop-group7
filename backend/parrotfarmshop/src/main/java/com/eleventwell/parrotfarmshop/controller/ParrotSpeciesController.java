@@ -50,6 +50,12 @@ public class ParrotSpeciesController {
         list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesParrotById(id));
         return list;
     }
+    @GetMapping(value = "find-one-species-by-color-id/{id}")
+    public ParrotSpeciesDTO findOneSpeciesByColorId(@RequestBody @PathVariable("id") long id) {
+
+        return (ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id);
+
+    }
 
     @GetMapping(value = "")
     public PagingModel showNew(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {

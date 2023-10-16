@@ -20,6 +20,29 @@
 
 .fade-container.show {
     opacity: 1;
-    max-height: 1000px; /* Adjust this value based on your content height */
+    max-height: 500px; /* Adjust this value based on your content height */
     transition-delay: 0s; /* No delay when showing */
+}
+
+.fade-container.showUpdate {
+    opacity: 1;
+    max-height: 250px; /* Adjust this value based on your content height */
+    transition-delay: 0s;
+    margin-top: 2px;
+}
+
+.fade-container.hide {
+    opacity: 0;
+    max-height: 0;
+    transition-delay: 0.3s; /* Delay when hiding */
+}
+
+.edit-button {
+    height: 100%;
+    margin: 0;
+}
+
+.edit-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }

@@ -16,51 +16,43 @@ import {
     AlertDescription,
 } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
-import styles from '~/Pages/AddRole/AddRole.module.scss';
+import styles from '~/Components/UpdateRole/UpdateRole.module.scss';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import RoleAPI from '~/Api/RoleAPI';
 const cx = classNames.bind(styles);
-function AddRole(props) {
-    const [submissionStatus, setSubmissionStatus] = useState();
-    const [role, setRole] = useState({
-        name: '',
-        description: '',
-        status: false,
-    });
+function UpdateRole(props) {
+    const [newRole, setNewRole] = useState(props.role);
 
-    const [name, setName] = useState();
-    const [description, setDescription] = useState();
     const [status, setStatus] = useState(false);
 
     const handleStatus = () => {
         setStatus(!status);
     };
-    useEffect(() => {
-        console.log(status);
-    });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         try {
             // Make a POST request to the first API endpoint
-            const responseParrots = await axios.post('http://localhost:8086/api/role', {
-                // Add other fields you want to send to the first API
-                name: role.name,
-                description: role.description,
-                status: status,
-            });
-            props.onAdd(responseParrots.data);
-            console.log(responseParrots.data);
-            if (responseParrots.status === 200) {
+            const responseRole = await RoleAPI.updateRole(
+                {
+                    // Add other fields you want to send to the first API
+
+                    name: newRole.name,
+                    description: newRole.description,
+                    status: newRole.status,
+                    createdDate: newRole.createdDate,
+                },
+                newRole.id,
+            );
+            props.onUpdate(responseRole);
+            console.log(responseRole.data);
+            if (responseRole.status === 200) {
                 console.log('POST request was successful at ROLE!!');
             } else {
-                console.error('POST request failed with status code - ROLE: ', responseParrots.status);
+                console.error('POST request failed with status code - ROLE: ', responseRole.status);
             }
-
-            setSubmissionStatus(true);
         } catch (error) {
             console.error('Error:', error);
-            setSubmissionStatus(false);
         }
     };
 
@@ -69,12 +61,6 @@ function AddRole(props) {
             <form onSubmit={handleSubmit} className={cx('inner')}>
                 <TableContainer className={cx('table-container')}>
                     <Table size="xs ">
-                        <Thead>
-                            <Tr>
-                                <Th fontSize={16}>Add Role</Th>
-                                <Th fontSize={16}></Th>
-                            </Tr>
-                        </Thead>
                         <Tbody>
                             <Tr>
                                 <Td fontSize={16}>Role name</Td>
@@ -86,8 +72,8 @@ function AddRole(props) {
                                         name="name"
                                         variant="filled"
                                         placeholder="Name"
-                                        value={role.name}
-                                        onChange={(e) => setRole({ ...role, name: e.target.value })}
+                                        value={newRole.name}
+                                        onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
                                         required
                                     />
                                 </Td>
@@ -103,8 +89,8 @@ function AddRole(props) {
                                         name="description"
                                         variant="filled"
                                         placeholder="Description"
-                                        value={role.description}
-                                        onChange={(e) => setRole({ ...role, description: e.target.value })}
+                                        value={newRole.description}
+                                        onChange={(e) => setNewRole({ ...newRole, description: e.target.value })}
                                         required
                                     />
                                 </Td>
@@ -121,8 +107,8 @@ function AddRole(props) {
                                         id="status"
                                         name="status"
                                         variant="filled"
-                                        value={status}
-                                        onChange={(e) => setRole({ ...role, status: e.target.value })}
+                                        value={newRole.status}
+                                        onChange={(e) => setNewRole({ ...newRole, status: e.target.value })}
                                     />
                                 </Td>
                             </Tr>
@@ -134,13 +120,13 @@ function AddRole(props) {
                                 <Td className={cx('submit-btn')}>
                                     <Button
                                         fontSize={16}
-                                        type="submit"
                                         className={cx('btn')}
+                                        onClick={handleSubmit}
                                         width="100%"
                                         style={{ marginTop: 15 }}
                                         margin="8px"
                                     >
-                                        ADD
+                                        CHANGE
                                     </Button>
                                 </Td>
                             </Tr>
@@ -152,4 +138,4 @@ function AddRole(props) {
     );
 }
 
-export default AddRole;
+export default UpdateRole;

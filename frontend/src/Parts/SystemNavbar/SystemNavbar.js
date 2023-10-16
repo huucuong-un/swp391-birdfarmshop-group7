@@ -18,7 +18,7 @@ function SystemNavbar() {
                     <Link>
                         <p>ACCOUNTS</p>
                     </Link>
-                    <Link>
+                    <Link to="/admin/role">
                         <p>ROLES</p>
                     </Link>
                     <Link>

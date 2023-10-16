@@ -10,6 +10,11 @@ const RoleAPI = {
         const url = '/role';
         return axiosClient.post(url, data);
     },
+
+    updateRole(data, roleId) {
+        const url = `/role/${roleId}`;
+        return axiosClient.put(url, data);
+    },
 };
 
 export default RoleAPI;

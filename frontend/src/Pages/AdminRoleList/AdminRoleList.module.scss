@@ -1,0 +1,25 @@
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.add-role-text {
+    margin: 0 5px;
+}
+
+.fade-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease, transition-delay 0.5s;
+}
+
+.fade-container.show {
+    opacity: 1;
+    max-height: 1000px; /* Adjust this value based on your content height */
+    transition-delay: 0s; /* No delay when showing */
+}

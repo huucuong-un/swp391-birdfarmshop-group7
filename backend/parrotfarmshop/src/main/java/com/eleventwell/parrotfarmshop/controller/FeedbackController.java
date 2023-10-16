@@ -43,7 +43,7 @@ public class FeedbackController {
     @GetMapping(value = "count-by-species-id")
     public Integer countBySpeciesId(@RequestBody @RequestParam(value = "id") Long  id) {
 
-           return feedbackService.countBySpeciesId(id);
+        return feedbackService.countBySpeciesId(id);
 
 
 

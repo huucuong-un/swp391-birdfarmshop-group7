@@ -4,6 +4,7 @@ import styles from '~/Pages/Payment/Payment.module.scss';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Link, useLocation } from 'react-router-dom';
 import OrderAPI from '~/Api/OrderAPI';
@@ -23,6 +24,7 @@ function Payment() {
     const [listOrder, setListOrder] = useState([]);
     const location = useLocation();
     const receivedData = location.state;
+    const navigate = useNavigate();
 
     // const quantity = receivedData.quantities[1] || 0;
     // const quantity = receivedData && receivedData.quantities ? receivedData.quantities[1] : 0;
@@ -38,6 +40,7 @@ function Payment() {
     const { paymentStatus, setPaymentStatus } = useCartStatus;
     const [discount, setDiscount] = useState(0);
     const [promotion, setPromotion] = useState(null);
+    // const { paymentStatus, setPaymentStatus } = useCartStatus;
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
@@ -75,13 +78,20 @@ function Payment() {
     }, []);
 
     useEffect(() => {
-        // Tính tổng giá trị từ các mục trong danh sách đơn hàng
+        console.log(payStatus);
+    }, [payStatus]);
+
+    useEffect(() => {
+        if (receivedData) {
+            setListOrder(receivedData);
+        }
+    }, [receivedData]);
+
+    useEffect(() => {
         let totalPrice = 0;
         listOrder.forEach((item) => {
             totalPrice += item.price * item.quantity;
         });
-
-        // Cập nhật giá trị của totalPrice
         setTotalPrice(totalPrice);
         setOriginTotalPrice(totalPrice);
     }, [listOrder]);
@@ -90,7 +100,7 @@ function Payment() {
         const addOrders = async () => {
             try {
                 // setPaymentStatus((prev) => prev + 1);
-                const cartList = receivedData.map((item, index) => ({
+                const cartList = listOrder.map((item, index) => ({
                     speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
                     quantity: item.quantity,
                     type: 'parrot',
@@ -120,6 +130,7 @@ function Payment() {
 
         if (payStatus) {
             addOrders();
+            navigate('/paid-success');
         }
     }, [payStatus]);
 
@@ -176,15 +187,16 @@ function Payment() {
                 </div>
                 <div className={cx('payment-detail', 'col-md-4')}>
                     <Box className={cx('payment-detail-container')}>
-                        {listOrder.map((item, index) => (
-                            <div key={index} className={cx('payment-detail-items')}>
-                                <div className={cx('payment-detail-items-img')}>
-                                    <img src={item.img} alt="product" />
+                        {listOrder &&
+                            listOrder.map((item, index) => (
+                                <div key={index} className={cx('payment-detail-items')}>
+                                    <div className={cx('payment-detail-items-img')}>
+                                        <img src={item.img} alt="product" />
+                                    </div>
+                                    <p className={cx('payment-detail-items-quantity')}>x{item.quantity}</p>
+                                    <p className={cx('payment-detail-items-price')}>$ {item.price * item.quantity}</p>
                                 </div>
-                                <p className={cx('payment-detail-items-quantity')}>x{item.quantity}</p>
-                                <p className={cx('payment-detail-items-price')}>$ {item.price * item.quantity}</p>
-                            </div>
-                        ))}
+                            ))}
 
                         <div className={cx('payment-detail-promotions')}>
                             <input id="promotionCode" type="text" placeholder="Discount code" />

@@ -30,12 +30,13 @@ import UserProfile from '~/Pages/UserProfile/UserProfile';
 import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
-
 import MyAccount from '~/Pages/MyAccount/MyAccount';
 import UserProfileNew from '~/Pages/UserProfileNew/UserProfileNew';
 import Contact from '~/Components/Contact/Contact';
 import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestService';
-
+import OrderHistoryNew from '~/Pages/OrderHistoryNew/OrderHistoryNew';
+import AdminDashboard from '~/Pages/AdminUserList/AdminDashboard';
+import AdminRoleList from '~/Pages/AdminRoleList/AdminRoleList';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -44,6 +45,7 @@ const publicRoutes = [
     { path: '/payment', component: Payment },
     { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
     { path: '/order-history', component: OrderHistory },
+    { path: '/order-history-new', component: OrderHistoryNew },
     { path: '/paid-success', component: PaidSuccess },
     { path: '/shopping-cart', component: ShoppingCart },
     { path: '/post-detail', component: PostDetail },
@@ -71,6 +73,8 @@ const publicRoutes = [
     { path: '/user-profile', component: UserProfileNew },
     { path: '/contact', component: Contact },
     { path: '/add-role', component: AddRole },
+    { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
+    { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

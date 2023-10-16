@@ -30,7 +30,7 @@ public class FeedbackEntity extends BaseEntity {
 	@NotBlank
 	@Column(name = "content")
 	private String content;
-	
+
 	@Unsigned
 	@Column(name = "rating")
 	private Integer rating;
@@ -38,25 +38,27 @@ public class FeedbackEntity extends BaseEntity {
 	@Unsigned
 	@Column(name = "belong_to")
 	private String belongTo;
-	
+
 	@ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-	
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
+
 	@ManyToOne
-    @JoinColumn(name = "color_id")
-    private ParrotSpeciesColorEntity parrotSpeciesColor;
+	@JoinColumn(name = "color_id")
+	private ParrotSpeciesColorEntity parrotSpeciesColor;
 
 	@OneToOne
 	@JoinColumn(name = "order_id", unique = true)
 	private OrderEntity orderId;
 
 
-	
-	
-	
 
-	
 
-	
+
+
+
+
+
+
+
 }

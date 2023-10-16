@@ -50,15 +50,8 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Override
     public List<OrderDTO> findAll() {
-        List<OrderDTO> result = new ArrayList<>();
-        List<OrderEntity> orderEntities = orderRepository.findAllByOrderByIdDesc();
 
-        for (OrderEntity entity : orderEntities) {
-            OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
-            result.add(orderDTO);
-        }
-
-        return result;
+     return null;
     }
 
     public OrderDTO findOneByOrderId(Long orderId) {
@@ -195,7 +188,7 @@ public class OrderService implements IGenericService<OrderDTO> {
     public List<OrderDTO> findAll(Pageable pageable){
         // TODO Auto-generated method stub
         List<OrderDTO> results = new ArrayList();
-        List<OrderEntity> entities = orderRepository.findAll(pageable).getContent();
+        List<OrderEntity> entities = orderRepository.findAllByOrderByIdDesc(pageable);
 
         for(OrderEntity item : entities) {
             OrderDTO newDTO = (OrderDTO) genericConverter.toDTO(item,OrderDTO.class);

@@ -28,7 +28,7 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "admin/order_management/list")
     public List<OrderDTO> showParrots() {
         List<OrderDTO> list = orderService.findAll();
         return list;

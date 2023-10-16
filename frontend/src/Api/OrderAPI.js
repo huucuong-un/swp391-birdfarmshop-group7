@@ -16,6 +16,11 @@ const OrderAPI = {
         return axiosClinet.get(url);
     },
 
+    findAllOrderWithUser() {
+        const url = '/order/find-all-order-with-user';
+        return axiosClinet.post(url);
+    },
+
     add(data) {
         const url = `/order/cart`;
         return axiosClinet.post(url, data);

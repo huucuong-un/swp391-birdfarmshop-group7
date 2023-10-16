@@ -35,6 +35,9 @@ public class FeedbackEntity extends BaseEntity {
 	@Column(name = "rating")
 	private Integer rating;
 
+	@Column(name = "status")
+	private Boolean status;
+
 	@Unsigned
 	@Column(name = "belong_to")
 	private String belongTo;

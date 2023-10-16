@@ -60,7 +60,7 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
             newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
         }
-newEntity.setUser(userRepository.findOneById(DTO.getId()));
+        newEntity.setUser(userRepository.findOneById(DTO.getId()));
         newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
         feedbackRepository.save(newEntity);
         pEntity.setParrotAverageRating(calculateAverageFeedbackRatingBySpeciesId(pEntity.getId()));
@@ -117,12 +117,13 @@ newEntity.setUser(userRepository.findOneById(DTO.getId()));
     public Integer countByRating(Integer rating) {
         return feedbackRepository.countAllByRating(rating);
     }
+
     public Integer countBySpeciesId(Long id) {
         return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
     }
 
-    public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId,Long colorId, Integer rating) {
-        return feedbackRepository.countAllByParrotSpeciesColorIdAndRating(speciesId,colorId,rating);
+    public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId, Long colorId, Integer rating) {
+        return feedbackRepository.countAllByParrotSpeciesColorIdAndRating(speciesId, colorId, rating);
     }
 
     public List<FeedbackDTO> findByRatingAndColorId(Integer rating, Long colorId, Pageable pageable) {
@@ -138,9 +139,9 @@ newEntity.setUser(userRepository.findOneById(DTO.getId()));
         return results;
     }
 
-    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username,Boolean status ,String sortRating,String sortDate ,Pageable pageable) {
+    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username, Boolean status, String sortRating, String sortDate, Pageable pageable) {
         List<FeedbackDTO> results = new ArrayList();
-        List<FeedbackEntity> entities = feedbackRepository.searchSortForAdmin(rating, speciesId,searchDate,username,status,sortRating,sortDate ,pageable);
+        List<FeedbackEntity> entities = feedbackRepository.searchSortForAdmin(rating, speciesId, searchDate, username, status, sortRating, sortDate, pageable);
 
         for (FeedbackEntity item : entities) {
             FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
@@ -150,7 +151,8 @@ newEntity.setUser(userRepository.findOneById(DTO.getId()));
 
         return results;
     }
-    public Integer countByOrderId(Long id){
+
+    public Integer countByOrderId(Long id) {
 
         return feedbackRepository.countAllByOrderIdId(id);
     }

@@ -52,8 +52,8 @@ public class OrderEntity extends BaseEntity {
 	private FeedbackEntity feedback;
 
 
-	@OneToOne
-	@JoinColumn(name = "deliveryInformation_id", unique = true)
+	@ManyToOne
+	@JoinColumn(name = "deliveryInformation_id")
 	private DeliveryInformationEntity deliveryInformation;
 
 }

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -189,6 +190,20 @@ public class OrderService implements IGenericService<OrderDTO> {
         // TODO Auto-generated method stub
         List<OrderDTO> results = new ArrayList();
         List<OrderEntity> entities = orderRepository.findAllByOrderByIdDesc(pageable);
+
+        for(OrderEntity item : entities) {
+            OrderDTO newDTO = (OrderDTO) genericConverter.toDTO(item,OrderDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+    public List<OrderDTO> searchByEmailOrPhone(String email, String phone, Date dateSearch,String status,String sortPrice,String sortDate, Pageable pageable){
+
+
+        List<OrderDTO> results = new ArrayList();
+        List<OrderEntity> entities = orderRepository.searchByEmailOrPhone(email,phone,dateSearch,status,sortPrice,sortDate,pageable);
 
         for(OrderEntity item : entities) {
             OrderDTO newDTO = (OrderDTO) genericConverter.toDTO(item,OrderDTO.class);

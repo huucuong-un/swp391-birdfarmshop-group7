@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @ToString
@@ -50,9 +52,8 @@ public class DeliveryInformationEntity extends BaseEntity {
 	@Column(name = "picking_status")
 	private Boolean pickingStatus;
 
-	@OneToOne(mappedBy = "deliveryInformation")
-	@PrimaryKeyJoinColumn
-	private OrderEntity orderId;
+	@OneToMany(mappedBy = "deliveryInformation")
+	private List<OrderEntity> orderId = new ArrayList<>();
 
 
 

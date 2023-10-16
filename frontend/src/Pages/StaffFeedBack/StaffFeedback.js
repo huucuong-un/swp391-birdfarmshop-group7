@@ -1,88 +1,135 @@
+import {
+    Container,
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+    Switch,
+} from '@chakra-ui/react';
+
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffFeedBack/StaffFeedback.module.scss';
 
-import { Input, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
-import Buttons from '~/Components/Button/Button';
 import React, { useState, useEffect } from 'react';
+import FeedbackAPI from '~/Api/FeedbackAPI';
+import UserAPI from '~/Api/UserAPI';
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 
 const cx = classNames.bind(styles);
 function StaffFeedback() {
-    //  State to set show for add btn
-    const [show, setShow] = useState(false);
-    const handleShow = () => {
-        setShow(!show);
-    };
+    const [feedbackList, setFeedbackList] = useState([]);
+    const [combineData, setCombineData] = useState([]);
+
+    useEffect(() => {
+        const getFeedback = async () => {
+            try {
+                const feedbackList = await FeedbackAPI.getAllFeedbackSystem();
+                setFeedbackList(feedbackList);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getFeedback();
+    }, []);
+
+    useEffect(() => {
+        const getUserbyId = async () => {
+            const data = [];
+            for (const item of feedbackList) {
+                const feedback = { ...item };
+                try {
+                    feedback.userInfor = await UserAPI.getUserById(item.userId);
+                    feedback.species = await ParrotSpeciesColorAPI.findOneSpeciesByColorId(item.colorId);
+                    data.push(feedback);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            setCombineData(data);
+        };
+        getUserbyId();
+    }, [feedbackList]);
+
+    useEffect(() => {
+        console.log(combineData);
+    }, [combineData]);
+
+    useEffect(() => {
+        console.log(feedbackList);
+    }, [feedbackList]);
+
+    function formatDate(date) {
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-indexed
+        const year = date.getFullYear();
+
+        const formattedDay = day < 10 ? `0${day}` : day;
+        const formattedMonth = month < 10 ? `0${month}` : month;
+
+        return `${formattedDay}/${formattedMonth}/${year}`;
+    }
+
     return (
-        <div className={cx('wrapper')}>
-            {/* Title */}
+        <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
                 <h1>Feedback</h1>
             </div>
-            {/* Sort space */}
-            <div className={cx('add-btn')}>
-                <div className={cx('sort-space')}>
-                    <form className={cx('sort-space-form')}>
-                        <select name="species" id="species">
-                            <option value="" disabled selected>
-                                Species
-                            </option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <select name="status" id="status">
-                            <option value="" disabled selected>
-                                Status
-                            </option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <input type="date" />
-                        <select name="price" id="price">
-                            <option value="" disabled selected>
-                                Price
-                            </option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </form>
-                </div>
+            <div className={cx('sort-space')}>
+                <input type="text" placeholder="Customer Name" />
+
+                <select name="status" id="status">
+                    <option value="" disabled selected>
+                        Status
+                    </option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <input type="date" />
+                <select name="price" id="price">
+                    <option value="" disabled selected>
+                        Price
+                    </option>
+                </select>
+
+                <button></button>
             </div>
-            {/* Table */}
-            <form className={cx('inner')}>
-                <TableContainer>
-                    <Table size="lg">
-                        <Thead>
-                            <Tr>
-                                <Th>User ID</Th>
-                                <Th>Username</Th>
-                                <Th>Content</Th>
-                                <Th>Parrot species id</Th>
-                                <Th>Create at</Th>
-                                <Th>Rating</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td>1</Td>
-                                <Td>NHN</Td>
-                                <Td>Con chim nay dep qua</Td>
-                                <Td>Vet den</Td>
-                                <Td>13/03/2003</Td>
-                                <Td>10</Td>
-                                <Td className={cx('action-column')}>
-                                    <Buttons add>Hide</Buttons>
-                                    <Buttons add>Unhide</Buttons>
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                        <Tfoot>
-                            <Tr></Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-            </form>
-        </div>
+            <TableContainer>
+                <Table size="lg">
+                    <Thead>
+                        <Tr>
+                            <Th>ID</Th>
+                            <Th>Customer Name</Th>
+                            <Th>Content</Th>
+                            <Th>Color ID</Th>
+                            <Th>Create At</Th>
+                            <Th>Rating</Th>
+                            <Th>Status</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {combineData &&
+                            combineData.map((feedback, index) => (
+                                <Tr key={index}>
+                                    <Td>{feedback.id}</Td>
+                                    <Td>{feedback.userInfor.fullName}</Td>
+                                    <Td>{feedback.content}</Td>
+                                    <Td>{feedback.species.name}</Td>
+                                    <Td>{formatDate(new Date(feedback.createdDate))}</Td>
+                                    <Td>{feedback.rating}</Td>
+                                    {/* <Td>{feedback.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />}</Td> */}
+                                </Tr>
+                            ))}
+                    </Tbody>
+                </Table>
+            </TableContainer>
+        </Container>
     );
 }
 

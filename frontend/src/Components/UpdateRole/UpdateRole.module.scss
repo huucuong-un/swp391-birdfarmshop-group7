@@ -1,14 +1,13 @@
 .wrapper {
-    display: flex;
     justify-content: center;
     align-items: center;
 }
 .inner {
-    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     flex-direction: column;
+    height: 570px;
     div {
         overflow: hidden;
         display: flex;
@@ -22,9 +21,9 @@
         color: var(--black);
     }
 }
-.table-container {
-    width: 50%;
-}
+// .table-container {
+//     width: 50%;
+// }
 .submit-btn {
     display: flex;
     justify-content: center;

@@ -378,7 +378,7 @@ function ParrotDetail() {
                                         Contact
                                     </Link>
                                 ) : countParrot === 'Check the color to see ' ? (
-                                    <Link className={cx('buy-btn-choose')}>Please choose color</Link>
+                                    <a className={cx('buy-btn-choose')}>Please choose color</a>
                                 ) : (
                                     <Link
                                         to={`/payment`}

@@ -110,7 +110,7 @@ function Payment() {
                 const data = {
                     orderDTO: {
                         // userID: 1,
-                        address: selectedDelivery.address,
+                        deliveryInformationId: selectedDelivery.id,
                         promotionID: promotion,
                         userID: user.userId,
                         status: true,
@@ -123,6 +123,7 @@ function Payment() {
                 await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                 const addOrder = await OrderAPI.add(data);
                 console.log('Order added:', addOrder);
+                console.log(data);
             } catch (error) {
                 console.error(error);
             }

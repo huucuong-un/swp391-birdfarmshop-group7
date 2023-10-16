@@ -1,10 +1,6 @@
 package com.eleventwell.parrotfarmshop.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @ToString
@@ -53,5 +51,10 @@ public class DeliveryInformationEntity extends BaseEntity {
 
 	@Column(name = "picking_status")
 	private Boolean pickingStatus;
+
+	@OneToMany(mappedBy = "deliveryInformation")
+	private List<OrderEntity> orderId = new ArrayList<>();
+
+
 
 }

@@ -37,7 +37,9 @@ import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestServ
 import OrderHistoryNew from '~/Pages/OrderHistoryNew/OrderHistoryNew';
 import AdminDashboard from '~/Pages/AdminUserList/AdminDashboard';
 import AdminRoleList from '~/Pages/AdminRoleList/AdminRoleList';
+import AdminPromotion from '~/Pages/AdminPromotion/AdminPromotion';
 import StaffOrderManagement from '~/Pages/StaffOrderManagement/StaffOrderManagement';
+import AdFAQSManagement from '~/Pages/AdFAQSManagement/AdFAQSManagement';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -53,6 +55,7 @@ const publicRoutes = [
     { path: '/about-us', component: AboutUs },
     { path: '/userprofile', component: UserProfile },
     { path: '/species-selection', component: SpeciesSelection },
+    { path: '/ad-faqs-management', component: AdFAQSManagement, layout: SystemLayout },
     { path: '/add-parrot-nest-service', component: AddParrotNestService },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
@@ -77,6 +80,7 @@ const publicRoutes = [
     { path: '/add-role', component: AddRole },
     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
+    { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

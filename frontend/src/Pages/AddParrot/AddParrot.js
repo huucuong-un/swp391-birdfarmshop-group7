@@ -406,7 +406,7 @@ function AddParrot() {
                     </TableContainer>
                 </form>
             ) : (
-                <div></div>
+                <></>
             )}
             <TableContainer className={cx('table-list')}>
                 <Table size="xs">

@@ -1,7 +1,9 @@
 package com.eleventwell.parrotfarmshop.Vnpay;
 
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
+import com.eleventwell.parrotfarmshop.service.impl.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,9 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping(value = "/api/vnpay")
 public class VnPayController {
     PayService payService;
+
+    @Autowired
+    OrderService orderService;
 
     public VnPayController(PayService payService) {
         this.payService = payService;
@@ -32,7 +37,7 @@ public class VnPayController {
             @RequestParam(value = "vnp_ResponseCode") String responseCode,
             @RequestParam(value = "vnp_TxnRef") String txnRef
     ) {
-        TransactionDTO transactionDTO = new TransactionDTO();
+                TransactionDTO transactionDTO = new TransactionDTO();
 
         // Kiểm tra responseCode
         if ("00".equals(responseCode)) {
@@ -40,6 +45,7 @@ public class VnPayController {
             transactionDTO.setStatus("OK");
             transactionDTO.setMessage("Success");
             transactionDTO.setData("");
+            orderService.changeStatus(Long.parseLong(txnRef));
         } else {
             // Trạng thái thất bại
             transactionDTO.setStatus("No");
@@ -48,5 +54,11 @@ public class VnPayController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionDTO);
+
+
     }
+
+
+
+
 }

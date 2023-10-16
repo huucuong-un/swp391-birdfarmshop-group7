@@ -31,7 +31,9 @@ public class OrderEntity extends BaseEntity {
 
 
 	@Column(name = "address")
-	private String address;
+	private Long address;
+
+
 	@Column(name="status")
 	private Boolean status;
 
@@ -50,5 +52,8 @@ public class OrderEntity extends BaseEntity {
 	private FeedbackEntity feedback;
 
 
+	@OneToOne
+	@JoinColumn(name = "deliveryInformation_id", unique = true)
+	private DeliveryInformationEntity deliveryInformation;
 
 }

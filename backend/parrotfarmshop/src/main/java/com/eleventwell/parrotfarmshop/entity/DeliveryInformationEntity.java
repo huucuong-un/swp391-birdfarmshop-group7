@@ -1,10 +1,6 @@
 package com.eleventwell.parrotfarmshop.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -53,5 +49,11 @@ public class DeliveryInformationEntity extends BaseEntity {
 
 	@Column(name = "picking_status")
 	private Boolean pickingStatus;
+
+	@OneToOne(mappedBy = "deliveryInformation")
+	@PrimaryKeyJoinColumn
+	private OrderEntity orderId;
+
+
 
 }

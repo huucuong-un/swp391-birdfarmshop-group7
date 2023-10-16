@@ -37,6 +37,8 @@ import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestServ
 import OrderHistoryNew from '~/Pages/OrderHistoryNew/OrderHistoryNew';
 import AdminDashboard from '~/Pages/AdminUserList/AdminDashboard';
 import AdminRoleList from '~/Pages/AdminRoleList/AdminRoleList';
+import AdminPromotion from '~/Pages/AdminPromotion/AdminPromotion';
+import StaffOrderManagement from '~/Pages/StaffOrderManagement/StaffOrderManagement';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -56,7 +58,8 @@ const publicRoutes = [
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
     { path: '/addpost', component: AddPost, layout: SystemLayout },
-    { path: '/stafffeedback', component: StaffFeedback, layout: SystemLayout },
+    { path: '/staff-feedback', component: StaffFeedback, layout: SystemLayout, role: 'staff' },
+    { path: '/staff-order-management', component: StaffOrderManagement, layout: SystemLayout, role: 'staff' },
     { path: '/mngvoucherpromotion', component: MngVoucherPromotion, layout: SystemLayout },
     { path: '/mngorder', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
@@ -75,6 +78,7 @@ const publicRoutes = [
     { path: '/add-role', component: AddRole },
     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
+    { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

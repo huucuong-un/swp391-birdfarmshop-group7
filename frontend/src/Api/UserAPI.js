@@ -3,9 +3,9 @@ import axios from 'axios';
 import axiosClient from './AxiosClient';
 
 const UserAPI = {
-    getUserById(param) {
-        const url = '/user';
-        return axiosClient.get(url, { param });
+    getUserById(id) {
+        const url = `/user/get-user-by-id?id=${id}`;
+        return axiosClient.get(url);
     },
 
     updateUserProfile(data) {

@@ -6,6 +6,10 @@ const FeedbackAPI = {
         const url = '/feedback/find-all-by-species-id-and-belong-to-or-rating-or-color-id';
         return axiosClinet.get(url, { params });
     },
+    getAllFeedbackSystem(params) {
+        const url = '/feedback';
+        return axiosClinet.get(url, { params });
+    },
 
     create(data) {
         const url = `/feedback`;

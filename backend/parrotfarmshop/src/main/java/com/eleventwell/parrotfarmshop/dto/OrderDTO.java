@@ -40,5 +40,5 @@ public class OrderDTO extends BaseDTO {
     public String vnp_OrderInfo = "Parrot";
 
     public String vnp_OrderType = "200000";
-
+    public String vnp_TxnRef;
 }

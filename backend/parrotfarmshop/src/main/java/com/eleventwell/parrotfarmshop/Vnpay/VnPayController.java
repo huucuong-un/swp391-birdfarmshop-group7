@@ -18,6 +18,8 @@ public class VnPayController {
     @Autowired
     OrderService orderService;
 
+
+
     public VnPayController(PayService payService) {
         this.payService = payService;
     }
@@ -37,7 +39,7 @@ public class VnPayController {
             @RequestParam(value = "vnp_ResponseCode") String responseCode,
             @RequestParam(value = "vnp_TxnRef") String txnRef
     ) {
-                TransactionDTO transactionDTO = new TransactionDTO();
+        TransactionDTO transactionDTO = new TransactionDTO();
 
         // Kiểm tra responseCode
         if ("00".equals(responseCode)) {
@@ -45,7 +47,11 @@ public class VnPayController {
             transactionDTO.setStatus("OK");
             transactionDTO.setMessage("Success");
             transactionDTO.setData("");
-            orderService.changeStatus(Long.parseLong(txnRef));
+            String orderIdByUsingLongDataType = txnRef.substring(0, txnRef.length() - 8);
+            long result = Long.parseLong(orderIdByUsingLongDataType);
+            orderService.changeStatus(result);
+
+
         } else {
             // Trạng thái thất bại
             transactionDTO.setStatus("No");

@@ -25,6 +25,8 @@ public class PayService {
         if(orderDTO.getId() == null){
             return "orderId not exits";
         }
+        orderDTO.vnp_TxnRef = Config.getRandomNumber(8);
+
         cld.add(Calendar.MINUTE,15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
 
@@ -41,7 +43,7 @@ public class PayService {
         vnp_Params.put("vnp_OrderInfo",orderDTO.vnp_OrderInfo);
         vnp_Params.put("vnp_OrderType",orderDTO.vnp_OrderType);
         vnp_Params.put("vnp_ReturnUrl", VnPayConstant.vnp_ReturnUrl);
-        vnp_Params.put("vnp_TxnRef", String.valueOf(orderDTO.getId()));
+        vnp_Params.put("vnp_TxnRef",String.valueOf(orderDTO.getId()) + String.valueOf(orderDTO.vnp_TxnRef));
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
         List fieldList = new ArrayList(vnp_Params.keySet());

@@ -39,10 +39,28 @@ public class OrderController {
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
 
-        result.setListResult(orderService.findAll(pageable));
+        List<OrderDTO> orders = orderService.findAll(pageable);
+        List<OrderResponseForManagement> orderResponses = new ArrayList<>();
+
+        List<OrderDetailHistoryModel> orderDetailHistoryModel = new ArrayList<>();
+
+        for (OrderDTO dto : orders) {
+            OrderResponseForManagement orderResponse = new OrderResponseForManagement();
+            orderDetailHistoryModel = orderDetailService.createOrderDetailHistoryModelList(dto.getId());
+            orderResponse.setOrderDTO(dto);
+            orderResponse.setListOrderDetailHistoryModel(orderDetailHistoryModel);
+            UserDTO user = userService.findOneById(dto.getUserID());
+            orderResponse.setUserDTO(user);
+
+
+            orderResponses.add(orderResponse);
+        }
+
+        result.setListResult(orderResponses);
         result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
         result.setLimit(limit);
-        return result;
+      return  result;
+
     }
     @GetMapping(value = "admin/order_management/search")
     public PagingModel searchOrderByPhoneAnd(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "email", required = false) String email,@RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,@RequestParam(value = "status",required = false) String status,@RequestParam(value = "sortPrice", required = false) String sortPrice,@RequestParam(value = "sortDate", required = false) String sortDate) {

@@ -68,7 +68,24 @@ public class OrderController {
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
 
-        result.setListResult(orderService.searchByEmailOrPhone(email,phone,date,status,sortPrice,sortDate,pageable));
+        List<OrderDTO> orders = orderService.searchByEmailOrPhone(email,phone,date,status,sortPrice,sortDate,pageable);
+        List<OrderResponseForManagement> orderResponses = new ArrayList<>();
+
+        List<OrderDetailHistoryModel> orderDetailHistoryModel = new ArrayList<>();
+
+        for (OrderDTO dto : orders) {
+            OrderResponseForManagement orderResponse = new OrderResponseForManagement();
+            orderDetailHistoryModel = orderDetailService.createOrderDetailHistoryModelList(dto.getId());
+            orderResponse.setOrderDTO(dto);
+            orderResponse.setListOrderDetailHistoryModel(orderDetailHistoryModel);
+            UserDTO user = userService.findOneById(dto.getUserID());
+            orderResponse.setUserDTO(user);
+
+
+            orderResponses.add(orderResponse);
+        }
+
+        result.setListResult(orderResponses);
         result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
         result.setLimit(limit);
         return result;

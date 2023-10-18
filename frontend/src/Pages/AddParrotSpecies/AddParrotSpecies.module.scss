@@ -11,7 +11,6 @@
     align-items: center;
     width: 100%;
     flex-direction: column;
-
     div {
         overflow: hidden;
         display: flex;
@@ -20,9 +19,7 @@
         padding: 2px;
     }
 }
-.scale-fade {
-    width: 2000px;
-}
+
 .table-container {
     margin: 20px;
     width: 50% !important;
@@ -30,9 +27,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
     flex-direction: column;
-    height: 500px;
     table {
         width: 100%;
         height: 400px;
@@ -61,7 +56,6 @@
 }
 .btn {
     background-color: #f57c7c;
-
     &:hover {
         opacity: 0.8;
         background-color: #f57c7c;
@@ -88,43 +82,18 @@
         font-size: 20px;
     }
 }
-.sort-space-form {
+.sort-space {
     display: flex;
-    gap: 10px;
-    padding: 0 20px;
     justify-content: end;
-}
-
-.sort-space-form input {
-    padding: 0 3px;
-    max-width: 140px;
-    font-weight: 600;
-    border: 2px solid var(--black);
-    border-radius: 6px;
-}
-
-.sort-space-form select {
-    border: 2px solid var(--black);
-    border-radius: 6px;
-    font-weight: 600;
-}
-.accordion {
+    padding: 20px 0;
+    gap: 20px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-bottom: 100px;
-}
-.accord-item {
-    width: 100%;
-    span {
-        overflow: hidden;
-    }
-
-    button {
-        overflow: hidden;
-        font-size: 18px;
+    margin-right: 20px;
+    input,
+    select {
+        border: 2px solid black;
+        border-radius: 50px;
+        padding: 0 1%;
     }
 }
 
@@ -158,7 +127,6 @@
 
 .crud-container {
     padding: 10px;
-
     width: 100%;
     display: flex;
     justify-content: center;

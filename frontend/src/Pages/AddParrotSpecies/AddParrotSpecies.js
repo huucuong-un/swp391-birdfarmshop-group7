@@ -3,11 +3,9 @@ import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
 import {
     Input,
     Table,
-    Thead,
     Tbody,
     Tfoot,
     Tr,
-    Th,
     Td,
     TableContainer,
     Button,
@@ -195,32 +193,12 @@ function AddParrotSpecies() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('add-btn')}>
-                <Buttons onClick={handleShow} add>
+                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Buttons>
-                <div className={cx('sort-space')}>
-                    <form className={cx('sort-space-form')}>
-                        <select name="species" id="species">
-                            <option value="a">Species</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <select name="status" id="status">
-                            <option value="b">Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <input type="date" />
-                        <select name="price" id="price">
-                            <option value="c">Price</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </form>
-                </div>
+                </Button>
             </div>
 
             {/* FORM TO ADD SPECIES  */}
@@ -406,6 +384,24 @@ function AddParrotSpecies() {
                 {/*END FORM TO ADD SPECIES  */}
             </form>
             {/* CRUD SPECIES LIST */}
+            <div className={cx('sort-space')}>
+                <select name="species" id="species">
+                    <option value="a">Species</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select name="status" id="status">
+                    <option value="b">Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <input type="date" />
+                <select name="price" id="price">
+                    <option value="c">Price</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
             <AddSpeciesColor key={addSpeciesColorKey} className={cx('addspeciescolor')}></AddSpeciesColor>
         </div>
     );

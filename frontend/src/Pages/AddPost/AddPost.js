@@ -3,11 +3,11 @@ import styles from '~/Pages/AddPost/AddPost.module.scss';
 import {
     Input,
     Table,
-    Thead,
     Tbody,
     Tfoot,
     Tr,
     Th,
+    Thead,
     Td,
     TableContainer,
     Button,
@@ -15,11 +15,16 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Textarea,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Title from '~/Components/Title/Title';
+
 import axios from 'axios';
+import PostAPI from '~/Api/PostAPI';
 
 const cx = classNames.bind(styles);
 
@@ -27,15 +32,19 @@ function AddPost() {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState('');
+    const [show, setShow] = useState(false);
     // Toast
     const toast = useToast();
-
+    const handleShow = () => {
+        setShow(!show);
+    };
     const [post, setPost] = useState({
+        description: 'Default by Hnam',
         title: '',
         content: '',
         imageUrl: null,
-        startDate: '2023-09-23 00:00:00',
-        endDate: '2023-09-30 23:59:59',
+        startDate: '',
+        endDate: '',
         status: true,
     });
 
@@ -88,12 +97,13 @@ function AddPost() {
         e.preventDefault();
         try {
             const responsePost = await axios.post('http://localhost:8086/api/post', {
-                title: post.title,
-                content: post.content,
-                imageUrl: img,
-                startDate: post.startDate,
                 endDate: post.endDate,
                 status: post.status,
+                title: post.title,
+                description: post.description,
+                content: post.content,
+                startDate: post.startDate,
+                imageUrl: img,
             });
             if (responsePost.status === 200) {
                 console.log('POST request was successful at species!!');
@@ -109,101 +119,222 @@ function AddPost() {
             setSubmissionStatus(false);
         }
     };
+    const [postList, setPostList] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const postList = await PostAPI.getAll();
+            setPostList(postList.listResult);
+        };
+        fetchData();
+    }, [post]);
+    const convertToTrueFormat = (timeText) => {
+        let [date, time] = timeText.split('T');
+        let [hours, mins, secs] = time.split(':');
+        if (date && time && hours && mins && secs) {
+            return date + ' ' + time;
+        } else if (secs === undefined) {
+            return date + ' ' + hours + ':' + mins + ':00';
+        }
+    };
+    console.log(postList);
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('title-container')}>
-                <Title system>Add Post</Title>
+            <div className={cx('title-wrapper')}>
+                <Title system>Add post</Title>
+            </div>
+            <div className={cx('add-btn')}>
+                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
+                    Add
+                    <span className={cx('span-icon', { 'rotate-icon': show })}>
+                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
+                    </span>
+                </Button>
             </div>
 
-            <form className={cx('inner')} onSubmit={handleSubmit}>
-                <TableContainer className={cx('table-container')}>
-                    {(submissionStatus === true && (
-                        <Alert status="success">
-                            <AlertIcon />
-                            <AlertTitle>Success!</AlertTitle>
-                            <AlertDescription>Your form has been submitted successfully.</AlertDescription>
-                        </Alert>
-                    )) ||
-                        (submissionStatus === false && (
-                            <Alert status="error">
-                                <AlertIcon />
-                                <AlertTitle>Failed to add parrot species - </AlertTitle>
-                                <AlertDescription>Please check your input!!!</AlertDescription>
-                            </Alert>
-                        ))}
-                    <div className={cx('title-post')}>
-                        <div className={cx('title')}>
-                            <h1>Post</h1>
+            {show ? (
+                <div className={cx('inner-up')}>
+                    <div className={cx('post-img')}>{img ? <img src={img} alt="post-img" /> : <></>}</div>
+                    <div className={cx('post-info')}>
+                        <div className={cx('post-info-title')}>
+                            <h1>{post.title}</h1>
+                        </div>
+                        <div className={cx('post-info-content')}>
+                            <p>{post.content}</p>
                         </div>
                     </div>
-                    <Table size="xs ">
-                        <Tbody>
-                            <Tr>
-                                <Td>Title</Td>
+                </div>
+            ) : (
+                <></>
+            )}
+
+            {show ? (
+                <form className={cx('inner')} onSubmit={handleSubmit}>
+                    <TableContainer className={cx('table-container-add')}>
+                        {(submissionStatus === true && (
+                            <Alert status="success">
+                                <AlertIcon />
+                                <AlertTitle>Success!</AlertTitle>
+                                <AlertDescription>Your form has been submitted successfully.</AlertDescription>
+                            </Alert>
+                        )) ||
+                            (submissionStatus === false && (
+                                <Alert status="error">
+                                    <AlertIcon />
+                                    <AlertTitle>Failed to add parrot species - </AlertTitle>
+                                    <AlertDescription>Please check your input!!!</AlertDescription>
+                                </Alert>
+                            ))}
+                        <div className={cx('title-container')}>
+                            <Title system>Add Post</Title>
+                        </div>
+                        <Table size="xs ">
+                            <Tbody>
+                                <Tr>
+                                    <Td>Title</Td>
+                                    <Td className={cx('text-area')}>
+                                        <Input
+                                            type="text"
+                                            id="title"
+                                            name="title"
+                                            value={post.title}
+                                            onChange={(e) => {
+                                                setPost({ ...post, title: e.target.value });
+                                            }}
+                                            variant="filled"
+                                            placeholder="Title"
+                                            required
+                                        />
+                                    </Td>
+                                </Tr>
+                                <Tr>
+                                    <Td>Content</Td>
+                                    <Td className={cx('text-area')}>
+                                        <Textarea
+                                            value={post.content}
+                                            onChange={(e) => setPost({ ...post, content: e.target.value })}
+                                        />
+                                    </Td>
+                                </Tr>
+
+                                <Tr>
+                                    <Td>Start day</Td>
+                                    <Td className={cx('text-area')}>
+                                        <Input
+                                            placeholder="Select Date and Time"
+                                            size="md"
+                                            step="1"
+                                            type="datetime-local"
+                                            onChange={(e) => {
+                                                const timeConvert = convertToTrueFormat(e.target.value);
+                                                setPost({ ...post, startDate: timeConvert });
+                                            }}
+                                            required
+                                        />
+                                    </Td>
+                                </Tr>
+                                <Tr>
+                                    <Td>End day</Td>
+                                    <Td className={cx('text-area')}>
+                                        <Input
+                                            placeholder="Select Date and Time"
+                                            size="md"
+                                            step="1"
+                                            type="datetime-local"
+                                            onChange={(e) => {
+                                                const timeConvert = convertToTrueFormat(e.target.value);
+                                                setPost({ ...post, endDate: timeConvert });
+                                            }}
+                                            required
+                                        />
+                                    </Td>
+                                </Tr>
+                                <Tr>
+                                    <Td>Post image</Td>
+                                    <Td className={cx('text-area')}>
+                                        <Input
+                                            type="file"
+                                            p={1.5}
+                                            id="image"
+                                            name="image"
+                                            accept="image/*"
+                                            onChange={(e) => postDetails(e.target.files[0])}
+                                            required
+                                        />
+                                    </Td>
+                                </Tr>
+                            </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Td></Td>
+                                    <Td className={cx('submit-btn')}>
+                                        <Button
+                                            type="submit"
+                                            className={cx('btn')}
+                                            width="100%"
+                                            style={{ marginTop: 15 }}
+                                            margin="8px"
+                                            isLoading={loading}
+                                        >
+                                            ADD
+                                        </Button>
+                                    </Td>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
+                </form>
+            ) : (
+                <></>
+            )}
+            <div className={cx('sort-space')}>
+                <select name="species" id="species">
+                    <option value="a">Species</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select name="status" id="status">
+                    <option value="b">Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <input type="date" />
+                <select name="price" id="price">
+                    <option value="c">Price</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <TableContainer className={cx('table-container')}>
+                <Table size="xs ">
+                    <Thead>
+                        <Tr>
+                            <Th className={cx('text-center')}>Post ID</Th>
+                            <Th className={cx('text-center')}>Title</Th>
+                            <Th className={cx('text-center')}>Content</Th>
+                            <Th className={cx('text-center')}>Description</Th>
+                            <Th className={cx('text-center')}>Image</Th>
+                            <Th className={cx('text-center')}>Start date</Th>
+                            <Th className={cx('text-center')}>End date</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {postList.map((post) => (
+                            <Tr key={post.id}>
+                                <Td>{post.id}</Td>
+                                <Td>{post.title}</Td>
+                                <Td>{post.content}</Td>
+                                <Td>{post.description}</Td>
                                 <Td>
-                                    <Input
-                                        type="text"
-                                        id="title"
-                                        name="title"
-                                        value={post.title}
-                                        onChange={(e) => setPost({ ...post, title: e.target.value })}
-                                        variant="filled"
-                                        placeholder="Origin"
-                                        required
-                                    />
+                                    <img src={post.imageUrl} />
                                 </Td>
+                                <Td>{post.startDate}</Td>
+                                <Td>{post.endDate}</Td>
                             </Tr>
-                            <Tr>
-                                <Td>Content</Td>
-                                <Td>
-                                    <Input
-                                        type="text"
-                                        id="content"
-                                        name="content"
-                                        value={post.content}
-                                        onChange={(e) => setPost({ ...post, content: e.target.value })}
-                                        variant="filled"
-                                        placeholder="Content"
-                                        required
-                                    />
-                                </Td>
-                            </Tr>
-                            <Tr>
-                                <Td>Parrot image</Td>
-                                <Td>
-                                    <Input
-                                        type="file"
-                                        p={1.5}
-                                        id="image"
-                                        name="image"
-                                        accept="image/*"
-                                        onChange={(e) => postDetails(e.target.files[0])}
-                                        required
-                                    />
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                        <Tfoot>
-                            <Tr>
-                                <Td></Td>
-                                <Td className={cx('submit-btn')}>
-                                    <Button
-                                        type="submit"
-                                        className={cx('btn')}
-                                        width="100%"
-                                        style={{ marginTop: 15 }}
-                                        margin="8px"
-                                        isLoading={loading}
-                                    >
-                                        ADD
-                                    </Button>
-                                </Td>
-                            </Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-            </form>
+                        ))}
+                    </Tbody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }

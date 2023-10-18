@@ -70,7 +70,7 @@ function OrderHistory() {
             content: textareaValue,
             rating: rating,
             belongTo: 'parrot',
-            userId: orderId.userID,
+            userId: orderId.userId,
             colorId: orderId.colorId,
             orderId: orderId.orderId,
             status: true,

@@ -60,7 +60,7 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
             newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
         }
-        newEntity.setUser(userRepository.findOneById(DTO.getId()));
+        newEntity.setUser(userRepository.findOneById(DTO.getUserId()));
         newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
         feedbackRepository.save(newEntity);
         pEntity.setParrotAverageRating(calculateAverageFeedbackRatingBySpeciesId(pEntity.getId()));

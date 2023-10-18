@@ -36,9 +36,13 @@ function StaffOrderManagement() {
     useEffect(() => {
         const getOrderWithUser = async () => {
             try {
-                const orderList = await OrderAPI.findAllOrderWithUser();
-                console.log(orderList);
-                setOrders(orderList);
+                const params = {
+                    page: 1,
+                    limit: 10,
+                };
+                const orderList = await OrderAPI.getAll(params);
+                console.log(orderList.listResult);
+                setOrders(orderList.listResult);
             } catch (error) {
                 console.error(error);
             }

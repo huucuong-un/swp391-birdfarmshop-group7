@@ -36,6 +36,7 @@ const AdminRoleList = () => {
     const [showUpdate, setShowUpdate] = useState(Array(roles.length).fill(false)); // Initialize with false for each item
     useEffect(() => {
         console.log(roles);
+        console.log(reloadStatus);
     }, [roles]);
     const handleAdd = (newInfo) => {
         const updatedRole = [...roles];
@@ -54,7 +55,9 @@ const AdminRoleList = () => {
             await axios.delete(`http://localhost:8086/api/role/${updatedRoles[index].id}`);
 
             // If the request is successful, update the state
+
             setRoles(updatedRoles);
+            setReloadStatus(true);
         } catch (error) {
             toast({
                 title: 'Error occur!',
@@ -70,6 +73,10 @@ const AdminRoleList = () => {
     const handleShow = () => {
         setShow(!show);
     };
+
+    useEffect(() => {
+        console.log(reloadStatus);
+    }, [reloadStatus]);
 
     const handleShowUpdate = (index) => {
         const updatedShowUpdate = [...showUpdate]; // Create a copy of showUpdate array

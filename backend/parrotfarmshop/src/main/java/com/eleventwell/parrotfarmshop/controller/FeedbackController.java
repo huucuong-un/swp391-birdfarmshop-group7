@@ -101,6 +101,13 @@ public class FeedbackController {
 
         return feedbackService.save(dto);
     }
+    
+        @PutMapping(value = "admin/change-status/{id}")
+    public void createFeedback(@RequestBody @PathVariable("id") Long id ) {
+
+       feedbackService.changeStatus(id);
+    }
+    
 
 
 }

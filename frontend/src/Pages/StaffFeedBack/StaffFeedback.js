@@ -10,6 +10,12 @@ import {
     TableCaption,
     TableContainer,
     Switch,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    Box,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,6 +33,7 @@ const cx = classNames.bind(styles);
 function StaffFeedback() {
     const [feedbackList, setFeedbackList] = useState([]);
     const [combineData, setCombineData] = useState([]);
+    const [vinh, setVinh] = useState(1);
 
     useEffect(() => {
         const getFeedback = async () => {
@@ -44,7 +51,7 @@ function StaffFeedback() {
         };
 
         getFeedback();
-    }, []);
+    }, [vinh]);
 
     useEffect(() => {
         const getUserbyId = async () => {
@@ -82,6 +89,12 @@ function StaffFeedback() {
 
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
+
+    const changeStatus = async (id) => {
+        console.log(id);
+        const change = await FeedbackAPI.changeStatus(id);
+        setVinh((pre) => pre + 1);
+    };
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -137,11 +150,41 @@ function StaffFeedback() {
                                 <Tr key={index}>
                                     <Td>{feedback.id}</Td>
                                     <Td>{feedback.userInfor.fullName}</Td>
-                                    <Td>{feedback.content}</Td>
+                                    <Td className={cx('feedback-content')} maxWidth={100}>
+                                        {/* <Accordion defaultIndex={[0]} allowMultiple>
+                                            <AccordionItem>
+                                                <h2>
+                                                    <AccordionButton>
+                                                        <Box as="span" flex="1" textAlign="left">
+                                                            Section 1 title
+                                                        </Box>
+                                                        <AccordionIcon />
+                                                    </AccordionButton>
+                                                </h2>
+                                                <AccordionPanel pb={4}>{feedback.content}</AccordionPanel>
+                                            </AccordionItem>
+                                        </Accordion> */}
+                                        {feedback.content}
+                                    </Td>
                                     <Td>{feedback.species.name}</Td>
                                     <Td>{formatDate(new Date(feedback.createdDate))}</Td>
                                     <Td>{feedback.rating}</Td>
-                                    {/* <Td>{feedback.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />}</Td> */}
+                                    <Td>
+                                        {feedback.status ? (
+                                            <Switch
+                                                size="lg"
+                                                isChecked
+                                                colorScheme="green"
+                                                onChange={() => changeStatus(feedback.id)}
+                                            />
+                                        ) : (
+                                            <Switch
+                                                size="lg"
+                                                colorScheme="green"
+                                                onChange={() => changeStatus(feedback.id)}
+                                            />
+                                        )}
+                                    </Td>
                                 </Tr>
                             ))}
                     </Tbody>

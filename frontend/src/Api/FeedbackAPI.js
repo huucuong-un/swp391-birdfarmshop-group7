@@ -23,6 +23,10 @@ const FeedbackAPI = {
         const url = '/feedback/count-by-species-id-or-species-color-id-and-rating';
         return axiosClinet.get(url, { params });
     },
+    changeStatus(id) {
+        const url = `/feedback/admin/change-status/${id}`;
+        return axiosClinet.put(url);
+    },
 };
 
 export default FeedbackAPI;

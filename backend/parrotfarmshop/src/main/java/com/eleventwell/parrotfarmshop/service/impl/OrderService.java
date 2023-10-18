@@ -51,8 +51,15 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Override
     public List<OrderDTO> findAll() {
+        List<OrderDTO> result = new ArrayList<>();
+        List<OrderEntity> orderEntities = orderRepository.findAll();
 
-     return null;
+        for (OrderEntity entity : orderEntities) {
+            OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
+            result.add(orderDTO);
+        }
+
+        return result;
     }
 
     public OrderDTO findOneByOrderId(Long orderId) {

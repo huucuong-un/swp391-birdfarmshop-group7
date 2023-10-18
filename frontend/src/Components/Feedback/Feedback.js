@@ -109,8 +109,8 @@ function Feedback({ feedbackType, colorSortList }) {
                 for (const items of feedbackList) {
                     const user = { ...items };
                     const userobject = await UserAPI.getUserById(items.userId);
-                    user.username = userobject[0].userName;
-                    user.imgUrl = userobject[0].imgUrl;
+                    user.username = userobject.userName;
+                    user.imgUrl = userobject.imgUrl;
                     data.push(user);
                 }
                 setCombineData(data);

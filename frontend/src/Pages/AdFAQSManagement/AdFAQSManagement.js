@@ -39,7 +39,7 @@ function AdFAQSManagement() {
     const [addStatus, setAddStatus] = useState(1);
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
-    const [vinh, setVinh] = useState(true);
+    const [vinh, setVinh] = useState(1);
 
     useEffect(() => {
         const getFaqsList = async () => {
@@ -122,7 +122,7 @@ function AdFAQSManagement() {
     const changeStatus = async (id) => {
         console.log(id);
         const change = await FAQSAPI.changeStatus(id);
-        setVinh(false);
+        setVinh((pre) => pre + 1);
     };
 
     useEffect(() => {

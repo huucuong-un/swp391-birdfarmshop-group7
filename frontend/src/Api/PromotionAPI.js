@@ -5,6 +5,10 @@ const PromotionAPI = {
         const url = `/promotion/find-one-by-code`;
         return axiosClinet.get(url, { params });
     },
+    getAll() {
+        const url = `/promotion`;
+        return axiosClinet.get(url);
+    },
 };
 
 export default PromotionAPI;

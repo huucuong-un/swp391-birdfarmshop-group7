@@ -35,7 +35,7 @@ public class OrderEntity extends BaseEntity {
 
 
 	@Column(name="status")
-	private Boolean status;
+	private String status;
 
 	@Column(name="total_price")
 	private Double totalPrice;

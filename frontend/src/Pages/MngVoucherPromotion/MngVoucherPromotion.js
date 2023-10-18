@@ -1,122 +1,127 @@
-import classNames from 'classnames/bind';
-import styles from '~/Pages/MngVoucherPromotion/MngVoucherPromotion.module.scss';
+import {
+    Container,
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+    Switch,
+    Button,
+    Textarea,
+    Input,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    Stack,
+} from '@chakra-ui/react';
 
-import { Input, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
-import Buttons from '~/Components/Button/Button';
+import classNames from 'classnames/bind';
+import { useEffect, useState } from 'react';
+import PromotionAPI from '~/Api/PromotionAPI';
+import styles from '~/Pages/MngVoucherPromotion/MngVoucherPromotion.module.scss';
 
 const cx = classNames.bind(styles);
 
 function MngVoucherPromotion() {
+    const [voucherList, setVoucherList] = useState([]);
+
+    useEffect(() => {
+        const getVoucherList = async () => {
+            try {
+                const voucherList = await PromotionAPI.getAll();
+                console.log(voucherList);
+                setVoucherList(voucherList);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getVoucherList();
+    }, []);
+
+    function formatDate(date) {
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-indexed
+        const year = date.getFullYear();
+
+        const formattedDay = day < 10 ? `0${day}` : day;
+        const formattedMonth = month < 10 ? `0${month}` : month;
+
+        return `${formattedDay}/${formattedMonth}/${year}`;
+    }
+
     return (
-        <div className={cx('wrapper')}>
-            {/* Title */}
+        <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
-                <h1>Voucher & Promotion</h1>
+                <h1>Promotions</h1>
             </div>
-            {/* Sort space */}
-            <div className={cx('add-btn')}>
-                <div className={cx('sort-space')}>
-                    <form className={cx('sort-space-form')}>
-                        <input type="text" placeholder="ID" />
-                        <input type="text" placeholder="Code" />
+            <div className={cx('sort-space')}>
+                <select name="status" id="status">
+                    <option value="" disabled selected>
+                        Rating
+                    </option>
 
-                        <select name="status" id="status">
-                            <option value="" disabled selected>
-                                Status
-                            </option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
+                    <option value="active">1</option>
+                    <option value="active">2</option>
+                    <option value="active">3</option>
+                    <option value="active">4</option>
+                    <option value="active">5</option>
+                </select>
 
-                        <select name="price" id="price">
-                            <option value="" disabled selected>
-                                Create at
-                            </option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <select name="price" id="price">
-                            <option value="" disabled selected>
-                                Start date
-                            </option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </form>
-                </div>
+                <select name="status" id="status">
+                    <option value="" disabled selected>
+                        Status
+                    </option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <input type="date" />
+                <select name="price" id="price">
+                    <option value="" disabled selected>
+                        Price
+                    </option>
+                </select>
+
+                <button></button>
             </div>
-            {/* Table */}
-            <form className={cx('inner')}>
-                <TableContainer>
-                    <Table size="lg">
-                        <Thead>
-                            <Tr>
-                                <Th>ID</Th>
-                                <Th>Voucher ID </Th>
-                                <Th>Voucher Code</Th>
-                                <Th>Description</Th>
-                                <Th>Create at</Th>
-                                <Th>Start date</Th>
-                                <Th>End date</Th>
-                                <Th>Value</Th>
-                                <Th>Status</Th>
-                                <Th>Action</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td>1</Td>
-                                <Td>1</Td>
-                                <Td>NHN130303</Td>
-                                <Td>30%</Td>
-                                <Td>13/03/2003</Td>
-                                <Td>23/05/2003</Td>
-                                <Td>31/11/2003</Td>
-                                <Td>30%</Td>
-                                <Td>Active</Td>
-                                <Td className={cx('action-column')}>
-                                    <Buttons add>Edit</Buttons>
-                                    <Buttons add>Delete</Buttons>
-                                    <Buttons add>Switch</Buttons>
-                                </Td>
-                            </Tr>
-                            <Tr>
-                                <Td>1</Td>
-                                <Td>1</Td>
-                                <Td>NHN130303</Td>
-                                <Td>30%</Td>
-                                <Td>13/03/2003</Td>
-                                <Td>23/05/2003</Td>
-                                <Td>31/11/2003</Td>
-                                <Td>30%</Td>
-                                <Td>Active</Td>
-                                <Td className={cx('action-column')}>
-                                    <Buttons add>Edit</Buttons>
-                                    <Buttons add>Delete</Buttons>
-                                    <Buttons add>Switch</Buttons>
-                                </Td>
-                            </Tr>
-                            <Tr>
-                                <Td>2</Td>
-                                <Td>2</Td>
-                                <Td>NHN230503</Td>
-                                <Td>30%</Td>
-                                <Td>13/03/2003</Td>
-                                <Td>23/05/2003</Td>
-                                <Td>31/11/2003</Td>
-                                <Td>30%</Td>
-                                <Td>Active</Td>
-                                <Td className={cx('action-column')}>
-                                    <Buttons add>Edit</Buttons>
-                                    <Buttons add>Delete</Buttons>
-                                    <Buttons add>Switch</Buttons>
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            </form>
-        </div>
+            <TableContainer>
+                <Table size="lg">
+                    <Thead>
+                        <Tr>
+                            <Th>ID</Th>
+                            <Th>Voucher Code</Th>
+                            <Th>Description</Th>
+                            <Th>Create at</Th>
+                            <Th>Start date</Th>
+                            <Th>End date</Th>
+                            <Th>Value</Th>
+                            <Th>Status</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {voucherList &&
+                            voucherList.map((voucher, index) => (
+                                <Tr key={index}>
+                                    <Td>{voucher.id}</Td>
+                                    <Td>{voucher.code}</Td>
+                                    <Td>{voucher.description}</Td>
+                                    <Td>{formatDate(new Date(voucher.createdDate))}</Td>
+                                    <Td>{formatDate(new Date(voucher.startDate))}</Td>
+                                    <Td>{formatDate(new Date(voucher.endDate))}</Td>
+                                    <Td>{voucher.value}</Td>
+                                    <Td>{voucher.status}</Td>
+                                </Tr>
+                            ))}
+                    </Tbody>
+                </Table>
+            </TableContainer>
+        </Container>
     );
 }
 

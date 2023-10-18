@@ -31,7 +31,7 @@ public class OrderDTO extends BaseDTO {
 
     private Long promotionID;
 
-    private Boolean status;
+    private String status;
 
     private Double totalPrice;
 

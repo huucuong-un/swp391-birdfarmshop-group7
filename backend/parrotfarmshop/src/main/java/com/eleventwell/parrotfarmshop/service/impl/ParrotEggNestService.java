@@ -57,8 +57,6 @@ public class ParrotEggNestService implements IGenericService<ParrotEggNestDTO> {
         } else {
             parrotEggNestEntity = (ParrotEggNestEntity) genericConverter.toEntity(parrotEggNestDTO,ParrotEggNestEntity.class);
         }
-        parrotEggNestEntity.setParrotDad(parrotRepository.findOneById(parrotEggNestDTO.getDadId()));
-        parrotEggNestEntity.setParrotMom(parrotRepository.findOneById(parrotEggNestDTO.getMomId()));
 
         parrotEggNestRepository.save(parrotEggNestEntity);
         return (ParrotEggNestDTO) genericConverter.toDTO(parrotEggNestEntity, ParrotEggNestDTO.class);

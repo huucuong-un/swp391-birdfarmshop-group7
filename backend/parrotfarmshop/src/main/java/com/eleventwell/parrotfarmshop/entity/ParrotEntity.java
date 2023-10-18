@@ -72,9 +72,7 @@ public class ParrotEntity extends BaseEntity {
     @JoinColumn(name = "color_ID")
     private ParrotSpeciesColorEntity parrotSpeciesColor;
 
-    @ManyToOne
-    @JoinColumn(name = "nest_ID")
-    private ParrotEggNestEntity parrotEggNest;
+
 
 //    @OneToOne(mappedBy = "parrot")
 //    private OrderDetailEntity orderDetail;

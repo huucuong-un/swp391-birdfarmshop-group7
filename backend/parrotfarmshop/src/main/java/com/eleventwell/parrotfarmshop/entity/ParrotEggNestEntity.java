@@ -60,16 +60,9 @@ public class ParrotEggNestEntity extends BaseEntity {
     @PrimaryKeyJoinColumn
     private OrderDetailEntity orderDetail;
 
-    @OneToMany(mappedBy = "parrotEggNest")
-    private List<ParrotEntity> parrots = new ArrayList<>();
+//    @OneToMany(mappedBy = "parrotEggNest")
+//    private List<ParrotEntity> parrots = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "parrotMomID")
-    private ParrotEntity parrotMom;
-
-    @ManyToOne
-    @JoinColumn(name = "parrotDadID")
-    private ParrotEntity parrotDad;
 
     @Unsigned
     @Column(name = "belongTo")

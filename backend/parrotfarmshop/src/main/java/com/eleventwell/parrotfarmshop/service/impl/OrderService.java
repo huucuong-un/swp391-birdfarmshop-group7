@@ -182,13 +182,13 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-        OrderEntity orderEntity = orderRepository.findOneById(ids);
-        if (orderEntity.getStatus() == true) {
-            orderEntity.setStatus(false);
-        } else {
-            orderEntity.setStatus(true);
-        }
-        orderRepository.save(orderEntity);
+//        OrderEntity orderEntity = orderRepository.findOneById(ids);
+//        if (orderEntity.getStatus() == true) {
+//            orderEntity.setStatus(false);
+//        } else {
+//            orderEntity.setStatus(true);
+//        }
+//        orderRepository.save(orderEntity);
 
 
     }

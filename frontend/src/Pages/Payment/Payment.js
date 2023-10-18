@@ -16,6 +16,8 @@ import { Box, Button, Image } from '@chakra-ui/react';
 import Paypal from '~/Assets/image/Payment/Paypal.svg';
 import VnPay from '~/Assets/image/Payment/vnpay-seeklogo.com.svg';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+import axios from 'axios';
+import VnpayAPI from '~/Api/VnpayAPI';
 
 const cx = classNames.bind(styles);
 
@@ -41,10 +43,30 @@ function Payment() {
     const [discount, setDiscount] = useState(0);
     const [promotion, setPromotion] = useState(null);
     // const { paymentStatus, setPaymentStatus } = useCartStatus;
+    const [orderInfo, setOrderInfo] = useState({
+        id: 1,
+        createdDate: '2023-10-17',
+        userID: 2, // Thay thế bằng giá trị thực tế của userID
+        deliveryInformationId: null, // Thay thế bằng giá trị thực tế của deliveryInformationId
+        promotionID: null, // Thay thế bằng giá trị thực tế của promotionID
+        status: true, // Thay thế bằng giá trị thực tế của status
+        totalPrice: 100.0, // Thay thế bằng giá trị thực tế của totalPrice
+        quantity: 0, // Thay thế bằng giá trị thực tế của quantity
+        vnp_OrderInfo: 'Parrot', // Thay thế bằng thông tin đặt hàng thực tế
+        vnp_OrderType: '20000', // Thay thế bằng giá trị thực tế của vnp_OrderType
+        vnp_TxnRef: null, // Thay thế bằng giá trị thực tế của vnp_TxnRef
+    });
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
     }, []);
+    useEffect(() => {
+        console.log(loggedUser);
+    }, [loggedUser]);
+    useEffect(() => {
+        console.log(orderInfo);
+    }, [orderInfo]);
+
     const { user } = ShopState();
 
     const handlePaymentSelection = (paymentMethod) => {
@@ -70,6 +92,7 @@ function Payment() {
             console.log('code not exist');
         }
     };
+
     useEffect(() => {
         setTotalPrice(originTotalPrice - discount);
     }, [discount]);
@@ -137,6 +160,51 @@ function Payment() {
 
     const handleReloadParent = () => {};
 
+    const handlePayment = async () => {
+        try {
+            // Make a POST request to the first API endpoint
+            // const response = await axios.post('http://localhost:8086/api/vnpay/payment', {
+            //     // Add other fields you want to send to the first API
+            //     userID: orderInfo.userID,
+            //     deliveryInformationId: orderInfo.deliveryInformationId,
+            //     promotionID: orderInfo.promotionID,
+            //     status: orderInfo.status,
+            //     totalPrice: orderInfo.totalPrice,
+            //     quantity: orderInfo.quantity,
+            //     vnp_OrderInfo: orderInfo.vnp_OrderInfo,
+            //     vnp_OrderType: orderInfo.vnp_OrderType,
+            //     vnp_TxnRef: orderInfo.vnp_TxnRef,
+            // });
+            const data = {
+                id: orderInfo.id,
+                createdDate: orderInfo.createdDate,
+                userID: orderInfo.userID,
+                deliveryInformationId: orderInfo.deliveryInformationId,
+                promotionID: orderInfo.promotionID,
+                status: orderInfo.status,
+                totalPrice: orderInfo.totalPrice,
+                quantity: orderInfo.quantity,
+                vnp_OrderInfo: orderInfo.vnp_OrderInfo,
+                vnp_OrderType: orderInfo.vnp_OrderType,
+                vnp_TxnRef: orderInfo.vnp_TxnRef,
+            };
+            const response = await VnpayAPI.add(data);
+
+            console.log(response);
+            window.location.href = response;
+            if (response.status === 200) {
+                console.log('Payment Sucessful');
+            } else {
+                console.error('payment not successful ', response.status);
+            }
+
+            // setPaymentStatus(true);
+        } catch (error) {
+            console.error('Error:', error);
+            // setPaymentStatus(false);
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <StartPartPage payment>Payment</StartPartPage>
@@ -148,7 +216,7 @@ function Payment() {
                     </div>
 
                     <div className={cx('payment-method-item-container')}>
-                        <button className={cx('payment-method-item')} onClick={() => handlePaymentSelection('paypal')}>
+                        <button className={cx('payment-method-item')} onClick={() => handlePayment()}>
                             <Box width="100%" height="24px">
                                 <Image src={Paypal} margin="auto auto" height="100%"></Image>
                             </Box>

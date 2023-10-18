@@ -7,7 +7,7 @@ const FeedbackAPI = {
         return axiosClinet.get(url, { params });
     },
     getAllFeedbackSystem(params) {
-        const url = '/feedback';
+        const url = '/feedback/admin/search_sort';
         return axiosClinet.get(url, { params });
     },
 

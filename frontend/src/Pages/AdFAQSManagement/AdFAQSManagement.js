@@ -39,6 +39,7 @@ function AdFAQSManagement() {
     const [addStatus, setAddStatus] = useState(1);
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
+    const [vinh, setVinh] = useState(true);
 
     useEffect(() => {
         const getFaqsList = async () => {
@@ -50,7 +51,7 @@ function AdFAQSManagement() {
             }
         };
         getFaqsList();
-    }, []);
+    }, [vinh]);
 
     useEffect(() => {
         const addFaqs = async () => {
@@ -116,6 +117,12 @@ function AdFAQSManagement() {
         } else {
             setStatus(false);
         }
+    };
+
+    const changeStatus = async (id) => {
+        console.log(id);
+        const change = await FAQSAPI.changeStatus(id);
+        setVinh(false);
     };
 
     useEffect(() => {
@@ -234,9 +241,18 @@ function AdFAQSManagement() {
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>
                                         {faqs.status ? (
-                                            <Switch size="lg" isChecked colorScheme="green" />
+                                            <Switch
+                                                size="lg"
+                                                isChecked
+                                                colorScheme="green"
+                                                onChange={() => changeStatus(faqs.id)}
+                                            />
                                         ) : (
-                                            <Switch size="lg" colorScheme="green" />
+                                            <Switch
+                                                size="lg"
+                                                colorScheme="green"
+                                                onChange={() => changeStatus(faqs.id)}
+                                            />
                                         )}
                                     </Td>
                                 </Tr>

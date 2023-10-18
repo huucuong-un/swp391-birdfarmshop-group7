@@ -2,7 +2,7 @@ import axiosClinet from './AxiosClient';
 
 const OrderAPI = {
     getAll(params) {
-        const url = '/order';
+        const url = '/order/admin/order_management/list';
         return axiosClinet.get(url, { params });
     },
 

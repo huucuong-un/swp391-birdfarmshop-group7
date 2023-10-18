@@ -12,6 +12,9 @@ import {
     Switch,
 } from '@chakra-ui/react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffFeedBack/StaffFeedback.module.scss';
 
@@ -28,8 +31,13 @@ function StaffFeedback() {
     useEffect(() => {
         const getFeedback = async () => {
             try {
-                const feedbackList = await FeedbackAPI.getAllFeedbackSystem();
-                setFeedbackList(feedbackList);
+                const params = {
+                    page: 1,
+                    limit: 10,
+                };
+                const feedbackList = await FeedbackAPI.getAllFeedbackSystem(params);
+                console.log(feedbackList);
+                setFeedbackList(feedbackList.listResult);
             } catch (error) {
                 console.log(error);
             }
@@ -81,7 +89,17 @@ function StaffFeedback() {
                 <h1>Feedback</h1>
             </div>
             <div className={cx('sort-space')}>
-                <input type="text" placeholder="Customer Name" />
+                <select name="status" id="status">
+                    <option value="" disabled selected>
+                        Rating
+                    </option>
+
+                    <option value="active">1</option>
+                    <option value="active">2</option>
+                    <option value="active">3</option>
+                    <option value="active">4</option>
+                    <option value="active">5</option>
+                </select>
 
                 <select name="status" id="status">
                     <option value="" disabled selected>
@@ -107,7 +125,7 @@ function StaffFeedback() {
                             <Th>ID</Th>
                             <Th>Customer Name</Th>
                             <Th>Content</Th>
-                            <Th>Color ID</Th>
+                            <Th>Species</Th>
                             <Th>Create At</Th>
                             <Th>Rating</Th>
                             <Th>Status</Th>

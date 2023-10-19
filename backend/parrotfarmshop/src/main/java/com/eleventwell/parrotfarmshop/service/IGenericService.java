@@ -9,6 +9,6 @@ public interface IGenericService<T> {
 
     void changeStatus(Long ids);
     int totalItem();
-
+    
     List<T> findAll(Pageable pageable);
 }

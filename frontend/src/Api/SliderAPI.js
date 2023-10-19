@@ -4,5 +4,9 @@ const SliderAPI = {
         const url = '/slider';
         return axiosClinet.get(url, { params });
     },
+    update(data) {
+        const url = `/slider/${data.id}`;
+        return axiosClinet.put(url, data);
+    },
 };
 export default SliderAPI;

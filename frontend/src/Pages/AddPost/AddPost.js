@@ -160,8 +160,9 @@ function AddPost() {
         if (reloadData) {
             fetchData();
             setReloadData(false);
+        } else {
+            fetchData();
         }
-        fetchData();
     }, [reloadData, post]);
     const convertToTrueFormat = (timeText) => {
         let [date, time] = timeText.split('T');

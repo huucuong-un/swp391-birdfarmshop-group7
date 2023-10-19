@@ -15,13 +15,14 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Switch,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-
+import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
 
@@ -30,6 +31,7 @@ const cx = classNames.bind(styles);
 function AddSlider() {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [loading, setLoading] = useState(false);
+
     const [img, setImg] = useState('');
     const [show, setShow] = useState(false);
     // Toast
@@ -39,24 +41,33 @@ function AddSlider() {
     };
     const [slider, setSlider] = useState({
         sliderName: '',
-        description: '',
+        sliderDescription: '',
         sliderImageURL: img,
         status: true,
     });
     const [sliderList, setSliderList] = useState([]);
+    const [reloadData, setReloadData] = useState(false);
+    const handleUpdateSuccess = () => {
+        setReloadData(true); // Set reloadData to true when the update is successful
+    };
     useEffect(() => {
         const fetchData = async () => {
             const sliderList = await SliderAPI.getAll();
             setSliderList(sliderList.listResult);
         };
-        fetchData();
-    }, [slider]);
+        if (reloadData) {
+            fetchData();
+            setReloadData(false);
+        } else {
+            fetchData();
+        }
+    }, [reloadData, slider]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const responsePost = await axios.post('http://localhost:8086/api/slider', {
                 sliderName: slider.sliderName,
-                description: slider.description,
+                sliderDescription: slider.sliderDescription,
                 sliderImageURL: img,
                 status: slider.status,
             });
@@ -75,7 +86,6 @@ function AddSlider() {
             setSubmissionStatus(false);
         }
     };
-
     const postDetails = (pic) => {
         setLoading(true);
         if (pic === undefined) {
@@ -118,6 +128,35 @@ function AddSlider() {
             });
             setLoading(false);
             return;
+        }
+    };
+    const handleStatus = async (index) => {
+        const updatedSlider = [...sliderList];
+        updatedSlider[index].status = !updatedSlider[index].status;
+        try {
+            await axios.delete(`http://localhost:8086/api/slider/${updatedSlider[index].id}`);
+
+            setSliderList(updatedSlider);
+        } catch (error) {
+            toast({
+                title: 'Error occur!',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            console.log(error);
+        }
+    };
+    const [openSliderID, setOpenSliderID] = useState(null);
+    const toggleEditForm = (sliderID) => {
+        if (openSliderID === sliderID) {
+            // If the form is already open for this species, close it
+            setOpenSliderID(null);
+        } else {
+            // Otherwise, open the form for this species
+            setOpenSliderID(sliderID);
         }
     };
     return (
@@ -180,7 +219,9 @@ function AddSlider() {
                                             id="title"
                                             name="title"
                                             value={slider.description}
-                                            onChange={(e) => setSlider({ ...slider, description: e.target.value })}
+                                            onChange={(e) =>
+                                                setSlider({ ...slider, sliderDescription: e.target.value })
+                                            }
                                             variant="filled"
                                             placeholder="Description"
                                             required
@@ -251,20 +292,48 @@ function AddSlider() {
                             <Th className={cx('text-center')}>Slider name</Th>
                             <Th className={cx('text-center')}>Description</Th>
                             <Th className={cx('text-center')}>Slider image</Th>
-                            <Th className={cx('text-center')}>Start date</Th>
+                            <Th className={cx('text-center')}>Status</Th>
+                            <Th className={cx('text-center')}>Action</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {sliderList.map((slider) => (
-                            <Tr key={slider.id}>
-                                <Td>{slider.id}</Td>
-                                <Td>{slider.sliderName}</Td>
-                                <Td>{slider.description}</Td>
-                                <Td className={cx('image-container')}>
-                                    <img src={slider.sliderImageURL} />
-                                </Td>
-                                <Td>{slider.status.toString()}</Td>
-                            </Tr>
+                        {sliderList.map((slider, index) => (
+                            <>
+                                <Tr key={slider.id}>
+                                    <Td>{slider.id}</Td>
+                                    <Td>{slider.sliderName}</Td>
+                                    <Td>{slider.sliderDescription}</Td>
+                                    <Td className={cx('image-container')}>
+                                        <img src={slider.sliderImageURL} />
+                                    </Td>
+                                    <Td>
+                                        <Switch
+                                            onChange={() => handleStatus(index)}
+                                            size="lg"
+                                            isChecked={slider.status}
+                                            colorScheme="green"
+                                        />
+                                        {slider.status.toString()}
+                                    </Td>
+                                    <Td>
+                                        <Button
+                                            key={slider.id}
+                                            size="lg"
+                                            colorScheme="green"
+                                            onClick={() => toggleEditForm(slider.id)}
+                                        >
+                                            {openSliderID === slider.id ? 'Close edit' : 'Edit'}
+                                        </Button>
+                                    </Td>
+                                </Tr>
+                                <Tr key={index + 'slider'}>
+                                    {openSliderID === slider.id && (
+                                        <Td colSpan={8}>
+                                            <UpdateSlider slider={slider} reloadData={handleUpdateSuccess} />
+                                        </Td>
+                                    )}
+                                </Tr>
+                            </>
                         ))}
                     </Tbody>
                 </Table>

@@ -7,14 +7,11 @@ package com.eleventwell.parrotfarmshop.service.impl;
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
-import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
-import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.eleventwell.parrotfarmshop.service.IGenericService;

@@ -4,7 +4,6 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.dto.UserDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
-import com.eleventwell.parrotfarmshop.entity.SpeciesEggPriceEntity;
 import com.eleventwell.parrotfarmshop.entity.UserEntity;
 import com.eleventwell.parrotfarmshop.repository.UserRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;

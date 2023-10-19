@@ -57,7 +57,7 @@ public class OrderController {
         }
 
         result.setListResult(orderResponses);
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (orderService.totalItem()) / limit)));
         result.setLimit(limit);
       return  result;
 
@@ -86,7 +86,7 @@ public class OrderController {
         }
 
         result.setListResult(orderResponses);
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (orderService.totalItem()) / limit)));
         result.setLimit(limit);
         return result;
     }
@@ -153,16 +153,16 @@ public class OrderController {
 
 
     @PostMapping(value = "/{species}/{product}")
-    public void createOrder(@RequestBody OrderDTO dto, @PathVariable Long species, @PathVariable String product) {
+    public OrderDTO createOrder(@RequestBody OrderDTO dto, @PathVariable Long species, @PathVariable String product) {
 
-        orderService.createOrderDetail(dto, species, product);
+      return  orderService.createOrderDetail(dto, species, product);
     }
 
     @PostMapping(value = "cart")
-    public void createOrderByCart(@RequestBody OrderRequest orderRequest) {
+    public OrderDTO createOrderByCart(@RequestBody OrderRequest orderRequest) {
         OrderDTO dto = orderRequest.getOrderDTO();
         List<CartModel> listcart = orderRequest.getCartList();
-        orderService.createOrderDetailsByCart(dto, listcart);
+      return  orderService.createOrderDetailsByCart(dto, listcart);
     }
 
     @DeleteMapping(value = "{id}")

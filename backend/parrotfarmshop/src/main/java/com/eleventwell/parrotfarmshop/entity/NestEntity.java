@@ -34,13 +34,19 @@ public class NestEntity extends BaseEntity {
 
 
 
+
+
     @Column(name = "status")
     private Boolean status;
+
 
     @OneToMany(mappedBy = "nest")
     private List<NestUsageHistoryEntity> nestUsageHistory = new ArrayList<>();
 
 
+    @ManyToOne
+    @JoinColumn(name = "species_id")
+    private ParrotSpeciesEntity parrotSpecies;
 
 //    @OneToOne(mappedBy = "parrotEggNest")
 //    private OrderDetailEntity orderDetailEntity;

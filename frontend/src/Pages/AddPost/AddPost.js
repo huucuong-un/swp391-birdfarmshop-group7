@@ -339,6 +339,8 @@ function AddPost() {
                     <option value="a">Species</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="inactive">Inactive</option>
                 </select>
                 <select name="status" id="status">
                     <option value="b">Status</option>

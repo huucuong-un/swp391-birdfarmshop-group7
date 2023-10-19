@@ -38,10 +38,23 @@ th {
     gap: 20px;
 }
 
+.sort-species-id {
+    max-width: 120px;
+}
+
 .number-page {
     margin: 0;
 
     &:hover {
         cursor: pointer;
+    }
+}
+
+.refresh-icon {
+    font-size: 2.2rem;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.9;
     }
 }

@@ -3,14 +3,12 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
-import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
-import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
+import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
+import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +30,7 @@ public class OrderService implements IGenericService<OrderDTO> {
     ParrotRepository parrotRepository;
 
     @Autowired
-    ParrotEggNestRepository parrotEggNestRepository;
+    NestRepository parrotEggNestRepository;
 
     @Autowired
     PromotionService promotionService;
@@ -41,7 +39,7 @@ public class OrderService implements IGenericService<OrderDTO> {
     ParrotService parrotService;
 
     @Autowired
-    ParrotEggNestService parrotEggNestService;
+    NestService nestService;
 
     @Autowired
     GenericConverter genericConverter;
@@ -80,7 +78,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 
-    public void createOrderDetail(OrderDTO dto, Long speciesId, String check) {
+    public OrderDTO createOrderDetail(OrderDTO dto, Long speciesId, String check) {
         OrderDTO orderDTO = save(dto);
         Double totalPrice = 0.0;
         Pageable pageable = (Pageable) PageRequest.of(0, orderDTO.getQuantity()); // Create a PageRequest with desired page size
@@ -94,20 +92,21 @@ public class OrderService implements IGenericService<OrderDTO> {
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }
-        if (check.equals("nest")) {
-            List<ParrotEggNestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
-
-            for (ParrotEggNestEntity id : nests) {
-                orderDetailService.createOrderDetailDTO(orderDTO.getId(), id.getId(), 2);
-
-                parrotEggNestService.changeSaleStatus(id.getId());
-                totalPrice += id.getSpeciesEggPrice().getPrice();
-
-
-            }
-        }
+//        if (check.equals("nest")) {
+//            List<NestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
+//
+//            for (NestEntity id : nests) {
+//                orderDetailService.createOrderDetailDTO(orderDTO.getId(), id.getId(), 2);
+//
+//                nestService.changeSaleStatus(id.getId());
+//                totalPrice += id.getSpeciesEggPrice().getPrice();
+//
+//
+//            }
+//        }
         orderDTO.setTotalPrice(totalPrice);
         save(orderDTO);
+        return orderDTO;
 
     }
 
@@ -126,23 +125,23 @@ public class OrderService implements IGenericService<OrderDTO> {
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }
-        if (check.equals("nest")) {
-            List<ParrotEggNestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
-
-            for (ParrotEggNestEntity id : nests) {
-                orderDetailService.createOrderDetailDTO(orderId, id.getId(), 2);
-
-                parrotEggNestService.changeSaleStatus(id.getId());
-                totalPrice += id.getSpeciesEggPrice().getPrice();
-
-
-            }
-        }
+//        if (check.equals("nest")) {
+//            List<NestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
+//
+//            for (NestEntity id : nests) {
+//                orderDetailService.createOrderDetailDTO(orderId, id.getId(), 2);
+//
+//                nestService.changeSaleStatus(id.getId());
+//                totalPrice += id.getSpeciesEggPrice().getPrice();
+//
+//
+//            }
+//        }
         return totalPrice;
 
     }
 //Duyet list cartModel, moi vao lap truyen vao quantity de lay dung so luong, tinh totalprice va goi ham  createOrderDetailByCartModel de tao orderdetail
-    public void createOrderDetailsByCart(OrderDTO dto, List<CartModel> cartModels) {
+    public OrderDTO createOrderDetailsByCart(OrderDTO dto, List<CartModel> cartModels) {
         OrderDTO orderDTO = save(dto);
         Double totalPrice = 0.0;
         Pageable pageable;
@@ -163,7 +162,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
         orderDTO.setTotalPrice(totalPrice);
         save(orderDTO);
-
+return orderDTO;
     }
 
 
@@ -182,14 +181,9 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-//        OrderEntity orderEntity = orderRepository.findOneById(ids);
-//        if (orderEntity.getStatus() == true) {
-//            orderEntity.setStatus(false);
-//        } else {
-//            orderEntity.setStatus(true);
-//        }
-//        orderRepository.save(orderEntity);
-
+        OrderEntity orderEntity = orderRepository.findOneById(ids);
+   orderEntity.setStatus("Done");
+        orderRepository.save(orderEntity);
 
     }
     @Override

@@ -3,6 +3,7 @@ package com.eleventwell.parrotfarmshop.Vnpay;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -76,5 +77,11 @@ public class PayService {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VnPayConstant.vnp_Url + "?" + queryUrl;
         return paymentUrl;
+    }
+
+    public RedirectView handleTransaction() {
+        // Redirect to the specified URL when the condition is met
+        return new RedirectView("http://localhost:8086/paid-success");
+
     }
 }

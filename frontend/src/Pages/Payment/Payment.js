@@ -136,7 +136,7 @@ function Payment() {
                         deliveryInformationId: selectedDelivery.id,
                         promotionID: promotion,
                         userID: user.userId,
-                        status: true,
+                        status: 'pending',
                     },
                     cartList: cartList,
                 };
@@ -145,6 +145,17 @@ function Payment() {
 
                 await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                 const addOrder = await OrderAPI.add(data);
+
+                const response = await VnpayAPI.add(addOrder);
+                console.log(addOrder);
+                console.log(response);
+                window.location.href = response;
+                if (response.status === 200) {
+                    console.log('Payment Sucessful');
+                } else {
+                    console.error('payment not successful ', response.status);
+                }
+
                 console.log('Order added:', addOrder);
                 console.log(data);
             } catch (error) {
@@ -154,7 +165,7 @@ function Payment() {
 
         if (payStatus) {
             addOrders();
-            navigate('/paid-success');
+            // navigate('/paid-success');
         }
     }, [payStatus]);
 

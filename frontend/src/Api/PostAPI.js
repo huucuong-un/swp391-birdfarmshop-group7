@@ -10,6 +10,10 @@ const PostAPI = {
         const url = `/post/find-one-by-id`;
         return axiosClinet.get(url, { params });
     },
+    update(data) {
+        const url = `/post/${data.id}`;
+        return axiosClinet.put(url, data);
+    },
 };
 
 export default PostAPI;

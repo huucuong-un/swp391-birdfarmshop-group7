@@ -47,10 +47,7 @@ function UpdateSpecies({ specieID, onUpdateSuccess }) {
         nestAverageRating: 4.0,
         status: true,
     });
-    // const handleRefreshClick = () => {
-    //     // Call the refreshParent function to trigger a page reload
-    //     refreshSpeciesColorPage();
-    // };
+
     // Toast
     const toast = useToast();
 
@@ -58,7 +55,6 @@ function UpdateSpecies({ specieID, onUpdateSuccess }) {
         const fetchSpeciesByID = async () => {
             try {
                 const specieById = await ParrotSpeciesAPI.get(specieID);
-                const myObject = {};
 
                 setSpecie(specieById);
             } catch (error) {

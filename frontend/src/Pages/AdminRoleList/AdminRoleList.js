@@ -46,17 +46,13 @@ const AdminRoleList = () => {
         // Update the state
         setRoles(updatedRole);
     };
-    const handleStatus = async (index) => {
-        const updatedRoles = [...roles];
-        updatedRoles[index].status = !updatedRoles[index].status;
-
+    const handleStatus = async (id) => {
         try {
             // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/role/${updatedRoles[index].id}`);
+            await axios.delete(`http://localhost:8086/api/role/${id}`);
 
             // If the request is successful, update the state
 
-            setRoles(updatedRoles);
             setReloadStatus(true);
         } catch (error) {
             toast({
@@ -160,7 +156,7 @@ const AdminRoleList = () => {
                                         <Td minWidth={150}>
                                             <div className={cx('haha')}>
                                                 <Switch
-                                                    onChange={() => handleStatus(role.id)}
+                                                    onChange={() => handleStatus(index)}
                                                     size="lg"
                                                     isChecked={role.status}
                                                     colorScheme="green"

@@ -16,10 +16,11 @@ import {
     AccordionPanel,
     AccordionIcon,
     Box,
+    Button,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faAngleRight, faAngleLeft, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffFeedBack/StaffFeedback.module.scss';
@@ -33,25 +34,63 @@ const cx = classNames.bind(styles);
 function StaffFeedback() {
     const [feedbackList, setFeedbackList] = useState([]);
     const [combineData, setCombineData] = useState([]);
-    const [vinh, setVinh] = useState(1);
+    const [vinh, setVinh] = useState(true);
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 1,
+        rating: null,
+        speciesId: null,
+        date: null,
+        username: null,
+        status: null,
+        sortRating: null,
+        sortDate: null,
+    });
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 1,
+            rating: sort.rating,
+            speciesId: sort.speciesId,
+            date: sort.date,
+            username: sort.username,
+            status: sort.status,
+            sortRating: sort.sortRating,
+            sortDate: sort.sortDate,
+        });
+
+        setPage(newPage);
+    };
+
+    const changeStatus = async (id, index) => {
+        const updatedFeedback = [...feedbackList];
+        updatedFeedback[index].status = !updatedFeedback[index].status;
+        const change = await FeedbackAPI.changeStatus(id);
+        setFeedbackList(updatedFeedback);
+        setVinh(true);
+    };
 
     useEffect(() => {
         const getFeedback = async () => {
             try {
-                const params = {
-                    page: 1,
-                    limit: 10,
-                };
-                const feedbackList = await FeedbackAPI.getAllFeedbackSystem(params);
+                const feedbackList = await FeedbackAPI.getAllFeedbackSystem(sort);
                 console.log(feedbackList);
                 setFeedbackList(feedbackList.listResult);
+                setTotalPage(feedbackList.totalPage);
             } catch (error) {
                 console.log(error);
             }
         };
+        if (vinh) {
+            getFeedback();
+            setVinh(false);
+        }
 
         getFeedback();
-    }, [vinh]);
+    }, [vinh || sort]);
 
     useEffect(() => {
         const getUserbyId = async () => {
@@ -90,10 +129,29 @@ function StaffFeedback() {
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
 
-    const changeStatus = async (id) => {
-        console.log(id);
-        const change = await FeedbackAPI.changeStatus(id);
-        setVinh((pre) => pre + 1);
+    const handleSortChange = (event) => {
+        const newSortValue = event.target.value;
+        console.log(newSortValue);
+    };
+
+    useEffect(() => {
+        console.log(sort);
+    }, [sort]);
+
+    useEffect(() => {
+        console.log(totalPage);
+    }, [totalPage]);
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            email: null,
+            phone: null,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
     };
 
     return (
@@ -102,36 +160,62 @@ function StaffFeedback() {
                 <h1>Feedback</h1>
             </div>
             <div className={cx('sort-space')}>
-                <select name="status" id="status">
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <select
+                    name="status"
+                    id="status"
+                    onChange={(e) => setSort({ ...sort, rating: parseInt(e.target.value) })}
+                >
                     <option value="" disabled selected>
                         Rating
                     </option>
 
-                    <option value="active">1</option>
-                    <option value="active">2</option>
-                    <option value="active">3</option>
-                    <option value="active">4</option>
-                    <option value="active">5</option>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                </select>
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, sortRating: e.target.value })}>
+                    <option value="" disabled selected>
+                        Sort Rating
+                    </option>
+                    <option value="RDESC">Highest</option>
+                    <option value="RASC">Lowest</option>
                 </select>
 
-                <select name="status" id="status">
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="" disabled selected>
+                        Sort Date
+                    </option>
+                    <option value="DDESC">Newest</option>
+                    <option value="DASC">Oldest</option>
+                </select>
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
                     <option value="" disabled selected>
                         Status
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value={true}>Active</option>
+                    <option value={false}>Inactive</option>
                 </select>
 
-                <input type="date" />
-                <select name="price" id="price">
-                    <option value="" disabled selected>
-                        Price
-                    </option>
-                </select>
+                <input
+                    type="number"
+                    className={cx('sort-species-id')}
+                    placeholder="Species Id..."
+                    onChange={(e) => setSort({ ...sort, speciesId: e.target.value })}
+                />
+                <input
+                    type="text"
+                    placeholder="username..."
+                    onChange={(e) => setSort({ ...sort, username: e.target.value })}
+                />
+
+                <input type="date" value={sort.date} onChange={(e) => setSort({ ...sort, date: e.target.value })} />
 
                 <button></button>
             </div>
-            <TableContainer>
+            <TableContainer className={cx('table-container')}>
                 <Table size="lg">
                     <Thead>
                         <Tr>
@@ -151,45 +235,37 @@ function StaffFeedback() {
                                     <Td>{feedback.id}</Td>
                                     <Td>{feedback.userInfor.fullName}</Td>
                                     <Td className={cx('feedback-content')} maxWidth={100}>
-                                        {/* <Accordion defaultIndex={[0]} allowMultiple>
-                                            <AccordionItem>
-                                                <h2>
-                                                    <AccordionButton>
-                                                        <Box as="span" flex="1" textAlign="left">
-                                                            Section 1 title
-                                                        </Box>
-                                                        <AccordionIcon />
-                                                    </AccordionButton>
-                                                </h2>
-                                                <AccordionPanel pb={4}>{feedback.content}</AccordionPanel>
-                                            </AccordionItem>
-                                        </Accordion> */}
                                         {feedback.content}
                                     </Td>
                                     <Td>{feedback.species.name}</Td>
                                     <Td>{formatDate(new Date(feedback.createdDate))}</Td>
                                     <Td>{feedback.rating}</Td>
                                     <Td>
-                                        {feedback.status ? (
-                                            <Switch
-                                                size="lg"
-                                                isChecked
-                                                colorScheme="green"
-                                                onChange={() => changeStatus(feedback.id)}
-                                            />
-                                        ) : (
-                                            <Switch
-                                                size="lg"
-                                                colorScheme="green"
-                                                onChange={() => changeStatus(feedback.id)}
-                                            />
-                                        )}
+                                        <Switch
+                                            size="lg"
+                                            isChecked={feedback.status}
+                                            colorScheme="green"
+                                            onChange={() => changeStatus(feedback.id, index)}
+                                        />
                                     </Td>
                                 </Tr>
                             ))}
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </Container>
     );
 }

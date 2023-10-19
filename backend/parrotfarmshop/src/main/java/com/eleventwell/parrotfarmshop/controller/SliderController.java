@@ -4,6 +4,7 @@ import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.dto.SliderDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.SliderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class SliderController {
 
     @Autowired
-    IGenericService sliderService;
+    SliderService sliderService;
 
 //    @GetMapping(value="")
 //    public ListOutput showPosts() {
@@ -38,6 +39,12 @@ public class SliderController {
         result.setListResult(sliderService.findAll());
         return result;
     }
+    @GetMapping(value = "/admin/find-one-by-id/{id}")
+    public SliderDTO showSlider(@RequestBody @PathVariable("id") Long id){
+
+        return sliderService.findOneById(id);
+    }
+
 
     @PostMapping(value = "")
     public SliderDTO createSlider(@RequestBody SliderDTO model){

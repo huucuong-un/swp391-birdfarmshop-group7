@@ -39,7 +39,15 @@ function AdFAQSManagement() {
     const [addStatus, setAddStatus] = useState(1);
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
-    const [vinh, setVinh] = useState(1);
+    const [vinh, setVinh] = useState(true);
+
+    const changeStatus = async (id, index) => {
+        const updatedFaqs = [...faqsList];
+        updatedFaqs[index].status = !updatedFaqs[index].status;
+        const change = await FAQSAPI.changeStatus(id);
+        setFaqsList(updatedFaqs);
+        setVinh(true);
+    };
 
     useEffect(() => {
         const getFaqsList = async () => {
@@ -50,7 +58,10 @@ function AdFAQSManagement() {
                 console.error(error);
             }
         };
-        getFaqsList();
+        if (vinh) {
+            getFaqsList();
+            setVinh(false);
+        }
     }, [vinh]);
 
     useEffect(() => {
@@ -63,6 +74,7 @@ function AdFAQSManagement() {
                 };
 
                 const add = await FAQSAPI.add(data);
+                setVinh(true);
             } catch (error) {
                 console.error(error);
             }
@@ -119,15 +131,9 @@ function AdFAQSManagement() {
         }
     };
 
-    const changeStatus = async (id) => {
-        console.log(id);
-        const change = await FAQSAPI.changeStatus(id);
-        setVinh((pre) => pre + 1);
-    };
-
     useEffect(() => {
-        console.log(status);
-    }, [status]);
+        console.log(vinh);
+    }, [vinh]);
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -240,20 +246,12 @@ function AdFAQSManagement() {
                                     <Td>{faqs.content}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>
-                                        {faqs.status ? (
-                                            <Switch
-                                                size="lg"
-                                                isChecked
-                                                colorScheme="green"
-                                                onChange={() => changeStatus(faqs.id)}
-                                            />
-                                        ) : (
-                                            <Switch
-                                                size="lg"
-                                                colorScheme="green"
-                                                onChange={() => changeStatus(faqs.id)}
-                                            />
-                                        )}
+                                        <Switch
+                                            size="lg"
+                                            isChecked={faqs.status}
+                                            colorScheme="green"
+                                            onChange={() => changeStatus(faqs.id, index)}
+                                        />
                                     </Td>
                                 </Tr>
                             ))}

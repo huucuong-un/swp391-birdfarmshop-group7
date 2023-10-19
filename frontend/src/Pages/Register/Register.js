@@ -85,7 +85,7 @@ function Register() {
                 pickingStatus: true,
             };
 
-            const deliveryInfo = DeliveryInformationAPI.addNewDeliveryInfo(dataForDeliveryInfo, config);
+            const deliveryInfo = await DeliveryInformationAPI.addNewDeliveryInfo(dataForDeliveryInfo, config);
 
             toast({
                 title: 'Register successfully',

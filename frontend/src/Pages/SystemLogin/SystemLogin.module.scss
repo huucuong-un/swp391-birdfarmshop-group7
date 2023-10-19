@@ -1,85 +1,48 @@
-.container,
-.wrapper {
-    width: 100%;
-    min-height: 833px;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    display: flex;
+.container {
+    border-radius: 5px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
+    margin-top: 3% !important;
+    margin-bottom: 3% !important;
+    min-height: 550px !important;
 }
-.wrapper {
-}
-.inner {
-    margin-top: 100px;
-    width: 30%;
-    min-height: 666px;
-    box-shadow: 3px 3px 20px 10px #888888;
-    padding: 40px 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 50px;
 
-    border-radius: 12px;
-    background-color: white h1 {
-        margin: 0;
-    }
+.login-title {
+    text-align: center !important;
+    font-size: 40px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    margin-top: 5% !important;
 }
-.login-form {
-    width: 100%;
-    margin-top: -30x;
-    hr {
-        margin-bottom: 40px;
-    }
-}
-.notification {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    width: 86.5%;
-    height: 100%;
-    border-radius: 12px;
-    padding: 4px;
-    background-color: rgb(245, 98, 98);
-}
-.notification-container {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    width: 576px;
-    min-height: 50px;
 
-    h1 {
-        font-weight: 550;
-        padding: 0;
-        margin: 0;
-        font-size: 15px;
-    }
+.input-form {
+    font-size: 18px !important;
+    margin-top: 10% !important;
+    margin-bottom: 5% !important;
 }
-.title {
-    display: block;
-    background-color: var(--white);
-    font-size: 5rem;
-    font-weight: 800;
-    padding: 0;
-    border-radius: 12px;
-    width: 100%;
-    text-shadow: 3px 2px 2px #888888;
-    margin: 0 0 -20px 0;
-    height: 8rem;
+.form-input {
+    text-align: center !important;
+    margin-top: 7% !important;
+    margin-bottom: 10% !important;
+    width: 70% !important;
 }
-.btn {
-    font-weight: 700;
-    font-size: 1.5rem;
-    width: 60%;
-    color: var(--white);
-    padding: 20px;
-    background-color: var(--custom-black);
-    border-radius: 12px;
-    &:hover {
-        opacity: 0.8;
-    }
+
+.login-button {
+    margin-top: 20% !important;
+    width: 70% !important;
+    height: 65px !important;
+    font-size: 18px !important;
+    background-color: black !important;
+    color: white !important;
+    border-radius: 7px !important;
+}
+
+.login-button:hover {
+    color: black !important;
+    border: 1px solid #444 !important;
+    background-color: #ccc !important;
+}
+
+.showHidePasswordBtn {
+    padding: 0 !important;
 }

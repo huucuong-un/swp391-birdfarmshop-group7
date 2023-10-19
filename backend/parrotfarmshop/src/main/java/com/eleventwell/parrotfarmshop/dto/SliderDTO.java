@@ -10,6 +10,7 @@ import lombok.*;
 public class SliderDTO extends BaseDTO{
 
     private String sliderName;
+    private String sliderDescription;
     private String sliderImageURL;
     private Boolean status;
 }

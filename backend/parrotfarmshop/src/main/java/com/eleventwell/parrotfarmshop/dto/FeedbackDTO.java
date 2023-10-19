@@ -26,7 +26,7 @@ private  Boolean status;
     private String belongTo;
 
 
-    private Integer userId;
+    private Long userId;
 
     private Integer colorId;
 

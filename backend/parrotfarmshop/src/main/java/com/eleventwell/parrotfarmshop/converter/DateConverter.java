@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Converter(autoApply = true)
 public class DateConverter implements AttributeConverter<Date, String> {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public String convertToDatabaseColumn(Date date) {

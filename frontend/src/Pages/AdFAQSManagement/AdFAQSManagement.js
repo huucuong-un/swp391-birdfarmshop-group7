@@ -39,6 +39,15 @@ function AdFAQSManagement() {
     const [addStatus, setAddStatus] = useState(1);
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
+    const [vinh, setVinh] = useState(true);
+
+    const changeStatus = async (id, index) => {
+        const updatedFaqs = [...faqsList];
+        updatedFaqs[index].status = !updatedFaqs[index].status;
+        const change = await FAQSAPI.changeStatus(id);
+        setFaqsList(updatedFaqs);
+        setVinh(true);
+    };
 
     useEffect(() => {
         const getFaqsList = async () => {
@@ -49,8 +58,11 @@ function AdFAQSManagement() {
                 console.error(error);
             }
         };
-        getFaqsList();
-    }, []);
+        if (vinh) {
+            getFaqsList();
+            setVinh(false);
+        }
+    }, [vinh]);
 
     useEffect(() => {
         const addFaqs = async () => {
@@ -62,6 +74,7 @@ function AdFAQSManagement() {
                 };
 
                 const add = await FAQSAPI.add(data);
+                setVinh(true);
             } catch (error) {
                 console.error(error);
             }
@@ -119,8 +132,8 @@ function AdFAQSManagement() {
     };
 
     useEffect(() => {
-        console.log(status);
-    }, [status]);
+        console.log(vinh);
+    }, [vinh]);
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -233,11 +246,12 @@ function AdFAQSManagement() {
                                     <Td>{faqs.content}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>
-                                        {faqs.status ? (
-                                            <Switch size="lg" isChecked colorScheme="green" />
-                                        ) : (
-                                            <Switch size="lg" colorScheme="green" />
-                                        )}
+                                        <Switch
+                                            size="lg"
+                                            isChecked={faqs.status}
+                                            colorScheme="green"
+                                            onChange={() => changeStatus(faqs.id, index)}
+                                        />
                                     </Td>
                                 </Tr>
                             ))}

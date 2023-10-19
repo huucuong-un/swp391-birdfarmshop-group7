@@ -10,10 +10,17 @@ import {
     TableCaption,
     TableContainer,
     Switch,
+    Button,
 } from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+
+import DeliveryInformation from '~/Api/DeliveryInformationAPI';
 import OrderAPI from '~/Api/OrderAPI';
+
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffOrderManagement/StaffOrderManagement.module.scss';
 
@@ -21,6 +28,18 @@ const cx = classNames.bind(styles);
 
 function StaffOrderManagement() {
     const [orders, setOrders] = useState();
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 1,
+        email: null,
+        phone: null,
+        date: null,
+        sortDate: null,
+        sortPrice: null,
+    });
+    const [combineData, setCombineData] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     function formatDate(date) {
         const day = date.getDate();
@@ -33,21 +52,65 @@ function StaffOrderManagement() {
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
 
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 1,
+            email: sort.email,
+            phone: sort.phone,
+            date: sort.date,
+            sortDate: sort.sortDate,
+            sortPrice: sort.sortPrice,
+        });
+
+        setPage(newPage);
+    };
+
     useEffect(() => {
         const getOrderWithUser = async () => {
             try {
-                const orderList = await OrderAPI.findAllOrderWithUser();
-                console.log(orderList);
-                setOrders(orderList);
+                const orderList = await OrderAPI.searchByEmailAndPhone(sort);
+                setOrders(orderList.listResult);
+                setTotalPage(orderList.totalPage);
             } catch (error) {
                 console.error(error);
             }
         };
 
         getOrderWithUser();
-    }, []);
+    }, [sort]);
 
-    const handleSearch = () => {};
+    useEffect(() => {
+        const getDelByOrderId = async () => {
+            const data = [];
+            try {
+                for (const item of orders) {
+                    const orderList = { ...item };
+                    orderList.deliveryInformation = await DeliveryInformation.getOneById(
+                        item.orderDTO.deliveryInformationId,
+                    );
+                    data.push(orderList);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+            setCombineData(data);
+        };
+
+        getDelByOrderId();
+    }, [orders]);
+
+    useEffect(() => {
+        console.log(sort);
+    }, [sort]);
+
+    useEffect(() => {
+        console.log(totalPage);
+    }, [totalPage]);
+
+    useEffect(() => {
+        console.log(page);
+    }, [page]);
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -55,8 +118,9 @@ function StaffOrderManagement() {
                 <h1>Order</h1>
             </div>
             <div className={cx('sort-space')}>
-                <input type="email" placeholder="Mail" />
-                <input type="text" placeholder="Phone" />
+                <input type="email" placeholder="Mail" onChange={(e) => setSort({ ...sort, email: e.target.value })} />
+                <input type="tel" placeholder="Phone" onChange={(e) => setSort({ ...sort, phone: e.target.value })} />
+                <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
 
                 <select name="status" id="status">
                     <option value="" disabled selected>
@@ -66,42 +130,42 @@ function StaffOrderManagement() {
                     <option value="inactive">Inactive</option>
                 </select>
 
-                <select name="price" id="price">
+                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
                     <option value="" disabled selected>
-                        Create at
+                        Sort Date
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="DDESC">Newest</option>
+                    <option value="DASC">Oldest</option>
                 </select>
-                <select name="price" id="price">
+                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}>
                     <option value="" disabled selected>
                         Price
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="PDESC">Highest</option>
+                    <option value="PASC">Lowest</option>
                 </select>
-
-                <button onClick={() => handleSearch()}></button>
             </div>
-            <TableContainer>
+            <TableContainer className={cx('table-container')}>
                 <Table size="lg">
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
                             <Th>Customer Name</Th>
                             <Th>Mail</Th>
+                            <Th>Phone</Th>
                             <Th>Create At</Th>
                             <Th>Price</Th>
                             <Th>Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {orders &&
-                            orders.map((order, index) => (
+                        {combineData &&
+                            combineData.map((order, index) => (
                                 <Tr key={index}>
                                     <Td>{order.orderDTO.id}</Td>
                                     <Td>{order.userDTO.fullName}</Td>
                                     <Td>{order.userDTO.email}</Td>
+                                    <Td>{order.deliveryInformation.phoneNumber}</Td>
                                     <Td>{formatDate(new Date(order.orderDTO.createdDate))}</Td>
                                     <Td>{order.orderDTO.totalPrice}</Td>
                                     <Td>
@@ -112,6 +176,19 @@ function StaffOrderManagement() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </Container>
     );
 }

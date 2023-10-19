@@ -87,7 +87,7 @@ public class FeedbackController {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
         result.setListResult(feedbackService.searchSortForAdmin(rating,speciesId,date , username,status,sortRating,sortDate ,pageable));
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (feedbackService.totalItem()) / limit)));
         result.setLimit(limit);
 
 
@@ -101,6 +101,13 @@ public class FeedbackController {
 
         return feedbackService.save(dto);
     }
+    
+        @PutMapping(value = "admin/change-status/{id}")
+    public void createFeedback(@RequestBody @PathVariable("id") Long id ) {
+
+       feedbackService.changeStatus(id);
+    }
+    
 
 
 }

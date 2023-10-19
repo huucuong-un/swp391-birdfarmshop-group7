@@ -37,6 +37,11 @@ const DeliveryInformation = {
         const url = `/delivery-information/update-picking-status`;
         return axiosClient.put(url, data);
     },
+
+    getOneById(id) {
+        const url = `/delivery-information/admin/find-one-by-id/${id}`;
+        return axiosClient.get(url);
+    },
 };
 
 export default DeliveryInformation;

@@ -43,12 +43,13 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
     @Query("SELECT u FROM FeedbackEntity u  WHERE (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
     List<FeedbackEntity> findAllByRatingAndSpeciesColorId(@Param("rating") Integer rating,@Param("colorId") Long colorId,Pageable pageable);
 
-    @Query("SELECT u FROM FeedbackEntity u  WHERE (:rating IS NULL OR u.rating = :rating) AND (:speciesId IS NULL OR u.parrotSpeciesColor.parrotSpecies.id= :speciesId)  AND(:searchDate IS NULL OR u.createdDate = :searchDate)  AND (:username IS NULL OR u.user.userName LIKE CONCAT('%', :username, '%'))  AND (:status IS NULL OR u.status =:status) ORDER BY " +
-            "CASE WHEN :sortRating ='RDESC' THEN u.rating  END DESC ," +
-            "CASE WHEN :sortRating ='RASC' THEN u.rating  END ASC ,"+
-            "CASE WHEN :sortDate ='DDESC' THEN u.id END DESC ," +
-            "CASE WHEN :sortDate ='DASC' THEN u.id  END ASC ,"+
-            " u.id DESC ")
-    List<FeedbackEntity> searchSortForAdmin(@Param("rating") Integer rating, @Param("speciesId") Long speciesId, @Param("searchDate") Date searchDate, @Param("username") String username ,@Param("status") Boolean status ,@Param("sortRating") String sortRating, @Param("sortDate") String sortDate , Pageable pageable);
+    @Query("SELECT u FROM FeedbackEntity u WHERE (:rating IS NULL OR u.rating = :rating) AND (:speciesId IS NULL OR u.parrotSpeciesColor.parrotSpecies.id = :speciesId) AND (:searchDate IS NULL OR DATE(u.createdDate) = :searchDate) AND (:username IS NULL OR u.user.userName LIKE CONCAT('%', :username, '%')) AND (:status IS NULL OR u.status = :status) " +
+            "ORDER BY " +
+            "CASE WHEN :sortRating = 'RDESC' THEN u.rating END DESC, " +
+            "CASE WHEN :sortRating = 'RASC' THEN u.rating END ASC, " +
+            "CASE WHEN :sortDate = 'DDESC' THEN u.id END DESC, " +
+            "CASE WHEN :sortDate = 'DASC' THEN u.id END ASC, " +
+            "u.id DESC")
+    List<FeedbackEntity> searchSortForAdmin(@Param("rating") Integer rating, @Param("speciesId") Long speciesId, @Param("searchDate") Date searchDate, @Param("username") String username, @Param("status") Boolean status, @Param("sortRating") String sortRating, @Param("sortDate") String sortDate, Pageable pageable);
 
 }

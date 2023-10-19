@@ -95,23 +95,6 @@ function UpdateRole(props) {
                                     />
                                 </Td>
                             </Tr>
-                            <Tr>
-                                <Td fontSize={16}>Status</Td>
-                                <Td>
-                                    <div className={cx('haha')}>
-                                        <Switch onChange={handleStatus} size="lg" isChecked={status} />
-                                        {status ? <p fontSize={16}>On Processing</p> : <p fontSize={16}>Disabled</p>}
-                                    </div>
-                                    <Input
-                                        type="hidden"
-                                        id="status"
-                                        name="status"
-                                        variant="filled"
-                                        value={newRole.status}
-                                        onChange={(e) => setNewRole({ ...newRole, status: e.target.value })}
-                                    />
-                                </Td>
-                            </Tr>
                         </Tbody>
 
                         <Tfoot>

@@ -72,9 +72,7 @@ public class ParrotEntity extends BaseEntity {
     @JoinColumn(name = "color_ID")
     private ParrotSpeciesColorEntity parrotSpeciesColor;
 
-    @ManyToOne
-    @JoinColumn(name = "nest_ID")
-    private ParrotEggNestEntity parrotEggNest;
+
 
 //    @OneToOne(mappedBy = "parrot")
 //    private OrderDetailEntity orderDetail;
@@ -82,10 +80,13 @@ public class ParrotEntity extends BaseEntity {
     @PrimaryKeyJoinColumn
     private OrderDetailEntity orderDetail;
 //
-//	@OneToMany(mappedBy = "parrot")
-//	private List<ParrotEggNestEntity> parrotEggNests = new ArrayList<>();
-//	
-//	
+	@OneToMany(mappedBy = "parrotMale")
+	private List<ParrotCoupleEntity> parrotMales = new ArrayList<>();
+    @OneToMany(mappedBy = "parrotFemale")
+    private List<ParrotCoupleEntity> parrotFemale = new ArrayList<>();
+
+
+
 
 //    @OneToMany(mappedBy = "parrot")
 //    private List<ReproductiveHistoryEntity> reproductiveHistories = new ArrayList<>();

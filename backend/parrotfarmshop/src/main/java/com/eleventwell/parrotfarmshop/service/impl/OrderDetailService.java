@@ -2,13 +2,11 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
-import com.eleventwell.parrotfarmshop.dto.FeedbackDTO;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
-import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotEggNestRepository;
+import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
 
 
     @Autowired
-    private ParrotEggNestRepository parrotEggNestRepository;
+    private NestRepository parrotEggNestRepository;
 
 
     @Override

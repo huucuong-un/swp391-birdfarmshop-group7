@@ -7,7 +7,7 @@ const FeedbackAPI = {
         return axiosClinet.get(url, { params });
     },
     getAllFeedbackSystem(params) {
-        const url = '/feedback';
+        const url = '/feedback/admin/search_sort';
         return axiosClinet.get(url, { params });
     },
 
@@ -22,6 +22,10 @@ const FeedbackAPI = {
     countReview(params) {
         const url = '/feedback/count-by-species-id-or-species-color-id-and-rating';
         return axiosClinet.get(url, { params });
+    },
+    changeStatus(id) {
+        const url = `/feedback/admin/change-status/${id}`;
+        return axiosClinet.put(url);
     },
 };
 

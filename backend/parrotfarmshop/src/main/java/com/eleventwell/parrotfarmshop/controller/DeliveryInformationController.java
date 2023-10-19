@@ -24,6 +24,12 @@ public class DeliveryInformationController {
     public DeliveryInformationDTO findDeliveryInfoWithTruePickStatus(@PathVariable("customerid") Long customerId) {
         return deliveryInformationService.getDeliveryInformationByCustomerIdWithTruePickingStatus(customerId);
     }
+    
+      @GetMapping(value = "/admin/find-one-by-id/{id}")
+    public DeliveryInformationDTO findDeliveryInfoById(@PathVariable("id") Long id) {
+        return deliveryInformationService.findDeliveryInfoById(id);
+    }
+
 
     @PostMapping(value = "")
     public DeliveryInformationDTO createDeliveryInformation(@RequestBody DeliveryInformationDTO model) {

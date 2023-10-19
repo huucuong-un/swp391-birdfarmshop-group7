@@ -2,7 +2,12 @@ import axiosClinet from './AxiosClient';
 
 const OrderAPI = {
     getAll(params) {
-        const url = '/order';
+        const url = '/order/admin/order_management/list';
+        return axiosClinet.get(url, { params });
+    },
+
+    searchByEmailAndPhone(params) {
+        const url = '/order/admin/order_management/search';
         return axiosClinet.get(url, { params });
     },
 

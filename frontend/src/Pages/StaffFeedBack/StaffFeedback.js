@@ -16,6 +16,7 @@ import {
     AccordionPanel,
     AccordionIcon,
     Box,
+    Button,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,6 +46,24 @@ function StaffFeedback() {
         sortRating: null,
         sortDate: null,
     });
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
+
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 12,
+            rating: sort.rating,
+            speciesId: sort.speciesId,
+            date: sort.date,
+            username: sort.username,
+            status: sort.status,
+            sortRating: sort.sortRating,
+            sortDate: sort.sortDate,
+        });
+
+        setPage(newPage);
+    };
 
     const changeStatus = async (id, index) => {
         const updatedFeedback = [...feedbackList];
@@ -216,6 +235,14 @@ function StaffFeedback() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <Button disabled={page === 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    Prev
+                </Button>
+                <Button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    Next
+                </Button>
+            </div>
         </Container>
     );
 }

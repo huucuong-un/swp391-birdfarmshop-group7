@@ -24,3 +24,16 @@ th {
         padding: 0 1%;
     }
 }
+
+.table-container {
+    margin-bottom: 20px;
+    min-height: 650px;
+}
+
+.button-pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}

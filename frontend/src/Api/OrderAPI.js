@@ -6,6 +6,11 @@ const OrderAPI = {
         return axiosClinet.get(url, { params });
     },
 
+    searchByEmailAndPhone(params) {
+        const url = '/order/admin/order_management/search';
+        return axiosClinet.get(url, { params });
+    },
+
     findAllByUserId(id) {
         const url = `/order/findAllByUserId/${id}`;
         return axiosClinet.get(url);

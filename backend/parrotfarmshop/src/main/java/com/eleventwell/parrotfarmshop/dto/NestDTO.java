@@ -1,20 +1,14 @@
 package com.eleventwell.parrotfarmshop.dto;
 
 
-import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
-import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ParrotEggNestDTO extends BaseDTO{
+public class NestDTO extends BaseDTO{
 
     private Boolean status;
 

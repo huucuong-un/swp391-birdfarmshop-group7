@@ -4,7 +4,6 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.SliderDTO;
 import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.entity.SliderEntity;
-import com.eleventwell.parrotfarmshop.entity.SpeciesEggPriceEntity;
 import com.eleventwell.parrotfarmshop.repository.SliderRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;

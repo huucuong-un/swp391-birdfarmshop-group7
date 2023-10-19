@@ -80,10 +80,13 @@ public class ParrotEntity extends BaseEntity {
     @PrimaryKeyJoinColumn
     private OrderDetailEntity orderDetail;
 //
-//	@OneToMany(mappedBy = "parrot")
-//	private List<ParrotEggNestEntity> parrotEggNests = new ArrayList<>();
-//	
-//	
+	@OneToMany(mappedBy = "parrotMale")
+	private List<ParrotCoupleEntity> parrotMales = new ArrayList<>();
+    @OneToMany(mappedBy = "parrotFemale")
+    private List<ParrotCoupleEntity> parrotFemale = new ArrayList<>();
+
+
+
 
 //    @OneToMany(mappedBy = "parrot")
 //    private List<ReproductiveHistoryEntity> reproductiveHistories = new ArrayList<>();

@@ -1,49 +1,44 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 
-import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
+import com.eleventwell.parrotfarmshop.dto.NestDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
-import com.eleventwell.parrotfarmshop.service.IGenericService;
-import com.eleventwell.parrotfarmshop.service.impl.ParrotEggNestService;
+import com.eleventwell.parrotfarmshop.service.impl.NestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/parrot-egg-nest")
-public class ParrotEggNestController {
+public class NestController {
     @Autowired
-    private ParrotEggNestService parrotEggNestService;
+    private NestService nestService;
 
     @GetMapping(value = "")
     public ListOutput showParrotEggNests() {
         ListOutput result = new ListOutput();
-        result.setListResult(parrotEggNestService.findAll());
+        result.setListResult(nestService.findAll());
         return result;
     }
-    @GetMapping(value="/count-available-nest-quantity-spcies-by-id/{id}")
-    public Long countAvaiableParrotById(@RequestBody @PathVariable("id") long id){
 
-        return parrotEggNestService.countAvaiableNestById(id);
-    }
         
     //add a parrot egg nest by Post method
     @PostMapping(value = "")
-    public ParrotEggNestDTO createParrotEggNest(@RequestBody ParrotEggNestDTO model){
+    public NestDTO createParrotEggNest(@RequestBody NestDTO model){
 
-        return (ParrotEggNestDTO) parrotEggNestService.save(model);
+        return (NestDTO) nestService.save(model);
     }
 
 
     @PutMapping(value = "{id}")
-    public ParrotEggNestDTO updateParrotEggNest(@RequestBody ParrotEggNestDTO model, @PathVariable("id") Long id) {
+    public NestDTO updateParrotEggNest(@RequestBody NestDTO model, @PathVariable("id") Long id) {
         model.setId(id);
-       return (ParrotEggNestDTO) parrotEggNestService.save(model);
+       return (NestDTO) nestService.save(model);
     }
 
     @DeleteMapping(value = "{id}")
     public void deleteParrotEggNest(@RequestBody @PathVariable("id") Long id){
-        parrotEggNestService.changeStatus(id);
+        nestService.changeStatus(id);
     }
 
 

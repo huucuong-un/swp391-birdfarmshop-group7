@@ -57,7 +57,7 @@ public class OrderController {
         }
 
         result.setListResult(orderResponses);
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()+1) / limit)));
         result.setLimit(limit);
       return  result;
 
@@ -86,7 +86,7 @@ public class OrderController {
         }
 
         result.setListResult(orderResponses);
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size() + 1) / limit)));
         result.setLimit(limit);
         return result;
     }

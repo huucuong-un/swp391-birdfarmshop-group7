@@ -87,7 +87,7 @@ public class FeedbackController {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
         result.setListResult(feedbackService.searchSortForAdmin(rating,speciesId,date , username,status,sortRating,sortDate ,pageable));
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size() +1 ) / limit)));
         result.setLimit(limit);
 
 

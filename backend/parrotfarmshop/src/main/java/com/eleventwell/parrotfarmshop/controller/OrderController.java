@@ -57,7 +57,7 @@ public class OrderController {
         }
 
         result.setListResult(orderResponses);
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()+1) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (orderService.totalItem()) / limit)));
         result.setLimit(limit);
       return  result;
 

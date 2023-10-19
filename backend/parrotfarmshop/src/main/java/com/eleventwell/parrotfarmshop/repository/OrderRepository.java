@@ -20,7 +20,7 @@ List<OrderEntity> findAllByOrderByIdDesc(Pageable pageable);
     @Query("SELECT ps FROM OrderEntity ps " +
             "WHERE (:email IS NULL OR ps.user.email LIKE CONCAT('%', :email, '%')) " +
             "AND (:phone IS NULL OR ps.deliveryInformation.phoneNumber LIKE CONCAT('%', :phone, '%'))  " +
-             "AND (:dateSearch IS NULL OR ps.createdDate = :dateSearch)"+
+             "AND (:dateSearch IS NULL OR DATE(ps.createdDate) = :dateSearch)"+
             "AND (:status IS NULL OR ps.status = :status)"+
 
             "ORDER BY  " +

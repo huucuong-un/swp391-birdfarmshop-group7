@@ -160,7 +160,7 @@ const AdminRoleList = () => {
                                         <Td minWidth={150}>
                                             <div className={cx('haha')}>
                                                 <Switch
-                                                    onChange={() => handleStatus(role.id)}
+                                                    onChange={() => handleStatus(index)}
                                                     size="lg"
                                                     isChecked={role.status}
                                                     colorScheme="green"

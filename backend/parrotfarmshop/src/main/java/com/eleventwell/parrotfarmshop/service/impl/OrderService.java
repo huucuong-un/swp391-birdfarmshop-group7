@@ -78,7 +78,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 
-    public void createOrderDetail(OrderDTO dto, Long speciesId, String check) {
+    public OrderDTO createOrderDetail(OrderDTO dto, Long speciesId, String check) {
         OrderDTO orderDTO = save(dto);
         Double totalPrice = 0.0;
         Pageable pageable = (Pageable) PageRequest.of(0, orderDTO.getQuantity()); // Create a PageRequest with desired page size
@@ -106,6 +106,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 //        }
         orderDTO.setTotalPrice(totalPrice);
         save(orderDTO);
+        return orderDTO;
 
     }
 
@@ -140,7 +141,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     }
 //Duyet list cartModel, moi vao lap truyen vao quantity de lay dung so luong, tinh totalprice va goi ham  createOrderDetailByCartModel de tao orderdetail
-    public void createOrderDetailsByCart(OrderDTO dto, List<CartModel> cartModels) {
+    public OrderDTO createOrderDetailsByCart(OrderDTO dto, List<CartModel> cartModels) {
         OrderDTO orderDTO = save(dto);
         Double totalPrice = 0.0;
         Pageable pageable;
@@ -161,7 +162,7 @@ public class OrderService implements IGenericService<OrderDTO> {
 
         orderDTO.setTotalPrice(totalPrice);
         save(orderDTO);
-
+return orderDTO;
     }
 
 
@@ -180,14 +181,9 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-//        OrderEntity orderEntity = orderRepository.findOneById(ids);
-//        if (orderEntity.getStatus() == true) {
-//            orderEntity.setStatus(false);
-//        } else {
-//            orderEntity.setStatus(true);
-//        }
-//        orderRepository.save(orderEntity);
-
+        OrderEntity orderEntity = orderRepository.findOneById(ids);
+   orderEntity.setStatus("Done");
+        orderRepository.save(orderEntity);
 
     }
     @Override

@@ -59,6 +59,9 @@ public class SliderService implements IGenericService<SliderDTO> {
         }
         sliderRepository.save(sliderEntity);
     }
+    public SliderDTO findOneById(Long id){
+        return (SliderDTO) genericConverter.toDTO(sliderRepository.findOneById(id),SliderDTO.class);
+    }
 
     @Override
     public List<SliderDTO> findAll(Pageable pageable){

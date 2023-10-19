@@ -35,5 +35,13 @@ th {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 20px;
+}
+
+.number-page {
+    margin: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
 }

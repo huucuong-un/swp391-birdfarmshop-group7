@@ -15,6 +15,9 @@ import {
 
 import { useEffect, useState } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+
 import DeliveryInformation from '~/Api/DeliveryInformationAPI';
 import OrderAPI from '~/Api/OrderAPI';
 
@@ -27,7 +30,7 @@ function StaffOrderManagement() {
     const [orders, setOrders] = useState();
     const [sort, setSort] = useState({
         page: 1,
-        limit: 12,
+        limit: 1,
         email: null,
         phone: null,
         date: null,
@@ -52,7 +55,7 @@ function StaffOrderManagement() {
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
-            limit: 12,
+            limit: 1,
             email: sort.email,
             phone: sort.phone,
             date: sort.date,
@@ -100,6 +103,14 @@ function StaffOrderManagement() {
     useEffect(() => {
         console.log(sort);
     }, [sort]);
+
+    useEffect(() => {
+        console.log(totalPage);
+    }, [totalPage]);
+
+    useEffect(() => {
+        console.log(page);
+    }, [page]);
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -166,12 +177,17 @@ function StaffOrderManagement() {
                 </Table>
             </TableContainer>
             <div className={cx('button-pagination')}>
-                <Button disabled={page === 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
-                    Prev
-                </Button>
-                <Button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
-                    Next
-                </Button>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
             </div>
         </Container>
     );

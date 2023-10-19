@@ -22,6 +22,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
+import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffFeedBack/StaffFeedback.module.scss';
 
@@ -37,7 +39,7 @@ function StaffFeedback() {
     const [vinh, setVinh] = useState(true);
     const [sort, setSort] = useState({
         page: 1,
-        limit: 12,
+        limit: 1,
         rating: null,
         speciesId: null,
         date: null,
@@ -52,7 +54,7 @@ function StaffFeedback() {
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
-            limit: 12,
+            limit: 1,
             rating: sort.rating,
             speciesId: sort.speciesId,
             date: sort.date,
@@ -79,6 +81,7 @@ function StaffFeedback() {
                 const feedbackList = await FeedbackAPI.getAllFeedbackSystem(sort);
                 console.log(feedbackList);
                 setFeedbackList(feedbackList.listResult);
+                setTotalPage(feedbackList.totalPage);
             } catch (error) {
                 console.log(error);
             }
@@ -136,6 +139,10 @@ function StaffFeedback() {
     useEffect(() => {
         console.log(sort);
     }, [sort]);
+
+    useEffect(() => {
+        console.log(totalPage);
+    }, [totalPage]);
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -197,7 +204,7 @@ function StaffFeedback() {
 
                 <button></button>
             </div>
-            <TableContainer>
+            <TableContainer className={cx('table-container')}>
                 <Table size="lg">
                     <Thead>
                         <Tr>
@@ -236,12 +243,17 @@ function StaffFeedback() {
                 </Table>
             </TableContainer>
             <div className={cx('button-pagination')}>
-                <Button disabled={page === 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
-                    Prev
-                </Button>
-                <Button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
-                    Next
-                </Button>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
             </div>
         </Container>
     );

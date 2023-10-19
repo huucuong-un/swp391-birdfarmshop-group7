@@ -25,10 +25,23 @@ th {
     }
 }
 
-.sort-species-id {
-    max-width: 150px;
+.table-container {
+    margin-bottom: 20px;
+    min-height: 650px;
 }
 
-// .feedback-content {
-//     max-width: 100px;
-// }
+.button-pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.number-page {
+    margin: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

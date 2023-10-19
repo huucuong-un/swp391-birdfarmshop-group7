@@ -20,9 +20,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-
-import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faAngleRight, faAngleLeft, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffFeedBack/StaffFeedback.module.scss';
@@ -144,12 +142,25 @@ function StaffFeedback() {
         console.log(totalPage);
     }, [totalPage]);
 
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            email: null,
+            phone: null,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
+
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
                 <h1>Feedback</h1>
             </div>
             <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <select
                     name="status"
                     id="status"

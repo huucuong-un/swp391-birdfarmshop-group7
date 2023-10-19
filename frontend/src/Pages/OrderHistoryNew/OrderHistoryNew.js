@@ -23,9 +23,27 @@ import {
     Td,
     TableCaption,
     TableContainer,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Step,
+    StepDescription,
+    StepIcon,
+    StepIndicator,
+    StepNumber,
+    StepSeparator,
+    StepStatus,
+    StepTitle,
+    Stepper,
+    useSteps,
 } from '@chakra-ui/react';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { ShopState } from '~/context/ShopProvider';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
@@ -34,9 +52,33 @@ import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
+const steps = [
+    { title: 'Watiting for parrot', description: 'Contact Info' },
+    { title: 'Parrot received', description: 'Date & Time' },
+    { title: 'Inspecting', description: 'Select Rooms' },
+    { title: 'Verification successful', description: 'Select Rooms' },
+    { title: 'Start pairing', description: 'Select Rooms' },
+    { title: 'Pregnant', description: 'Select Rooms' },
+    { title: 'Gave birth', description: 'Select Rooms' },
+    { title: 'Incubating', description: 'Select Rooms' },
+    { title: 'Hatched', description: 'Select Rooms' },
+    { title: 'Ready to deliver', description: 'Select Rooms' },
+    { title: 'Delivered to the shipping unit', description: 'Select Rooms' },
+    { title: 'Delivering to you', description: 'Select Rooms' },
+    { title: 'Delivered successfully', description: 'Select Rooms' },
+];
+
 function OrderHistoryNew() {
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
+    const [overlay, setOverlay] = React.useState(<OverlayOne />);
+
+    const { activeStep } = useSteps({
+        index: 1,
+        count: steps.length,
+    });
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
@@ -137,7 +179,14 @@ function OrderHistoryNew() {
                                         <Button variant="solid" colorScheme="blue">
                                             Feedback
                                         </Button>
-                                        <Button variant="solid" colorScheme="green">
+                                        <Button
+                                            variant="solid"
+                                            colorScheme="green"
+                                            onClick={() => {
+                                                setOverlay(<OverlayOne />);
+                                                onOpen();
+                                            }}
+                                        >
                                             Track Process
                                         </Button>
                                     </ButtonGroup>
@@ -146,6 +195,38 @@ function OrderHistoryNew() {
                         </div>
                     </div>
                 ))}
+                <Modal isCentered isOpen={isOpen} onClose={onClose} size="5xl">
+                    {overlay}
+                    <ModalContent>
+                        <ModalHeader>Modal Title</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Stepper size="lg" index={activeStep} orientation="vertical">
+                                {steps.map((step, index) => (
+                                    <Step key={index}>
+                                        <StepIndicator>
+                                            <StepStatus
+                                                complete={<StepIcon />}
+                                                incomplete={<StepNumber />}
+                                                active={<StepNumber />}
+                                            />
+                                        </StepIndicator>
+
+                                        <Box flexShrink="0">
+                                            <StepTitle>{step.title}</StepTitle>
+                                            <StepDescription>{step.description}</StepDescription>
+                                        </Box>
+
+                                        <StepSeparator />
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button onClick={onClose}>Close</Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
             </div>
         </Container>
     );

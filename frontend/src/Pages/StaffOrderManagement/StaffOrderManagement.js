@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faAngleLeft, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 import DeliveryInformation from '~/Api/DeliveryInformationAPI';
 import OrderAPI from '~/Api/OrderAPI';
@@ -30,7 +30,7 @@ function StaffOrderManagement() {
     const [orders, setOrders] = useState();
     const [sort, setSort] = useState({
         page: 1,
-        limit: 1,
+        limit: 12,
         email: null,
         phone: null,
         date: null,
@@ -55,7 +55,7 @@ function StaffOrderManagement() {
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
-            limit: 1,
+            limit: 12,
             email: sort.email,
             phone: sort.phone,
             date: sort.date,
@@ -100,6 +100,18 @@ function StaffOrderManagement() {
         getDelByOrderId();
     }, [orders]);
 
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            email: null,
+            phone: null,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
+
     useEffect(() => {
         console.log(sort);
     }, [sort]);
@@ -118,6 +130,7 @@ function StaffOrderManagement() {
                 <h1>Order</h1>
             </div>
             <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input type="email" placeholder="Mail" onChange={(e) => setSort({ ...sort, email: e.target.value })} />
                 <input type="tel" placeholder="Phone" onChange={(e) => setSort({ ...sort, phone: e.target.value })} />
                 <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />

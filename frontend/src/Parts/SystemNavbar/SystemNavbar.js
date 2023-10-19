@@ -7,7 +7,43 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function SystemNavbar() {
+function SystemNavbar({ staff, manager }) {
+    const staffItem = [
+        {
+            title: 'ORDERS',
+            path: '/staff-order-management',
+        },
+
+        {
+            title: 'FEEDBACKS',
+            path: '/staff-feedback',
+        },
+    ];
+
+    const managerItem = [
+        {
+            title: 'ACCOUNTS',
+            path: '/staff-order-management',
+        },
+
+        {
+            title: 'ROLES',
+            path: '/staff-feedback',
+        },
+        {
+            title: 'SERVICE',
+            path: '/staff-feedback',
+        },
+        {
+            title: 'SPECIES',
+            path: '/staff-feedback',
+        },
+        {
+            title: 'COLORS',
+            path: '/staff-feedback',
+        },
+    ];
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -18,7 +54,7 @@ function SystemNavbar() {
                     <Link>
                         <p>ACCOUNTS</p>
                     </Link>
-                    <Link>
+                    <Link to="/admin/role">
                         <p>ROLES</p>
                     </Link>
                     <Link>

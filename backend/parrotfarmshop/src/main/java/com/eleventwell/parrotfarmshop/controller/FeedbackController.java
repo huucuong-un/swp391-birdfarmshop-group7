@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,7 +45,7 @@ public class FeedbackController {
     @GetMapping(value = "count-by-species-id")
     public Integer countBySpeciesId(@RequestBody @RequestParam(value = "id") Long  id) {
 
-           return feedbackService.countBySpeciesId(id);
+        return feedbackService.countBySpeciesId(id);
 
 
 
@@ -57,7 +59,13 @@ public class FeedbackController {
 
 
     }
+    @GetMapping(value = "count-by-orderId")
+    public Integer countByOrderId(@RequestBody @RequestParam(value = "orderId") Long  orderId) {
 
+        return feedbackService.countByOrderId(orderId);
+
+
+    }
     @GetMapping(value = "find-all-by-species-id-and-belong-to-or-rating-or-color-id")
     public PagingModel findAllBySpeciesIdAndBelongTo(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam("speciesId") Long speciesId, @RequestParam(value = "productType",required = false) String productType,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "colorId",required = false) Long colorId) {
         PagingModel result = new PagingModel();
@@ -65,6 +73,20 @@ public class FeedbackController {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
         result.setListResult(feedbackService.findAllBySpeciesIdAndBelongtoOrRatingOrColorId(speciesId, productType, rating,colorId,pageable));
+        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setLimit(limit);
+
+
+
+        return result;
+    }
+    @GetMapping(value = "admin/search_sort")
+    public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "speciesId",required = false) Long speciesId, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam(value = "username",required = false) String username,@RequestParam(value = "status",required = false) Boolean status ,@RequestParam(value = "sortRating",required = false) String sortRating, @RequestParam(value = "sortDate",required = false)String sortDate) {
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+        result.setListResult(feedbackService.searchSortForAdmin(rating,speciesId,date , username,status,sortRating,sortDate ,pageable));
         result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
         result.setLimit(limit);
 

@@ -21,6 +21,7 @@ public class FeedbackDTO extends BaseDTO {
 
     private Integer rating;
 
+private  Boolean status;
 
     private String belongTo;
 
@@ -28,5 +29,7 @@ public class FeedbackDTO extends BaseDTO {
     private Integer userId;
 
     private Integer colorId;
+
+    private Long orderId;
 
 }

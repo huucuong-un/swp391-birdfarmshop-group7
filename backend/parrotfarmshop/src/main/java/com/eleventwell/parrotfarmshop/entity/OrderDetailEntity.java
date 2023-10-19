@@ -51,4 +51,6 @@ public class OrderDetailEntity extends BaseEntity {
     private ParrotEggNestEntity parrotEggNest;
 
 
+
+
 }

@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+
 import styles from '~/Pages/AddPost/AddPost.module.scss';
 import {
     Input,
@@ -16,15 +17,18 @@ import {
     AlertTitle,
     AlertDescription,
     Textarea,
+    Text,
+    Switch,
 } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Title from '~/Components/Title/Title';
-
 import axios from 'axios';
 import PostAPI from '~/Api/PostAPI';
+import UpdatePost from '~/Components/UpdatePost/UpdatePost';
 
 const cx = classNames.bind(styles);
 
@@ -33,7 +37,35 @@ function AddPost() {
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState('');
     const [show, setShow] = useState(false);
+    const [status, setStatus] = useState(false);
+    const [reloadData, setReloadData] = useState(false);
+    const handleUpdateSuccess = () => {
+        setReloadData(true); // Set reloadData to true when the update is successful
+    };
+    const handleStatus = async (index) => {
+        const updatedPost = [...postList];
+        updatedPost[index].status = !updatedPost[index].status;
+
+        try {
+            // Send a request to update the status on the server
+            await axios.delete(`http://localhost:8086/api/post/${updatedPost[index].id}`);
+
+            // If the request is successful, update the state
+            setPostList(updatedPost);
+        } catch (error) {
+            toast({
+                title: 'Error occur!',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            console.log(error);
+        }
+    };
     // Toast
+
     const toast = useToast();
     const handleShow = () => {
         setShow(!show);
@@ -125,8 +157,12 @@ function AddPost() {
             const postList = await PostAPI.getAll();
             setPostList(postList.listResult);
         };
+        if (reloadData) {
+            fetchData();
+            setReloadData(false);
+        }
         fetchData();
-    }, [post]);
+    }, [reloadData, post]);
     const convertToTrueFormat = (timeText) => {
         let [date, time] = timeText.split('T');
         let [hours, mins, secs] = time.split(':');
@@ -138,6 +174,16 @@ function AddPost() {
     };
     console.log(postList);
 
+    const [openPostID, setOpenPostID] = useState(null);
+    const toggleEditForm = (postID) => {
+        if (openPostID === postID) {
+            // If the form is already open for this species, close it
+            setOpenPostID(null);
+        } else {
+            // Otherwise, open the form for this species
+            setOpenPostID(postID);
+        }
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-wrapper')}>
@@ -287,6 +333,7 @@ function AddPost() {
             ) : (
                 <></>
             )}
+
             <div className={cx('sort-space')}>
                 <select name="species" id="species">
                     <option value="a">Species</option>
@@ -316,21 +363,69 @@ function AddPost() {
                             <Th className={cx('text-center')}>Image</Th>
                             <Th className={cx('text-center')}>Start date</Th>
                             <Th className={cx('text-center')}>End date</Th>
+                            <Th className={cx('text-center')}>Status</Th>
+                            <Th>Action</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {postList.map((post) => (
-                            <Tr key={post.id}>
-                                <Td>{post.id}</Td>
-                                <Td>{post.title}</Td>
-                                <Td>{post.content}</Td>
-                                <Td>{post.description}</Td>
-                                <Td>
-                                    <img src={post.imageUrl} />
-                                </Td>
-                                <Td>{post.startDate}</Td>
-                                <Td>{post.endDate}</Td>
-                            </Tr>
+                        {postList.map((post, index) => (
+                            <>
+                                <Tr key={index}>
+                                    <Td>{post.id}</Td>
+                                    <Td>{post.title}</Td>
+                                    <Td>{post.content}</Td>
+                                    <Td>{post.description}</Td>
+                                    <Td>
+                                        <img src={post.imageUrl} />
+                                    </Td>
+                                    <Td>{post.startDate}</Td>
+                                    <Td>{post.endDate}</Td>
+                                    <Td>
+                                        <Switch
+                                            onChange={() => handleStatus(index)}
+                                            size="lg"
+                                            isChecked={post.status}
+                                            colorScheme="green"
+                                        />
+                                        {post.status ? (
+                                            <Text color="green" fontSize={12} overflow="hidden">
+                                                On Processing
+                                            </Text>
+                                        ) : (
+                                            <Text color="red" fontSize={12} overflow="hidden">
+                                                Disabled
+                                            </Text>
+                                        )}
+
+                                        <Input
+                                            type="hidden"
+                                            id="status"
+                                            name="status"
+                                            variant="filled"
+                                            value={status}
+                                            onChange={(e) => setPost({ ...post, status: e.target.value })}
+                                        />
+                                    </Td>
+                                    <Td>
+                                        <Button
+                                            key={post.id}
+                                            onClick={() => toggleEditForm(post.id)}
+                                            colorScheme={'green'}
+                                            size={'lg'}
+                                        >
+                                            {openPostID === post.id ? 'Close Edit' : 'Edit'}
+                                        </Button>
+                                    </Td>
+                                </Tr>
+
+                                <Tr key={index + 'post'}>
+                                    {openPostID === post.id && (
+                                        <Td colSpan={10}>
+                                            <UpdatePost postId={post.id} reloadData={handleUpdateSuccess} />
+                                        </Td>
+                                    )}
+                                </Tr>
+                            </>
                         ))}
                     </Tbody>
                 </Table>

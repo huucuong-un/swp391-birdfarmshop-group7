@@ -14,7 +14,6 @@ import {
     AlertTitle,
     AlertDescription,
 } from '@chakra-ui/react';
-import Buttons from '~/Components/Button/Button';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

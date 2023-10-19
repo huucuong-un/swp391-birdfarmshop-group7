@@ -23,6 +23,7 @@ import { useTransform } from 'framer-motion';
 import UserProfileNew from '../UserProfileNew/UserProfileNew';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 import OrderHistory from '../OrderHistory/OrderHistory';
+import OrderHistoryNew from '../OrderHistoryNew/OrderHistoryNew';
 
 const cx = classNames.bind(styles);
 
@@ -52,7 +53,8 @@ function MyAccount() {
                         <DeliveryInformation></DeliveryInformation>
                     </TabPanel>
                     <TabPanel>
-                        <OrderHistory></OrderHistory>
+                        {/* <OrderHistory></OrderHistory> */}
+                        <OrderHistoryNew></OrderHistoryNew>
                     </TabPanel>
                 </TabPanels>
             </Tabs>

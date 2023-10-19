@@ -27,24 +27,75 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import classNames from 'classnames/bind';
 import styles from '~/Pages/OrderHistory/OrderHistory.module.scss';
+import ButtonT from '~/Components/Button/Button';
 
 import { ShopState } from '~/context/ShopProvider';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 
-import React, { useEffect, useState } from 'react';
+import Rate from '~/Components/Rate/Rate';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import OrderAPI from '~/Api/OrderAPI';
+import FeedbackAPI from '~/Api/FeedbackAPI';
 
 const cx = classNames.bind(styles);
 
 function OrderHistory() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [rating, setRating] = useState(0);
+    const [textareaValue, setTextareaValue] = useState('');
 
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
 
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const [overlay, setOverlay] = React.useState(<OverlayOne />);
+
+    const handleTextareaChange = (event) => {
+        // Update the state variable with the new value from the textarea
+        setTextareaValue(event.target.value);
+        console.log(textareaValue);
+    };
+    const [orderId, setOrderId] = useState({});
+    const handleStoreOrderId = (e) => {
+        setOrderId(e);
+    };
+    useEffect(() => {
+        console.log(orderId);
+    }, [orderId]);
+    const handleSaveFeedback = () => {
+        // Update the state variable with the new value from the textarea
+        console.log(orders);
+        const feedbackParam = {
+            content: textareaValue,
+            rating: rating,
+            belongTo: 'parrot',
+            userId: orderId.userID,
+            colorId: orderId.colorId,
+            orderId: orderId.orderId,
+            status: true,
+        };
+        console.log(orderId);
+        FeedbackAPI.create(feedbackParam);
+        document.getElementById(orderId.btnId).disabled = true;
+        document.getElementById(orderId.btnId).style.backgroundColor = 'grey';
+
+        onClose();
+    };
+
+    useEffect(() => {
+        const checkFeedbackButton = async () => {
+            for (const items of orders) {
+                const check = await FeedbackAPI.checkFeedbacked({ orderId: items.orderDTO.id });
+                if (check > 0) {
+                    document.getElementById('btnf' + items.orderDTO.id).disabled = true;
+                    document.getElementById('btnf' + items.orderDTO.id).style.backgroundColor = 'grey';
+                    document.getElementById('btnf' + items.orderDTO.id).style.cursor = 'Default';
+                }
+            }
+        };
+        checkFeedbackButton();
+    }, [orders]);
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
@@ -149,17 +200,25 @@ function OrderHistory() {
                                     </div>
                                 </div>
                                 <div className={cx('rating-btn')}>
-                                    <Button
+                                    <ButtonT
+                                        id={'btnf' + order.orderDTO.id}
+                                        backgroundColorBlue
                                         colorScheme="blue"
                                         size="lg"
                                         fontSize={'15px'}
                                         onClick={() => {
+                                            handleStoreOrderId({
+                                                orderId: order.orderDTO.id,
+                                                userId: order.orderDTO.userID,
+                                                colorId: order.listOrderDetailHistoryModel[0].colorId,
+                                                btnId: 'btnf' + order.orderDTO.id,
+                                            });
                                             setOverlay(<OverlayOne />);
                                             onOpen();
                                         }}
                                     >
                                         Feedback
-                                    </Button>
+                                    </ButtonT>
                                     <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
                                         {overlay}
                                         <ModalContent>
@@ -176,39 +235,62 @@ function OrderHistory() {
                                                         </div>
                                                         <div className={cx('product-info')}>
                                                             <div className={cx('product-title')}>
-                                                                <p>Ronaldo</p>
+                                                                <p>
+                                                                    {order.listOrderDetailHistoryModel[0].speciesName}
+                                                                </p>
                                                             </div>
                                                             <div className={cx('product-type')}>
-                                                                <p>Category: yellow</p>
+                                                                <p>
+                                                                    Category:{' '}
+                                                                    {order.listOrderDetailHistoryModel[0].color}
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div className={cx('rating-star-container')}>
                                                         <div className={cx('rating-star-title')}>
-                                                            <p>Product Quality:</p>
+                                                            <p>Rating:</p>
                                                         </div>
                                                         <div className={cx('rating-star-icon')}>
-                                                            <FontAwesomeIcon icon={faStar} />
-                                                            <FontAwesomeIcon icon={faStar} />
-                                                            <FontAwesomeIcon icon={faStar} />
-                                                            <FontAwesomeIcon icon={faStar} />
-                                                            <FontAwesomeIcon icon={faStar} />
+                                                            <div className={cx('row')}>
+                                                                <div className={cx('col text-center')}>
+                                                                    <Rate
+                                                                        rating={rating}
+                                                                        onRating={(rate) => setRating(rate)}
+                                                                    />
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div className={cx('rating-input')}>
                                                         <p>Description:</p>
-                                                        <textarea maxLength={100} />
+                                                        <textarea
+                                                            maxLength={150}
+                                                            value={textareaValue}
+                                                            onChange={handleTextareaChange}
+                                                        />
                                                     </div>
                                                 </div>
                                             </ModalBody>
                                             <ModalFooter className={cx('button-footer')}>
-                                                <Button>Save</Button>
+                                                <Button
+                                                    key={order.orderDTO.id + 1000}
+                                                    value={order.orderDTO.id}
+                                                    onClick={() => {
+                                                        handleSaveFeedback();
+                                                    }}
+                                                >
+                                                    Save
+                                                </Button>
+                                                <p>{order.orderDTO.id}</p>
+
                                                 <Button onClick={onClose}>Close</Button>
                                             </ModalFooter>
                                         </ModalContent>
                                     </Modal>
+
                                     {/* <Modal isOpen={isOpen} onClose={onClose} w>
                                         <ModalOverlay />
                                         <ModalContent>

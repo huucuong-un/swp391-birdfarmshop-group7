@@ -4,6 +4,7 @@ import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
+import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +35,9 @@ public class OrderService implements IGenericService<OrderDTO> {
     ParrotEggNestRepository parrotEggNestRepository;
 
     @Autowired
+    PromotionService promotionService;
+
+    @Autowired
     ParrotService parrotService;
 
     @Autowired
@@ -46,15 +51,15 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Override
     public List<OrderDTO> findAll() {
-        List<OrderDTO> result = new ArrayList<>();
-        List<OrderEntity> orderEntities = orderRepository.findAllByOrderByIdDesc();
 
-        for (OrderEntity entity : orderEntities) {
-            OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
-            result.add(orderDTO);
-        }
+     return null;
+    }
 
-        return result;
+    public OrderDTO findOneByOrderId(Long orderId) {
+        OrderEntity orderEntity = orderRepository.findOneById(orderId);
+        OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(orderEntity, OrderDTO.class);
+
+        return orderDTO;
     }
 
     @Override
@@ -143,7 +148,11 @@ public class OrderService implements IGenericService<OrderDTO> {
 
 
         }
-
+        try{
+           PromotionDTO promotionDTO = promotionService.findOneById(dto.getPromotionID());
+            totalPrice = totalPrice- totalPrice*promotionDTO.getValue();
+        }catch (Exception e){
+        }
 
         orderDTO.setTotalPrice(totalPrice);
         save(orderDTO);
@@ -163,6 +172,7 @@ public class OrderService implements IGenericService<OrderDTO> {
         return result;
     }
 
+
     @Override
     public void changeStatus(Long ids) {
         OrderEntity orderEntity = orderRepository.findOneById(ids);
@@ -179,7 +189,21 @@ public class OrderService implements IGenericService<OrderDTO> {
     public List<OrderDTO> findAll(Pageable pageable){
         // TODO Auto-generated method stub
         List<OrderDTO> results = new ArrayList();
-        List<OrderEntity> entities = orderRepository.findAll(pageable).getContent();
+        List<OrderEntity> entities = orderRepository.findAllByOrderByIdDesc(pageable);
+
+        for(OrderEntity item : entities) {
+            OrderDTO newDTO = (OrderDTO) genericConverter.toDTO(item,OrderDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+    public List<OrderDTO> searchByEmailOrPhone(String email, String phone, Date dateSearch,String status,String sortPrice,String sortDate, Pageable pageable){
+
+
+        List<OrderDTO> results = new ArrayList();
+        List<OrderEntity> entities = orderRepository.searchByEmailOrPhone(email,phone,dateSearch,status,sortPrice,sortDate,pageable);
 
         for(OrderEntity item : entities) {
             OrderDTO newDTO = (OrderDTO) genericConverter.toDTO(item,OrderDTO.class);

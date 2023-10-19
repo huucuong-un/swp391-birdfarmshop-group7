@@ -14,6 +14,7 @@ import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIco
 
 import { useState, useEffect } from 'react';
 
+import { Button as Buttons } from '@chakra-ui/react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
@@ -41,6 +42,12 @@ function ParrotDetail() {
         id: id,
         type: 'parrot',
     };
+
+    // useEffect(() => {
+    //     if (selectedColorId !== null || selectedColorId !== undefined) {
+    //         setSelectedColor(colorSortList[0].id);
+    //     }
+    // }, [colorSortList]);
 
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
@@ -371,7 +378,7 @@ function ParrotDetail() {
                                         Contact
                                     </Link>
                                 ) : countParrot === 'Check the color to see ' ? (
-                                    <Link className={cx('buy-btn-choose')}>Please choose color</Link>
+                                    <a className={cx('buy-btn-choose')}>Please choose color</a>
                                 ) : (
                                     <Link
                                         to={`/payment`}

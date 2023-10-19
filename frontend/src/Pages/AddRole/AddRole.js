@@ -17,10 +17,10 @@ import {
 } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddRole/AddRole.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 const cx = classNames.bind(styles);
-function AddRole() {
+function AddRole(props) {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [role, setRole] = useState({
         name: '',
@@ -35,6 +35,9 @@ function AddRole() {
     const handleStatus = () => {
         setStatus(!status);
     };
+    useEffect(() => {
+        console.log(status);
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -44,12 +47,14 @@ function AddRole() {
                 // Add other fields you want to send to the first API
                 name: role.name,
                 description: role.description,
-                status: role.status,
+                status: status,
             });
+            props.onAdd(responseParrots.data);
+            console.log(responseParrots.data);
             if (responseParrots.status === 200) {
-                console.log('POST request was successful at species!!');
+                console.log('POST request was successful at ROLE!!');
             } else {
-                console.error('POST request failed with status code - species: ', responseParrots.status);
+                console.error('POST request failed with status code - ROLE: ', responseParrots.status);
             }
 
             setSubmissionStatus(true);
@@ -66,15 +71,16 @@ function AddRole() {
                     <Table size="xs ">
                         <Thead>
                             <Tr>
-                                <Th>Title</Th>
-                                <Th>Input</Th>
+                                <Th fontSize={16}>Add Role</Th>
+                                <Th fontSize={16}></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td>Role name</Td>
+                                <Td fontSize={16}>Role name</Td>
                                 <Td>
                                     <Input
+                                        fontSize={16}
                                         type="text"
                                         id="name"
                                         name="name"
@@ -88,9 +94,10 @@ function AddRole() {
                             </Tr>
 
                             <Tr>
-                                <Td>Description</Td>
+                                <Td fontSize={16}>Description</Td>
                                 <Td>
                                     <Input
+                                        fontSize={16}
                                         type="text"
                                         id="description"
                                         name="description"
@@ -103,16 +110,16 @@ function AddRole() {
                                 </Td>
                             </Tr>
                             <Tr>
-                                <Td>Status</Td>
+                                <Td fontSize={16}>Status</Td>
                                 <Td>
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
-                                        {status ? <p>Available</p> : <p>Unavailable</p>}
+                                        {status ? <p fontSize={16}>On Processing</p> : <p fontSize={16}>Disabled</p>}
                                     </div>
                                     <Input
                                         type="hidden"
-                                        id="pregnancy"
-                                        name="pregnancy"
+                                        id="status"
+                                        name="status"
                                         variant="filled"
                                         value={status}
                                         onChange={(e) => setRole({ ...role, status: e.target.value })}
@@ -126,6 +133,7 @@ function AddRole() {
                                 <Td></Td>
                                 <Td className={cx('submit-btn')}>
                                     <Button
+                                        fontSize={16}
                                         type="submit"
                                         className={cx('btn')}
                                         width="100%"

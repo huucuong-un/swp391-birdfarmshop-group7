@@ -39,7 +39,7 @@ function AddSpeciesColor() {
     const [colorExist, setColorExist] = useState();
     const [species, setSpecies] = useState([]);
     const [colorInputs, setColorInputs] = useState([]);
-    const [isColorExist, setIsColorExist] = useState();
+
     const [show, setShow] = useState(false);
     const handleShow = () => {
         setShow(!show);
@@ -270,7 +270,6 @@ function AddSpeciesColor() {
     const toggleEditColor = async (specieColorID) => {
         try {
             const colorByIdList = await ParrotSpeciesColorAPI.findByParrotSpecieId(specieColorID);
-
             setColorById(colorByIdList);
         } catch (error) {
             console.log('Error at UpdateSpecies.js fetchSpeciesByID | Error:  ' + error);

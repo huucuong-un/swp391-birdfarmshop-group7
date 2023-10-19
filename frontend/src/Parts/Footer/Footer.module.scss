@@ -20,6 +20,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    text-align: center;
 
     p {
         color: var(--text-color-nav);
@@ -34,5 +35,15 @@
         &:hover {
             text-decoration: underline;
         }
+    }
+}
+
+@media (max-width: 740px) {
+    .inner {
+        gap: 30px;
+    }
+
+    .footer-part {
+        max-width: 100px;
     }
 }

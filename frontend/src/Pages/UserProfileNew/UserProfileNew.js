@@ -80,6 +80,13 @@ function UserProfileNew() {
                 localStorage.removeItem('userInfo');
                 localStorage.setItem('userInfo', JSON.stringify(updateInfo));
                 console.log(updateInfo);
+                toast({
+                    title: 'Change successfully',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
             } else {
                 console.log('Error in updateProfile function, loggedUser is null');
             }

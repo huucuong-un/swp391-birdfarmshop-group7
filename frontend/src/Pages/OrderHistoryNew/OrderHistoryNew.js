@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import FeedbackAPI from '~/Api/FeedbackAPI';
 import styles from '~/Pages/OrderHistoryNew/OrderHistoryNew.module.scss';
 
-import { Button, ButtonGroup, Text } from '@chakra-ui/react';
+import { Button, ButtonGroup, Center, Text } from '@chakra-ui/react';
 import ButtonT from '~/Components/Button/Button';
 
 import {
@@ -50,6 +50,13 @@ import {
     StepTitle,
     Stepper,
     useSteps,
+    Drawer,
+    DrawerBody,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
 } from '@chakra-ui/react';
 
 import React, { useState, useEffect } from 'react';
@@ -92,6 +99,7 @@ function OrderHistoryNew() {
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [overlay, setOverlay] = React.useState(<OverlayOne />);
+    const btnRef = React.useRef();
 
     const handleTextareaChange = (event) => {
         // Update the state variable with the new value from the textarea
@@ -234,9 +242,10 @@ function OrderHistoryNew() {
                                 </CardBody>
                                 <Divider />
                                 <CardFooter>
-                                    <ButtonGroup spacing="2">
+                                    <ButtonGroup spacing="2" className={cx('btn-container')}>
                                         <div className={cx('rating-btn')}>
-                                            <ButtonT
+                                            <button
+                                                className={cx('feedback-btn')}
                                                 id={'btnf' + order.orderDTO.id}
                                                 backgroundColorBlue
                                                 colorScheme="blue"
@@ -254,7 +263,7 @@ function OrderHistoryNew() {
                                                 }}
                                             >
                                                 Feedback
-                                            </ButtonT>
+                                            </button>
                                             <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
                                                 {overlay}
                                                 <ModalContent>
@@ -329,34 +338,9 @@ function OrderHistoryNew() {
                                                     </ModalFooter>
                                                 </ModalContent>
                                             </Modal>
-
-                                            {/* <Modal isOpen={isOpen} onClose={onClose} w>
-                                        <ModalOverlay />
-                                        <ModalContent>
-                                            <ModalHeader>Rate Product</ModalHeader>
-                                            <ModalCloseButton />
-                                            <ModalBody>
-                                                
-                                            </ModalBody>
-
-                                            <ModalFooter>
-                                                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                                                    Close
-                                                </Button>
-                                                <Button variant="ghost">Secondary Action</Button>
-                                            </ModalFooter>
-                                        </ModalContent>
-                                    </Modal> */}
                                         </div>
 
-                                        <Button
-                                            variant="solid"
-                                            colorScheme="green"
-                                            onClick={() => {
-                                                setOverlay(<OverlayOne />);
-                                                onOpen();
-                                            }}
-                                        >
+                                        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
                                             Track Process
                                         </Button>
                                     </ButtonGroup>
@@ -365,6 +349,22 @@ function OrderHistoryNew() {
                         </div>
                     </div>
                 ))}
+                {/* <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
+                    <DrawerOverlay />
+                    <DrawerContent>
+                        <DrawerCloseButton />
+                        <DrawerHeader>Create your account</DrawerHeader>
+
+                        <DrawerBody></DrawerBody>
+
+                        <DrawerFooter>
+                            <Button variant="outline" mr={3} onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="blue">Save</Button>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </Drawer> */}
                 {/* <Modal isCentered isOpen={isOpen} onClose={onClose} size="5xl">
                     {overlay}
                     <ModalContent>

@@ -157,10 +157,15 @@ function OrderHistoryNew() {
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const orderList = await OrderAPI.findAllByUserId(user.userId);
-                setOrders(orderList);
-                console.log(orderList[0].orderDTO.createdDate);
-                console.log(orderList);
+                const param = {
+                    page: 1,
+                    limit: 1,
+                    userId: user.userId,
+                };
+                const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
+                setOrders(orderList.listResult);
+                // console.log(orderList[0].orderDTO.createdDate);
+                console.log(orderList.listResult);
             } catch (error) {
                 console.error(error);
             }

@@ -38,6 +38,7 @@ function ParrotDetail() {
     const [countParrot, setCountParrot] = useState('Check the color to see ');
     const { addToCartStatus, setAddToCartStatus } = useCartStatus();
     const [colorSortList, setColorSortList] = useState([]);
+    const [vinh, setVinh] = useState(1);
     const feedback = {
         id: id,
         type: 'parrot',
@@ -62,6 +63,31 @@ function ParrotDetail() {
 
         setSelectedColorId(colorId);
     };
+
+    useEffect(() => {
+        const reciveColor = () => {
+            try {
+                for (const items of combineData[0].colors) {
+                    if (items.id === receivedData.selectedColorId) {
+                        setSelectedColor({
+                            ...selectedColor,
+                            [combineData[0].id]: {
+                                color: items.color,
+                                price: items.price,
+                                colorId: items.id,
+                            },
+                        });
+
+                        setSelectedColorId(items.id);
+                    }
+                }
+                console.log(receivedData.selectedColorId);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        reciveColor();
+    }, [vinh]);
 
     const handleQuantityIncrease = (parrotId) => {
         if (quantities[parrotId] < countParrot) {
@@ -171,6 +197,7 @@ function ParrotDetail() {
                 console.log(colorSortList[0].id);
                 console.log(colorSortList[0].color);
                 handleColorSelection(1, colorSortList[0].color, colorSortList[0].price, colorSortList[0].id);
+                setVinh(vinh + 1);
             } else {
                 console.log('Color list is empty');
                 // Handle the case when colorSortList is empty

@@ -73,7 +73,7 @@ public class FeedbackController {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
         result.setListResult(feedbackService.findAllBySpeciesIdAndBelongtoOrRatingOrColorId(speciesId, productType, rating,colorId,pageable));
-        result.setTotalPage(((int) Math.ceil((double) (result.getListResult().size()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (feedbackService.totalItem()) / limit)));
         result.setLimit(limit);
 
 

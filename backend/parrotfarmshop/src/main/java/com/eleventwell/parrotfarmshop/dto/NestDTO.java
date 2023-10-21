@@ -1,6 +1,7 @@
 package com.eleventwell.parrotfarmshop.dto;
 
 
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import lombok.*;
 
 @ToString
@@ -12,20 +13,7 @@ public class NestDTO extends BaseDTO{
 
     private Boolean status;
 
+    private Long speciesId;
 
-    private Long orderDetailId;
-
-
-
-    private Long momId;
-
-
-    private Long dadId;
-
-    private Boolean saleStatus;
-
-    private Long speciesEggPriceId;
-
-    private String breedStatus;
 
 }

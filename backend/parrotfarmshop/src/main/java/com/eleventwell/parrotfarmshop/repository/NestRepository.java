@@ -11,11 +11,13 @@ import java.util.List;
 public interface NestRepository extends JpaRepository<NestEntity, Long> {
     NestEntity findOneById(Long id);
 
-    List<NestEntity> findAllByOrderByIdDesc();
+    List<NestEntity> findAllByOrderByIdDesc(Pageable pageable);
 
 //    @Query("SELECT u FROM NestEntity u WHERE u.status = true AND u.saleStatus = false AND u.breedStatus='Done' AND u.speciesEggPrice.parrotSpecies.id = :speciesId ORDER BY u.id")
 //    List<NestEntity> findTopNByStatusIsTrue(@Param("speciesId") Long speciesId, Pageable pageable);
 //
 //    Long countAllBySaleStatusAndStatusAndBreedStatusAndSpeciesEggPriceParrotSpeciesId(Boolean saleStatus,Boolean status ,String breedStatus, Long id);
+
+
 
 }

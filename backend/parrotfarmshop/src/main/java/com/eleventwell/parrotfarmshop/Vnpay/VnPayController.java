@@ -45,9 +45,9 @@ public class VnPayController {
             String orderIdByUsingLongDataType = txnRef.substring(0, txnRef.length() - 8);
             long result = Long.parseLong(orderIdByUsingLongDataType);
             orderService.changeStatus(result);
+            return new RedirectView("http://localhost:3000/paid-success");
 
             // Redirect to the specified URL when the condition is met
-            return new RedirectView("http://localhost:3000/paid-success");
         } else {
             // Trạng thái thất bại
             return new RedirectView("http://localhost:3000/error");

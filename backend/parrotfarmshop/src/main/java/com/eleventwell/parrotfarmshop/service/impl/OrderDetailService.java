@@ -135,6 +135,10 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         return results;
     }
 
+    public void removeOrderDetail(Long id){
+
+        orderDetailRepository.deleteById(id);
+    }
     @Override
     public int totalItem() {
         return (int)orderDetailRepository.count();

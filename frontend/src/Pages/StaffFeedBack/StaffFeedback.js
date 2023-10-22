@@ -17,6 +17,7 @@ import {
     AccordionIcon,
     Box,
     Button,
+    Textarea,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,6 +35,8 @@ const cx = classNames.bind(styles);
 function StaffFeedback() {
     const [feedbackList, setFeedbackList] = useState([]);
     const [combineData, setCombineData] = useState([]);
+    const [show, setShow] = useState(false);
+
     const [vinh, setVinh] = useState(true);
     const [sort, setSort] = useState({
         page: 1,
@@ -48,6 +51,13 @@ function StaffFeedback() {
     });
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
+
+    const handleShow = () => {
+        setShow(!show);
+    };
+    useEffect(() => {
+        console.log(show);
+    }, [show]);
 
     const handlePageChange = (newPage) => {
         setSort({
@@ -231,7 +241,7 @@ function StaffFeedback() {
                     <Tbody>
                         {combineData &&
                             combineData.map((feedback, index) => (
-                                <Tr key={index}>
+                                <Tr onClick={handleShow} key={index}>
                                     <Td>{feedback.id}</Td>
                                     <Td>{feedback.userInfor.fullName}</Td>
                                     <Td className={cx('feedback-content')} maxWidth={100}>
@@ -249,7 +259,10 @@ function StaffFeedback() {
                                         />
                                     </Td>
                                 </Tr>
+
                             ))}
+
+                       
                     </Tbody>
                 </Table>
             </TableContainer>

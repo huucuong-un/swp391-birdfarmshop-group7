@@ -20,15 +20,15 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
     List<PostEntity> findAllByOrderByIdDesc();
 
     @Query("SELECT u FROM PostEntity u WHERE (:title IS NULL OR u.title LIKE CONCAT('%', :title, '%')) " +
-            "AND (:content is null or u.content LIKE CONCAT('%', :content, '%'))" +
-            "AND (:description is null or u.description LIKE CONCAT('%', :description, '%'))" +
-            "AND (:searchDate is null or DATE(u.createdDate) = :searchDate or DATE(u.startDate) = :searchDate or DATE(u.endDate) = :searchDate)" +
-            "AND (:status is null or u.status = :status) " +
+            "AND (:content is Null or u.content LIKE CONCAT('%', :content, '%'))" +
+            "AND (:description is Null or u.description LIKE CONCAT('%', :description, '%'))" +
+            "AND (:searchDate is Null or DATE(u.createdDate) = :searchDate or DATE(u.startDate) = :searchDate or DATE(u.endDate) = :searchDate)" +
+            "AND (:status is Null or u.status = :status) " +
                 "ORDER BY " +
                 "case when :sortTitle = 'TDESC' then u.title end desc, " +
                 "case when :sortTitle = 'TASC' then u.title end asc, " +
-                "case when :sortDate = 'DDESC' then u.createdDate end desc, " +
-                "case when :sortDate = 'DASC' then u.createdDate end asc, " +
+                "case when :sortDate = 'DDESC' then u.id end desc, " +
+                "case when :sortDate = 'DASC' then u.id end asc, " +
                 "u.id desc")
     List<PostEntity> searchSortForAdmin(@Param("title") String title,
                                         @Param("content") String content,

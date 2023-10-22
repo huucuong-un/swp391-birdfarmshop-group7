@@ -3,6 +3,8 @@ package com.eleventwell.parrotfarmshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @ToString
 @Builder
 @Data
@@ -15,16 +17,19 @@ import lombok.*;
 @Table(name = "nest_development_status")
 public class NestDevelopmentStatusEntity extends BaseEntity{
 
-    @OneToOne(mappedBy = "nestDevelopmentStatus")
-    @PrimaryKeyJoinColumn
-    private NestDevelopmentEntity nestDevelopmentEntity;
+    @OneToMany(mappedBy = "nestDevelopmentStatus")
+    private List<NestDevelopmentEntity> nestDevelopmentEntity;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
-    @Column
+
+    @Column(name = "available")
+    private Boolean available;
+
+    @Column(name = "sequence")
     private  Integer sequence;
 }

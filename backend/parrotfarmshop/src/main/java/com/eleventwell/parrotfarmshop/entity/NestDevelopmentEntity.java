@@ -22,8 +22,8 @@ public class NestDevelopmentEntity extends BaseEntity{
     @JoinColumn(name = "nest_usage_history_id")
     private NestUsageHistoryEntity nestUsageHistory;
 
-    @OneToOne
-    @JoinColumn(name = "status_id", unique = true)
+    @ManyToOne
+    @JoinColumn(name = "status_id")
     private NestDevelopmentStatusEntity nestDevelopmentStatus;
 
     @Column(name = "event_date")

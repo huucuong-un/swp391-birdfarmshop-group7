@@ -5,6 +5,7 @@ import com.eleventwell.parrotfarmshop.dto.NestDevelopmentDTO;
 import com.eleventwell.parrotfarmshop.dto.NestDevelopmentStatusDTO;
 import com.eleventwell.parrotfarmshop.entity.NestDevelopmentEntity;
 import com.eleventwell.parrotfarmshop.entity.NestDevelopmentStatusEntity;
+import com.eleventwell.parrotfarmshop.entity.PostEntity;
 import com.eleventwell.parrotfarmshop.repository.NestDevelopmentRepository;
 import com.eleventwell.parrotfarmshop.repository.NestDevelopmentStatusRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -60,7 +61,13 @@ public class NestDevelopmentStatusService implements IGenericService<NestDevelop
 
     @Override
     public void changeStatus(Long ids) {
-
+//        NestDevelopmentStatusEntity nestDevelopmentStatusEntity = nestDevelopmentStatusRepository.findOneById(ids);
+//        if (nestDevelopmentStatusEntity.getStatus() == true) {
+//            nestDevelopmentStatusEntity.setStatus(false);
+//        } else {
+//            nestDevelopmentStatusEntity.setStatus(true);
+//        }
+//        nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
     }
 
     public void changeSequence(Long ids, Integer newSequence) {

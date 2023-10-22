@@ -1,17 +1,23 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.FeedbackDTO;
 import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
+import com.eleventwell.parrotfarmshop.dto.SliderDTO;
+import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
 import com.eleventwell.parrotfarmshop.entity.PostEntity;
 import com.eleventwell.parrotfarmshop.entity.PromotionEntity;
+import com.eleventwell.parrotfarmshop.entity.SliderEntity;
 import com.eleventwell.parrotfarmshop.repository.PostRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -87,5 +93,32 @@ public class PostService implements IGenericService<PostDTO> {
 
     }
 
+    public List<PostDTO> searchSortForAdmin(String title,
+                                            String content,
+                                            String description,
+                                            Date searchDate,
+                                            Boolean status,
+                                            String sortTitle,
+                                            String sortDate,
+                                            Pageable pageable ){
+        List<PostDTO> results = new ArrayList<>();
+        List<PostEntity> entities = postRepository.searchSortForAdmin(title, content, description, searchDate, status, sortTitle, sortDate, pageable);
+        for (PostEntity postEntity : entities
+             ) {
+            PostDTO newDTO = (PostDTO) genericConverter.toDTO(postEntity, PostDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+//    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username, Boolean status, String sortRating, String sortDate, Pageable pageable) {
+//        List<FeedbackDTO> results = new ArrayList();
+//        List<FeedbackEntity> entities = feedbackRepository.searchSortForAdmin(rating, speciesId, searchDate, username, status, sortRating, sortDate, pageable);
+//
+//        for (FeedbackEntity item : entities) {
+//            FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
+//            results.add(newDTO);
+//        }
+//        return results;
+//    }
 
 }

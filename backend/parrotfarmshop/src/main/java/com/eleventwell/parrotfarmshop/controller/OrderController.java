@@ -91,9 +91,15 @@ public class OrderController {
         return result;
     }
 
-    @GetMapping(value = "findAllByUserId/{id}")
-    public List<OrderResponse> findAllByOrderId(@RequestBody @PathVariable Long id) {
-        List<OrderDTO> orders = orderService.findAllByUserId(id);
+    @GetMapping(value = "order-history-search-sort")
+    public PagingModel findAllByOrderId(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "userId", required = false) Long userId  ,@RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,@RequestParam(value = "status",required = false) String status,@RequestParam(value = "sortPrice", required = false) String sortPrice,@RequestParam(value = "sortDate", required = false) String sortDate) {
+
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+
+        List<OrderDTO> orders = orderService.findAllByUserIdAndSearchSort(userId,date,status,sortPrice,sortDate,pageable);
         List<OrderResponse> orderResponses = new ArrayList<>();
 
         List<OrderDetailHistoryModel> orderDetailHistoryModes = new ArrayList<>();
@@ -108,7 +114,11 @@ public class OrderController {
         }
 
 
-        return orderResponses;
+        result.setListResult(orderResponses);
+        result.setTotalPage(((int) Math.ceil((double) (orderService.totalItem()) / limit)));
+        result.setLimit(limit);
+
+        return result;
 
     }
 

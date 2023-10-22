@@ -17,11 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class OrderEntity extends BaseEntity {
-
-
-
-
-
 	@OneToMany(mappedBy = "orderId")
 	private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 

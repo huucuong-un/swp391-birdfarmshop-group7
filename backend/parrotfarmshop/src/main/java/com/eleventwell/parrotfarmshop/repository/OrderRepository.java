@@ -15,7 +15,19 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     OrderEntity findOneById(Long id);
 List<OrderEntity> findAllByOrderByIdDesc(Pageable pageable);
 
-    List<OrderEntity> findAllByUserIdOrderByIdDesc(Long id);
+    @Query("SELECT ps FROM OrderEntity ps " +
+            "WHERE ps.user.id = :userId " +
+            "AND (:dateSearch IS NULL OR DATE(ps.createdDate) = :dateSearch)"+
+            "AND (:status IS NULL OR ps.status = :status)"+
+
+            "ORDER BY  " +
+            "CASE WHEN :sortPrice ='PDESC' THEN ps.totalPrice  END DESC ," +
+            "CASE WHEN :sortPrice ='PASC' THEN ps.totalPrice  END ASC ,"+
+            "CASE WHEN :sortDate ='DDESC' THEN ps.id END DESC ," +
+            "CASE WHEN :sortDate ='DASC' THEN ps.id  END ASC ,"+
+            "ps.id desc")
+List<OrderEntity> findAllByUserIdOrderByIdDescANDSearchSort(@Param("userId") Long id,@Param("dateSearch") Date dateSearch,@Param("status") String status,@Param("sortPrice") String sortPrice ,@Param("sortDate") String sortDate,Pageable pageable);
+
 
     @Query("SELECT ps FROM OrderEntity ps " +
             "WHERE (:email IS NULL OR ps.user.email LIKE CONCAT('%', :email, '%')) " +

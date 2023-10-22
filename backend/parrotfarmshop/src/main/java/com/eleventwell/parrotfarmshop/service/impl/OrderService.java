@@ -166,9 +166,9 @@ return orderDTO;
     }
 
 
-    public List<OrderDTO> findAllByUserId(Long id) {
+    public List<OrderDTO> findAllByUserIdAndSearchSort(Long id,Date date, String status, String sortPrice, String sortDate,Pageable pageable) {
         List<OrderDTO> result = new ArrayList<>();
-        List<OrderEntity> orderEntities = orderRepository.findAllByUserIdOrderByIdDesc(id);
+        List<OrderEntity> orderEntities = orderRepository.findAllByUserIdOrderByIdDescANDSearchSort(id,date,status,sortPrice,sortDate,pageable);
 
         for (OrderEntity entity : orderEntities) {
             OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);

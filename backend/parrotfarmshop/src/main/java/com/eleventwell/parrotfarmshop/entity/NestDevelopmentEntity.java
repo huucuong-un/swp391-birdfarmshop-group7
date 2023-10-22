@@ -22,9 +22,9 @@ public class NestDevelopmentEntity extends BaseEntity{
     @JoinColumn(name = "nest_usage_history_id")
     private NestUsageHistoryEntity nestUsageHistory;
 
-
-    @Column(name = "status")
-    private String status;
+    @OneToOne
+    @JoinColumn(name = "status_id", unique = true)
+    private NestDevelopmentStatusEntity nestDevelopmentStatus;
 
     @Column(name = "event_date")
     private Date eventDate;

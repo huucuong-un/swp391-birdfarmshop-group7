@@ -47,6 +47,13 @@ public class FeedbackEntity extends BaseEntity {
 	private UserEntity user;
 
 	@ManyToOne
+	@JoinColumn(name = "replyer_id")
+	private UserEntity replyer;
+
+	@Column(name = "reply_content")
+	private String replyContent;
+
+	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private ParrotSpeciesColorEntity parrotSpeciesColor;
 

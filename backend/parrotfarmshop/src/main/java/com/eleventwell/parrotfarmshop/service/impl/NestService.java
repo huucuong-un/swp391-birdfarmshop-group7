@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class NestService implements IGenericService<NestDTO> {
+public class  NestService implements IGenericService<NestDTO> {
 
     @Autowired
     private ParrotRepository parrotRepository;
@@ -32,14 +32,15 @@ public class NestService implements IGenericService<NestDTO> {
 
     @Override
     public List<NestDTO> findAll() {
-        List<NestDTO> result = new ArrayList<>();
-        List<NestEntity> parrotEggNestEntities = parrotEggNestRepository.findAllByOrderByIdDesc();
-
-        for (NestEntity entity : parrotEggNestEntities) {
-            result.add((NestDTO) genericConverter.toDTO(entity, NestDTO.class));
-        }
-
-        return result;
+//        List<NestDTO> result = new ArrayList<>();
+//        List<NestEntity> parrotEggNestEntities = parrotEggNestRepository.findAllByOrderByIdDesc();
+//
+//        for (NestEntity entity : parrotEggNestEntities) {
+//            result.add((NestDTO) genericConverter.toDTO(entity, NestDTO.class));
+//        }
+//
+//        return result;
+        return null;
     }
 
     @Override

@@ -28,6 +28,10 @@ private  Boolean status;
 
     private Long userId;
 
+    private Long replyerId;
+
+    private String replyContent;
+
     private Integer colorId;
 
     private Long orderId;

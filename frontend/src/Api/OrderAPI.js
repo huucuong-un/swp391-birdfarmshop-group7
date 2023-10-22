@@ -11,9 +11,9 @@ const OrderAPI = {
         return axiosClinet.get(url, { params });
     },
 
-    findAllByUserId(id) {
-        const url = `/order/findAllByUserId/${id}`;
-        return axiosClinet.get(url);
+    findAllByUserIdAndSearchSort(params) {
+        const url = `/order/order-history-search-sort`;
+        return axiosClinet.get(url, { params });
     },
 
     findAllByOrderId(id) {

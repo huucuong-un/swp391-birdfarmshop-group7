@@ -96,7 +96,6 @@ function Feedback({ feedbackType, colorSortList }) {
                 console.error(error);
             }
         };
-
         // Gọi hàm getParrots khi component được mount
         getFeedbackList();
     }, [param]);
@@ -189,18 +188,17 @@ function Feedback({ feedbackType, colorSortList }) {
                     );
                 }
             }
+            setCount(1);
             setColorSort(colorSorts);
             console.log(colorSortSelect);
         };
         createColorSort();
     }, [feedbackList]);
     useEffect(() => {
-        const timer = setTimeout(() => {
+        try {
             sortFeedbackByRating({ raing: null, id: 'rs0', color: colorSortSelect });
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, []);
+        } catch (error) {}
+    }, [count]);
     return (
         <div className={cx('wrapper')}>
             <h1>Feedback</h1>

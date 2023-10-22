@@ -51,5 +51,4 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
             "CASE WHEN :sortDate = 'DASC' THEN u.id END ASC, " +
             "u.id DESC")
     List<FeedbackEntity> searchSortForAdmin(@Param("rating") Integer rating, @Param("speciesId") Long speciesId, @Param("searchDate") Date searchDate, @Param("username") String username, @Param("status") Boolean status, @Param("sortRating") String sortRating, @Param("sortDate") String sortDate, Pageable pageable);
-
 }

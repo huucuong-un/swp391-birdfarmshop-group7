@@ -11,9 +11,17 @@ import {
     TableContainer,
     Switch,
     Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
 } from '@chakra-ui/react';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
@@ -40,6 +48,10 @@ function StaffOrderManagement() {
     const [combineData, setCombineData] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
+    const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [overlay, setOverlay] = React.useState(<OverlayOne />);
 
     function formatDate(date) {
         const day = date.getDate();
@@ -182,7 +194,16 @@ function StaffOrderManagement() {
                                     <Td>{formatDate(new Date(order.orderDTO.createdDate))}</Td>
                                     <Td>{order.orderDTO.totalPrice}</Td>
                                     <Td>
-                                        {order.orderDTO.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />}
+                                        {/* {order.orderDTO.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />} */}
+                                        <Button
+                                            colorScheme="green"
+                                            onClick={() => {
+                                                setOverlay(<OverlayOne />);
+                                                onOpen();
+                                            }}
+                                        >
+                                            Update
+                                        </Button>
                                     </Td>
                                 </Tr>
                             ))}
@@ -202,6 +223,18 @@ function StaffOrderManagement() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </button>
             </div>
+
+            <Modal isCentered isOpen={isOpen} onClose={onClose}>
+                {overlay}
+                <ModalContent>
+                    <ModalHeader>Modal Title</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody></ModalBody>
+                    <ModalFooter>
+                        <Button onClick={onClose}>Close</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </Container>
     );
 }

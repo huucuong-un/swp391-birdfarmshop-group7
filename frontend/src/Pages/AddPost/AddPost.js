@@ -24,7 +24,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import Title from '~/Components/Title/Title';
 import axios from 'axios';
 import PostAPI from '~/Api/PostAPI';
@@ -174,7 +174,6 @@ function AddPost() {
         }
     };
     console.log(postList);
-
     const [openPostID, setOpenPostID] = useState(null);
     const toggleEditForm = (postID) => {
         if (openPostID === postID) {
@@ -185,6 +184,66 @@ function AddPost() {
             setOpenPostID(postID);
         }
     };
+    // Sorting
+    // Sorting
+    // Sorting
+    // Sorting
+    // Sorting
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        searchDate: null,
+        status: null,
+        title: null,
+        content: null,
+        description: null,
+        sortTile: null,
+        sortDate: null,
+    });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const postSortList = await PostAPI.searchSortForPost(sort);
+                setPostList(postSortList.listResult);
+                setTotalPage(postSortList.totalPage);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        sortData();
+    }, [sort]);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 5,
+            email: sort.email,
+            phone: sort.phone,
+            date: sort.date,
+            sortDate: sort.sortDate,
+            sortPrice: sort.sortPrice,
+            sortTitle: sort.sortTile,
+        });
+
+        setPage(newPage);
+    };
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 10,
+            searchDate: null,
+            status: null,
+            title: null,
+            content: null,
+            description: null,
+            sortTile: null,
+            sortDate: null,
+        });
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-wrapper')}>
@@ -334,25 +393,48 @@ function AddPost() {
             ) : (
                 <></>
             )}
-
             <div className={cx('sort-space')}>
-                <select name="species" id="species">
-                    <option value="a">Species</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="inactive">Inactive</option>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="text"
+                    placeholder="Content"
+                    onChange={(e) => setSort({ ...sort, content: e.target.value })}
+                />
+                <input type="text" placeholder="Title" onChange={(e) => setSort({ ...sort, title: e.target.value })} />
+                <input
+                    type="text"
+                    placeholder="Description"
+                    onChange={(e) => setSort({ ...sort, description: e.target.value })}
+                />
+                {/* Sort date */}
+                <input
+                    type="date"
+                    placeholder="Date"
+                    onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}
+                />
+                {/* Sort title */}
+                <select
+                    name="sortTitle"
+                    id="sortTitle"
+                    onChange={(e) => setSort({ ...sort, sortTitle: e.target.value })}
+                >
+                    <option value="b">Title</option>
+                    <option value="TASC">Ascending</option>
+                    <option value="TDESC">Descending</option>
                 </select>
-                <select name="status" id="status">
+                <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="b">Date</option>
+                    <option value="DASC">Ascending</option>
+                    <option value="DDESC">Descending</option>
+                </select>
+                <select
+                    name="sortStatus"
+                    id="sortStatus"
+                    onChange={(e) => setSort({ ...sort, status: e.target.value })}
+                >
                     <option value="b">Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                <input type="date" />
-                <select name="price" id="price">
-                    <option value="c">Price</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                 </select>
             </div>
             <TableContainer className={cx('table-container')}>
@@ -376,7 +458,9 @@ function AddPost() {
                                 <Tr key={index}>
                                     <Td>{post.id}</Td>
                                     <Td>{post.title}</Td>
-                                    <Td>{post.content}</Td>
+                                    <Td>
+                                        <div className={cx('td-content')}>{post.content}</div>
+                                    </Td>
                                     <Td>{post.description}</Td>
                                     <Td>
                                         <img src={post.imageUrl} />
@@ -433,6 +517,19 @@ function AddPost() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }

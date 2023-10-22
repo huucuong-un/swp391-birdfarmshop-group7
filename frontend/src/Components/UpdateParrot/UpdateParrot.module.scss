@@ -29,14 +29,7 @@
         font-size: 1.6rem;
     }
 }
-.sort-space {
-    width: 100%;
-    display: flex;
-    justify-content: end;
-}
-.table-container {
-    width: 50%;
-}
+
 .submit-btn {
     display: flex;
     justify-content: center;
@@ -74,45 +67,4 @@
         margin-left: 10px;
         font-size: 20px;
     }
-}
-.table-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 10px !important;
-}
-.image-container {
-    width: 20%;
-}
-.sort-space {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    margin-right: 20px;
-    padding: 20px 0;
-    gap: 20px;
-
-    input,
-    select {
-        border: 2px solid black;
-        border-radius: 50px;
-        padding: 0 1%;
-    }
-}
-.refresh-icon {
-    font-size: 2.2rem;
-
-    &:hover {
-        cursor: pointer;
-        opacity: 0.9;
-    }
-}
-.button-pagination {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
 }

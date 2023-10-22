@@ -18,26 +18,25 @@ import {
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import Title from '~/Components/Title/Title';
 import Buttons from '~/Components/Button/Button';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
-import Title from '~/Components/Title/Title';
+import UpdateParrot from '~/Components/UpdateParrot/UpdateParrot';
 
 const cx = classNames.bind(styles);
 function AddParrot() {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [shouldFetchData, setShouldFetchData] = useState(true);
-
-    // const [specieColorId, setSpecieColorId] = useState();
-
+    const toast = useToast();
     const [species, setSpecies] = useState([]);
     const [speciesColor, setSpeciesColor] = useState([]);
     const [speciesColorByID, setSpeciesColorById] = useState([]);
-
     const [saleStatus, setSaleStatus] = useState(false);
     const [healthStatus, setHealthStatus] = useState(false);
     const [pregnancyStatus, setPregnancyStatus] = useState(false);
@@ -56,6 +55,10 @@ function AddParrot() {
 
     const handleShow = () => {
         setShow(!show);
+    };
+    const [reloadData, setReloadData] = useState(false);
+    const handleUpdateSuccess = () => {
+        setReloadData(true); // Set reloadData to true when the update is successful
     };
 
     const [parrots, setParrots] = useState({
@@ -115,21 +118,20 @@ function AddParrot() {
         const fetchParrotSpeciesColorbyID = async () => {
             try {
                 if (
-                    // listSpeciesColorById !== null ||
-                    speciesColorByID !== 'Select a color' &&
-                    speciesColorByID !== 'Selected specie' &&
+                    speciesColorByID !== undefined ||
+                    speciesColorByID !== 'Select a color' ||
+                    speciesColorByID !== 'Selected specie' ||
                     speciesColorByID.length !== 0
                 ) {
                     const listSpeciesColorById = await ParrotSpeciesAPI.getListBySpeciesId(speciesColorByID);
                     if (listSpeciesColorById != null) {
                         setSpeciesColor(listSpeciesColorById);
-                    } else {
-                        return;
                     }
                 } else {
                     // // Handle the case where the response is null
                     // console.error('Received a null response from ParrotSpeciesAPI.getListBySpeciesId');
                     // // You can set an empty array or perform other error handling here
+                    setSpeciesColor([]);
                     return;
                 }
             } catch (error) {
@@ -151,12 +153,18 @@ function AddParrot() {
                 console.error(error + ' At Add parrot fetch parrot species color by id');
             }
         };
+
         if (shouldFetchData) {
             fetchParrotList();
             setShouldFetchData(false);
+        } else if (reloadData) {
+            fetchParrotList();
+            setReloadData(false);
+        } else {
+            fetchParrotList();
         }
-        fetchParrotList();
-    }, [shouldFetchData]);
+    }, [shouldFetchData, reloadData]);
+
     useEffect(() => {
         const fetchData = async () => {
             const data = [];
@@ -178,8 +186,9 @@ function AddParrot() {
         };
         if (shouldFetchData) {
             fetchData();
+        } else {
+            fetchData();
         }
-        fetchData();
     }, [shouldFetchData, parrotList]);
     // console.log('- species list - ');
     // console.log(species);
@@ -191,7 +200,37 @@ function AddParrot() {
     // console.log(parrotList);
     // // console.log(parrotList[0].id);
     // console.log(combineData);
+    const handleStatus = async (index) => {
+        const updatedPost = [...parrotList];
+        updatedPost[index].status = !updatedPost[index].status;
 
+        try {
+            // Send a request to update the status on the server
+            await axios.delete(`http://localhost:8086/api/parrot/${updatedPost[index].id}`);
+            // If the request is successful, update the state
+            setParrotList(updatedPost);
+        } catch (error) {
+            toast({
+                title: 'Error occur!',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            console.log(error);
+        }
+    };
+    const [openParrotID, setOpenParrotID] = useState(null);
+    const toggleEditForm = (parrotID) => {
+        if (openParrotID === parrotID) {
+            // If the form is already open for this species, close it
+            setOpenParrotID(null);
+        } else {
+            // Otherwise, open the form for this species
+            setOpenParrotID(parrotID);
+        }
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -247,8 +286,7 @@ function AddParrot() {
                         <Table size="xs ">
                             <Thead>
                                 <Tr>
-                                    <Th>Title</Th>
-                                    <Th>Input</Th>
+                                    <Th colSpan={2}>Add parrot</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -340,10 +378,12 @@ function AddParrot() {
                                             className={cx('select-btn')}
                                             onChange={(e) => setSpeciesColorById(e.target.value)}
                                         >
-                                            <option key={'a'}>Selected specie</option>
+                                            <option key={'a'} value={'a'}>
+                                                Selected specie
+                                            </option>
                                             {species.map((specie, index) => (
                                                 <option key={index} value={specie.id}>
-                                                    {specie.id}
+                                                    {specie.name}
                                                 </option>
                                             ))}
                                         </select>
@@ -363,7 +403,7 @@ function AddParrot() {
                                                 onChange={(e) => {
                                                     const selectedColorId = e.target.value;
                                                     console.log('Selected color ID:', selectedColorId);
-                                                    // setSpecieColorId(selectedColorId); // Update the selected color ID
+
                                                     setParrots({ ...parrots, colorID: selectedColorId });
                                                 }}
                                             >
@@ -375,7 +415,7 @@ function AddParrot() {
                                                             value={item.id}
                                                             style={{ backgroundColor: item.color, padding: '5px' }}
                                                         >
-                                                            {item.id}
+                                                            {item.color}
                                                         </option>
                                                         <p>{item.name}</p>
                                                     </>
@@ -422,22 +462,53 @@ function AddParrot() {
                             <Th>Color</Th>
                             <Th>Specie</Th>
                             <Th>Status</Th>
+                            <Th>Action</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {combineData.map((parrot, index) => (
-                            <Tr>
-                                <Td key={index + 'a'}>{parrot.id}</Td>
-                                <Td key={index + 'b'}>{parrot.age}</Td>
-                                <Td key={index + 'c'}>{parrot.saleStatus.toString()}</Td>
-                                <Td key={index + 'd'}>{parrot.pregnancyStatus.toString()}</Td>
-                                <Td key={index + 'e'}>{parrot.healthStatus.toString()}</Td>
-                                <Td key={index + 'f'}>{parrot.numberOfChildren}</Td>
-                                <Td key={index + 'g'}>{parrot.colorID}</Td>
-                                <Td key={index + 'h'}>{parrot.colorName}</Td>
-                                <Td key={index + 'i'}>{parrot.specieName}</Td>
-                                <Td key={index + 'j'}>{parrot.status.toString()}</Td>
-                            </Tr>
+                            <>
+                                <Tr key={index}>
+                                    <Td key={index + 'a'}>{parrot.id}</Td>
+                                    <Td key={index + 'b'}>{parrot.age}</Td>
+                                    <Td key={index + 'c'}>{parrot.saleStatus.toString()}</Td>
+                                    <Td key={index + 'd'}>{parrot.pregnancyStatus.toString()}</Td>
+                                    <Td key={index + 'e'}>{parrot.healthStatus.toString()}</Td>
+                                    <Td key={index + 'f'}>{parrot.numberOfChildren}</Td>
+                                    <Td key={index + 'g'}>{parrot.colorID}</Td>
+                                    <Td key={index + 'h'}>{parrot.colorName}</Td>
+                                    <Td key={index + 'i'}>{parrot.specieName}</Td>
+                                    <Td key={index + 'j'}>
+                                        <Switch
+                                            onChange={() => handleStatus(index)}
+                                            size="lg"
+                                            isChecked={parrot.status}
+                                            colorScheme="green"
+                                        />
+                                    </Td>
+                                    <Td>
+                                        <Button
+                                            key={parrot.id}
+                                            onClick={() => toggleEditForm(parrot.id)}
+                                            colorScheme={'green'}
+                                            size={'lg'}
+                                        >
+                                            {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
+                                        </Button>
+                                    </Td>
+                                    <Td key={index + 'k'}></Td>
+                                </Tr>
+                                <Tr>
+                                    {openParrotID === parrot.id && (
+                                        <Td colSpan={11}>
+                                            <UpdateParrot
+                                                parrot={parrot}
+                                                reloadData={handleUpdateSuccess}
+                                            ></UpdateParrot>
+                                        </Td>
+                                    )}
+                                </Tr>
+                            </>
                         ))}
                     </Tbody>
                 </Table>

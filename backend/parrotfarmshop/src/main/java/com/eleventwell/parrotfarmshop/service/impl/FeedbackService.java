@@ -153,9 +153,7 @@ feedbackRepository.save(fEntity);
         for (FeedbackEntity item : entities) {
             FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
             results.add(newDTO);
-
         }
-
         return results;
     }
 

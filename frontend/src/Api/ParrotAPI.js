@@ -17,7 +17,7 @@ const ParrotAPI = {
     },
 
     add(data) {
-        const url = `/parrot-species`;
+        const url = `/parrot`;
         return axiosClinet.post(url, data);
     },
 

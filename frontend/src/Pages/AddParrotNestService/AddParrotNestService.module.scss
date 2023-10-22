@@ -8,6 +8,12 @@
 
 .icon {
     font-size: 2rem;
+
+    &:hover {
+        color: palevioletred;
+        cursor: pointer;
+        font-size: 3rem;
+    }
 }
 
 .add-form {
@@ -39,4 +45,11 @@
         max-width: 60px;
         padding: 0 10px;
     }
+}
+
+.breed-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

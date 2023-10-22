@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
@@ -159,6 +159,53 @@ function AddSlider() {
             setOpenSliderID(sliderID);
         }
     };
+
+    // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 10,
+        name: null,
+        status: null,
+        date: null,
+        sortDate: 'DDESC',
+    });
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const sliderSortList = await SliderAPI.searchSortForSlider(sort);
+                setSliderList(sliderSortList.listResult);
+                setTotalPage(sliderSortList.totalPage);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        sortData();
+    }, [sort]);
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: 1,
+            limit: 10,
+            id: null,
+            name: null,
+            status: null,
+            sortDate: null,
+        });
+
+        setPage(newPage);
+    };
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 10,
+            name: null,
+            date: null,
+            status: null,
+            sortDate: null,
+        });
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -267,21 +314,31 @@ function AddSlider() {
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <select name="species" id="species">
-                    <option value="a">Species</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="text"
+                    placeholder="Slider name"
+                    onChange={(e) => setSort({ ...sort, name: e.target.value })}
+                />
+                <input
+                    type="date"
+                    placeholder="Slider name"
+                    onChange={(e) => setSort({ ...sort, date: e.target.value })}
+                />
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
+                    <option value="" disabled selected>
+                        Status
+                    </option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                 </select>
-                <select name="status" id="status">
-                    <option value="b">Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                <input type="date" />
-                <select name="price" id="price">
-                    <option value="c">Price</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+
+                <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="" disabled selected>
+                        Sort Date
+                    </option>
+                    <option value="DDESC">Newest</option>
+                    <option value="DASC">Oldest</option>
                 </select>
             </div>
             <TableContainer className={cx('table-container')}>
@@ -313,7 +370,6 @@ function AddSlider() {
                                             isChecked={slider.status}
                                             colorScheme="green"
                                         />
-                                        {slider.status.toString()}
                                     </Td>
                                     <Td>
                                         <Button
@@ -338,6 +394,19 @@ function AddSlider() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }

@@ -8,5 +8,9 @@ const SliderAPI = {
         const url = `/slider/${data.id}`;
         return axiosClinet.put(url, data);
     },
+    searchSortForSlider(params) {
+        const url = '/slider/admin/search_sort';
+        return axiosClinet.get(url, { params });
+    },
 };
 export default SliderAPI;

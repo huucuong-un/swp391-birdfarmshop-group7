@@ -40,4 +40,6 @@ public class ParrotDTO extends BaseDTO {
 
     private Long nestID;
 
+    private  Boolean gender;
+
 }

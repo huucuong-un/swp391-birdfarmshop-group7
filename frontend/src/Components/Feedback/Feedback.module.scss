@@ -82,6 +82,17 @@
     width: 100%;
 }
 
+.admin-avatar {
+    overflow: hidden;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.admin-avatar img {
+    width: 100%;
+}
+
 .feadback-date-and-type-container {
     display: flex;
     align-items: center;
@@ -102,4 +113,10 @@
     color: var(--black-old);
     opacity: 0.4;
     font-weight: 600;
+}
+.feadback-reply {
+    margin-left: 5%;
+}
+.reply-font {
+    font-size: 15px;
 }

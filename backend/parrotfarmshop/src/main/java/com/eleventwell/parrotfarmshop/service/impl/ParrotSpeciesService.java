@@ -165,6 +165,6 @@ public ParrotSpeciesDTO findOneSpeciesParrotById(Long id){
 
     @Override
     public int totalItem() {
-      	return (int)parrotSpeciesRepository.count();
+      	return (int)parrotSpeciesRepository.countAllByStatusIsTrue();
     }
 }

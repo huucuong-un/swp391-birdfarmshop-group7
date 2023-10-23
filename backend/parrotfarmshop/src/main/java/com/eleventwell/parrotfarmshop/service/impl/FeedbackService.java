@@ -125,8 +125,10 @@ feedbackRepository.save(fEntity);
         return feedbackRepository.countAllByRating(rating);
     }
 
+
+  //ADD STATUS ==TRUE
     public Integer countBySpeciesId(Long id) {
-        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
+        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesIdAndStatusIsTrue(id);
     }
 
     public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId, Long colorId, Integer rating) {

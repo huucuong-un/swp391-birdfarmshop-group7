@@ -160,7 +160,7 @@ function OrderHistoryNew() {
             try {
                 const param = {
                     page: 1,
-                    limit: 1,
+                    limit: 12,
                     userId: user.userId,
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);

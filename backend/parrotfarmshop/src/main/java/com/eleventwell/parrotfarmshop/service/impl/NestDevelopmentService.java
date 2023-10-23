@@ -50,6 +50,7 @@ public class NestDevelopmentService implements IGenericService<NestDevelopmentDT
         } else {
             nestDevelopmentEntity = (NestDevelopmentEntity) genericConverter.toEntity(DTO, NestDevelopmentEntity.class);
         }
+        nestDevelopmentEntity.setNestDevelopmentStatus(nestDevelopmentStatusRepository.findOneById(DTO.getStatusId()));
         nestDevelopmentRepository.save(nestDevelopmentEntity);
         return (NestDevelopmentDTO) genericConverter.toDTO(nestDevelopmentEntity, NestDevelopmentDTO.class);
     }

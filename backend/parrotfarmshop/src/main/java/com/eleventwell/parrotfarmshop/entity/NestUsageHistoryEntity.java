@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Builder
@@ -17,7 +18,6 @@ import java.util.Date;
 @Table(name = "nest_usage_history")
 public class NestUsageHistoryEntity extends BaseEntity {
 
-
     @ManyToOne
     @JoinColumn(name = "parrot_couple_id")
     private ParrotCoupleEntity parrotCouple;
@@ -26,10 +26,13 @@ public class NestUsageHistoryEntity extends BaseEntity {
     @JoinColumn(name = "nest_id")
     private NestEntity nest;
 
-    @Column(name="start_date")
+    @OneToMany(mappedBy = "nestUsageHistory")
+    private List<NestDevelopmentEntity> nestDevelopmentEntity;
+
+    @Column(name = "start_date")
     private Date startDate;
 
-    @Column(name="end_date")
+    @Column(name = "end_date")
     private Date endDate;
 
 }

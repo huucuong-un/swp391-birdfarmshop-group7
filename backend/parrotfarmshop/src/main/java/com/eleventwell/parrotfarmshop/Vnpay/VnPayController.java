@@ -40,15 +40,17 @@ public class VnPayController {
             @RequestParam(value = "vnp_ResponseCode") String responseCode,
             @RequestParam(value = "vnp_TxnRef") String txnRef
     ) {
+        String orderIdByUsingLongDataType = txnRef.substring(0, txnRef.length() - 8);
+        long result = Long.parseLong(orderIdByUsingLongDataType);
         if ("00".equals(responseCode)) {
             // Trạng thái thành công
-            String orderIdByUsingLongDataType = txnRef.substring(0, txnRef.length() - 8);
-            long result = Long.parseLong(orderIdByUsingLongDataType);
+
             orderService.changeStatus(result);
             return new RedirectView("http://localhost:3000/paid-success");
 
             // Redirect to the specified URL when the condition is met
         } else {
+            orderService.removeOrder(result);
             // Trạng thái thất bại
             return new RedirectView("http://localhost:3000/error");
         }

@@ -28,7 +28,7 @@ public class PayService {
         }
         orderDTO.vnp_TxnRef = Config.getRandomNumber(8);
 
-        cld.add(Calendar.MINUTE,15);
+        cld.add(Calendar.MINUTE,2);
         String vnp_ExpireDate = formatter.format(cld.getTime());
 
         Map<String,String> vnp_Params = new HashMap<>();

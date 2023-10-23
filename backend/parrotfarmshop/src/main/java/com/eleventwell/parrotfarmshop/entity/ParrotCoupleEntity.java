@@ -19,9 +19,6 @@ import java.util.List;
 @Table(name = "parrot_couple")
 public class ParrotCoupleEntity extends BaseEntity {
 
-
-
-
 	@ManyToOne
 	@JoinColumn(name = "parrot_male")
 	private ParrotEntity parrotMale;
@@ -35,8 +32,5 @@ public class ParrotCoupleEntity extends BaseEntity {
 
 	@Column(name="status")
 	private Boolean status;
-
-
-
 
 }

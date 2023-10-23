@@ -173,19 +173,6 @@ function Payment() {
 
     const handlePayment = async () => {
         try {
-            // Make a POST request to the first API endpoint
-            // const response = await axios.post('http://localhost:8086/api/vnpay/payment', {
-            //     // Add other fields you want to send to the first API
-            //     userID: orderInfo.userID,
-            //     deliveryInformationId: orderInfo.deliveryInformationId,
-            //     promotionID: orderInfo.promotionID,
-            //     status: orderInfo.status,
-            //     totalPrice: orderInfo.totalPrice,
-            //     quantity: orderInfo.quantity,
-            //     vnp_OrderInfo: orderInfo.vnp_OrderInfo,
-            //     vnp_OrderType: orderInfo.vnp_OrderType,
-            //     vnp_TxnRef: orderInfo.vnp_TxnRef,
-            // });
             const data = {
                 id: orderInfo.id,
                 createdDate: orderInfo.createdDate,

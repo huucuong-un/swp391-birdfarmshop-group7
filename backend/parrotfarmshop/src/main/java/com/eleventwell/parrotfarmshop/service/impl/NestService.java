@@ -8,6 +8,7 @@ import com.eleventwell.parrotfarmshop.dto.NestDTO;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
+import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,17 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class  NestService implements IGenericService<NestDTO> {
+public class NestService implements IGenericService<NestDTO> {
 
     @Autowired
     private ParrotRepository parrotRepository;
 
     @Autowired
+    private ParrotSpeciesRepository parrotSpeciesRepository;
+
+    @Autowired
     private NestRepository parrotEggNestRepository;
 
-   @Autowired
+    @Autowired
     GenericConverter genericConverter;
-
 
 
     @Override
@@ -54,7 +57,7 @@ public class  NestService implements IGenericService<NestDTO> {
         } else {
             parrotEggNestEntity = (NestEntity) genericConverter.toEntity(nestDTO, NestEntity.class);
         }
-
+        parrotEggNestEntity.setParrotSpecies(parrotSpeciesRepository.findOneById(nestDTO.getSpeciesId()));
         parrotEggNestRepository.save(parrotEggNestEntity);
         return (NestDTO) genericConverter.toDTO(parrotEggNestEntity, NestDTO.class);
     }
@@ -75,13 +78,13 @@ public class  NestService implements IGenericService<NestDTO> {
 
     @Override
     public void changeStatus(Long ids) {
-       NestEntity parrotEggNestEntity = parrotEggNestRepository.findOneById(ids);
-       if(parrotEggNestEntity.getStatus() == true){
-           parrotEggNestEntity.setStatus(false);
-       }else{
+        NestEntity parrotEggNestEntity = parrotEggNestRepository.findOneById(ids);
+        if (parrotEggNestEntity.getStatus() == true) {
+            parrotEggNestEntity.setStatus(false);
+        } else {
             parrotEggNestEntity.setStatus(true);
-       }
-       parrotEggNestRepository.save(parrotEggNestEntity);
+        }
+        parrotEggNestRepository.save(parrotEggNestEntity);
     }
 
 //    public void changeBreedStatus(Long id){
@@ -99,12 +102,12 @@ public class  NestService implements IGenericService<NestDTO> {
 //    }
 
     @Override
-    public List<NestDTO> findAll(Pageable pageable){
+    public List<NestDTO> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         List<NestDTO> results = new ArrayList();
         List<NestEntity> entities = parrotEggNestRepository.findAll(pageable).getContent();
 
-        for(NestEntity item : entities) {
+        for (NestEntity item : entities) {
             NestDTO newDTO = (NestDTO) genericConverter.toDTO(item, NestDTO.class);
             results.add(newDTO);
 
@@ -115,6 +118,6 @@ public class  NestService implements IGenericService<NestDTO> {
 
     @Override
     public int totalItem() {
-        return (int)parrotEggNestRepository.count();
+        return (int) parrotEggNestRepository.count();
     }
 }

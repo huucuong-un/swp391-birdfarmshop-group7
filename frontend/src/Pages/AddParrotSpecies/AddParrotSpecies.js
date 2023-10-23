@@ -17,13 +17,33 @@ import {
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 
 const cx = classNames.bind(styles);
 
 function AddParrotSpecies() {
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 12,
+        email: null,
+        phone: null,
+        date: null,
+        sortDate: null,
+        sortPrice: null,
+    });
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            email: null,
+            phone: null,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
     // useState for alert status
     const [submissionStatus, setSubmissionStatus] = useState();
     const [species, setSpecies] = useState([]);
@@ -392,6 +412,7 @@ function AddParrotSpecies() {
             </form>
             {/* CRUD SPECIES LIST */}
             <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <select name="species" id="species">
                     <option value="a">Species</option>
                     <option value="active">Active</option>
@@ -399,12 +420,6 @@ function AddParrotSpecies() {
                 </select>
                 <select name="status" id="status">
                     <option value="b">Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                <input type="date" />
-                <select name="price" id="price">
-                    <option value="c">Price</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                 </select>

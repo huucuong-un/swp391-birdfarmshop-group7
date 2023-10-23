@@ -37,5 +37,7 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
     List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
 
+    Integer countAllByStatusIsTrue();
+
 
 }

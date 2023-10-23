@@ -125,8 +125,10 @@ feedbackRepository.save(fEntity);
         return feedbackRepository.countAllByRating(rating);
     }
 
+
+  //ADD STATUS ==TRUE
     public Integer countBySpeciesId(Long id) {
-        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
+        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesIdAndStatusIsTrue(id);
     }
 
     public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId, Long colorId, Integer rating) {
@@ -153,9 +155,7 @@ feedbackRepository.save(fEntity);
         for (FeedbackEntity item : entities) {
             FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
             results.add(newDTO);
-
         }
-
         return results;
     }
 

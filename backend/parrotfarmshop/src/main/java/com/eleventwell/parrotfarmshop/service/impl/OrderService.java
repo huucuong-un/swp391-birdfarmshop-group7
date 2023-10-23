@@ -4,9 +4,11 @@ import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
+import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
+import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
 import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
@@ -25,6 +27,9 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
 
     @Autowired
     ParrotRepository parrotRepository;
@@ -200,6 +205,7 @@ return orderDTO;
 
         return results;
     }
+
     public List<OrderDTO> searchByEmailOrPhone(String email, String phone, Date dateSearch,String status,String sortPrice,String sortDate, Pageable pageable){
 
 
@@ -215,6 +221,14 @@ return orderDTO;
         return results;
     }
 
+    public void removeOrder(Long id){
+List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
+        for (OrderDetailEntity orderDetail: orderDetails ) {
+         parrotService.changeSaleStatus(orderDetail.getParrot().getId());
+         orderDetailRepository.deleteById(orderDetail.getId());
+        }
+        orderRepository.deleteById(id);
+    }
     @Override
     public int totalItem() {
         return (int)orderRepository.count();

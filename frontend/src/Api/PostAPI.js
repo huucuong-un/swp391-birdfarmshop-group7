@@ -5,6 +5,10 @@ const PostAPI = {
         const url = '/post';
         return axiosClinet.get(url, { params });
     },
+    searchSortForPost(params) {
+        const url = '/post/admin/search_sort';
+        return axiosClinet.get(url, { params });
+    },
 
     get(params) {
         const url = `/post/find-one-by-id`;

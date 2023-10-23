@@ -33,9 +33,6 @@ import java.util.List;
 public class NestEntity extends BaseEntity {
 
 
-
-
-
     @Column(name = "status")
     private Boolean status;
 

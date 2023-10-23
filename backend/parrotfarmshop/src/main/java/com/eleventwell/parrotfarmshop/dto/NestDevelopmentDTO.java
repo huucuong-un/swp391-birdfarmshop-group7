@@ -18,7 +18,7 @@ public class NestDevelopmentDTO extends BaseDTO {
 
     private Long nestUsageHistoryId;
 
-    private String status;
+    private Long statusId;
 
     private Date eventDate;
 

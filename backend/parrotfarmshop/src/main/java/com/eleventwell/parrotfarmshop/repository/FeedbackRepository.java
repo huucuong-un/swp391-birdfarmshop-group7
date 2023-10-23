@@ -32,15 +32,15 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
 
     Integer countAllByRating(Integer id);
 
-    @Query("SELECT COUNT(u) FROM FeedbackEntity u   WHERE (:speciesId IS NULL OR u.rating = :speciesId) AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
+    @Query("SELECT COUNT(u) FROM FeedbackEntity u   WHERE u.status =true AND (:speciesId IS NULL OR u.rating = :speciesId) AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
 
     Integer countAllByParrotSpeciesColorIdAndRating(@Param("speciesId") Long speciesId,@Param("colorId") Long colorId,@Param("rating") Integer rating);
-    Integer countAllByParrotSpeciesColorParrotSpeciesId(Long colorId);
+    Integer countAllByParrotSpeciesColorParrotSpeciesIdAndStatusIsTrue(Long colorId);
 
     List<FeedbackEntity> findAllByRatingOrderByIdDesc(Integer rating);
 
 
-    @Query("SELECT u FROM FeedbackEntity u  WHERE (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
+    @Query("SELECT u FROM FeedbackEntity u  WHERE u.status=true AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
     List<FeedbackEntity> findAllByRatingAndSpeciesColorId(@Param("rating") Integer rating,@Param("colorId") Long colorId,Pageable pageable);
 
     @Query("SELECT u FROM FeedbackEntity u WHERE (:rating IS NULL OR u.rating = :rating) AND (:speciesId IS NULL OR u.parrotSpeciesColor.parrotSpecies.id = :speciesId) AND (:searchDate IS NULL OR DATE(u.createdDate) = :searchDate) AND (:username IS NULL OR u.user.userName LIKE CONCAT('%', :username, '%')) AND (:status IS NULL OR u.status = :status) " +
@@ -51,4 +51,6 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
             "CASE WHEN :sortDate = 'DASC' THEN u.id END ASC, " +
             "u.id DESC")
     List<FeedbackEntity> searchSortForAdmin(@Param("rating") Integer rating, @Param("speciesId") Long speciesId, @Param("searchDate") Date searchDate, @Param("username") String username, @Param("status") Boolean status, @Param("sortRating") String sortRating, @Param("sortDate") String sortDate, Pageable pageable);
+
+
 }

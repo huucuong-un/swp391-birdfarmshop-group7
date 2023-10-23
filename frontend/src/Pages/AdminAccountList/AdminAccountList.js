@@ -78,23 +78,29 @@ const AdminAccountList = () => {
         setAccounts(updatedAccount);
     };
     const handleStatus = async (id) => {
-        try {
-            // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/user/${id}`);
+        var userResponse = window.confirm('Are you sure to change status ?');
 
-            // If the request is successful, update the state
+        if (userResponse) {
+            try {
+                // Send a request to update the status on the server
+                await axios.delete(`http://localhost:8086/api/user/${id}`);
 
-            setReloadStatus(true);
-        } catch (error) {
-            toast({
-                title: 'Error occur!',
-                description: error.response.data.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            console.log(error);
+                // If the request is successful, update the state
+
+                setReloadStatus(true);
+            } catch (error) {
+                toast({
+                    title: 'Error occur!',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                console.log(error);
+            }
+        } else {
+            // Hành động nếu người dùng chọn "Không"
         }
     };
     const handleShow = () => {

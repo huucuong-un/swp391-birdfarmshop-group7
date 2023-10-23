@@ -130,6 +130,7 @@ function AddParrot() {
                     // // Handle the case where the response is null
                     // console.error('Received a null response from ParrotSpeciesAPI.getListBySpeciesId');
                     // // You can set an empty array or perform other error handling here
+                    setSpeciesColor([]);
                     return;
                 }
             } catch (error) {
@@ -275,7 +276,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
-                                        {saleStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {saleStatus ? <p>Sold</p> : <p> Not sold yet</p>}
                                         <Input
                                             type="hidden"
                                             id="sale"
@@ -299,7 +300,7 @@ function AddParrot() {
                                             size="lg"
                                             isChecked={pregnancyStatus}
                                         />
-                                        {pregnancyStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {pregnancyStatus ? <p>In progress</p> : <p> No</p>}
                                         <Input
                                             type="hidden"
                                             id="pregnancy"
@@ -319,7 +320,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleHealthStatus} size="lg" isChecked={healthStatus} />
-                                        {healthStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {healthStatus ? <p>Good</p> : <p>Not good</p>}
                                         <Input
                                             type="hidden"
                                             id="health"
@@ -340,10 +341,10 @@ function AddParrot() {
                                             className={cx('select-btn')}
                                             onChange={(e) => setSpeciesColorById(e.target.value)}
                                         >
-                                            <option key={'a'}>Selected specie</option>
+                                            <option key={'a'}>Select species</option>
                                             {species.map((specie, index) => (
                                                 <option key={index} value={specie.id}>
-                                                    {specie.id}
+                                                    {specie.name}
                                                 </option>
                                             ))}
                                         </select>
@@ -375,7 +376,7 @@ function AddParrot() {
                                                             value={item.id}
                                                             style={{ backgroundColor: item.color, padding: '5px' }}
                                                         >
-                                                            {item.id}
+                                                            {item.color}
                                                         </option>
                                                         <p>{item.name}</p>
                                                     </>

@@ -51,7 +51,7 @@ function SystemNavbar({ staff, manager }) {
                     <img className={cx('logo')} src={logo} alt="logo" />
                 </Link>
                 <div className={cx('nav-items')}>
-                    <Link>
+                    <Link to="/admin/account">
                         <p>ACCOUNTS</p>
                     </Link>
                     <Link to="/admin/role">
@@ -60,11 +60,11 @@ function SystemNavbar({ staff, manager }) {
                     <Link>
                         <p>SERVICE</p>
                     </Link>
-                    <Link>
+                    <Link to="/add-parrot-species">
                         <p>SPECIES</p>
                     </Link>
-                    <Link>
-                        <p>COLORS</p>
+                    <Link to="/add-parrot">
+                        <p>PARROTS</p>
                     </Link>
                 </div>
 

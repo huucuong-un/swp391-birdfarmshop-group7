@@ -313,7 +313,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
-                                        {saleStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {saleStatus ? <p>Sold</p> : <p> Not sold yet</p>}
                                         <Input
                                             type="hidden"
                                             id="sale"
@@ -337,7 +337,7 @@ function AddParrot() {
                                             size="lg"
                                             isChecked={pregnancyStatus}
                                         />
-                                        {pregnancyStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {pregnancyStatus ? <p>In progress</p> : <p> No</p>}
                                         <Input
                                             type="hidden"
                                             id="pregnancy"
@@ -357,7 +357,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleHealthStatus} size="lg" isChecked={healthStatus} />
-                                        {healthStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {healthStatus ? <p>Good</p> : <p>Not good</p>}
                                         <Input
                                             type="hidden"
                                             id="health"
@@ -381,6 +381,7 @@ function AddParrot() {
                                             <option key={'a'} value={'a'}>
                                                 Selected specie
                                             </option>
+
                                             {species.map((specie, index) => (
                                                 <option key={index} value={specie.id}>
                                                     {specie.name}

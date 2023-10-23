@@ -16,6 +16,7 @@ import {
     AlertTitle,
     AlertDescription,
     Switch,
+    Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
@@ -71,16 +72,11 @@ function AddSlider() {
                 sliderImageURL: img,
                 status: slider.status,
             });
-            if (responsePost.status === 200) {
-                console.log('POST request was successful at species!!');
-                // Assuming the response contains the newly created post data
 
-                setSubmissionStatus(true);
-            } else {
-                console.error('POST request failed with status code - species: ', responsePost.status);
-                setSubmissionStatus(false);
-            }
-            setSlider({});
+            console.log('POST request was successful at species!!');
+            // Assuming the response contains the newly created post data
+            setSlider({ ...slider, ...responsePost.data });
+            setSubmissionStatus(true);
         } catch (error) {
             console.error('Error while making POST request:', error);
             setSubmissionStatus(false);
@@ -131,11 +127,12 @@ function AddSlider() {
         }
     };
     const handleStatus = async (index) => {
-        const updatedSlider = [...sliderList];
-        updatedSlider[index].status = !updatedSlider[index].status;
         try {
+            const updatedSlider = [...sliderList];
+            updatedSlider[index].status = !updatedSlider[index].status;
             await axios.delete(`http://localhost:8086/api/slider/${updatedSlider[index].id}`);
-
+            console.log('slider list in change status');
+            console.log(updatedSlider);
             setSliderList(updatedSlider);
         } catch (error) {
             toast({
@@ -168,8 +165,10 @@ function AddSlider() {
         name: null,
         status: null,
         date: null,
-        sortDate: 'DDESC',
+        sortDate: null,
     });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
     useEffect(() => {
         const sortData = async () => {
             try {
@@ -182,16 +181,15 @@ function AddSlider() {
         };
         sortData();
     }, [sort]);
-    const [totalPage, setTotalPage] = useState(1);
-    const [page, setPage] = useState(1);
+
     const handlePageChange = (newPage) => {
         setSort({
-            page: 1,
+            page: newPage,
             limit: 10,
-            id: null,
-            name: null,
-            status: null,
-            sortDate: null,
+            name: sort.name,
+            status: sort.status,
+            date: sort.date,
+            sortDate: sort.sortDate,
         });
 
         setPage(newPage);
@@ -201,11 +199,13 @@ function AddSlider() {
             page: 1,
             limit: 10,
             name: null,
-            date: null,
             status: null,
+            date: null,
             sortDate: null,
         });
     };
+
+    console.log(sliderList);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -248,8 +248,8 @@ function AddSlider() {
                                     <Td>
                                         <Input
                                             type="text"
-                                            id="title"
-                                            name="title"
+                                            id="sliderName"
+                                            name="sliderName"
                                             value={slider.sliderName}
                                             onChange={(e) => setSlider({ ...slider, sliderName: e.target.value })}
                                             variant="filled"
@@ -263,9 +263,9 @@ function AddSlider() {
                                     <Td>
                                         <Input
                                             type="text"
-                                            id="title"
-                                            name="title"
-                                            value={slider.description}
+                                            id="sliderDescription"
+                                            name="sliderDescription"
+                                            value={slider.sliderDescription}
                                             onChange={(e) =>
                                                 setSlider({ ...slider, sliderDescription: e.target.value })
                                             }
@@ -369,6 +369,24 @@ function AddSlider() {
                                             size="lg"
                                             isChecked={slider.status}
                                             colorScheme="green"
+                                        />
+                                        {slider.status ? (
+                                            <Text color="green" fontSize={12} overflow="hidden">
+                                                On Processing
+                                            </Text>
+                                        ) : (
+                                            <Text color="red" fontSize={12} overflow="hidden">
+                                                Disabled
+                                            </Text>
+                                        )}
+
+                                        <Input
+                                            type="hidden"
+                                            id="status"
+                                            name="status"
+                                            variant="filled"
+                                            value={slider.status}
+                                            onChange={(e) => setSlider({ ...slider, status: e.target.value })}
                                         />
                                     </Td>
                                     <Td>

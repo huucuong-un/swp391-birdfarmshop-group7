@@ -46,6 +46,8 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
     List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
 
+    Integer countAllByStatusIsTrue();
+
 
     @Query("select u from ParrotSpeciesEntity u where (:name is null or u.name like concat('%', :name, '%')) " +
             "and (:quantity is null or u.quantity = :quantity) " +

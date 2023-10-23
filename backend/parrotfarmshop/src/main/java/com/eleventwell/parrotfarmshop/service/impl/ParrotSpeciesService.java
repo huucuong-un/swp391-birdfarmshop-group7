@@ -174,7 +174,8 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     @Override
     public int totalItem() {
-        return (int) parrotSpeciesRepository.count();
+      	return (int)parrotSpeciesRepository.countAllByStatusIsTrue();
+
     }
 
     public List<ParrotSpeciesDTO> searchSortForAdmin(String name,

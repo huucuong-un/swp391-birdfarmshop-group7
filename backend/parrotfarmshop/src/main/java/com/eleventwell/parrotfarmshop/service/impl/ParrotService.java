@@ -7,14 +7,11 @@ package com.eleventwell.parrotfarmshop.service.impl;
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
-import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
-import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -84,12 +81,17 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         parrotRepository.save(parrotEntity);
     }
     public Long countAvaiableParrotById(Long id){
-        return parrotRepository.countAllBySaleStatusAndStatusAndParrotSpeciesColorId(false,true,id);
+        return parrotRepository.countAllBySaleStatusAndStatusAndParrotSpeciesColorId(true,true,id);
     }
 
     public void changeSaleStatus(Long id){
         ParrotEntity entity = parrotRepository.findOneById(id);
-        entity.setSaleStatus(true);
+        if(entity.getSaleStatus()==true){
+            entity.setSaleStatus(false);
+
+        }else{
+            entity.setSaleStatus(true);
+        }
         parrotRepository.save(entity);
     }
 

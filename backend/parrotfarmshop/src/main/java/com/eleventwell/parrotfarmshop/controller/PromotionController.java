@@ -1,7 +1,6 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
-import com.eleventwell.parrotfarmshop.service.IGenericService;
 import com.eleventwell.parrotfarmshop.service.impl.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/promotion")
-public class PromotionAPI {
+public class PromotionController {
 
     @Autowired
     PromotionService promotionService;
@@ -24,8 +23,8 @@ public class PromotionAPI {
 
     }
 
-    @GetMapping(value= "find-one-by-code/{code}")
-    public PromotionDTO findOneByCode(@RequestBody @PathVariable("code") String code){
+    @GetMapping(value= "find-one-by-code")
+    public PromotionDTO findOneByCode(@RequestBody @RequestParam("code") String code){
 
       return promotionService.findOneByCode(code);
 
@@ -47,7 +46,7 @@ public class PromotionAPI {
 //    public void delete(@RequestBody long[] ids){
 //        promotionService.delete(ids);
 //    }
-    @DeleteMapping(value = "{id}")
+    @PutMapping(value = "change-status/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
         promotionService.changeStatus(id);
     }

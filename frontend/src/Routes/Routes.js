@@ -30,12 +30,17 @@ import UserProfile from '~/Pages/UserProfile/UserProfile';
 import SpeciesSelection from '~/Pages/SpeciesSelection/SpeciesSelection';
 import AddRole from '~/Pages/AddRole/AddRole';
 import CompareParrot from '~/Pages/CompareParrot/CompareParrot';
-
 import MyAccount from '~/Pages/MyAccount/MyAccount';
 import UserProfileNew from '~/Pages/UserProfileNew/UserProfileNew';
 import Contact from '~/Components/Contact/Contact';
 import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestService';
-
+import OrderHistoryNew from '~/Pages/OrderHistoryNew/OrderHistoryNew';
+import AdminDashboard from '~/Pages/AdminDashboard/AdminDashboard';
+import AdminRoleList from '~/Pages/AdminRoleList/AdminRoleList';
+import AdminPromotion from '~/Pages/AdminPromotion/AdminPromotion';
+import StaffOrderManagement from '~/Pages/StaffOrderManagement/StaffOrderManagement';
+import AdFAQSManagement from '~/Pages/AdFAQSManagement/AdFAQSManagement';
+import AdminAccountList from '~/Pages/AdminAccountList/AdminAccountList';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -44,17 +49,20 @@ const publicRoutes = [
     { path: '/payment', component: Payment },
     { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
     { path: '/order-history', component: OrderHistory },
+    { path: '/order-history-new', component: OrderHistoryNew },
     { path: '/paid-success', component: PaidSuccess },
     { path: '/shopping-cart', component: ShoppingCart },
     { path: '/post-detail', component: PostDetail },
     { path: '/about-us', component: AboutUs },
     { path: '/userprofile', component: UserProfile },
     { path: '/species-selection', component: SpeciesSelection },
+    { path: '/ad-faqs-management', component: AdFAQSManagement, layout: SystemLayout },
     { path: '/add-parrot-nest-service', component: AddParrotNestService },
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
     { path: '/addpost', component: AddPost, layout: SystemLayout },
-    { path: '/stafffeedback', component: StaffFeedback, layout: SystemLayout },
+    { path: '/staff-feedback', component: StaffFeedback, layout: SystemLayout, role: 'staff' },
+    { path: '/staff-order-management', component: StaffOrderManagement, layout: SystemLayout, role: 'staff' },
     { path: '/mngvoucherpromotion', component: MngVoucherPromotion, layout: SystemLayout },
     { path: '/mngorder', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
@@ -62,15 +70,19 @@ const publicRoutes = [
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
-    { path: '/loginSystem', component: SystemLogin, layout: LoginSystemLayout },
+    { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faqs', component: FAQs },
-    { path: '/add-parrot-species', component: AddParotSpecies, layout: LoginSystemLayout },
+    { path: '/add-parrot-species', component: AddParotSpecies, layout: SystemLayout },
     { path: '/add-parrot', component: AddParrot, layout: SystemLayout },
     { path: '/compare-products', component: CompareParrot },
     { path: '/profile', component: MyAccount },
     { path: '/user-profile', component: UserProfileNew },
     { path: '/contact', component: Contact },
     { path: '/add-role', component: AddRole },
+    { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
+    { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
+    { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },
+    { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },
 ];
 
 //Dành cho những người đăng nhập mới coi được

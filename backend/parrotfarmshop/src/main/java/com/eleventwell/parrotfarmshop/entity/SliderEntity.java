@@ -36,7 +36,12 @@ public class SliderEntity extends BaseEntity {
 	@Size(max=100)
 	@Column(name = "slider_name")
 	private String sliderName;
-
+        
+        @NotBlank
+        @Size(max=500)
+        @Column(name = "slider_description")
+	private String sliderDescription;
+        
 	@NotBlank
 	@Lob
 	@Column(name = "slider_imageURL")

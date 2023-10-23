@@ -2,6 +2,7 @@ package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
+import com.eleventwell.parrotfarmshop.service.impl.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,9 @@ import java.util.List;
 public class RoleController {
     @Autowired
     private IGenericService roleService;
+
+    @Autowired
+    RoleService roleServiceConcrete;
 
     @GetMapping
     public List<RoleDTO> showRoles() {
@@ -37,5 +41,6 @@ public class RoleController {
         roleService.changeStatus(id);
     }
 
-
+    @PostMapping(value = "{id}")
+    public void findRoleById(@PathVariable("id") Long id) { roleServiceConcrete.findOneById(id);}
 }

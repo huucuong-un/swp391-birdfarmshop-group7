@@ -5,10 +5,12 @@ import styles from '~/Components/Post/Post.module.scss';
 import Title from '~/Components/Title/Title';
 import { useEffect, useState } from 'react';
 import PostAPI from '~/Api/PostAPI';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 function Post() {
+    const { t } = useTranslation();
     const [postList, setPostList] = useState([]);
 
     useEffect(() => {
@@ -31,10 +33,10 @@ function Post() {
 
     return (
         <div className={cx('wrapper')}>
-            <Title className={cx('title-post')}>Shopping With Fun</Title>
+            <Title className={cx('title-post')}>{t('Shopping With Fun')}</Title>
             <div className={cx('post-container', 'row')}>
                 {postList.map((post, index) => (
-                    <div key={index} className={cx('post-item', 'col-4')}>
+                    <div key={index} className={cx('post-item', 'col-lg-4', 'col-md-6')}>
                         <div className={cx('post-inner')}>
                             <div className={cx('scheme-swirl')}></div>
                             <div className={cx('post-img')}>

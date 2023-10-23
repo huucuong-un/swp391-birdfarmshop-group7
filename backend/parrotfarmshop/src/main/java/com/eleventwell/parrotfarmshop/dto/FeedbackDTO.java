@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 import jdk.jfr.Unsigned;
 import lombok.*;
 
+import java.util.Date;
+
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,11 +23,18 @@ public class FeedbackDTO extends BaseDTO {
 
     private Integer rating;
 
+private  Boolean status;
 
     private String belongTo;
 
 
-    private Integer userId;
+    private Long userId;
+
+    private Long replyerId;
+
+    private String replyContent;
+
+    private Date replyDate;
 
     private Integer colorId;
 

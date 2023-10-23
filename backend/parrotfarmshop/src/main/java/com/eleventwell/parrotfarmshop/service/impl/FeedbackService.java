@@ -7,16 +7,14 @@ import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
-import com.eleventwell.parrotfarmshop.repository.FeedbackRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
+import com.eleventwell.parrotfarmshop.repository.*;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +28,9 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
     @Autowired
     ParrotSpeciesColorRepository parrotSpeciesColorRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     GenericConverter genericConverter;
@@ -59,7 +60,7 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
             newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
         }
-
+        newEntity.setUser(userRepository.findOneById(DTO.getUserId()));
         newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
         feedbackRepository.save(newEntity);
         pEntity.setParrotAverageRating(calculateAverageFeedbackRatingBySpeciesId(pEntity.getId()));
@@ -87,7 +88,14 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
     @Override
     public void changeStatus(Long ids) {
+FeedbackEntity fEntity  = feedbackRepository.findOneById(ids);
+if(fEntity.getStatus() == true){
+    fEntity.setStatus(Boolean.FALSE);
 
+}else{
+      fEntity.setStatus(Boolean.TRUE);
+}
+feedbackRepository.save(fEntity);
     }
 
     @Override
@@ -116,12 +124,15 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
     public Integer countByRating(Integer rating) {
         return feedbackRepository.countAllByRating(rating);
     }
+
+
+  //ADD STATUS ==TRUE
     public Integer countBySpeciesId(Long id) {
-        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesId(id);
+        return feedbackRepository.countAllByParrotSpeciesColorParrotSpeciesIdAndStatusIsTrue(id);
     }
 
-    public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId,Long colorId, Integer rating) {
-        return feedbackRepository.countAllByParrotSpeciesColorIdAndRating(speciesId,colorId,rating);
+    public Integer countBySpeciesIdOrSpeciesColorIdAndRating(Long speciesId, Long colorId, Integer rating) {
+        return feedbackRepository.countAllByParrotSpeciesColorIdAndRating(speciesId, colorId, rating);
     }
 
     public List<FeedbackDTO> findByRatingAndColorId(Integer rating, Long colorId, Pageable pageable) {
@@ -136,7 +147,19 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
 
         return results;
     }
-    public Integer countByOrderId(Long id){
+
+    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username, Boolean status, String sortRating, String sortDate, Pageable pageable) {
+        List<FeedbackDTO> results = new ArrayList();
+        List<FeedbackEntity> entities = feedbackRepository.searchSortForAdmin(rating, speciesId, searchDate, username, status, sortRating, sortDate, pageable);
+
+        for (FeedbackEntity item : entities) {
+            FeedbackDTO newDTO = (FeedbackDTO) genericConverter.toDTO(item, FeedbackDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    public Integer countByOrderId(Long id) {
 
         return feedbackRepository.countAllByOrderIdId(id);
     }

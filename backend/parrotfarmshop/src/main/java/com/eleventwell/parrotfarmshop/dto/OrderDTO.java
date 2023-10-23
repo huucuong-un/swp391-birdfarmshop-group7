@@ -26,14 +26,19 @@ public class OrderDTO extends BaseDTO {
     private Long userID;
 
 
-    private String address;
+    private Long deliveryInformationId;
 
 
     private Long promotionID;
 
-    private Boolean status;
+    private String status;
 
     private Double totalPrice;
 
     private int quantity;
+
+    public String vnp_OrderInfo = "Parrot";
+
+    public String vnp_OrderType = "200000";
+    public String vnp_TxnRef;
 }

@@ -213,3 +213,11 @@
 .cart-right-total-product {
     font-weight: 500;
 }
+
+.check-out-disable {
+    opacity: 0.5;
+
+    &:hover {
+        cursor: default !important;
+    }
+}

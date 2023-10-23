@@ -4,14 +4,15 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.SliderDTO;
 import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.entity.SliderEntity;
-import com.eleventwell.parrotfarmshop.entity.SpeciesEggPriceEntity;
 import com.eleventwell.parrotfarmshop.repository.SliderRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,6 +61,9 @@ public class SliderService implements IGenericService<SliderDTO> {
         }
         sliderRepository.save(sliderEntity);
     }
+    public SliderDTO findOneById(Long id){
+        return (SliderDTO) genericConverter.toDTO(sliderRepository.findOneById(id),SliderDTO.class);
+    }
 
     @Override
     public List<SliderDTO> findAll(Pageable pageable){
@@ -69,6 +73,17 @@ public class SliderService implements IGenericService<SliderDTO> {
 
         for(SliderEntity item : entities) {
             SliderDTO newDTO = (SliderDTO) genericConverter.toDTO(item,SliderDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+    public List<SliderDTO> searchSortForAdmin(Date searchDate, Boolean status ,String slidername, String sortDate,Pageable pageable ){
+        List<SliderDTO> results = new ArrayList<>();
+        List<SliderEntity> entities = sliderRepository.searchSortForAdmin(searchDate, status, slidername, sortDate, pageable);
+        for (SliderEntity sliderEntity : entities
+             ) {
+            SliderDTO newDTO = (SliderDTO) genericConverter.toDTO(sliderEntity, SliderDTO.class);
             results.add(newDTO);
         }
         return results;

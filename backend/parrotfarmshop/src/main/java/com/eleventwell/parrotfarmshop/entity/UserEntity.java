@@ -92,6 +92,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private List<OrderEntity> order = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    private List<FeedbackEntity> feedbacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "replyer")
+    private List<FeedbackEntity> feedbackRs = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "user")
     private List<DeliveryInformationEntity> deliveryInformations = new ArrayList<>();
 
 

@@ -46,7 +46,7 @@ public class RoleService implements IGenericService<RoleDTO> {
             roleEntity = (RoleEntity) roleConverter.toEntity(dto, RoleEntity.class);
         } else {
             RoleEntity oldRoleEntity = roleRepository.findOneById(dto.getId());
-            roleEntity = (RoleEntity) roleConverter.updateEntity(oldRoleEntity, dto);
+            roleEntity = (RoleEntity) roleConverter.updateEntity(dto, oldRoleEntity);
         }
 
         roleRepository.save(roleEntity);
@@ -85,4 +85,7 @@ public class RoleService implements IGenericService<RoleDTO> {
         return (int)roleRepository.count();
     }
 
+    public RoleDTO findOneById(long id) {
+        return (RoleDTO) roleConverter.toDTO(roleRepository.findOneById(id), RoleDTO.class);
+    }
 }

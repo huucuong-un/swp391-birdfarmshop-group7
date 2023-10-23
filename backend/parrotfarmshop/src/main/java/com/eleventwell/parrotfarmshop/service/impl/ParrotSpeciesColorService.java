@@ -9,6 +9,7 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericsRepository;
@@ -121,10 +122,12 @@ public class ParrotSpeciesColorService implements IGenericService<ParrotSpeciesC
         return results;
     }
 
+
     public ParrotSpeciesColorDTO findOneById(Long id){
         return (ParrotSpeciesColorDTO) converter.toDTO(parrotSpeciesColorRepository.findOneById(id),ParrotSpeciesColorDTO.class);
 
     }
+
 
     @Override
     public int totalItem() {

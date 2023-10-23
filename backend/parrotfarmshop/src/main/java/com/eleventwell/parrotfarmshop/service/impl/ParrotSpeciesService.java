@@ -6,21 +6,17 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
-import com.eleventwell.parrotfarmshop.dto.ParrotEggNestDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
-import com.eleventwell.parrotfarmshop.entity.ParrotEggNestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
+import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +33,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     @Autowired
     private ParrotRepository parrotRepository;
+
+    @Autowired
+    private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
 
     @Autowired
     private GenericConverter genericConverter;
@@ -158,11 +157,14 @@ public ParrotSpeciesDTO findOneSpeciesParrotById(Long id){
             
             
         }
+    public ParrotSpeciesDTO findOneByColorId(Long id){
 
+        return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesColorRepository.findOneById(id).getParrotSpecies(),ParrotSpeciesDTO.class);
+    }
     
 
     @Override
     public int totalItem() {
-      	return (int)parrotSpeciesRepository.count();
+      	return (int)parrotSpeciesRepository.countAllByStatusIsTrue();
     }
 }

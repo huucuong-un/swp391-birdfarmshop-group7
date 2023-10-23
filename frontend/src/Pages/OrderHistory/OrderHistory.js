@@ -70,9 +70,10 @@ function OrderHistory() {
             content: textareaValue,
             rating: rating,
             belongTo: 'parrot',
-            userId: orderId.userID,
+            userId: orderId.userId,
             colorId: orderId.colorId,
             orderId: orderId.orderId,
+            status: true,
         };
         console.log(orderId);
         FeedbackAPI.create(feedbackParam);
@@ -283,7 +284,6 @@ function OrderHistory() {
                                                 >
                                                     Save
                                                 </Button>
-                                                <p>{order.orderDTO.id}</p>
 
                                                 <Button onClick={onClose}>Close</Button>
                                             </ModalFooter>

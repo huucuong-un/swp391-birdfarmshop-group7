@@ -3,11 +3,9 @@ import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
 import {
     Input,
     Table,
-    Thead,
     Tbody,
     Tfoot,
     Tr,
-    Th,
     Td,
     TableContainer,
     Button,
@@ -16,17 +14,36 @@ import {
     AlertTitle,
     AlertDescription,
 } from '@chakra-ui/react';
-import Buttons from '~/Components/Button/Button';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 
 const cx = classNames.bind(styles);
 
 function AddParrotSpecies() {
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 12,
+        email: null,
+        phone: null,
+        date: null,
+        sortDate: null,
+        sortPrice: null,
+    });
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            email: null,
+            phone: null,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
     // useState for alert status
     const [submissionStatus, setSubmissionStatus] = useState();
     const [species, setSpecies] = useState([]);
@@ -195,32 +212,12 @@ function AddParrotSpecies() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('add-btn')}>
-                <Buttons onClick={handleShow} add>
+                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Buttons>
-                <div className={cx('sort-space')}>
-                    <form className={cx('sort-space-form')}>
-                        <select name="species" id="species">
-                            <option value="a">Species</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <select name="status" id="status">
-                            <option value="b">Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <input type="date" />
-                        <select name="price" id="price">
-                            <option value="c">Price</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </form>
-                </div>
+                </Button>
             </div>
 
             {/* FORM TO ADD SPECIES  */}
@@ -406,6 +403,19 @@ function AddParrotSpecies() {
                 {/*END FORM TO ADD SPECIES  */}
             </form>
             {/* CRUD SPECIES LIST */}
+            <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <select name="species" id="species">
+                    <option value="a">Species</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                <select name="status" id="status">
+                    <option value="b">Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
             <AddSpeciesColor key={addSpeciesColorKey} className={cx('addspeciescolor')}></AddSpeciesColor>
         </div>
     );

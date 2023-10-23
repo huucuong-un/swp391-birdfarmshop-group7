@@ -96,7 +96,6 @@ function Feedback({ feedbackType, colorSortList }) {
                 console.error(error);
             }
         };
-
         // Gọi hàm getParrots khi component được mount
         getFeedbackList();
     }, [param]);
@@ -109,8 +108,8 @@ function Feedback({ feedbackType, colorSortList }) {
                 for (const items of feedbackList) {
                     const user = { ...items };
                     const userobject = await UserAPI.getUserById(items.userId);
-                    user.username = userobject[0].userName;
-                    user.imgUrl = userobject[0].imgUrl;
+                    user.username = userobject.userName;
+                    user.imgUrl = userobject.imgUrl;
                     data.push(user);
                 }
                 setCombineData(data);
@@ -189,18 +188,17 @@ function Feedback({ feedbackType, colorSortList }) {
                     );
                 }
             }
+            setCount(1);
             setColorSort(colorSorts);
             console.log(colorSortSelect);
         };
         createColorSort();
     }, [feedbackList]);
     useEffect(() => {
-        const timer = setTimeout(() => {
+        try {
             sortFeedbackByRating({ raing: null, id: 'rs0', color: colorSortSelect });
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, []);
+        } catch (error) {}
+    }, [count]);
     return (
         <div className={cx('wrapper')}>
             <h1>Feedback</h1>
@@ -247,6 +245,30 @@ function Feedback({ feedbackType, colorSortList }) {
                     <div className={cx('feadback-content')}>
                         <p>{feedback.content}</p>
                     </div>
+                    {feedback.replyContent !== null ? (
+                        <div className={cx('feadback-reply')}>
+                            <div className={cx('feedback-header')}>
+                                <div style={{ border: '1px solid black' }} className={cx('admin-avatar')}>
+                                    <img
+                                        src="http://localhost:3000/static/media/2(5).74c204955106ee08d9c2.png"
+                                        alt="user-avatar"
+                                    />
+                                </div>
+                                <div className={cx('feedback-header-info')}>
+                                    <p className={cx('feedback-header-info-name', 'reply-font')}>Parrot Farm Shop</p>
+                                    <div className={cx('feadback-date')}>
+                                        <p>{feedback.replyDate}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={cx('feadback-content')}>
+                                <p className={cx('reply-font')}>{feedback.replyContent}</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ))}
         </div>

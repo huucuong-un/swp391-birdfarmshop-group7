@@ -5,6 +5,7 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 //import com.eleventwell.parrotfarmshop.converter.ParrotConverter;
+
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
@@ -12,43 +13,44 @@ import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Admin
  */
 @Service
 public class ParrotService implements IGenericService<ParrotDTO> {
 
-    
-      @Autowired
-   private ParrotRepository parrotRepository;
-      
-      @Autowired
-   private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
-      
-      @Autowired
-      private GenericConverter parrotConverter;
-      
-    
+
+    @Autowired
+    private ParrotRepository parrotRepository;
+
+    @Autowired
+    private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
+
+    @Autowired
+    private GenericConverter parrotConverter;
+
+
     @Override
     public List<ParrotDTO> findAll() {
-       List<ParrotDTO> result = new ArrayList<>();
-       List<ParrotEntity> entities = parrotRepository.findAllByOrderByIdDesc();
-       
+        List<ParrotDTO> result = new ArrayList<>();
+        List<ParrotEntity> entities = parrotRepository.findAllByOrderByIdDesc();
+
         for (ParrotEntity entity : entities) {
             ParrotDTO dto = (ParrotDTO) parrotConverter.toDTO(entity, ParrotDTO.class);
             result.add(dto);
-            
+
         }
-       
-       return result; 
+
+        return result;
     }
 
     @Override
@@ -80,22 +82,23 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         }
         parrotRepository.save(parrotEntity);
     }
-    public Long countAvaiableParrotById(Long id){
-        return parrotRepository.countAllBySaleStatusAndStatusAndParrotSpeciesColorId(true,true,id);
+
+    public Long countAvaiableParrotById(Long id) {
+        return parrotRepository.countAllBySaleStatusAndStatusAndParrotSpeciesColorId(true, true, id);
     }
 
-    public void changeSaleStatus(Long id){
+    public void changeSaleStatus(Long id) {
         ParrotEntity entity = parrotRepository.findOneById(id);
-        if(entity.getSaleStatus()==true){
+        if (entity.getSaleStatus() == true) {
             entity.setSaleStatus(false);
 
-        }else{
+        } else {
             entity.setSaleStatus(true);
         }
         parrotRepository.save(entity);
     }
 
-    public void changeHealthStatus(Long id){
+    public void changeHealthStatus(Long id) {
         ParrotEntity parrotEntity = parrotRepository.findOneById(id);
         if (parrotEntity.getHealthStatus() == true) {
             parrotEntity.setHealthStatus(false);
@@ -105,22 +108,23 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         parrotRepository.save(parrotEntity);
     }
 
-    public void changePregnancyStatus(Long id){
+    public void changePregnancyStatus(Long id) {
         ParrotEntity parrotEntity = parrotRepository.findOneById(id);
-        if(parrotEntity.getPregnancyStatus() == true){
+        if (parrotEntity.getPregnancyStatus() == true) {
             parrotEntity.setHealthStatus(false);
-        }else{
+        } else {
             parrotEntity.setHealthStatus(true);
         }
         parrotRepository.save(parrotEntity);
     }
+
     @Override
-    public List<ParrotDTO> findAll(Pageable pageable){
+    public List<ParrotDTO> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         List<ParrotDTO> results = new ArrayList();
         List<ParrotEntity> entities = parrotRepository.findAll(pageable).getContent();
 
-        for(ParrotEntity item : entities) {
+        for (ParrotEntity item : entities) {
             ParrotDTO newDTO = (ParrotDTO) parrotConverter.toDTO(item, ParrotDTO.class);
             results.add(newDTO);
 
@@ -131,7 +135,33 @@ public class ParrotService implements IGenericService<ParrotDTO> {
 
     @Override
     public int totalItem() {
-        return (int)parrotRepository.count();
+        return (int) parrotRepository.count();
     }
-    
+
+    public List<ParrotDTO> searchSortForAdmin(Integer age,
+                                              Boolean status,
+                                              Boolean pregnancyStatus,
+                                              Boolean healthStatus,
+                                              Boolean saleStatus,
+                                              Long numberOfChildren,
+                                              Boolean gender,
+
+                                              Date searchDate,
+                                              String sortAge,
+                                              String sortNumberOfChildren,
+
+                                              String sortGender,
+                                              String sortDate,
+                                              Pageable pageable) {
+        List<ParrotDTO> results = new ArrayList<>();
+        List<ParrotEntity> entities = parrotRepository.searchSortForAdmin(age, status, pregnancyStatus, healthStatus, saleStatus, numberOfChildren,
+                gender, searchDate, sortAge, sortNumberOfChildren,
+                sortGender, sortDate, pageable);
+        for (ParrotEntity parrotEntity : entities
+        ) {
+            ParrotDTO newDTO = (ParrotDTO) parrotConverter.toDTO(parrotEntity, ParrotDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
 }

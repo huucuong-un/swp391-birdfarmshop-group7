@@ -21,6 +21,7 @@ import {
     AccordionButton,
     AccordionPanel,
     AccordionIcon,
+    Switch,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
@@ -333,31 +334,39 @@ function AddSpeciesColor() {
     return (
         <div className={cx('wrapper')}>
             <Accordion className={cx('accordion')} allowToggle>
-                <div className={cx('crud-container')}>
-                    <div className={cx('crud-title')}>
-                        <span className={cx('margin-left')}>Specie ID</span>
-                        <span className={cx('margin-left')}>Specie name</span>
-                        <span className={cx('margin-left')}>Quantity</span>
-                        <span className={cx('margin-left-lilbit')}>Nest quantity</span>
-                        <span className={cx('margin-left-lilbit')}>Origin</span>
-                        <span className={cx('margin-left-lilbit')}>Average weight</span>
-                        <span className={cx('margin-left-lilbit')}>Action</span>
-                    </div>
+                <div className={cx('crud-title')}>
+                    <span className={cx('margin-left')}>Specie ID</span>
+                    <span className={cx('margin-left')}>Specie name</span>
+                    <span className={cx('margin-left')}>Quantity</span>
+                    <span className={cx('margin-left-lilbit')}>Nest quantity</span>
+                    <span className={cx('margin-left-lilbit')}>Origin</span>
+                    <span className={cx('margin-left-lilbit')}>Average weight</span>
+                    <span className={cx('margin-left-lilbit')}>Status</span>
+                    <span className={cx('margin-left-lilbit')}>Action</span>
+                </div>
 
+                <div className={cx('crud-container')}>
                     {combineData.map((data, dataIndex) => (
                         // Print the specie color
                         <AccordionItem key={dataIndex} className={cx('accord-item')}>
                             <h2 className={cx('data-container')}>
                                 <AccordionButton>
                                     <Box as="span" flex="1" textAlign="left">
-                                        <div className={cx('crud-data')}>
-                                            <div className={cx('data-field')}>{data.id}</div>
-                                            <div className={cx('data-field')}>{data.name}</div>
-                                            <div className={cx('data-field')}>{data.quantity}</div>
-                                            <div className={cx('data-field')}>{data.nestQuantity}</div>
-                                            <div className={cx('data-field')}>{data.origin}</div>
-                                            <div className={cx('data-field')}>{data.averageWeight}</div>
-                                        </div>
+                                        <TableContainer className={cx('data-parent')}>
+                                            <Table size="lg">
+                                                <Tr>
+                                                    <Td>{data.id}</Td>
+                                                    <Td>{data.name}</Td>
+                                                    <Td>{data.quantity}</Td>
+                                                    <Td>{data.nestQuantity}</Td>
+                                                    <Td>{data.origin}</Td>
+                                                    <Td>{data.averageWeight}</Td>
+                                                    <Td>
+                                                        <Switch colorScheme={'green'} fontSize={16}></Switch>
+                                                    </Td>
+                                                </Tr>
+                                            </Table>
+                                        </TableContainer>
                                     </Box>
 
                                     <AccordionIcon />

@@ -68,6 +68,7 @@ function AddParrot() {
         pregnancyStatus: false,
         healthStatus: true,
         numberOfChildren: 2,
+        gender: true,
         colorID: 1,
     });
     // Handel add parrot
@@ -82,6 +83,7 @@ function AddParrot() {
                 pregnancyStatus: pregnancyStatus,
                 healthStatus: healthStatus,
                 numberOfChildren: parrots.numberOfChildren,
+                gender: parrots.gender,
                 colorID: parrots.colorID,
             });
             if (responseParrots.status === 200) {
@@ -168,10 +170,11 @@ function AddParrot() {
     useEffect(() => {
         const fetchData = async () => {
             const data = [];
+
             try {
                 for (const parrot of parrotList) {
-                    const listParrot = { ...parrot };
                     const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
+                    const listParrot = { ...parrot };
                     const species = await ParrotSpeciesAPI.get(colors[0].id);
                     const colorName = colors[0].color;
                     const specieName = species[0].name;
@@ -230,6 +233,15 @@ function AddParrot() {
             // Otherwise, open the form for this species
             setOpenParrotID(parrotID);
         }
+    };
+
+    const [selectedOption, setSelectedOption] = useState('true');
+    useEffect(() => {
+        console.log(selectedOption);
+    }, [selectedOption]);
+    const handleOptionChange = (event) => {
+        setParrots({ ...parrots, gender: event.target.value });
+        setSelectedOption(event.target.value);
     };
     return (
         <div className={cx('wrapper')}>
@@ -368,7 +380,32 @@ function AddParrot() {
                                         />
                                     </Td>
                                 </Tr>
-
+                                {/* Parrot gender */}
+                                <Tr>
+                                    <Td>
+                                        <p>Parrot gender</p>
+                                    </Td>
+                                    <Td>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="true"
+                                                checked={selectedOption === 'true'}
+                                                onChange={handleOptionChange}
+                                            />
+                                            Male
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="false"
+                                                checked={selectedOption === 'false'}
+                                                onChange={handleOptionChange}
+                                            />
+                                            Female
+                                        </label>
+                                    </Td>
+                                </Tr>
                                 <Tr>
                                     <Td>
                                         <p>Parrot species </p>
@@ -396,7 +433,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         {speciesColor.length === 0 ? (
-                                            <p>Species have no color</p>
+                                            'Species have no color'
                                         ) : (
                                             <select
                                                 className={cx('select-btn')}
@@ -461,6 +498,7 @@ function AddParrot() {
                             <Th>Color ID</Th>
                             <Th>Color</Th>
                             <Th>Specie</Th>
+                            <Th>Parrot gender</Th>
                             <Th>Status</Th>
                             <Th>Action</Th>
                         </Tr>
@@ -468,17 +506,18 @@ function AddParrot() {
                     <Tbody>
                         {combineData.map((parrot, index) => (
                             <>
-                                <Tr key={index}>
-                                    <Td key={index + 'a'}>{parrot.id}</Td>
-                                    <Td key={index + 'b'}>{parrot.age}</Td>
-                                    <Td key={index + 'c'}>{parrot.saleStatus.toString()}</Td>
-                                    <Td key={index + 'd'}>{parrot.pregnancyStatus.toString()}</Td>
-                                    <Td key={index + 'e'}>{parrot.healthStatus.toString()}</Td>
-                                    <Td key={index + 'f'}>{parrot.numberOfChildren}</Td>
-                                    <Td key={index + 'g'}>{parrot.colorID}</Td>
-                                    <Td key={index + 'h'}>{parrot.colorName}</Td>
-                                    <Td key={index + 'i'}>{parrot.specieName}</Td>
-                                    <Td key={index + 'j'}>
+                                <Tr key={index + 'a'}>
+                                    <Td>{parrot.id}</Td>
+                                    <Td>{parrot.age}</Td>
+                                    <Td>{parrot.saleStatus.toString()}</Td>
+                                    <Td>{parrot.pregnancyStatus.toString()}</Td>
+                                    <Td>{parrot.healthStatus.toString()}</Td>
+                                    <Td>{parrot.numberOfChildren}</Td>
+                                    <Td>{parrot.colorID}</Td>
+                                    <Td>{parrot.colorName}</Td>
+                                    <Td>{parrot.specieName}</Td>
+                                    <Td>{parrot.gender === true ? 'male' : 'female'}</Td>
+                                    <Td>
                                         <Switch
                                             onChange={() => handleStatus(index)}
                                             size="lg"
@@ -496,12 +535,13 @@ function AddParrot() {
                                             {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
                                         </Button>
                                     </Td>
-                                    <Td key={index + 'k'}></Td>
+                                    <Td key={index + 'l'}></Td>
                                 </Tr>
-                                <Tr>
+                                <Tr key={index + 'b'}>
                                     {openParrotID === parrot.id && (
                                         <Td colSpan={11}>
                                             <UpdateParrot
+                                                key={index}
                                                 parrot={parrot}
                                                 reloadData={handleUpdateSuccess}
                                             ></UpdateParrot>

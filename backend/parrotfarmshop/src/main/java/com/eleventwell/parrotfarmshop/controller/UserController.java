@@ -1,11 +1,14 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 
+import com.eleventwell.parrotfarmshop.Model.PagingModel;
 import com.eleventwell.parrotfarmshop.dto.UserDTO;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import com.eleventwell.parrotfarmshop.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,5 +56,18 @@ public class UserController {
     @DeleteMapping(value = "{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
         userService.changeStatus(id);
+    }
+
+    @GetMapping(value =  "paging")
+    public PagingModel pagingModel (@RequestBody @RequestParam(value = "page") Integer page, @RequestParam(value = "limit") Integer limit){
+
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+        result.setListResult(userService.findAll(pageable)) ;
+        result.setTotalPage(((int) Math.ceil((double) (userService.totalItem()) / limit)));
+        result.setLimit(limit);
+        return  result;
     }
 }

@@ -6,8 +6,6 @@ import {
     Tbody,
     Tfoot,
     Tr,
-    Th,
-    Thead,
     Td,
     TableContainer,
     Button,
@@ -15,11 +13,7 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
-    Textarea,
-    Text,
-    Switch,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import styles from '~/Components/UpdateSlider/UpdateSlider.module.scss';

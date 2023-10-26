@@ -78,8 +78,11 @@ function UserProfileNew() {
             if (loggedUser !== null) {
                 const updateInfo = await UserAPI.updateUserProfile(loggedUser);
                 localStorage.removeItem('userInfo');
-                localStorage.setItem('userInfo', JSON.stringify(updateInfo));
                 console.log(updateInfo);
+
+                localStorage.setItem('userInfo', JSON.stringify(updateInfo));
+                setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+                console.log(loggedUser);
                 toast({
                     title: 'Change successfully',
                     status: 'success',
@@ -98,6 +101,10 @@ function UserProfileNew() {
     useEffect(() => {
         console.log(loggedUser);
     }, [loggedUser]);
+
+    useEffect(() => {
+        console.log('gender: ' + gender);
+    }, []);
     return (
         <Container className={cx('container')} maxW="container.xl">
             <Box>
@@ -148,14 +155,15 @@ function UserProfileNew() {
                                     <Td>
                                         <RadioGroup>
                                             <Stack direction="row" spacing={10}>
-                                                {gender === true ? (
+                                                {gender ? (
                                                     <Radio
                                                         size="lg"
                                                         value="true"
                                                         checked
-                                                        onChange={(e) =>
-                                                            setLoggedUser({ ...loggedUser, gender: e.target.value })
-                                                        }
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
                                                     >
                                                         <Text className={cx('gender-text')}>Male</Text>
                                                     </Radio>
@@ -163,15 +171,16 @@ function UserProfileNew() {
                                                     <Radio
                                                         size="lg"
                                                         value="true"
-                                                        onChange={(e) =>
-                                                            setLoggedUser({ ...loggedUser, gender: e.target.value })
-                                                        }
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
                                                     >
                                                         <Text className={cx('gender-text')}>Male</Text>
                                                     </Radio>
                                                 )}
 
-                                                {gender === false ? (
+                                                {!gender ? (
                                                     <Radio
                                                         size="lg"
                                                         value="false"

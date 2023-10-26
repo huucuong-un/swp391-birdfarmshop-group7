@@ -16,12 +16,13 @@ import {
     AlertTitle,
     AlertDescription,
     Switch,
+    Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
@@ -71,16 +72,11 @@ function AddSlider() {
                 sliderImageURL: img,
                 status: slider.status,
             });
-            if (responsePost.status === 200) {
-                console.log('POST request was successful at species!!');
-                // Assuming the response contains the newly created post data
 
-                setSubmissionStatus(true);
-            } else {
-                console.error('POST request failed with status code - species: ', responsePost.status);
-                setSubmissionStatus(false);
-            }
-            setSlider({});
+            console.log('POST request was successful at species!!');
+            // Assuming the response contains the newly created post data
+            setSlider({ ...slider, ...responsePost.data });
+            setSubmissionStatus(true);
         } catch (error) {
             console.error('Error while making POST request:', error);
             setSubmissionStatus(false);
@@ -131,11 +127,12 @@ function AddSlider() {
         }
     };
     const handleStatus = async (index) => {
-        const updatedSlider = [...sliderList];
-        updatedSlider[index].status = !updatedSlider[index].status;
         try {
+            const updatedSlider = [...sliderList];
+            updatedSlider[index].status = !updatedSlider[index].status;
             await axios.delete(`http://localhost:8086/api/slider/${updatedSlider[index].id}`);
-
+            console.log('slider list in change status');
+            console.log(updatedSlider);
             setSliderList(updatedSlider);
         } catch (error) {
             toast({
@@ -159,6 +156,56 @@ function AddSlider() {
             setOpenSliderID(sliderID);
         }
     };
+
+    // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 10,
+        name: null,
+        status: null,
+        date: null,
+        sortDate: null,
+    });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const sliderSortList = await SliderAPI.searchSortForSlider(sort);
+                setSliderList(sliderSortList.listResult);
+                setTotalPage(sliderSortList.totalPage);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        sortData();
+    }, [sort]);
+
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 10,
+            name: sort.name,
+            status: sort.status,
+            date: sort.date,
+            sortDate: sort.sortDate,
+        });
+
+        setPage(newPage);
+    };
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 10,
+            name: null,
+            status: null,
+            date: null,
+            sortDate: null,
+        });
+    };
+
+    console.log(sliderList);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -201,8 +248,8 @@ function AddSlider() {
                                     <Td>
                                         <Input
                                             type="text"
-                                            id="title"
-                                            name="title"
+                                            id="sliderName"
+                                            name="sliderName"
                                             value={slider.sliderName}
                                             onChange={(e) => setSlider({ ...slider, sliderName: e.target.value })}
                                             variant="filled"
@@ -216,9 +263,9 @@ function AddSlider() {
                                     <Td>
                                         <Input
                                             type="text"
-                                            id="title"
-                                            name="title"
-                                            value={slider.description}
+                                            id="sliderDescription"
+                                            name="sliderDescription"
+                                            value={slider.sliderDescription}
                                             onChange={(e) =>
                                                 setSlider({ ...slider, sliderDescription: e.target.value })
                                             }
@@ -267,21 +314,31 @@ function AddSlider() {
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <select name="species" id="species">
-                    <option value="a">Species</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="text"
+                    placeholder="Slider name"
+                    onChange={(e) => setSort({ ...sort, name: e.target.value })}
+                />
+                <input
+                    type="date"
+                    placeholder="Slider name"
+                    onChange={(e) => setSort({ ...sort, date: e.target.value })}
+                />
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
+                    <option value="" disabled selected>
+                        Status
+                    </option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                 </select>
-                <select name="status" id="status">
-                    <option value="b">Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                <input type="date" />
-                <select name="price" id="price">
-                    <option value="c">Price</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+
+                <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="" disabled selected>
+                        Sort Date
+                    </option>
+                    <option value="DDESC">Newest</option>
+                    <option value="DASC">Oldest</option>
                 </select>
             </div>
             <TableContainer className={cx('table-container')}>
@@ -313,7 +370,24 @@ function AddSlider() {
                                             isChecked={slider.status}
                                             colorScheme="green"
                                         />
-                                        {slider.status.toString()}
+                                        {slider.status ? (
+                                            <Text color="green" fontSize={12} overflow="hidden">
+                                                On Processing
+                                            </Text>
+                                        ) : (
+                                            <Text color="red" fontSize={12} overflow="hidden">
+                                                Disabled
+                                            </Text>
+                                        )}
+
+                                        <Input
+                                            type="hidden"
+                                            id="status"
+                                            name="status"
+                                            variant="filled"
+                                            value={slider.status}
+                                            onChange={(e) => setSlider({ ...slider, status: e.target.value })}
+                                        />
                                     </Td>
                                     <Td>
                                         <Button
@@ -338,6 +412,19 @@ function AddSlider() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }

@@ -5,22 +5,14 @@
     flex-direction: column;
 }
 .inner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    flex-direction: column;
-    height: 570px;
+    width: 50% !important;
     div {
         overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         padding: 2px;
     }
     th {
         text-align: center;
-        background-color: #f9ede9;
+        background-color: #f57c7c;
         color: var(--black);
     }
     tbody,
@@ -38,9 +30,6 @@
     }
 }
 
-.table-container {
-    width: 50%;
-}
 .submit-btn {
     display: flex;
     justify-content: center;
@@ -49,10 +38,10 @@
         font-weight: bold;
         font-size: 16px;
         padding: 20px;
-        background-color: #f9ede9;
+        background-color: #f57c7c;
         color: var(--black);
         &:hover {
-            background-color: #f9ede9;
+            background-color: #f57c7c;
             opacity: 0.7;
         }
     }
@@ -63,6 +52,12 @@
 .title-container {
     width: 100%;
 }
+.title-post {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background-color: #f57c7c;
+}
 .add-btn {
     margin-top: 20px;
     width: 90%;
@@ -72,8 +67,4 @@
         margin-left: 10px;
         font-size: 20px;
     }
-}
-.table-list {
-    width: 100%;
-    padding: 10px;
 }

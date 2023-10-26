@@ -2,6 +2,7 @@ package com.eleventwell.parrotfarmshop.entity;
 
 //
 //feedbackId, userID, feedbackContent, feedbackRating, parrotSpeciesID,createdAt, createdBy
+import com.eleventwell.parrotfarmshop.converter.DateConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import jakarta.persistence.*;
 
@@ -14,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @ToString
 @Builder
@@ -50,8 +54,16 @@ public class FeedbackEntity extends BaseEntity {
 	@JoinColumn(name = "replyer_id")
 	private UserEntity replyer;
 
+
 	@Column(name = "reply_content")
 	private String replyContent;
+
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "reply_date")
+	@CreationTimestamp
+	@Convert(converter = DateConverter.class) // Use a custom converter
+	private Date replyDate;
 
 	@ManyToOne
 	@JoinColumn(name = "color_id")

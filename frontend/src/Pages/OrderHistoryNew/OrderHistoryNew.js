@@ -4,7 +4,8 @@ import styles from '~/Pages/OrderHistoryNew/OrderHistoryNew.module.scss';
 
 import { Button, ButtonGroup, Center, Text } from '@chakra-ui/react';
 import ButtonT from '~/Components/Button/Button';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import {
     Accordion,
     AccordionItem,
@@ -159,7 +160,7 @@ function OrderHistoryNew() {
             try {
                 const param = {
                     page: 1,
-                    limit: 1,
+                    limit: 12,
                     userId: user.userId,
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
@@ -177,7 +178,52 @@ function OrderHistoryNew() {
     useEffect(() => {
         console.log(user);
     }, [user]);
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 12,
+            email: sort.email,
+            phone: sort.phone,
+            date: sort.date,
+            sortDate: sort.sortDate,
+            sortPrice: sort.sortPrice,
+        });
 
+        setPage(newPage);
+    };
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 12,
+        email: null,
+        phone: null,
+        date: null,
+        sortDate: null,
+        sortPrice: null,
+    });
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            email: null,
+            phone: null,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
+    useEffect(() => {
+        console.log(sort);
+    }, [sort]);
+
+    useEffect(() => {
+        console.log(totalPage);
+    }, [totalPage]);
+
+    useEffect(() => {
+        console.log(page);
+    }, [page]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <Box>
@@ -186,6 +232,37 @@ function OrderHistoryNew() {
                 </Text>
                 <Text>View your order</Text>
             </Box>
+            {/* Sorting Space */}
+            {/* Sorting Space */}
+            <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
+
+                <select name="status" id="status">
+                    <option value="" disabled selected>
+                        Status
+                    </option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="" disabled selected>
+                        Sort Date
+                    </option>
+                    <option value="DDESC">Newest</option>
+                    <option value="DASC">Oldest</option>
+                </select>
+                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}>
+                    <option value="" disabled selected>
+                        Price
+                    </option>
+                    <option value="PDESC">Highest</option>
+                    <option value="PASC">Lowest</option>
+                </select>
+            </div>
+            {/* Sorting Space */}
+            {/* Sorting Space */}
             <div className={cx('order-container')}>
                 {orders.map((order, index) => (
                     <div key={index} className={cx('order-item')}>
@@ -337,7 +414,6 @@ function OrderHistoryNew() {
                                                         >
                                                             Save
                                                         </Button>
-                                                        <p>{order.orderDTO.id}</p>
 
                                                         <Button onClick={onClose}>Close</Button>
                                                     </ModalFooter>

@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+import GoogleTranslate from '~/Components/gg/gg';
 
 const cx = classNames.bind(styles);
 
@@ -195,7 +196,7 @@ function Navbar() {
                             className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
-                            Language
+                            Language {/* <GoogleTranslate></GoogleTranslate> */}
                         </Button>
                         <Tippy
                             interactive

@@ -49,6 +49,21 @@ const ParrotSpeciesColorAPI = {
         const url = `/parrot-species-color/${id}`;
         return axiosClinet.delete(url);
     },
+
+    getImagesByColorId(id) {
+        const url = `/color-image/find-by-color/${id}`;
+        return axiosClinet.post(url);
+    },
+
+    getImagesBySpeciesId(id) {
+        const url = `/color-image/find-by-species/${id}`;
+        return axiosClinet.post(url);
+    },
+
+    getImageURLsBySpeciesId(id) {
+        const url = `/color-image/find-by-species/images/${id}`;
+        return axiosClinet.post(url);
+    },
 };
 
 export default ParrotSpeciesColorAPI;

@@ -55,7 +55,7 @@
         padding: 0;
     }
     th {
-        background-color: #f57c7c;
+        background-color: #f9ede9;
         font-size: 18px;
         padding: 0;
         text-align: center;
@@ -63,13 +63,13 @@
     }
 }
 .btn {
-    background-color: #f57c7c;
+    background-color: #f9ede9;
     button {
         width: 100% !important;
     }
     &:hover {
         opacity: 0.8;
-        background-color: #f57c7c;
+        background-color: #f9ede9;
     }
 }
 .submit-btn {
@@ -77,7 +77,7 @@
     display: flex;
     justify-content: center;
     button {
-        background-color: #f57c7c;
+        background-color: #f9ede9;
         font-size: 20px;
         padding: 20px;
         width: 50%;
@@ -176,7 +176,7 @@
 .crud-title {
     display: flex;
     justify-content: space-between;
-    background-color: #f57c7c;
+    background-color: #f9ede9;
     padding: 10px 15px;
     font-weight: bold;
     border-bottom: 1px solid #ccc;
@@ -236,7 +236,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    background-color: #f57c7c;
+    background-color: #f9ede9;
 }
 // specoe Color Table
 .color-row {
@@ -252,14 +252,15 @@
 .update-color {
     cursor: pointer;
     display: inline-block;
-    padding: 20px 20px;
-    background-color: black;
+    // padding: 20px 20px;
+    background-color: #444;
     color: white;
-    border-radius: 12px;
+    border-radius: 5px;
     user-select: none;
     &:hover {
         opacity: 0.9;
     }
+    text-align: center;
 }
 .form-specie-color {
     width: 100%;
@@ -270,4 +271,13 @@
 }
 .overflow-hidden {
     overflow: hidden;
+}
+
+.add-new-image-btn:hover {
+    opacity: 0.9;
+}
+
+.new-image:hover {
+    opacity: 0.5;
+    cursor: pointer;
 }

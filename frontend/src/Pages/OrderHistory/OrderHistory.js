@@ -284,7 +284,6 @@ function OrderHistory() {
                                                 >
                                                     Save
                                                 </Button>
-                                                <p>{order.orderDTO.id}</p>
 
                                                 <Button onClick={onClose}>Close</Button>
                                             </ModalFooter>

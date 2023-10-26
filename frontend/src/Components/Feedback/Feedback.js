@@ -245,6 +245,30 @@ function Feedback({ feedbackType, colorSortList }) {
                     <div className={cx('feadback-content')}>
                         <p>{feedback.content}</p>
                     </div>
+                    {feedback.replyContent !== null ? (
+                        <div className={cx('feadback-reply')}>
+                            <div className={cx('feedback-header')}>
+                                <div style={{ border: '1px solid black' }} className={cx('admin-avatar')}>
+                                    <img
+                                        src="http://localhost:3000/static/media/2(5).74c204955106ee08d9c2.png"
+                                        alt="user-avatar"
+                                    />
+                                </div>
+                                <div className={cx('feedback-header-info')}>
+                                    <p className={cx('feedback-header-info-name', 'reply-font')}>Parrot Farm Shop</p>
+                                    <div className={cx('feadback-date')}>
+                                        <p>{feedback.replyDate}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={cx('feadback-content')}>
+                                <p className={cx('reply-font')}>{feedback.replyContent}</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ))}
         </div>

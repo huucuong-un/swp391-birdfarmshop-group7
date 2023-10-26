@@ -25,6 +25,10 @@ const ParrotAPI = {
         const url = `/parrot-species/${data.id}`;
         return axiosClinet.put(url, data);
     },
+    updateParrot(data) {
+        const url = `/parrot/${data.id}`;
+        return axiosClinet.put(url, data);
+    },
 
     remove(id) {
         const url = `/parrot-species/${id}`;

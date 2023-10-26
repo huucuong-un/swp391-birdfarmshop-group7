@@ -114,6 +114,9 @@ public class NestService implements IGenericService<NestDTO> {
 
         return results;
     }
+    public NestDTO findOneBySpeciesId(Long id){
+        return (NestDTO) genericConverter.toDTO(parrotEggNestRepository.findOneBySpeciesIdAndStatusTrue(id),NestDTO.class);
+    }
 
     @Override
     public int totalItem() {

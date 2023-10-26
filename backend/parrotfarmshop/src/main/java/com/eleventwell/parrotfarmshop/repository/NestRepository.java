@@ -15,7 +15,7 @@ public interface NestRepository extends JpaRepository<NestEntity, Long> {
 
 
 
- @Query("SELECT u FROM NestEntity u WHERE u.nestPrice.parrotSpecies.id = :id")
+ @Query("SELECT u FROM NestEntity u WHERE u.nestPrice.parrotSpecies.id = :id AND u.status = true")
  NestEntity findOneBySpeciesIdAndStatusTrue(@Param("id") Long id);
 
 //    @Query("SELECT u FROM NestEntity u WHERE u.status = true AND u.saleStatus = false AND u.breedStatus='Done' AND u.speciesEggPrice.parrotSpecies.id = :speciesId ORDER BY u.id")

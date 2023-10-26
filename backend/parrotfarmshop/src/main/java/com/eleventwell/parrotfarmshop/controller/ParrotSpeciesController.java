@@ -105,6 +105,7 @@ public class ParrotSpeciesController {
             result.setListResult(parrotSpeciesService.findAll(pageable));
 
         } else {
+
             result.setListResult(parrotSpeciesService.findAllByName(name, pageable));
             result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
             result.setLimit(limit);
@@ -154,7 +155,7 @@ public class ParrotSpeciesController {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
         result.setListResult(parrotSpeciesService.searchSortForAdmin(name, quantity, description, origin, averageWeight, parrotAverageRating, status, searchDate, sortName, sortQuantity, sortOrigin, sortAverageWeight, sortParrotAverageRating, sortDate, pageable));
-        result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
+        result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItemForAdmin()) / limit)));
         result.setLimit(limit);
 
         return result;

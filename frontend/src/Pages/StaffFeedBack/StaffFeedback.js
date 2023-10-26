@@ -115,6 +115,15 @@ function StaffFeedback() {
     const handleReply = async () => {
         // Update the state variable with the new value from the textarea
         try {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+
+            // Định dạng thành "yyyy/mm/dd"
+            const formattedDate = new Date(`${year}/${month}/${day}`);
+
+            console.log(formattedDate);
             const replyParam = {
                 id: feedback.id,
                 content: feedback.content,
@@ -123,6 +132,7 @@ function StaffFeedback() {
                 userId: feedback.userId,
                 replyerId: user.userId,
                 replyContent: textareaValue === '' ? null : textareaValue,
+                replyDate: textareaValue === '' ? null : formattedDate,
                 colorId: feedback.colorId,
                 orderId: feedback.orderId,
                 status: true,
@@ -421,9 +431,9 @@ function StaffFeedback() {
 
                             <div className={cx('rating-input')}>
                                 <p>
-                                    Description:<Text>{feedback.content}</Text>
+                                    Content:<Text>{feedback.content}</Text>
                                 </p>
-
+                                Reply
                                 <Textarea
                                     fontSize={15}
                                     onChange={handleTextareaChange}

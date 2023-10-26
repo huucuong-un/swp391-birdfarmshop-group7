@@ -34,9 +34,9 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
     @Column(name = "price")
     private Double price;
 
-    @Lob
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToMany(mappedBy = "parrotSpeciesColor")
+    private List<ParrotColorImageEntity> images = new ArrayList<>();
+
 
     @NotBlank
     @Column(name = "color")
@@ -52,7 +52,7 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
     private ParrotSpeciesEntity parrotSpecies;
 
 
-   
+
     
 //	@OneToMany(mappedBy = "user")
 //	private List<ParrotEntity> parrots = new ArrayList<>();

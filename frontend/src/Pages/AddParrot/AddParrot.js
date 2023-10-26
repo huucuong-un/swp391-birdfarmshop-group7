@@ -20,7 +20,7 @@ import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Title from '~/Components/Title/Title';
 import Buttons from '~/Components/Button/Button';
@@ -193,16 +193,6 @@ function AddParrot() {
             fetchData();
         }
     }, [shouldFetchData, parrotList]);
-    // console.log('- species list - ');
-    // console.log(species);
-    // console.log('- species color by id  - ');
-    // console.log(speciesColorByID);
-    // console.log('- species color by id list - ');
-    // console.log(speciesColor);
-    // console.log('- combine data -');
-    // console.log(parrotList);
-    // // console.log(parrotList[0].id);
-    // console.log(combineData);
     const handleStatus = async (index) => {
         const updatedPost = [...parrotList];
         updatedPost[index].status = !updatedPost[index].status;
@@ -236,13 +226,67 @@ function AddParrot() {
     };
 
     const [selectedOption, setSelectedOption] = useState('true');
-    useEffect(() => {
-        console.log(selectedOption);
-    }, [selectedOption]);
+
     const handleOptionChange = (event) => {
         setParrots({ ...parrots, gender: event.target.value });
         setSelectedOption(event.target.value);
     };
+
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        searchDate: null,
+        status: null,
+        title: null,
+        content: null,
+        description: null,
+        sortTile: null,
+        sortDate: null,
+    });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                // const postSortList = await PostAPI.searchSortForPost(sort);
+                // setPostList(postSortList.listResult);
+                // setTotalPage(postSortList.totalPage);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        sortData();
+    }, [sort]);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 5,
+            email: sort.email,
+            phone: sort.phone,
+            date: sort.date,
+            sortDate: sort.sortDate,
+            sortPrice: sort.sortPrice,
+            sortTitle: sort.sortTile,
+        });
+
+        setPage(newPage);
+    };
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 10,
+            searchDate: null,
+            status: null,
+            title: null,
+            content: null,
+            description: null,
+            sortTile: null,
+            sortDate: null,
+        });
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -255,26 +299,30 @@ function AddParrot() {
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
                 </Buttons>
-                <div className={cx('sort-space')}>
-                    <form className={cx('sort-space-form')}>
-                        <select name="species" id="species">
-                            <option value="a">Species</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <select name="status" id="status">
-                            <option value="b">Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <input type="date" />
-                        <select name="price" id="price">
-                            <option value="c">Price</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </form>
-                </div>
+            </div>
+            <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} />
+                <input type="text" placeholder="Content" />
+                <input type="text" placeholder="Title" />
+                <input type="text" placeholder="Description" />
+                {/* Sort date */}
+
+                {/* Sort title */}
+                <select name="sortTitle" id="sortTitle">
+                    <option value="b">Title</option>
+                    <option value="TASC">Ascending</option>
+                    <option value="TDESC">Descending</option>
+                </select>
+                <select name="sortDate" id="sortDate">
+                    <option value="b">Date</option>
+                    <option value="DASC">Ascending</option>
+                    <option value="DDESC">Descending</option>
+                </select>
+                <select name="sortStatus" id="sortStatus">
+                    <option value="b">Status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
             </div>
             {show ? (
                 <form className={cx('inner')} onSubmit={handleSubmit}>
@@ -295,7 +343,7 @@ function AddParrot() {
                             ))}
                     </div>
                     <TableContainer className={cx('table-container')}>
-                        <Table size="xs ">
+                        <Table size="xs">
                             <Thead>
                                 <Tr>
                                     <Th colSpan={2}>Add parrot</Th>
@@ -325,7 +373,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
-                                        {saleStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {saleStatus ? <p>Sold</p> : <p> Not sold yet</p>}
                                         <Input
                                             type="hidden"
                                             id="sale"
@@ -349,7 +397,7 @@ function AddParrot() {
                                             size="lg"
                                             isChecked={pregnancyStatus}
                                         />
-                                        {pregnancyStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {pregnancyStatus ? <p>In progress</p> : <p> No</p>}
                                         <Input
                                             type="hidden"
                                             id="pregnancy"
@@ -369,7 +417,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleHealthStatus} size="lg" isChecked={healthStatus} />
-                                        {healthStatus ? <p>Available</p> : <p>Unavailable</p>}
+                                        {healthStatus ? <p>Good</p> : <p>Not good</p>}
                                         <Input
                                             type="hidden"
                                             id="health"
@@ -418,6 +466,7 @@ function AddParrot() {
                                             <option key={'a'} value={'a'}>
                                                 Selected specie
                                             </option>
+
                                             {species.map((specie, index) => (
                                                 <option key={index} value={specie.id}>
                                                     {specie.name}
@@ -486,7 +535,7 @@ function AddParrot() {
                 <></>
             )}
             <TableContainer className={cx('table-list')}>
-                <Table size="xs">
+                <Table size="md">
                     <Thead>
                         <Tr>
                             <Th>Parrot ID</Th>

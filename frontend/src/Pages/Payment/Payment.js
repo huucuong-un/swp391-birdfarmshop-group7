@@ -18,6 +18,7 @@ import VnPay from '~/Assets/image/Payment/vnpay-seeklogo.com.svg';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import axios from 'axios';
 import VnpayAPI from '~/Api/VnpayAPI';
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 
 const cx = classNames.bind(styles);
 
@@ -111,12 +112,20 @@ function Payment() {
     }, [receivedData]);
 
     useEffect(() => {
-        let totalPrice = 0;
-        listOrder.forEach((item) => {
-            totalPrice += item.price * item.quantity;
-        });
-        setTotalPrice(totalPrice);
-        setOriginTotalPrice(totalPrice);
+        const updateListOrder = async () => {
+            let totalPrice = 0;
+            listOrder.forEach((item) => {
+                totalPrice += item.price * item.quantity;
+                let imgTemp = ParrotSpeciesColorAPI.getImagesByColorId(item.colorID);
+
+                imgTemp.then((result) => {
+                    item.img = result[0].imageUrl;
+                });
+            });
+            setTotalPrice(totalPrice);
+            setOriginTotalPrice(totalPrice);
+        };
+        updateListOrder();
     }, [listOrder]);
 
     useEffect(() => {

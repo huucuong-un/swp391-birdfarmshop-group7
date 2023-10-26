@@ -44,8 +44,8 @@ public class OrderDetailEntity extends BaseEntity {
     private ParrotEntity parrot;
 
     @OneToOne
-    @JoinColumn(name = "nest_id", unique = true)
-    private NestEntity parrotEggNest;
+    @JoinColumn(name = "nest_usage_id", unique = true)
+    private NestUsageHistoryEntity nestUsageHistory;
 
 
 

@@ -47,7 +47,6 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         orderDetailEntity = (OrderDetailEntity) converter.toEntity(orderDetailDTO, OrderDetailEntity.class);
 
 
-        orderDetailEntity.setParrotEggNest(parrotEggNestRepository.findOneById(orderDetailDTO.getNestId()));
         orderDetailRepository.save(orderDetailEntity);
         return (OrderDetailDTO) converter.toDTO(orderDetailEntity, OrderDetailDTO.class);
     }

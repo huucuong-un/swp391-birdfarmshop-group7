@@ -27,14 +27,8 @@ function Payment() {
     const [listOrder, setListOrder] = useState([]);
     const location = useLocation();
     const receivedData = location.state;
+    console.log(receivedData);
     const navigate = useNavigate();
-
-    // const quantity = receivedData.quantities[1] || 0;
-    // const quantity = receivedData && receivedData.quantities ? receivedData.quantities[1] : 0;
-    // const pricePerItem = receivedData.selectedColor[1].price;
-    // const pricePerItem = receivedData && receivedData.selectedColor ? receivedData.selectedColor[1].price || 0 : 0;
-    // const quantity = receivedData.quantities[1];
-    // const pricePerItem = receivedData.selectedColor[1].price;
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);

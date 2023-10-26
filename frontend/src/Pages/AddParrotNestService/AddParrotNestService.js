@@ -24,13 +24,15 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrotNestService/AddParrotNestService.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faL } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 import ParrotAPI from '~/Api/ParrotAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 import ChooseProduct from '~/Components/ChooseProduct/ChooseProduct';
 import ParrotCoupleAPI from '~/Api/ParrotCoupleAPI';
+import { color } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -39,14 +41,16 @@ function AddParrotNestService() {
     const cancelRef = React.useRef();
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [choosenFirstParrotSpecies, setChoosenFirstParrotSpecies] = useState();
-    const [choosenSecondParrotSpecies, setChoosenSecondParrotSpecies] = useState();
     const [firstParrotColor, setFirstParrotColor] = useState([]);
+    const [firstParrotColorSelected, setFirstParrotColorSelected] = useState(false);
+    const [choosenColorFirst, setChoosenColorFirst] = useState(false);
+    const [choosenColorSecond, setChoosenColorSecond] = useState(false);
     const [secondParrotColor, setSecondParrotColor] = useState([]);
     const [firstParrot, setFirstParrot] = useState({
         age: null,
         status: true,
         saleStatus: false,
-        pregnancyStatus: true,
+        pregnancyStatus: false,
         healthStatus: true,
         numberOfChildren: 2,
         gender: true,
@@ -59,9 +63,10 @@ function AddParrotNestService() {
         pregnancyStatus: true,
         healthStatus: true,
         numberOfChildren: 2,
-        gender: true,
+        gender: false,
         colorID: null,
     });
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getParrotSpecies = async () => {
@@ -93,7 +98,7 @@ function AddParrotNestService() {
     useEffect(() => {
         const getSecondParrotColor = async () => {
             try {
-                const parrotColor = await ParrotSpeciesColorAPI.findOneSpeciesByParrotID(choosenSecondParrotSpecies);
+                const parrotColor = await ParrotSpeciesColorAPI.findOneSpeciesByParrotID(choosenFirstParrotSpecies);
                 setSecondParrotColor(parrotColor);
             } catch (error) {
                 console.error(error);
@@ -101,7 +106,7 @@ function AddParrotNestService() {
         };
 
         getSecondParrotColor();
-    }, [choosenSecondParrotSpecies]);
+    }, [choosenFirstParrotSpecies]);
 
     useEffect(() => {
         console.log(firstParrot);
@@ -111,6 +116,10 @@ function AddParrotNestService() {
         console.log(secondParrot);
     }, [secondParrot]);
 
+    useEffect(() => {
+        console.log(firstParrotColorSelected);
+    }, [firstParrotColorSelected]);
+
     const handleBreed = async () => {
         const addFirstParrot = await ParrotAPI.add(firstParrot);
         const addSecondParrot = await ParrotAPI.add(secondParrot);
@@ -119,13 +128,67 @@ function AddParrotNestService() {
             parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
             status: true,
         });
+
+        if (addParrotCouple) {
+            navigate('/payment', {
+                state: [firstParrot],
+            });
+        }
     };
 
-    const handleGenderSelect = (e) => {
-        setFirstParrot({
-            ...firstParrot,
-            gender: e === 'true' ? (e = true) : (e = false),
-        });
+    const handleGenderSelect = ({ e, type }) => {
+        if (e === 'true' && type === 'firstParrot') {
+            setFirstParrot({
+                ...firstParrot,
+                gender: (e = true),
+                pregnancyStatus: false,
+            });
+            setSecondParrot({
+                ...secondParrot,
+                gender: false,
+                pregnancyStatus: true,
+            });
+        } else if (e === 'false' && type === 'firstParrot') {
+            setFirstParrot({
+                ...firstParrot,
+                gender: (e = false),
+                pregnancyStatus: true,
+            });
+            setSecondParrot({
+                ...secondParrot,
+                gender: true,
+                pregnancyStatus: false,
+            });
+
+            // setSecondParrot({
+            //     ...secondParrot,
+            //     pregnancyStatus: false,
+            // });
+        } else if (e === 'true' && type === 'secondParrot') {
+            setSecondParrot({
+                ...secondParrot,
+                gender: true,
+                pregnancyStatus: false,
+            });
+
+            setFirstParrot({
+                ...firstParrot,
+                gender: (e = false),
+                pregnancyStatus: true,
+            });
+        } else if (e === 'false' && type === 'secondParrot') {
+            setSecondParrot({
+                ...secondParrot,
+                gender: false,
+                pregnancyStatus: true,
+            });
+
+            setFirstParrot({
+                ...firstParrot,
+                gender: (e = true),
+                pregnancyStatus: false,
+            });
+        }
     };
 
     return (
@@ -145,27 +208,22 @@ function AddParrotNestService() {
                             <Text>
                                 <div className={cx('add-form')}>
                                     <div className={cx('add-form-item')}>
-                                        <label>Species:</label>
-                                        <select onChange={(e) => setChoosenFirstParrotSpecies(e.target.value)}>
-                                            <option value="" disabled selected>
-                                                Species
-                                            </option>
-                                            {parrotSpecies &&
-                                                parrotSpecies.map((species, speciesIndex) => (
-                                                    <option key={speciesIndex} value={species.id}>
-                                                        {species.name}
-                                                    </option>
-                                                ))}
-                                        </select>
-                                    </div>
-                                    <div className={cx('add-form-item')}>
                                         <label>Color:</label>
                                         <select
-                                            onChange={(e) =>
-                                                setFirstParrot({ ...firstParrot, colorID: parseInt(e.target.value) })
-                                            }
+                                            onChange={(e) => {
+                                                setFirstParrot({ ...firstParrot, colorID: parseInt(e.target.value) });
+                                                setFirstParrotColorSelected(false);
+                                                setChoosenColorFirst(true);
+                                            }}
                                         >
-                                            <option value="" disabled selected>
+                                            <option
+                                                value=""
+                                                disabled
+                                                selected={
+                                                    firstParrotColorSelected ||
+                                                    (firstParrotColorSelected === false && choosenColorFirst === false)
+                                                }
+                                            >
                                                 Colors
                                             </option>
                                             {firstParrotColor &&
@@ -215,24 +273,29 @@ function AddParrotNestService() {
                                                 })
                                             }
                                         >
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            {firstParrot.gender ? (
+                                                <option value="false">No</option>
+                                            ) : (
+                                                <>
+                                                    <option value="true">Yes</option>
+                                                    <option value="false">No</option>
+                                                </>
+                                            )}
                                         </select>
                                     </div>
                                     <div className={cx('add-form-item')}>
                                         <label>Gender:</label>
-                                        <select onChange={(e) => handleGenderSelect(e.target.value)}>
-                                            {/* {secondParrot.gender === true ? (
-                                                <option value="false" selected>
-                                                    Female
-                                                </option>
-                                            ) : (
-                                                <option value="true" selected>
-                                                    Male
-                                                </option>
-                                            )} */}
-                                            <option value="true">Male</option>
-                                            <option value="false">Female</option>
+                                        <select
+                                            onChange={(e) =>
+                                                handleGenderSelect({ e: e.target.value, type: 'firstParrot' })
+                                            }
+                                        >
+                                            <option value="false" selected={firstParrot.gender === false}>
+                                                Female
+                                            </option>
+                                            <option value="true" selected={firstParrot.gender === true}>
+                                                Male
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -241,8 +304,31 @@ function AddParrotNestService() {
                     </CardBody>
                 </Card>
                 <div className={cx('breed-zone')}>
-                    <Text>Breed</Text>
+                    <Text>Breed Here</Text>
                     <FontAwesomeIcon icon={faHeart} className={cx('icon')} onClick={handleBreed} />
+                    <div className={cx('add-form-item', 'species-selected')}>
+                        {/* <label>Species:</label> */}
+                        <select
+                            onChange={(e) => {
+                                setChoosenFirstParrotSpecies(e.target.value);
+                                setFirstParrot({ ...firstParrot, colorID: null });
+                                setSecondParrot({ ...secondParrot, colorID: null });
+                                setFirstParrotColorSelected(true);
+                                setChoosenColorFirst(false);
+                                setChoosenColorSecond(false);
+                            }}
+                        >
+                            <option value="" disabled selected>
+                                Species
+                            </option>
+                            {parrotSpecies &&
+                                parrotSpecies.map((species, speciesIndex) => (
+                                    <option key={speciesIndex} value={species.id}>
+                                        {species.name}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
                 </div>
                 <Card maxW="md">
                     <CardBody>
@@ -258,33 +344,28 @@ function AddParrotNestService() {
                             <Text>
                                 <div className={cx('add-form')}>
                                     <div className={cx('add-form-item')}>
-                                        <label>Species:</label>
-                                        <select onChange={(e) => setChoosenSecondParrotSpecies(e.target.value)}>
-                                            <option value="" disabled selected>
-                                                Species
-                                            </option>
-                                            {parrotSpecies &&
-                                                parrotSpecies.map((species, speciesIndex) => (
-                                                    <option key={speciesIndex} value={species.id}>
-                                                        {species.name}
-                                                    </option>
-                                                ))}
-                                        </select>
-                                    </div>
-                                    <div className={cx('add-form-item')}>
                                         <label>Color:</label>
                                         <select
-                                            onChange={(e) =>
-                                                setSecondParrot({ ...secondParrot, colorID: parseInt(e.target.value) })
-                                            }
+                                            onChange={(e) => {
+                                                setSecondParrot({ ...secondParrot, colorID: parseInt(e.target.value) });
+                                                setFirstParrotColorSelected(false);
+                                                setChoosenColorSecond(true);
+                                            }}
                                         >
-                                            <option value="" disabled selected>
+                                            <option
+                                                value=""
+                                                disabled
+                                                selected={
+                                                    firstParrotColorSelected ||
+                                                    (firstParrotColorSelected === false && choosenColorSecond === false)
+                                                }
+                                            >
                                                 Colors
                                             </option>
-                                            {secondParrotColor &&
-                                                secondParrotColor.map((secondParrotColor, secondParrotColorIndex) => (
-                                                    <option key={secondParrotColorIndex} value={secondParrotColor.id}>
-                                                        {secondParrotColor.color}
+                                            {firstParrotColor &&
+                                                firstParrotColor.map((firstParrotColor, firstParrotColorIndex) => (
+                                                    <option key={firstParrotColorIndex} value={firstParrotColor.id}>
+                                                        {firstParrotColor.color}
                                                     </option>
                                                 ))}
                                         </select>
@@ -328,25 +409,29 @@ function AddParrotNestService() {
                                                 })
                                             }
                                         >
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            {secondParrot.gender === true ? (
+                                                <option value="false">No</option>
+                                            ) : (
+                                                <>
+                                                    <option value="true">Yes</option>
+                                                    <option value="false">No</option>
+                                                </>
+                                            )}
                                         </select>
                                     </div>
                                     <div className={cx('add-form-item')}>
                                         <label>Gender:</label>
                                         <select
                                             onChange={(e) =>
-                                                setSecondParrot({
-                                                    ...secondParrot,
-                                                    gender:
-                                                        e.target.value === 'true'
-                                                            ? (e.target.value = true)
-                                                            : (e.target.value = false),
-                                                })
+                                                handleGenderSelect({ e: e.target.value, type: 'secondParrot' })
                                             }
                                         >
-                                            <option value="true">Male</option>
-                                            <option value="false">Female</option>
+                                            <option value="false" selected={secondParrot.gender === false}>
+                                                Female
+                                            </option>
+                                            <option value="true" selected={secondParrot.gender === true}>
+                                                Male
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

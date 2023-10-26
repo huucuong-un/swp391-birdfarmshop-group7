@@ -10,6 +10,7 @@ import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 //import com.eleventwell.parrotfarmshop.repository.GenericRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
@@ -175,9 +176,12 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     @Override
     public int totalItem() {
       	return (int)parrotSpeciesRepository.countAllByStatusIsTrue();
-
     }
 
+
+    public int totalItemForAdmin() {
+        return (int)parrotSpeciesRepository.count();
+    }
     public List<ParrotSpeciesDTO> searchSortForAdmin(String name,
                                                      Long quantity,
                                                      String description,
@@ -243,6 +247,8 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 //        }
 //        return results;
 //    }
+
+
 
 
 }

@@ -40,10 +40,10 @@ public class NestEntity extends BaseEntity {
     @OneToMany(mappedBy = "nest")
     private List<NestUsageHistoryEntity> nestUsageHistory = new ArrayList<>();
 
-
     @ManyToOne
-    @JoinColumn(name = "species_id")
-    private ParrotSpeciesEntity parrotSpecies;
+    @JoinColumn(name = "nest_price_id")
+    private NestPriceEntity nestPrice;
+
 
 //    @OneToOne(mappedBy = "parrotEggNest")
 //    private OrderDetailEntity orderDetailEntity;

@@ -8,10 +8,7 @@ import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
-import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
-import com.eleventwell.parrotfarmshop.repository.OrderRepository;
-import com.eleventwell.parrotfarmshop.repository.NestRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
+import com.eleventwell.parrotfarmshop.repository.*;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +24,9 @@ public class OrderService implements IGenericService<OrderDTO> {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    NestUsageHistoryRepository nestUsageHistoryRepository;
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
@@ -130,18 +130,15 @@ public class OrderService implements IGenericService<OrderDTO> {
                 totalPrice += id.getParrotSpeciesColor().getPrice();
             }
         }
-//        if (check.equals("nest")) {
-//            List<NestEntity> nests = parrotEggNestRepository.findTopNByStatusIsTrue(speciesId, pageable);
-//
-//            for (NestEntity id : nests) {
-//                orderDetailService.createOrderDetailDTO(orderId, id.getId(), 2);
-//
-//                nestService.changeSaleStatus(id.getId());
-//                totalPrice += id.getSpeciesEggPrice().getPrice();
-//
-//
-//            }
-//        }
+        if (check.equals("nest")) {
+
+
+                orderDetailService.createOrderDetailDTO(orderId, speciesId, 2);
+                totalPrice += nestUsageHistoryRepository.findOneById(speciesId).getNest().getNestPrice().getPrice(); ;
+
+
+            }
+
         return totalPrice;
 
     }

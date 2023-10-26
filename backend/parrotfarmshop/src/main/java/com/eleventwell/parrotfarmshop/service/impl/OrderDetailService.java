@@ -59,7 +59,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         if (check == 1) {
             orderDetailDTO.setParrotId(productID);
         } else if (check == 2) {
-            orderDetailDTO.setNestId(productID);
+            orderDetailDTO.setNestUsageId(productID);
         }
 
         save(orderDetailDTO);

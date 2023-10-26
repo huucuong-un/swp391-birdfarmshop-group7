@@ -57,7 +57,6 @@ public class NestService implements IGenericService<NestDTO> {
         } else {
             parrotEggNestEntity = (NestEntity) genericConverter.toEntity(nestDTO, NestEntity.class);
         }
-        parrotEggNestEntity.setParrotSpecies(parrotSpeciesRepository.findOneById(nestDTO.getSpeciesId()));
         parrotEggNestRepository.save(parrotEggNestEntity);
         return (NestDTO) genericConverter.toDTO(parrotEggNestEntity, NestDTO.class);
     }

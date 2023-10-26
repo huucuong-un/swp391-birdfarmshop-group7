@@ -7,13 +7,11 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SpeciesEggPriceDTO extends BaseDTO {
+public class NestPriceDTO extends BaseDTO {
 
     private Long speciesId;
 
     private Double price;
-
-    private Integer quantity;
 
     private Boolean status;
 }

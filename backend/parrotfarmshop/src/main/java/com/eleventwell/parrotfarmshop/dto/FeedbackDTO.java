@@ -27,7 +27,6 @@ private  Boolean status;
 
     private String belongTo;
 
-
     private Long userId;
 
     private Long replyerId;

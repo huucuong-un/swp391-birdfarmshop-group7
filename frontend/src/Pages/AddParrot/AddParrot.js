@@ -20,7 +20,7 @@ import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Title from '~/Components/Title/Title';
 import Buttons from '~/Components/Button/Button';
@@ -119,6 +119,9 @@ function AddParrot() {
     useEffect(() => {
         const fetchParrotSpeciesColorbyID = async () => {
             try {
+                if (speciesColorByID === 'a') {
+                    return;
+                }
                 if (
                     speciesColorByID !== undefined ||
                     speciesColorByID !== 'Select a color' ||
@@ -235,13 +238,15 @@ function AddParrot() {
     const [sort, setSort] = useState({
         page: 1,
         limit: 5,
-        searchDate: null,
+        age: null,
         status: null,
-        title: null,
-        content: null,
-        description: null,
-        sortTile: null,
+        saleStatus: null,
+        pregnancyStatus: null,
+        healthStatus: null,
+        gender: null,
+        searchDate: null,
         sortDate: null,
+        sortAge: null,
     });
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
@@ -249,9 +254,9 @@ function AddParrot() {
     useEffect(() => {
         const sortData = async () => {
             try {
-                // const postSortList = await PostAPI.searchSortForPost(sort);
-                // setPostList(postSortList.listResult);
-                // setTotalPage(postSortList.totalPage);
+                const sortData = await ParrotAPI.searchSortForParrot(sort);
+                setParrotList(sortData.listResult);
+                setTotalPage(sortData.totalPage);
             } catch (error) {
                 console.error(error);
             }
@@ -262,12 +267,15 @@ function AddParrot() {
         setSort({
             page: newPage,
             limit: 5,
-            email: sort.email,
-            phone: sort.phone,
-            date: sort.date,
-            sortDate: sort.sortDate,
-            sortPrice: sort.sortPrice,
-            sortTitle: sort.sortTile,
+            age: null,
+            status: null,
+            saleStatus: null,
+            pregnancyStatus: null,
+            healthStatus: null,
+            gender: null,
+            searchDate: null,
+            sortDate: null,
+            sortAge: null,
         });
 
         setPage(newPage);
@@ -276,17 +284,21 @@ function AddParrot() {
     const handleClear = () => {
         setSort({
             page: 1,
-            limit: 10,
-            searchDate: null,
+            limit: 5,
+            age: null,
             status: null,
-            title: null,
-            content: null,
-            description: null,
-            sortTile: null,
+            saleStatus: null,
+            pregnancyStatus: null,
+            healthStatus: null,
+            gender: null,
+            searchDate: null,
             sortDate: null,
+            sortAge: null,
         });
     };
-
+    useEffect(() => {
+        console.log(sort);
+    }, [sort]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -301,27 +313,65 @@ function AddParrot() {
                 </Buttons>
             </div>
             <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} />
-                <input type="text" placeholder="Content" />
-                <input type="text" placeholder="Title" />
-                <input type="text" placeholder="Description" />
-                {/* Sort date */}
-
-                {/* Sort title */}
-                <select name="sortTitle" id="sortTitle">
-                    <option value="b">Title</option>
-                    <option value="TASC">Ascending</option>
-                    <option value="TDESC">Descending</option>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                {/* Sort 1 */}
+                <input type="number" placeholder="Age" onChange={(e) => setSort({ ...sort, age: e.target.value })} />
+                {/* Sort 2 */}
+                <input type="date" onChange={(e) => setSort({ ...sort, searchDate: e.target.value })} />
+                {/* Sort 3 */}
+                <select name="gender" id="gender" onChange={(e) => setSort({ ...sort, gender: e.target.value })}>
+                    <option value="b">Gender</option>
+                    <option value="true">Male</option>
+                    <option value="false">Female</option>
                 </select>
-                <select name="sortDate" id="sortDate">
-                    <option value="b">Date</option>
-                    <option value="DASC">Ascending</option>
-                    <option value="DDESC">Descending</option>
-                </select>
-                <select name="sortStatus" id="sortStatus">
+                {/* Sort 4 */}
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
                     <option value="b">Status</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
+                </select>
+                {/* Sort 5 */}
+                <select
+                    name="healthStatus"
+                    id="healthStatus"
+                    onChange={(e) => setSort({ ...sort, healthStatus: e.target.value })}
+                >
+                    <option value="b">Health status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 6 */}
+
+                <select
+                    name="pregnancyStatus"
+                    id="pregnancyStatus"
+                    onChange={(e) => setSort({ ...sort, pregnancyStatus: e.target.value })}
+                >
+                    <option value="b">Pregnancy status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 7 */}
+                <select
+                    name="saleStatus"
+                    id="saleStatus"
+                    onChange={(e) => setSort({ ...sort, saleStatus: e.target.value })}
+                >
+                    <option value="b">Sale status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 8 */}
+                <select name="sortAge" id="sortAge" onChange={(e) => setSort({ ...sort, sortAge: e.target.value })}>
+                    <option value="b">Age</option>
+                    <option value="ADESC">Descending</option>
+                    <option value="AASC">Ascending</option>
+                </select>
+                {/* Sort 9 */}
+                <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="b">Date</option>
+                    <option value="DDESC">Descending</option>
+                    <option value="DASC">Ascending</option>
                 </select>
             </div>
             {show ? (
@@ -602,6 +652,19 @@ function AddParrot() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }

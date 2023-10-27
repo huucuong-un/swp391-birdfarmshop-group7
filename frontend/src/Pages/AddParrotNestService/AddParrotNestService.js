@@ -33,12 +33,14 @@ import ChooseProduct from '~/Components/ChooseProduct/ChooseProduct';
 import ParrotCoupleAPI from '~/Api/ParrotCoupleAPI';
 import { color } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import NestAPI from '~/Api/NestAPI';
 
 const cx = classNames.bind(styles);
 
 function AddParrotNestService() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = React.useRef();
+    const [combineData, setCombineData] = useState([]);
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [choosenFirstParrotSpecies, setChoosenFirstParrotSpecies] = useState();
     const [firstParrotColor, setFirstParrotColor] = useState([]);
@@ -66,6 +68,7 @@ function AddParrotNestService() {
         gender: false,
         colorID: null,
     });
+    const [nestPrice, setNestPrice] = useState({});
     const [speciesToPass, setSpeciesToPass] = useState({});
     const [combineSpecies, setcombineSpecies] = useState([]);
 
@@ -74,9 +77,8 @@ function AddParrotNestService() {
     useEffect(() => {
         const getParrotSpecies = async () => {
             try {
-                const parrotSpecies = await ParrotSpeciesAPI.getAll();
-                console.log(parrotSpecies.listResult);
-                setParrotSpecies(parrotSpecies.listResult);
+                const parrotSpecies = await NestAPI.getAll();
+                setParrotSpecies(parrotSpecies);
             } catch (error) {
                 console.error(error);
             }
@@ -84,6 +86,42 @@ function AddParrotNestService() {
 
         getParrotSpecies();
     }, []);
+
+    useEffect(() => {
+        try {
+            console.log(combineData);
+        } catch (error) {}
+    }, [combineData]);
+
+    useEffect(() => {
+        const getParrotSpecies = async () => {
+            const data = [];
+            for (const item of parrotSpecies) {
+                const parrot = { ...item };
+                try {
+                    parrot.species = await ParrotSpeciesAPI.get(item.speciesId);
+                    data.push(parrot);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            setCombineData(data);
+        };
+        getParrotSpecies();
+    }, [parrotSpecies]);
+
+    useEffect(() => {
+        const getNestPriceBySpecies = async () => {
+            try {
+                const nestPriceBySpeciesId = await NestAPI.getNestPriceBySpeciesId(choosenFirstParrotSpecies);
+                setNestPrice(nestPriceBySpeciesId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getNestPriceBySpecies();
+    }, [choosenFirstParrotSpecies]);
 
     useEffect(() => {
         const getFirstParrotColor = async () => {
@@ -125,6 +163,10 @@ function AddParrotNestService() {
     }, [choosenFirstParrotSpecies]);
 
     useEffect(() => {
+        console.log(combineSpecies);
+    }, [combineSpecies]);
+
+    useEffect(() => {
         const combineSpeciesWithIsNest = () => {
             try {
                 setcombineSpecies({
@@ -132,6 +174,7 @@ function AddParrotNestService() {
                     isNest: true,
                     firstParrot: firstParrot,
                     secondParrot: secondParrot,
+                    nestPrice: nestPrice,
                 });
             } catch (error) {
                 console.error(error);
@@ -149,13 +192,17 @@ function AddParrotNestService() {
         console.log(secondParrot);
     }, [secondParrot]);
 
-    useEffect(() => {
-        console.log(firstParrotColorSelected);
-    }, [firstParrotColorSelected]);
+    // useEffect(() => {
+    //     console.log(firstParrotColorSelected);
+    // }, [firstParrotColorSelected]);
 
-    useEffect(() => {
-        console.log(combineSpecies);
-    }, [combineSpecies]);
+    // useEffect(() => {
+    //     console.log(combineSpecies);
+    // }, [combineSpecies]);
+
+    // useEffect(() => {
+    //     if(firstParrot.age || )
+    // }, [firstParrot, secondParrot])
 
     const handleBreed = async () => {
         // const addFirstParrot = await ParrotAPI.add(firstParrot);
@@ -338,8 +385,21 @@ function AddParrotNestService() {
                     </CardBody>
                 </Card>
                 <div className={cx('breed-zone')}>
-                    <Text>Breed Here</Text>
-                    <FontAwesomeIcon icon={faHeart} className={cx('icon')} onClick={handleBreed} />
+                    {firstParrot.age === null ||
+                    firstParrot.colorID === null ||
+                    secondParrot.age === null ||
+                    secondParrot.colorID === null ? (
+                        <>
+                            <Text>Choose Species</Text>
+                            <FontAwesomeIcon icon={faHeart} className={cx('icon', 'disable')} />
+                        </>
+                    ) : (
+                        <>
+                            <Text>Breed Here</Text>
+                            <FontAwesomeIcon icon={faHeart} className={cx('icon')} onClick={handleBreed} />
+                        </>
+                    )}
+
                     <div className={cx('add-form-item', 'species-selected')}>
                         {/* <label>Species:</label> */}
                         <select
@@ -355,10 +415,10 @@ function AddParrotNestService() {
                             <option value="" disabled selected>
                                 Species
                             </option>
-                            {parrotSpecies &&
-                                parrotSpecies.map((species, speciesIndex) => (
-                                    <option key={speciesIndex} value={species.id}>
-                                        {species.name}
+                            {combineData &&
+                                combineData.map((species, speciesIndex) => (
+                                    <option key={speciesIndex} value={species.speciesId}>
+                                        {species.species[0].name}
                                     </option>
                                 ))}
                         </select>

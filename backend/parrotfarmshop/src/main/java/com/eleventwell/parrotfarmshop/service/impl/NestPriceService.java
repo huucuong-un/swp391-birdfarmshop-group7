@@ -89,7 +89,7 @@ public class NestPriceService implements IGenericService<NestPriceDTO> {
 //
 //}
     public NestPriceDTO findOneBySpeciesId(Long id){
-        return (NestPriceDTO) converter.toDTO(nestPriceRepository.findOneById(id),NestPriceDTO.class);
+        return (NestPriceDTO) converter.toDTO(nestPriceRepository.findOneByParrotSpeciesId(id),NestPriceDTO.class);
 
     }
     @Override

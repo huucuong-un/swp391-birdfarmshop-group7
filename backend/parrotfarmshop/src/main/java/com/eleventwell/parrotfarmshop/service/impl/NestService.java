@@ -115,7 +115,9 @@ public class NestService implements IGenericService<NestDTO> {
         return results;
     }
     public NestDTO findOneBySpeciesId(Long id){
-        return (NestDTO) genericConverter.toDTO(parrotEggNestRepository.findOneBySpeciesIdAndStatusTrue(id),NestDTO.class);
+        List<NestEntity> nests = parrotEggNestRepository.findOneBySpeciesIdAndStatusTrue(id);
+return (NestDTO) genericConverter.toDTO(nests.get(0),NestDTO.class);
+
     }
 
     @Override

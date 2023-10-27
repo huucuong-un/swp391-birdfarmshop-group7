@@ -4,10 +4,7 @@ import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDetailDTO;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
-import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
-import com.eleventwell.parrotfarmshop.repository.OrderRepository;
-import com.eleventwell.parrotfarmshop.repository.NestRepository;
-import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
+import com.eleventwell.parrotfarmshop.repository.*;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +32,9 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
     @Autowired
     private NestRepository parrotEggNestRepository;
 
+    @Autowired
+    private NestUsageHistoryRepository nestUsageHistoryRepository;
+
 
     @Override
     public List<OrderDetailDTO> findAll() {
@@ -46,7 +46,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         OrderDetailEntity orderDetailEntity = new OrderDetailEntity();
         orderDetailEntity = (OrderDetailEntity) converter.toEntity(orderDetailDTO, OrderDetailEntity.class);
 
-
+orderDetailEntity.setNestUsageHistory(nestUsageHistoryRepository.findOneById(orderDetailDTO.getNestUsageId()));
         orderDetailRepository.save(orderDetailEntity);
         return (OrderDetailDTO) converter.toDTO(orderDetailEntity, OrderDetailDTO.class);
     }

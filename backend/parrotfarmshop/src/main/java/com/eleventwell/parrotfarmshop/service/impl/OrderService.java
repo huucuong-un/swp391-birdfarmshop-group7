@@ -221,8 +221,14 @@ return orderDTO;
     public void removeOrder(Long id){
 List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
         for (OrderDetailEntity orderDetail: orderDetails ) {
-         parrotService.changeSaleStatus(orderDetail.getParrot().getId());
-         orderDetailRepository.deleteById(orderDetail.getId());
+            if(orderDetail.getParrot()!=null){
+                parrotService.changeSaleStatus(orderDetail.getParrot().getId());
+            }else{
+nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
+            }
+            orderDetailRepository.deleteById(orderDetail.getId());
+
+
         }
         orderRepository.deleteById(id);
     }

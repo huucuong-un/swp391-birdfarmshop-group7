@@ -294,9 +294,11 @@ function OrderHistoryNew() {
                                         <Tr>
                                             <Th>Image</Th>
                                             <Th>Name</Th>
-                                            <Th>Color</Th>
+                                            {order.listOrderDetailHistoryModel[0].color != null ? <Th>Color</Th> : null}
+
                                             <Th>Quantity</Th>
                                             <Th>Price</Th>
+                                            <Th>Service</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
@@ -311,9 +313,12 @@ function OrderHistoryNew() {
                                                     />
                                                 </Td>
                                                 <Td>{parrot.speciesName}</Td>
-                                                <Td>{parrot.color}</Td>
+                                                {parrot.color != null ? <Td>{parrot.color}</Td> : null}
+
                                                 <Td>x{parrot.quantity}</Td>
                                                 <Td>$ {parrot.price}</Td>
+                                                <Td>{parrot.color != null ? 'Parrot' : 'Nest'}</Td>
+
                                             </Tr>
                                         ))}
                                     </Tbody>

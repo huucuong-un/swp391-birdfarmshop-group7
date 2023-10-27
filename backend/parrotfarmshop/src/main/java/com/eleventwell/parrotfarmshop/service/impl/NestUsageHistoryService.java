@@ -51,8 +51,10 @@ public class NestUsageHistoryService implements IGenericService<NestUsageHistory
             nestUsageHistoryEntity = (NestUsageHistoryEntity) genericConverter.toEntity(DTO, NestUsageHistoryEntity.class);
         }
 
-        NestEntity  nestEntity = nestRepository.findOneById(DTO.getNestId());
+        NestEntity nestEntity = nestRepository.findOneById(DTO.getNestId());
         nestUsageHistoryRepository.save(nestUsageHistoryEntity);
+        nestEntity.setStatus(false);
+        nestRepository.save(nestEntity);
         return (NestUsageHistoryDTO) genericConverter.toDTO(nestUsageHistoryEntity, NestUsageHistoryDTO.class);
     }
 

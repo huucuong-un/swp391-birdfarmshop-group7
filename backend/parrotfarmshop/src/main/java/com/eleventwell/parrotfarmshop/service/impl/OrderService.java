@@ -224,7 +224,8 @@ List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(
             if(orderDetail.getParrot()!=null){
                 parrotService.changeSaleStatus(orderDetail.getParrot().getId());
             }else{
-nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
+            nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
+            nestService.changeStatus(orderDetail.getNestUsageHistory().getNest().getId());
             }
             orderDetailRepository.deleteById(orderDetail.getId());
 

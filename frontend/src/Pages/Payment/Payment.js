@@ -123,8 +123,8 @@ function Payment() {
     }, [listOrder]);
 
     useEffect(() => {
-        console.log(listOrder);
-    }, [listOrder]);
+        console.log(receivedData);
+    }, []);
 
     useEffect(() => {
         console.log(checkNest);
@@ -333,7 +333,7 @@ function Payment() {
                                             x{checkNest ? 1 : item.quantity}
                                         </p>
                                         <p className={cx('payment-detail-items-price')}>
-                                            $ {item.price * item.quantity}
+                                            $ {checkNest ? item.nestPrice.price : item.price * item.quantity}
                                         </p>
                                     </div>
                                 </div>

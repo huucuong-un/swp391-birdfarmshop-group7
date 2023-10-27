@@ -8,6 +8,10 @@ import java.util.List;
 public interface NestPriceRepository extends JpaRepository<NestPriceEntity,Long> {
 
     NestPriceEntity findOneById(Long id);
+
+    NestPriceEntity findOneByParrotSpeciesId(Long id);
+
+
     List<NestPriceEntity> findAllByOrderByIdDesc();
 
 }

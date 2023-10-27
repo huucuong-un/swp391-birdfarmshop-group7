@@ -46,6 +46,12 @@ public class ParrotSpeciesController {
         return list;
     }
 
+    @GetMapping(value = "find-one-species-by-id-object/{id}")
+    public ParrotSpeciesDTO findOneSpeciesByIdInNest(@RequestBody @PathVariable("id") long id) {
+        ParrotSpeciesDTO list = parrotSpeciesService.findOneSpeciesById(id);
+        return list;
+    }
+
     @GetMapping(value = "find-one-species-by-parrot-id/{id}")
     public List<ParrotSpeciesDTO> findOneSpeciesByParrotId(@RequestBody @PathVariable("id") long id) {
         List<ParrotSpeciesDTO> list = new ArrayList<>();

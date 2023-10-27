@@ -19,6 +19,11 @@ import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext'
 import axios from 'axios';
 import VnpayAPI from '~/Api/VnpayAPI';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+import { Text } from '@chakra-ui/react';
+import ParrotAPI from '~/Api/ParrotAPI';
+import ParrotCoupleAPI from '~/Api/ParrotCoupleAPI';
+import NestUsageHistoryAPI from '~/Api/NestUsageHistoryAPI';
+import NestAPI from '~/Api/NestAPI';
 
 const cx = classNames.bind(styles);
 
@@ -51,6 +56,8 @@ function Payment() {
         vnp_OrderType: '20000', // Thay thế bằng giá trị thực tế của vnp_OrderType
         vnp_TxnRef: null, // Thay thế bằng giá trị thực tế của vnp_TxnRef
     });
+
+    const [checkNest, setCheckNest] = useState(false);
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
@@ -106,6 +113,24 @@ function Payment() {
     }, [receivedData]);
 
     useEffect(() => {
+        try {
+            if (listOrder[0].isNest) {
+                setCheckNest(true);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }, [listOrder]);
+
+    useEffect(() => {
+        console.log(listOrder);
+    }, [listOrder]);
+
+    useEffect(() => {
+        console.log(checkNest);
+    }, [checkNest]);
+
+    useEffect(() => {
         const updateListOrder = async () => {
             let totalPrice = 0;
             listOrder.forEach((item) => {
@@ -119,51 +144,108 @@ function Payment() {
             setTotalPrice(totalPrice);
             setOriginTotalPrice(totalPrice);
         };
-        updateListOrder();
+
+        if (listOrder.colorID) {
+            updateListOrder();
+        }
     }, [listOrder]);
 
     useEffect(() => {
         const addOrders = async () => {
-            try {
-                // setPaymentStatus((prev) => prev + 1);
-                const cartList = listOrder.map((item, index) => ({
-                    speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
-                    quantity: item.quantity,
-                    type: 'parrot',
-                }));
+            if (checkNest == false) {
+                try {
+                    const cartList = listOrder.map((item, index) => ({
+                        speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
+                        quantity: item.quantity,
+                        type: 'parrot',
+                    }));
+                    const data = {
+                        orderDTO: {
+                            // userID: 1,
+                            deliveryInformationId: selectedDelivery.id,
+                            promotionID: promotion,
+                            userID: user.userId,
+                            status: 'pending',
+                        },
+                        cartList: cartList,
+                    };
 
-                console.log(cartList);
-                const data = {
-                    orderDTO: {
-                        // userID: 1,
-                        deliveryInformationId: selectedDelivery.id,
-                        promotionID: promotion,
-                        userID: user.userId,
-                        status: 'pending',
-                    },
-                    cartList: cartList,
-                };
+                    // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
 
-                // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+                    await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+                    const addOrder = await OrderAPI.add(data);
 
-                await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
-                const addOrder = await OrderAPI.add(data);
+                    const response = await VnpayAPI.add(addOrder);
+                    console.log(addOrder);
+                    console.log(response);
+                    window.location.href = response;
+                    if (response.status === 200) {
+                        console.log('Payment Sucessful');
+                    } else {
+                        console.error('payment not successful ', response.status);
+                    }
 
-                const response = await VnpayAPI.add(addOrder);
-                console.log(addOrder);
-                console.log(response);
-                window.location.href = response;
-                if (response.status === 200) {
-                    console.log('Payment Sucessful');
-                } else {
-                    console.error('payment not successful ', response.status);
+                    console.log('Order added:', addOrder);
+                    console.log(data);
+                } catch (error) {
+                    console.error(error);
                 }
+            } else {
+                try {
+                    const addFirstParrot = await ParrotAPI.add(listOrder[0].firstParrot);
+                    const addSecondParrot = await ParrotAPI.add(listOrder[0].secondParrot);
+                    const addParrotCouple = await ParrotCoupleAPI.add({
+                        parrotMaleId: addFirstParrot.gender === true ? addFirstParrot.id : addSecondParrot.id,
+                        parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
+                        status: true,
+                    });
+                    const getNestBySpeciesID = await NestAPI.findOneBySpeciesId({
+                        speciesId: listOrder[0].id,
+                    });
+                    const addNestUsageHistory = await NestUsageHistoryAPI.add({
+                        parrotCoupleId: addParrotCouple.id,
+                        nestId: getNestBySpeciesID.id,
+                        startDate: null,
+                        endDate: null,
+                    });
+                    const cartList = listOrder.map((item, index) => ({
+                        speicesId: addNestUsageHistory.id, // Sử dụng item.colorID thay vì receivedData.colorID
+                        quantity: 1,
+                        type: 'nest',
+                    }));
+                    const data = {
+                        orderDTO: {
+                            // userID: 1,
+                            deliveryInformationId: selectedDelivery.id,
+                            promotionID: promotion,
+                            userID: user.userId,
+                            status: 'pending',
+                        },
+                        cartList: cartList,
+                    };
 
-                console.log('Order added:', addOrder);
-                console.log(data);
-            } catch (error) {
-                console.error(error);
+                    // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+
+                    await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+                    const addOrder = await OrderAPI.add(data);
+
+                    const response = await VnpayAPI.add(addOrder);
+                    console.log(addOrder);
+                    console.log(response);
+                    window.location.href = response;
+                    if (response.status === 200) {
+                        console.log('Payment Sucessful');
+                    } else {
+                        console.error('payment not successful ', response.status);
+                    }
+
+                    console.log('Order added:', addOrder);
+                    console.log(data);
+                } catch (error) {
+                    console.error(error);
+                }
             }
+            // setPaymentStatus((prev) => prev + 1);
         };
 
         if (payStatus) {
@@ -172,7 +254,9 @@ function Payment() {
         }
     }, [payStatus]);
 
-    const handleReloadParent = () => {};
+    useEffect(() => {
+        console.log(listOrder);
+    }, [listOrder]);
 
     const handlePayment = async () => {
         try {
@@ -228,26 +312,6 @@ function Payment() {
                             </Box>
                         </button>
                     </div>
-
-                    {/* <div className={cx('payment-method-input-container')}>
-                        <div className={cx('payment-method-input')}>
-                            <p>Contact</p>
-                            <input placeholder="Name" type="text" required />
-                            <input placeholder="Phone" type="text" required />
-                        </div>
-
-                        <div className={cx('payment-method-input')}>
-                            <p>Delivery</p>
-                            <input placeholder="City, district" type="text" required />
-                            <input
-                                placeholder="Address"
-                                type="text"
-                                required
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
-                        </div>
-                    </div> */}
                     <div className={cx('delivery-info-component')}>
                         <DeliveryInformation
                             selectedDelivery={selectedDelivery}
@@ -260,16 +324,28 @@ function Payment() {
                         {listOrder &&
                             listOrder.map((item, index) => (
                                 <div key={index} className={cx('payment-detail-items')}>
-                                    <div className={cx('payment-detail-items-img')}>
-                                        <img src={item.img} alt="product" />
+                                    <Text fontWeight={600}>{checkNest ? 'Nest' : 'Parrot'} Service</Text>
+                                    <div className={cx('payment-detail-items-info')}>
+                                        <div className={cx('payment-detail-items-img')}>
+                                            <img src={item.img} alt="product" />
+                                        </div>
+                                        <p className={cx('payment-detail-items-quantity')}>
+                                            x{checkNest ? 1 : item.quantity}
+                                        </p>
+                                        <p className={cx('payment-detail-items-price')}>
+                                            $ {item.price * item.quantity}
+                                        </p>
                                     </div>
-                                    <p className={cx('payment-detail-items-quantity')}>x{item.quantity}</p>
-                                    <p className={cx('payment-detail-items-price')}>$ {item.price * item.quantity}</p>
                                 </div>
                             ))}
 
                         <div className={cx('payment-detail-promotions')}>
-                            <input id="promotionCode" type="text" placeholder="Discount code" />
+                            <input
+                                className={cx('payment-detail-promotions-input')}
+                                id="promotionCode"
+                                type="text"
+                                placeholder="Discount code"
+                            />
                             <button onClick={() => handlePromotionCode()}>Apply</button>
                         </div>
 

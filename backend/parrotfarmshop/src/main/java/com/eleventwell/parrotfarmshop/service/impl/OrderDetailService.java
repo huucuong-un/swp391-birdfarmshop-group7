@@ -99,7 +99,7 @@ orderDetailEntity.setNestUsageHistory(nestUsageHistoryRepository.findOneById(ord
             }
             if (count == 0) {
                 OrderDetailHistoryModel model = new OrderDetailHistoryModel();
-                model.setImg(entity.getParrot().getParrotSpeciesColor().getImages().get(0).getImageUrl());
+               model.setImg(entity.getParrot().getParrotSpeciesColor().getImages().get(0).getImageUrl());
                 model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
                 model.setColorId(entity.getParrot().getParrotSpeciesColor().getId());
                 model.setSpeciesName(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName());

@@ -66,6 +66,9 @@ function AddParrotNestService() {
         gender: false,
         colorID: null,
     });
+    const [speciesToPass, setSpeciesToPass] = useState({});
+    const [combineSpecies, setcombineSpecies] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -109,6 +112,36 @@ function AddParrotNestService() {
     }, [choosenFirstParrotSpecies]);
 
     useEffect(() => {
+        const getSpeciesByColorId = async () => {
+            try {
+                const speciesByColorId = await ParrotSpeciesAPI.getSpeciesByColorId(choosenFirstParrotSpecies);
+                setSpeciesToPass(speciesByColorId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getSpeciesByColorId();
+    }, [choosenFirstParrotSpecies]);
+
+    useEffect(() => {
+        const combineSpeciesWithIsNest = () => {
+            try {
+                setcombineSpecies({
+                    ...speciesToPass,
+                    isNest: true,
+                    firstParrot: firstParrot,
+                    secondParrot: secondParrot,
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        combineSpeciesWithIsNest();
+    }, [speciesToPass, firstParrot, secondParrot]);
+
+    useEffect(() => {
         console.log(firstParrot);
     }, [firstParrot]);
 
@@ -120,20 +153,21 @@ function AddParrotNestService() {
         console.log(firstParrotColorSelected);
     }, [firstParrotColorSelected]);
 
-    const handleBreed = async () => {
-        const addFirstParrot = await ParrotAPI.add(firstParrot);
-        const addSecondParrot = await ParrotAPI.add(secondParrot);
-        const addParrotCouple = await ParrotCoupleAPI.add({
-            parrotMaleId: addFirstParrot.gender === true ? addFirstParrot.id : addSecondParrot.id,
-            parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
-            status: true,
-        });
+    useEffect(() => {
+        console.log(combineSpecies);
+    }, [combineSpecies]);
 
-        if (addParrotCouple) {
-            navigate('/payment', {
-                state: [firstParrot],
-            });
-        }
+    const handleBreed = async () => {
+        // const addFirstParrot = await ParrotAPI.add(firstParrot);
+        // const addSecondParrot = await ParrotAPI.add(secondParrot);
+        // const addParrotCouple = await ParrotCoupleAPI.add({
+        //     parrotMaleId: addFirstParrot.gender === true ? addFirstParrot.id : addSecondParrot.id,
+        //     parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
+        //     status: true,
+        // });
+        navigate('/payment', {
+            state: [combineSpecies],
+        });
     };
 
     const handleGenderSelect = ({ e, type }) => {

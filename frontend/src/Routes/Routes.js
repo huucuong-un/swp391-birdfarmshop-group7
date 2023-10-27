@@ -42,6 +42,7 @@ import StaffOrderManagement from '~/Pages/StaffOrderManagement/StaffOrderManagem
 import AdFAQSManagement from '~/Pages/AdFAQSManagement/AdFAQSManagement';
 import AdminAccountList from '~/Pages/AdminAccountList/AdminAccountList';
 import AdNestManagement from '~/Pages/AdNestManagement/AdNestManagement';
+import AdNestPriceManagement from '~/Pages/AdNestPriceManagement/AdNestPriceManagement';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -82,6 +83,7 @@ const publicRoutes = [
     { path: '/add-role', component: AddRole },
     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
     { path: '/admin/nest', component: AdNestManagement, layout: SystemLayout },
+    { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
     { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },
     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },

@@ -10,5 +10,5 @@ import lombok.*;
 public class OrderDetailDTO extends BaseDTO{
     private Long orderId;
     private Long parrotId;
-    private Long nestId;
+    private Long nestUsageId;
 }

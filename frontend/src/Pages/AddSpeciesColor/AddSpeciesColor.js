@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddSpeciesColor/AddSpeciesColor.module.scss';
 import Buttons from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
     Input,
     Table,
@@ -21,6 +21,11 @@ import {
     AccordionButton,
     AccordionPanel,
     AccordionIcon,
+    Switch,
+    Image,
+    Text,
+    Thead,
+    Th,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
@@ -32,14 +37,34 @@ import UpdateSpecies from '~/Pages/UpdateSpecies/UpdateSpecies';
 const cx = classNames.bind(styles);
 function AddSpeciesColor() {
     // Note 3:55 9/10/2023: đang làm phần update species color -> cần xử lí cái nút ẩn hiện form update species color -> cho từng species color
-
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        name: null,
+        quantity: null,
+        description: null,
+        origin: null,
+        averageWeight: null,
+        parrotAverageRating: null,
+        status: null,
+        searchDate: null,
+        sortName: null,
+        sortQuantity: null,
+        sortOrigin: null,
+        sortAverageWeight: null,
+        sortParrotAverageRating: null,
+        sortDate: null,
+    });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
     // useState for alert status
     const [submissionStatus, setSubmissionStatus] = useState();
     const [statusForSpecieColor, setStatusForSpecieColor] = useState();
     const [colorExist, setColorExist] = useState();
     const [species, setSpecies] = useState([]);
     const [colorInputs, setColorInputs] = useState([]);
-
+    const [newImg, setNewImg] = useState();
+    const [addImageStatus, setAddImageStatus] = useState(0);
     const [show, setShow] = useState(false);
     const handleShow = () => {
         setShow(!show);
@@ -51,11 +76,12 @@ function AddSpeciesColor() {
         color: '',
         price: '',
         speciesID: 0,
+        images: [],
     });
     // USEEFFECT ================================
     // Handle update data immediately
     // Handle update data immediately
-    const [reloadData, setReloadData] = useState(false);
+    const [reloadData, setReloadData] = useState(true);
     const handleUpdateSuccess = () => {
         setReloadData(true); // Set reloadData to true when the update is successful
     };
@@ -63,9 +89,12 @@ function AddSpeciesColor() {
     useEffect(() => {
         const fetchParrotSpecies = async () => {
             try {
-                const parrotSpecies = await ParrotSpeciesAPI.getAll();
-                setSpecies(parrotSpecies.listResult);
-                console.log(parrotSpecies.listResult);
+                // const parrotSpecies = await ParrotSpeciesAPI.getAll();
+                // setSpecies(parrotSpecies.listResult);
+                // console.log(parrotSpecies.listResult);
+                const specieSortList = await ParrotSpeciesColorAPI.searchSortParrotSpecies(sort);
+                setSpecies(specieSortList.listResult);
+                setTotalPage(specieSortList.totalPage);
             } catch (error) {
                 console.error(error);
             }
@@ -73,14 +102,14 @@ function AddSpeciesColor() {
         if (reloadData) {
             fetchParrotSpecies();
             setReloadData(false);
+        } else {
+            fetchParrotSpecies();
         }
-        fetchParrotSpecies();
-    }, [reloadData, parrotSpeciesColor]);
+    }, [reloadData, parrotSpeciesColor, sort]);
 
     //USEEFFECT to setCombindedata
     // Combine data
     const [combineData, setCombineData] = useState([]);
-    const [shouldFetchData, setShouldFetchData] = useState(true);
     useEffect(
         () => {
             const fetchData = async () => {
@@ -89,6 +118,9 @@ function AddSpeciesColor() {
                     for (const specie of species) {
                         const parrot = { ...specie };
                         parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(parrot.id);
+
+                        parrot.images = await ParrotSpeciesColorAPI.getImagesBySpeciesId(specie.id);
+
                         data.push(parrot);
                     }
                 } catch (error) {
@@ -96,23 +128,72 @@ function AddSpeciesColor() {
                 }
                 setCombineData(data);
             };
-            // Condition to check if shoudFetchData useState change in handleUpdateSpeciesColor
-            // fetchdata again and setShoudFetchData to false to stop fetching to waiting for next fetch
-            if (shouldFetchData) {
-                fetchData();
-                setShouldFetchData(false); // Set to false after fetching data
-            }
-
             fetchData();
         },
-        [shouldFetchData, species] /*check species if species change then load the list*/,
+        [species, addImageStatus] /*check species if species change then load the list*/,
     );
-    console.log(parrotSpeciesColor);
+
+    useEffect(() => {
+        console.log('New Combine Data');
+        console.log(combineData);
+    }, [combineData]);
     //======================== USEEFFECT ================================
     // Handle posting image
     const [img, setImg] = useState('');
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+
+    const addNewImage = async (pic, colorId) => {
+        setLoading(true);
+        if (pic === undefined) {
+            toast({
+                title: 'Select an image!',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            return;
+        }
+
+        if (pic.type === 'image/jpeg' || pic.type === 'image/png') {
+            const data = new FormData();
+            data.append('file', pic);
+            data.append('upload_preset', 'parrotfarmshop');
+            data.append('cloud_name', 'dkddhxz2g');
+            fetch('https://api.cloudinary.com/v1_1/dkddhxz2g/image/upload', {
+                method: 'post',
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data.url.toString());
+                    setLoading(false);
+                    setNewImg(data.url.toString());
+                    const addImageData = axios.post('http://localhost:8086/api/color-image', {
+                        imageUrl: data.url.toString(),
+                        parrotSpeciesColorId: colorId,
+                    });
+                    // window.location.reload();
+                    setAddImageStatus((prev) => prev + 1);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setLoading(false);
+                });
+        } else {
+            toast({
+                title: 'Select an image!',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            setLoading(false);
+            return;
+        }
+    }; //End Handle posting image
+
     const postDetails = (pic) => {
         setLoading(true);
         if (pic === undefined) {
@@ -166,10 +247,8 @@ function AddSpeciesColor() {
             console.log('Color already exists, cannot submit the form');
             return;
         }
-
         const speciesID = species[index].id;
         const { color, price } = colorInputs[index];
-
         try {
             // Make a POST request to submit the color data for the specific species
             const response = await axios.post('http://localhost:8086/api/parrot-species-color', {
@@ -179,6 +258,10 @@ function AddSpeciesColor() {
                 speciesID: speciesID, // Use the species ID from the data
                 price: price,
             });
+            const addImg = await axios.post('http://localhost:8086/api/color-image', {
+                imageUrl: img,
+                parrotSpeciesColorId: response.data.id,
+            });
             if (response.status === 200) {
                 console.log(`POST request was successful for species ID ${speciesID}!!`);
                 // Assuming the response contains the newly created post data
@@ -187,7 +270,7 @@ function AddSpeciesColor() {
                 setColorExist(null);
                 setSubmissionStatus(true);
                 // Automatically reset colorExist to null after 2 seconds
-                const newData = response.data;
+                var newData = response.data;
                 setParrotSpeciesColor({ ...parrotSpeciesColor, newData });
 
                 setTimeout(() => {
@@ -253,6 +336,7 @@ function AddSpeciesColor() {
     const [openSpeciesColorID, setOpenSpeciesColorID] = useState(null);
     const [colorsById, setColorById] = useState();
     //*
+
     useEffect(() => {
         if (colorsById && colorsById.length > 0) {
             setParrotSpeciesColor({
@@ -263,6 +347,7 @@ function AddSpeciesColor() {
                 color: colorsById[0].color,
                 price: colorsById[0].price,
                 speciesID: colorsById[0].speciesID,
+                images: colorsById[0].images,
             });
         }
     }, [colorsById]);
@@ -282,12 +367,6 @@ function AddSpeciesColor() {
         }
     };
 
-    console.log('colors by ID');
-    console.log(colorsById);
-
-    useEffect(() => {
-        console.log(colorsById);
-    }, [colorsById]);
     const handleUpdateSpeciesColor = async (e) => {
         e.preventDefault();
         try {
@@ -313,8 +392,6 @@ function AddSpeciesColor() {
                 );
                 console.error('Response data:', responseSpeciesColor);
             }
-            // Set should fetch data to true to allow fetch data for update
-            setShouldFetchData(true);
             // Set submission status to true to allow pop up notification after successfully update
             setStatusForSpecieColor(true);
             setTimeout(() => {
@@ -325,41 +402,251 @@ function AddSpeciesColor() {
             setStatusForSpecieColor(false);
         }
     };
+
+    const deleteImage = async (imageId) => {
+        try {
+            var imageDeleteResponse = window.confirm('Are you sure to delete this image?');
+            if (imageDeleteResponse) {
+                try {
+                    // Send a request to update the status on the server
+                    await axios.delete(`http://localhost:8086/api/color-image/delete-image/${imageId}`);
+
+                    // If the request is successful, update the state
+
+                    setAddImageStatus((prev) => prev + 1);
+                } catch (error) {
+                    toast({
+                        title: 'Error occur!',
+                        description: error.response.data.message,
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                    console.log(error);
+                }
+            } else {
+                // Hành động nếu người dùng chọn "Không"
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     //====================================================
 
-    console.log(parrotSpeciesColor.id);
-    console.log('Combine data');
-    console.log(combineData);
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 5,
+            name: null,
+            quantity: null,
+            description: null,
+            origin: null,
+            averageWeight: null,
+            parrotAverageRating: null,
+            status: null,
+            searchDate: null,
+            sortName: null,
+            sortQuantity: null,
+            sortOrigin: null,
+            sortAverageWeight: null,
+            sortParrotAverageRating: null,
+            sortDate: null,
+        });
+    };
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 5,
+            name: sort.name,
+            quantity: sort.quantity,
+            description: sort.description,
+            origin: sort.origin,
+            averageWeight: sort.averageWeight,
+            parrotAverageRating: sort.parrotAverageRating,
+            status: sort.status,
+            searchDate: sort.searchDate,
+            sortName: sort.sortName,
+            sortQuantity: sort.sortQuantity,
+            sortOrigin: sort.sortOrigin,
+            sortAverageWeight: sort.sortAverageWeight,
+            sortParrotAverageRating: sort.sortParrotAverageRating,
+            sortDate: sort.sortDate,
+        });
+        setPage(newPage);
+    };
+
+    const handleStatus = async (index) => {
+        const updatedSpecie = [...species];
+        updatedSpecie[index].status = !updatedSpecie[index].status;
+        try {
+            // Send a request to update the status on the server
+            await axios.delete(`http://localhost:8086/api/parrot-species/${updatedSpecie[index].id}`);
+            // If the request is successful, update the state
+            setSpecies(updatedSpecie);
+        } catch (error) {
+            toast({
+                title: 'Error occur!',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        console.log(totalPage);
+    }, [totalPage]);
+
+    useEffect(() => {
+        console.log(page);
+    }, [page]);
+
     return (
         <div className={cx('wrapper')}>
             <Accordion className={cx('accordion')} allowToggle>
-                <div className={cx('crud-container')}>
-                    <div className={cx('crud-title')}>
-                        <span className={cx('margin-left')}>Specie ID</span>
-                        <span className={cx('margin-left')}>Specie name</span>
-                        <span className={cx('margin-left')}>Quantity</span>
-                        <span className={cx('margin-left-lilbit')}>Nest quantity</span>
-                        <span className={cx('margin-left-lilbit')}>Origin</span>
-                        <span className={cx('margin-left-lilbit')}>Average weight</span>
-                        <span className={cx('margin-left-lilbit')}>Action</span>
-                    </div>
+                <div className={cx('sort-space')}>
+                    <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                    {/* Sort #1 */}
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Name"
+                        onChange={(e) => setSort({ ...sort, name: e.target.value })}
+                    />
+                    {/* Sort #2 */}
 
+                    {/* Sort #3 */}
+
+                    {/* Sort #4 */}
+                    <input
+                        type="text"
+                        name="origin"
+                        id="origin"
+                        placeholder="Origin"
+                        onChange={(e) => setSort({ ...sort, origin: e.target.value })}
+                    />
+                    {/* Sort #5 */}
+                    {/* Sort #6 */}
+                    {/* Sort #7 */}
+                    <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
+                        <option value="b">Status</option>
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                    {/* Sort #8 */}
+                    <input
+                        type="date"
+                        name="date"
+                        id="date"
+                        onChange={(e) => setSort({ ...sort, searchDate: e.target.value })}
+                    />
+                    {/* Sort #9 */}
+                    <select
+                        name="sortName"
+                        id="sortName"
+                        onChange={(e) => setSort({ ...sort, sortName: e.target.value })}
+                    >
+                        <option value="b">Name</option>
+                        <option value="NDESC">Ascending</option>
+                        <option value="NASC">Decending</option>
+                    </select>
+                    {/* Sort #10 */}
+                    <select
+                        name="sortQuantity"
+                        id="sortQuantity"
+                        onChange={(e) => setSort({ ...sort, sortQuantity: e.target.value })}
+                    >
+                        <option value="b">Quantity</option>
+                        <option value="QDESC">Ascending</option>
+                        <option value="QASC">Decending</option>
+                    </select>
+                    {/* Sort #11 */}
+                    {/* Sort #12 */}
+                    <select
+                        name="sortAverageWeight"
+                        id="sortAverageWeight"
+                        onChange={(e) => setSort({ ...sort, sortAverageWeight: e.target.value })}
+                    >
+                        <option value="b">Average weight</option>
+                        <option value="AWDESC">Ascending</option>
+                        <option value="AWASC">Decending</option>
+                    </select>
+                    {/* Sort #13 */}
+                    <select
+                        name="sortParrotAverageRating"
+                        id="sortParrotAverageRating"
+                        onChange={(e) => setSort({ ...sort, sortParrotAverageRating: e.target.value })}
+                    >
+                        <option value="b">Average rating</option>
+                        <option value="PDESC">Ascending</option>
+                        <option value="PASC">Decending</option>
+                    </select>
+                    {/* Sort #14 */}
+                    <select
+                        name="sortDate"
+                        id="sortDate"
+                        onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}
+                    >
+                        <option value="b">Date</option>
+                        <option value="DDESC">Ascending</option>
+                        <option value="DASC">Decending</option>
+                    </select>
+                </div>
+                <TableContainer className={cx('crud-title')}>
+                    <Table size="lg">
+                        <Thead>
+                            <Tr>
+                                <Th>Specie ID</Th>
+                                <Th>Specie name</Th>
+                                <Th>Quantity</Th>
+                                <Th>Nest quantity</Th>
+                                <Th>Origin</Th>
+                                <Th>Average weight</Th>
+                                <Th>Status</Th>
+                                <Th></Th>
+                                <Th colSpan={2}>Action</Th>
+                            </Tr>
+                        </Thead>
+                    </Table>
+                </TableContainer>
+
+                <div className={cx('crud-container')}>
                     {combineData.map((data, dataIndex) => (
                         // Print the specie color
                         <AccordionItem key={dataIndex} className={cx('accord-item')}>
                             <h2 className={cx('data-container')}>
                                 <AccordionButton>
                                     <Box as="span" flex="1" textAlign="left">
-                                        <div className={cx('crud-data')}>
-                                            <div className={cx('data-field')}>{data.id}</div>
-                                            <div className={cx('data-field')}>{data.name}</div>
-                                            <div className={cx('data-field')}>{data.quantity}</div>
-                                            <div className={cx('data-field')}>{data.nestQuantity}</div>
-                                            <div className={cx('data-field')}>{data.origin}</div>
-                                            <div className={cx('data-field')}>{data.averageWeight}</div>
-                                        </div>
+                                        <TableContainer>
+                                            <Table size="lg">
+                                                <Tbody>
+                                                    <Tr>
+                                                        <Td>{data.id}</Td>
+                                                        <Td>{data.name}</Td>
+                                                        <Td>{data.quantity}</Td>
+                                                        <Td>{data.nestQuantity}</Td>
+                                                        <Td>{data.origin}</Td>
+                                                        <Td>{data.averageWeight}</Td>
+                                                        <Td>
+                                                            <Switch
+                                                                onChange={() => handleStatus(dataIndex)}
+                                                                size="lg"
+                                                                isChecked={data.status}
+                                                                colorScheme="green"
+                                                            />
+                                                        </Td>
+                                                        <Td></Td>
+                                                    </Tr>
+                                                </Tbody>
+                                            </Table>
+                                        </TableContainer>
                                     </Box>
-
                                     <AccordionIcon />
                                 </AccordionButton>
                                 <div>
@@ -386,9 +673,54 @@ function AddSpeciesColor() {
                                             <Table size="sm" className={cx('data-child')}>
                                                 <Tbody>
                                                     <Tr className={cx('color-row')}>
-                                                        <Td className={cx('td-image')}>
-                                                            <img src={childObj.imageUrl} />
+                                                        <Td className={cx('item-container-td')}>
+                                                            <label class="label">
+                                                                <input
+                                                                    type="file"
+                                                                    style={{ display: 'none' }}
+                                                                    id="img"
+                                                                    name="img"
+                                                                    accept="image/*"
+                                                                    onChange={(e) =>
+                                                                        addNewImage(e.target.files[0], childObj.id)
+                                                                    } // Pass the index of the species
+                                                                    required
+                                                                />
+                                                                <Text
+                                                                    style={{
+                                                                        height: '100%',
+                                                                        padding: '10px 10px',
+                                                                        backgroundColor: '#444  ',
+                                                                        color: 'white',
+                                                                        borderRadius: '5px',
+                                                                        cursor: 'pointer',
+                                                                    }}
+                                                                    isLoading={loading}
+                                                                    className={cx('add-new-image-btn')}
+                                                                >
+                                                                    Add a new image
+                                                                </Text>
+                                                            </label>
                                                         </Td>
+                                                        <Td className={cx('item-container-td')}>
+                                                            <div style={{ maxHeight: '110px', maxWidth: '130px' }}>
+                                                                {data.images.map((imgItem, imgItemIndex) =>
+                                                                    childObj.id === imgItem.parrotSpeciesColorId ? (
+                                                                        <Image
+                                                                            boxSize="110px"
+                                                                            objectFit="cover"
+                                                                            src={imgItem.imageUrl}
+                                                                            alt="Parrot Color Img"
+                                                                            className={cx('new-image')}
+                                                                            onClick={() => deleteImage(imgItem.id)}
+                                                                        />
+                                                                    ) : (
+                                                                        <></>
+                                                                    ),
+                                                                )}
+                                                            </div>
+                                                        </Td>
+
                                                         <Td className={cx('item-container-td')}>
                                                             <div>
                                                                 <button
@@ -537,19 +869,7 @@ function AddSpeciesColor() {
                                                                     />
                                                                 </Td>
                                                             </Tr>
-                                                            <Tr>
-                                                                <Td>Parrot image</Td>
-                                                                <Td>
-                                                                    <Input
-                                                                        type="file"
-                                                                        id="img"
-                                                                        name="img"
-                                                                        accept="image/*"
-                                                                        onChange={(e) => postDetails(e.target.files[0])} // Pass the index of the species
-                                                                        required
-                                                                    />
-                                                                </Td>
-                                                            </Tr>
+
                                                             <Tr>
                                                                 <Td></Td>
                                                                 <Td className={cx('submit-btn')}>
@@ -758,6 +1078,19 @@ function AddSpeciesColor() {
                     ))}
                 </div>
             </Accordion>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }

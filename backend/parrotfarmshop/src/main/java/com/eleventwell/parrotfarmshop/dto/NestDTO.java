@@ -13,7 +13,7 @@ public class NestDTO extends BaseDTO{
 
     private Boolean status;
 
-    private Long speciesId;
+    private Long nestPriceId;
 
 
 }

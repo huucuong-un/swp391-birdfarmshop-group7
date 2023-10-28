@@ -10,7 +10,7 @@ import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 
 // Add the empty star icon to the library
 
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box, Image } from '@chakra-ui/react';
 
 import { useState, useEffect } from 'react';
 
@@ -20,6 +20,7 @@ import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 
 const cx = classNames.bind(styles);
 
@@ -39,6 +40,7 @@ function ParrotDetail() {
     const { addToCartStatus, setAddToCartStatus } = useCartStatus();
     const [colorSortList, setColorSortList] = useState([]);
     const [vinh, setVinh] = useState(1);
+    const [images, setImages] = useState();
     const feedback = {
         id: id,
         type: 'parrot',
@@ -187,6 +189,7 @@ function ParrotDetail() {
         };
         fetchData();
     }, [parrotSpecies]);
+
     useEffect(() => {
         console.log(selectedColor);
 
@@ -294,7 +297,29 @@ function ParrotDetail() {
         }
         return stars;
     };
+    const changeMainImage = (smallImg) => {
+        var fullImg = document.getElementById('imageBox');
+        fullImg.src = smallImg;
+        console.log(smallImg);
+    };
 
+    useEffect(() => {
+        const getAllImageBySpeciesId = async (id) => {
+            try {
+                const data = await ParrotSpeciesColorAPI.getImageURLsBySpeciesId(id);
+                setImages(data);
+                console.log('images: ' + data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getAllImageBySpeciesId(id);
+    }, []);
+
+    // useEffect(() => {
+    //     console.log('images: ' + images);
+    // }, []);
     return (
         <div className={cx('wrapper')}>
             <StartPartPage>Parrot Details</StartPartPage>
@@ -303,14 +328,19 @@ function ParrotDetail() {
                 return (
                     <div key={index} className={cx('inner')}>
                         <div className={cx('mini-img-container')}>
-                            <img src={parrot} alt="mini-image" />
-                            <img src={parrot} alt="mini-image" />
-                            <img src={parrot} alt="mini-image" />
-                            <img src={parrot} alt="mini-image" />
+                            {images.map((img, imgIndex) => (
+                                <Image
+                                    boxSize="100px"
+                                    objectFit="cover"
+                                    src={img}
+                                    alt="parrot"
+                                    onClick={() => changeMainImage(img)}
+                                />
+                            ))}
                         </div>
 
                         <div className={cx('main-img')}>
-                            <img src={parrot.img} alt="main-picture" />
+                            <img id="imageBox" src={images[0]} alt="main" />
                         </div>
 
                         <div className={cx('parrot-detail-container')}>

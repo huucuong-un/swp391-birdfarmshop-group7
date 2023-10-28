@@ -4,8 +4,10 @@ import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.NestDevelopmentDTO;
 import com.eleventwell.parrotfarmshop.dto.NestUsageHistoryDTO;
 import com.eleventwell.parrotfarmshop.entity.NestDevelopmentEntity;
+import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.entity.NestUsageHistoryEntity;
 import com.eleventwell.parrotfarmshop.repository.NestDevelopmentRepository;
+import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.NestUsageHistoryRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ import java.util.List;
 public class NestUsageHistoryService implements IGenericService<NestUsageHistoryDTO>{
     @Autowired
     NestUsageHistoryRepository nestUsageHistoryRepository;
+
+    @Autowired
+    NestRepository nestRepository;
 
     @Autowired
     private GenericConverter genericConverter;
@@ -45,13 +50,21 @@ public class NestUsageHistoryService implements IGenericService<NestUsageHistory
         } else {
             nestUsageHistoryEntity = (NestUsageHistoryEntity) genericConverter.toEntity(DTO, NestUsageHistoryEntity.class);
         }
+
+        NestEntity nestEntity = nestRepository.findOneById(DTO.getNestId());
         nestUsageHistoryRepository.save(nestUsageHistoryEntity);
+        nestEntity.setStatus(false);
+        nestRepository.save(nestEntity);
         return (NestUsageHistoryDTO) genericConverter.toDTO(nestUsageHistoryEntity, NestUsageHistoryDTO.class);
     }
 
     @Override
     public void changeStatus(Long ids) {
 
+
+    }
+    public void delete(Long id){
+        nestUsageHistoryRepository.deleteById(id);
     }
 
     @Override

@@ -35,7 +35,7 @@ function AddAccount(props) {
     //these useState for upload image
     const [loading, setLoading] = useState(false);
     const toast = useToast();
-
+    const [gender, setGender] = useState();
     const [submissionStatus, setSubmissionStatus] = useState();
     const [account, setAccount] = useState({
         userName: '',
@@ -90,6 +90,7 @@ function AddAccount(props) {
                 status: status,
                 roleId: account.roleId,
                 imgUrl: img,
+                gender: gender,
             });
             props.onAdd({
                 id: responseAccount.userId,
@@ -226,14 +227,14 @@ function AddAccount(props) {
                             <Tr>
                                 <Td>Gender</Td>
                                 <Td>
-                                    <RadioGroup defaultValue="2" fontSize={16}>
+                                    <RadioGroup onChange={setGender} defaultValue="null" fontSize={16} value={gender}>
                                         <Stack spacing={20} direction="row">
-                                            <Radio value="0" size="lg">
+                                            <Radio value="true" size="lg">
                                                 <Text fontSize={16} m={0}>
                                                     Male
                                                 </Text>
                                             </Radio>
-                                            <Radio value="1" fontSize={16} size="lg">
+                                            <Radio value="false" fontSize={16} size="lg">
                                                 <Text fontSize={16} m={0}>
                                                     Female
                                                 </Text>

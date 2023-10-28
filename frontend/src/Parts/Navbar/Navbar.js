@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
+import GoogleTranslate from '~/Components/gg/gg';
 
 const cx = classNames.bind(styles);
 
@@ -149,12 +150,12 @@ function Navbar() {
                                     display="flex"
                                     justifyContent="space-between"
                                     alignItems="center"
-                                    w="50%"
+                                    w="90%"
                                     p="5px 10px 5px 10px"
                                 >
                                     <Menu>
                                         <MenuButton as={Button}>
-                                            <Avatar size="lg" cursor="pointer" name={user.name} src={user.imgUrl} />
+                                            <Avatar size="lg" cursor="pointer" name={user.userName} src={user.imgUrl} />
                                         </MenuButton>
                                         <MenuList mt={20} ml={20} className={cx('profile-list')}>
                                             <MenuItem padding={5} onClick={showProfile}>
@@ -166,6 +167,7 @@ function Navbar() {
                                             </MenuItem>
                                         </MenuList>
                                     </Menu>
+                                    <span>{user.userName}</span>
                                 </Box>
 
                                 {/* <Button className={cx('nav-top-btn-left-register')} to="/register">
@@ -195,7 +197,7 @@ function Navbar() {
                             className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
-                            Language
+                            Language {/* <GoogleTranslate></GoogleTranslate> */}
                         </Button>
                         <Tippy
                             interactive

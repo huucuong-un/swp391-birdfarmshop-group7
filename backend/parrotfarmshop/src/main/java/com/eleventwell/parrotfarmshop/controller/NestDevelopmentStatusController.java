@@ -47,4 +47,9 @@ public class NestDevelopmentStatusController {
     public void updateSequence(@RequestBody @RequestParam(value = "id") Long id, @RequestParam(value = "sequence") Integer sequence) {
         nestDevelopmentStatusService.changeSequence(id, sequence);
     }
+
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") long id){
+        nestDevelopmentStatusService.changeStatus(id);
+    }
 }

@@ -5,7 +5,7 @@ import { publicRoutes } from './Routes/Routes';
 import { Fragment } from 'react';
 import ShopProvider from './context/ShopProvider';
 import { CartStatusProvider } from './Components/CartStatusContext/CartStatusContext';
-import 'src/i18next/i18next';
+import '~/i18next/i18next';
 function App() {
     return (
         <Router>

@@ -65,6 +65,7 @@ function AddParrotSpecies() {
         parrotAverageRating: 4.5,
         nestAverageRating: 4.0,
         status: true,
+        img: '',
     });
     // State for api parrot species color
     const [parrotSpeciesColor, setParrotSpeciesColor] = useState({
@@ -149,6 +150,7 @@ function AddParrotSpecies() {
                 origin: parrotSpecies.origin,
                 status: parrotSpecies.status,
                 averageWeight: parrotSpecies.averageWeight,
+                img: img,
                 // Add other fields you want to send to the first API
             });
             if (responseSpecies.status === 200) {
@@ -165,6 +167,11 @@ function AddParrotSpecies() {
                 price: parrotSpeciesColor.price,
                 color: parrotSpeciesColor.color,
                 imageUrl: img,
+            });
+
+            const addImg = await axios.post('http://localhost:8086/api/color-image', {
+                imageUrl: img,
+                parrotSpeciesColorId: responseSpeciesColor.data.id,
             });
             console.log('pot detail' + postDetails);
             if (responseSpeciesColor.status === 200) {
@@ -194,7 +201,7 @@ function AddParrotSpecies() {
                 price: 0,
                 speciesID: 0,
             });
-            setSpecies([...species, responseSpecies.data]);
+            // setSpecies([...species, responseSpecies.data]);
 
             setSubmissionStatus(true);
         } catch (error) {
@@ -367,6 +374,7 @@ function AddParrotSpecies() {
                                     <Td>
                                         <Input
                                             type="file"
+                                            multiple
                                             p={1.5}
                                             id="image"
                                             name="image"
@@ -403,19 +411,7 @@ function AddParrotSpecies() {
                 {/*END FORM TO ADD SPECIES  */}
             </form>
             {/* CRUD SPECIES LIST */}
-            <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
-                <select name="species" id="species">
-                    <option value="a">Species</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                <select name="status" id="status">
-                    <option value="b">Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
+
             <AddSpeciesColor key={addSpeciesColorKey} className={cx('addspeciescolor')}></AddSpeciesColor>
         </div>
     );

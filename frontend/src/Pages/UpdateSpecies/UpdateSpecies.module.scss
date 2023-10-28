@@ -50,7 +50,7 @@
         padding: 0;
     }
     th {
-        background-color: #f57c7c;
+        background-color: #f9ede9;
         font-size: 18px;
         padding: 0;
         text-align: center;
@@ -58,11 +58,11 @@
     }
 }
 .btn {
-    background-color: #f57c7c;
+    background-color: #f9ede9;
 
     &:hover {
         opacity: 0.8;
-        background-color: #f57c7c;
+        background-color: #f9ede9;
     }
 }
 .submit-btn {
@@ -70,7 +70,7 @@
     display: flex;
     justify-content: center;
     button {
-        background-color: #f57c7c;
+        background-color: #f9ede9;
         font-size: 20px;
         padding: 20px;
         width: 50%;
@@ -168,7 +168,7 @@
 .crud-title {
     display: flex;
     justify-content: space-around;
-    background-color: #f57c7c;
+    background-color: #f9ede9;
     padding: 8px;
     font-weight: bold;
     border-bottom: 1px solid #ccc;
@@ -235,5 +235,5 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    background-color: #f57c7c;
+    background-color: #f9ede9;
 }

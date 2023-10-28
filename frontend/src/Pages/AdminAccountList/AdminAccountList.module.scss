@@ -31,6 +31,13 @@
     margin-top: 2px;
 }
 
+.fade-container.showDelivery {
+    opacity: 1;
+    max-height: 250px; /* Adjust this value based on your content height */
+    transition-delay: 0s;
+    margin-top: 2px;
+}
+
 .fade-container.hide {
     opacity: 0;
     max-height: 0;
@@ -45,4 +52,8 @@
 .edit-button:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.delivery-container {
+    margin: auto auto;
 }

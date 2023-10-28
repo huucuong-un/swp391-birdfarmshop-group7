@@ -2,13 +2,11 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.SliderDTO;
-import com.eleventwell.parrotfarmshop.dto.SpeciesEggPriceDTO;
 import com.eleventwell.parrotfarmshop.entity.SliderEntity;
 import com.eleventwell.parrotfarmshop.repository.SliderRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

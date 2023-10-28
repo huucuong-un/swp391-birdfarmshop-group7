@@ -32,6 +32,11 @@ public class NestController {
         result.setLimit(limit);
         return result;
     }
+    @GetMapping(value = "find-one-by-species-id")
+    public NestDTO findAllO(@RequestBody @RequestParam(value = "speciesId", required = false) Long speciesId) {
+
+        return nestService.findOneBySpeciesId(speciesId);
+    }
 
 
     //add a parrot egg nest by Post method

@@ -30,6 +30,7 @@ import axios from 'axios';
 import AccountAPI from '~/Api/AccountAPI';
 import AddAccount from '~/Components/AddAccount/AddAccount';
 import RoleAPI from '~/Api/RoleAPI';
+import DeliveryInformationWithNoRadio from '../DeliveryInformationWithNoRadio/DeliveryInformationWithNoRadio';
 
 const cx = classNames.bind(styles);
 
@@ -38,13 +39,18 @@ const AdminAccountList = () => {
     const toast = useToast();
     const [show, setShow] = useState(false);
     const [reloadStatus, setReloadStatus] = useState(true);
-    const [showUpdate, setShowUpdate] = useState(Array(accounts.length).fill(false)); // Initialize with false for each item
     const [roles, setRoles] = useState([]);
+    const [showDelivery, setShowDelivery] = useState(false);
+    const [selectDeliveryId, setSelectDeliveryId] = useState();
 
     // useEffect(() => {
     //     console.log(accounts);
     //     console.log(reloadStatus);
     // }, [accounts]);
+    const handleShowDelivery = (id) => {
+        setSelectDeliveryId(id);
+        setShowDelivery(!showDelivery); // Update the state
+    };
     useEffect(() => {
         const loadRoles = async () => {
             try {
@@ -78,37 +84,33 @@ const AdminAccountList = () => {
         setAccounts(updatedAccount);
     };
     const handleStatus = async (id) => {
-        try {
-            // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/user/${id}`);
+        var userResponse = window.confirm('Are you sure to change status ?');
 
-            // If the request is successful, update the state
+        if (userResponse) {
+            try {
+                // Send a request to update the status on the server
+                await axios.delete(`http://localhost:8086/api/user/${id}`);
 
-            setReloadStatus(true);
-        } catch (error) {
-            toast({
-                title: 'Error occur!',
-                description: error.response.data.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            console.log(error);
+                // If the request is successful, update the state
+
+                setReloadStatus(true);
+            } catch (error) {
+                toast({
+                    title: 'Error occur!',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                console.log(error);
+            }
+        } else {
+            // Hành động nếu người dùng chọn "Không"
         }
     };
     const handleShow = () => {
         setShow(!show);
-    };
-
-    // useEffect(() => {
-    //     console.log(reloadStatus);
-    // }, [reloadStatus]);
-
-    const handleShowUpdate = (index) => {
-        const updatedShowUpdate = [...showUpdate]; // Create a copy of showUpdate array
-        updatedShowUpdate[index] = !updatedShowUpdate[index]; // Toggle the value
-        setShowUpdate(updatedShowUpdate); // Update the state
     };
 
     useEffect(() => {
@@ -150,6 +152,14 @@ const AdminAccountList = () => {
             <div className={cx('fade-container', { show: show })}>
                 {show && <AddAccount onAdd={handleAdd} w={100}></AddAccount>}
             </div>
+            <br />
+            <br />
+
+            <div className={cx('fade-container', { showDelivery: showDelivery })}>
+                <h1 style={{ textAlign: 'center' }}>Delivery Info of userId. {selectDeliveryId}</h1>
+                {showDelivery && <DeliveryInformationWithNoRadio userId={selectDeliveryId} />}
+            </div>
+
             <TableContainer width="100%" margin="5% 0">
                 <Table variant="simple" fontSize={16}>
                     <TableCaption>Account list</TableCaption>
@@ -160,6 +170,8 @@ const AdminAccountList = () => {
                             <Th>Username</Th>
                             <Th>Full Name</Th>
                             <Th>Email</Th>
+                            <Th>Gender</Th>
+
                             <Th>Role</Th>
                             <Th>Status</Th>
                         </Tr>
@@ -168,7 +180,7 @@ const AdminAccountList = () => {
                         {accounts.map((account, index) => {
                             return (
                                 <>
-                                    <Tr key={index}>
+                                    <Tr key={index} onClick={() => handleShowDelivery(account.id)} cursor="pointer">
                                         <Td>{account.id}</Td>
 
                                         <Td>
@@ -178,6 +190,7 @@ const AdminAccountList = () => {
                                         <Td>{account.fullName}</Td>
 
                                         <Td>{account.email}</Td>
+                                        {account.gender === true ? <Td> Male</Td> : <Td>Female</Td>}
 
                                         {roles.map((role, roleIndex) =>
                                             role.id === account.roleId ? <Td>{role.name}</Td> : <></>,

@@ -54,7 +54,6 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	private Boolean availabilityStatus;
 
 	@NotBlank
-	@Size(max = 20)
 	@Column(name = "origin")
 	private String origin;
 
@@ -65,8 +64,7 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@Column(name = "parrot_average_rating")
 	private Double parrotAverageRating;
 
-	@Column(name = "nest_average_rating")
-	private Double nestAverageRating;
+
 
 	@Column(name = "img")
 	private String img;
@@ -77,9 +75,11 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@OneToMany(mappedBy = "parrotSpecies")
 	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 
-	@OneToMany(mappedBy = "parrotSpecies")
-	private List<NestEntity> nest = new ArrayList<>();
 
+
+	@OneToOne(mappedBy = "parrotSpecies")
+	@PrimaryKeyJoinColumn
+	private NestPriceEntity nestPriceEntity;
 
 
 

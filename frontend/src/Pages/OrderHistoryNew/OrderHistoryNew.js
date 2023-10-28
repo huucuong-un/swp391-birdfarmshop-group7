@@ -101,7 +101,6 @@ function OrderHistoryNew() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [overlay, setOverlay] = React.useState(<OverlayOne />);
     const btnRef = React.useRef();
-
     const handleTextareaChange = (event) => {
         // Update the state variable with the new value from the textarea
         setTextareaValue(event.target.value);
@@ -180,6 +179,38 @@ function OrderHistoryNew() {
     }, [user]);
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
+
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 12,
+        date: null,
+        sortDate: null,
+        sortPrice: null,
+    });
+    console.log('sortsort');
+    console.log(sort);
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            userId: user.userId,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const orderHistoryNew = await OrderAPI.findAllByUserIdAndSearchSort(sort);
+                setOrders(orderHistoryNew.listResult);
+                setTotalPage(orderHistoryNew.totalPage);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        sortData();
+    }, [sort]);
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
@@ -192,26 +223,6 @@ function OrderHistoryNew() {
         });
 
         setPage(newPage);
-    };
-    const [sort, setSort] = useState({
-        page: 1,
-        limit: 12,
-        email: null,
-        phone: null,
-        date: null,
-        sortDate: null,
-        sortPrice: null,
-    });
-    const handleClear = () => {
-        setSort({
-            page: 1,
-            limit: 12,
-            email: null,
-            phone: null,
-            date: null,
-            sortDate: null,
-            sortPrice: null,
-        });
     };
     useEffect(() => {
         console.log(sort);
@@ -236,16 +247,15 @@ function OrderHistoryNew() {
             {/* Sorting Space */}
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
-                <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
 
-                <select name="status" id="status">
+                <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
+                {/* <select name="status" id="status" onChange={(e) => setSort({...sort, status:e.target.value})}>
                     <option value="" disabled selected>
                         Status
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-
+                    <option value="false">Active</option>
+                    <option value="true">Inactive</option>
+                </select> */}
                 <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
                     <option value="" disabled selected>
                         Sort Date
@@ -284,9 +294,11 @@ function OrderHistoryNew() {
                                         <Tr>
                                             <Th>Image</Th>
                                             <Th>Name</Th>
-                                            <Th>Color</Th>
+                                            {order.listOrderDetailHistoryModel[0].color != null ? <Th>Color</Th> : null}
+
                                             <Th>Quantity</Th>
                                             <Th>Price</Th>
+                                            <Th>Service</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
@@ -301,9 +313,12 @@ function OrderHistoryNew() {
                                                     />
                                                 </Td>
                                                 <Td>{parrot.speciesName}</Td>
-                                                <Td>{parrot.color}</Td>
+                                                {parrot.color != null ? <Td>{parrot.color}</Td> : null}
+
                                                 <Td>x{parrot.quantity}</Td>
                                                 <Td>$ {parrot.price}</Td>
+                                                <Td>{parrot.color != null ? 'Parrot' : 'Nest'}</Td>
+
                                             </Tr>
                                         ))}
                                     </Tbody>
@@ -450,7 +465,7 @@ function OrderHistoryNew() {
                     {overlay}
                     <ModalContent>
                         <ModalHeader>Modal Title</ModalHeader>
-                        <ModalCloseButton />
+<ModalCloseButton />
                         <ModalBody>
                             <Stepper size="lg" index={activeStep} orientation="vertical">
                                 {steps.map((step, index) => (

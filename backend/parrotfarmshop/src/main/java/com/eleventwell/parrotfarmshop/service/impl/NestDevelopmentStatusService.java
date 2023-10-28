@@ -55,6 +55,8 @@ public class NestDevelopmentStatusService implements IGenericService<NestDevelop
         } else {
             nestDevelopmentStatusEntity = (NestDevelopmentStatusEntity) genericConverter.toEntity(DTO, NestDevelopmentStatusEntity.class);
         }
+        int countObject = (int) nestDevelopmentStatusRepository.count();
+        nestDevelopmentStatusEntity.setSequence(countObject + 1);
         nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
         return (NestDevelopmentStatusDTO) genericConverter.toDTO(nestDevelopmentStatusEntity, NestDevelopmentStatusDTO.class);
     }

@@ -50,6 +50,7 @@ public class AuthenticationService {
                 .role(role)
                 .status(request.getStatus())
                 .imgUrl(request.getImgUrl())
+                .gender(request.getGender())
                 .build();
         repository.save(user);
         UserEntity userToReturn = repository.findOneByUserName(user.getUsername());
@@ -66,6 +67,8 @@ public class AuthenticationService {
                 .email(userToReturn.getEmail())
                 .imgUrl(request.getImgUrl())
                 .roleId(role.getId())
+                .gender(request.getGender())
+
                 .build();
     }
 
@@ -92,6 +95,8 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .roleId(user.getRole().getId())
                 .imgUrl(user.getImgUrl())
+                .gender(user.getGender())
+
                 .build();
     }
 
@@ -159,6 +164,8 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .roleId(user.getRole().getId())
                 .imgUrl(user.getImgUrl())
+                .dob(user.getDob())
+                .gender(user.getGender())
                 .build();
     }
 

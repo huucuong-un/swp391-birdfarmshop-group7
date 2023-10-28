@@ -61,13 +61,13 @@ public class NestDevelopmentStatusService implements IGenericService<NestDevelop
 
     @Override
     public void changeStatus(Long ids) {
-//        NestDevelopmentStatusEntity nestDevelopmentStatusEntity = nestDevelopmentStatusRepository.findOneById(ids);
-//        if (nestDevelopmentStatusEntity.getStatus() == true) {
-//            nestDevelopmentStatusEntity.setStatus(false);
-//        } else {
-//            nestDevelopmentStatusEntity.setStatus(true);
-//        }
-//        nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
+        NestDevelopmentStatusEntity nestDevelopmentStatusEntity = nestDevelopmentStatusRepository.findOneById(ids);
+        if (nestDevelopmentStatusEntity.getAvailable() == true) {
+            nestDevelopmentStatusEntity.setAvailable(false);
+        } else {
+            nestDevelopmentStatusEntity.setAvailable(true);
+        }
+        nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
     }
 
     public void changeSequence(Long ids, Integer newSequence) {

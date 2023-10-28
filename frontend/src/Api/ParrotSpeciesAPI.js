@@ -13,7 +13,10 @@ const ParrotSpeciesAPI = {
         const url = `/parrot-species/find-one-species-by-id/${id}`;
         return axiosClinet.get(url);
     },
-
+    getSpeciesBySpeciesIdObject(id) {
+        const url = `/parrot-species/find-one-species-by-id-object/${id}`;
+        return axiosClinet.get(url);
+    },
     getListBySpeciesId(speciesId) {
         const url = `/parrot-species-color/find-by-parrot-species-id/${speciesId}`;
         return axiosClinet.get(url);

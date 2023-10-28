@@ -75,9 +75,11 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	@OneToMany(mappedBy = "parrotSpecies")
 	private List<ParrotSpeciesColorEntity> parrotSpeciesColors = new ArrayList<>();
 
-	@OneToMany(mappedBy = "parrotSpecies")
-	private List<NestEntity> nest = new ArrayList<>();
 
+
+	@OneToOne(mappedBy = "parrotSpecies")
+	@PrimaryKeyJoinColumn
+	private NestPriceEntity nestPriceEntity;
 
 
 

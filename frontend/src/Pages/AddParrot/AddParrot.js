@@ -20,7 +20,7 @@ import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Title from '~/Components/Title/Title';
 import Buttons from '~/Components/Button/Button';
@@ -68,6 +68,7 @@ function AddParrot() {
         pregnancyStatus: false,
         healthStatus: true,
         numberOfChildren: 2,
+        gender: true,
         colorID: 1,
     });
     // Handel add parrot
@@ -82,6 +83,7 @@ function AddParrot() {
                 pregnancyStatus: pregnancyStatus,
                 healthStatus: healthStatus,
                 numberOfChildren: parrots.numberOfChildren,
+                gender: parrots.gender,
                 colorID: parrots.colorID,
             });
             if (responseParrots.status === 200) {
@@ -117,6 +119,9 @@ function AddParrot() {
     useEffect(() => {
         const fetchParrotSpeciesColorbyID = async () => {
             try {
+                if (speciesColorByID === 'a') {
+                    return;
+                }
                 if (
                     speciesColorByID !== undefined ||
                     speciesColorByID !== 'Select a color' ||
@@ -168,10 +173,11 @@ function AddParrot() {
     useEffect(() => {
         const fetchData = async () => {
             const data = [];
+
             try {
                 for (const parrot of parrotList) {
-                    const listParrot = { ...parrot };
                     const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
+                    const listParrot = { ...parrot };
                     const species = await ParrotSpeciesAPI.get(colors[0].id);
                     const colorName = colors[0].color;
                     const specieName = species[0].name;
@@ -190,16 +196,6 @@ function AddParrot() {
             fetchData();
         }
     }, [shouldFetchData, parrotList]);
-    // console.log('- species list - ');
-    // console.log(species);
-    // console.log('- species color by id  - ');
-    // console.log(speciesColorByID);
-    // console.log('- species color by id list - ');
-    // console.log(speciesColor);
-    // console.log('- combine data -');
-    // console.log(parrotList);
-    // // console.log(parrotList[0].id);
-    // console.log(combineData);
     const handleStatus = async (index) => {
         const updatedPost = [...parrotList];
         updatedPost[index].status = !updatedPost[index].status;
@@ -231,6 +227,78 @@ function AddParrot() {
             setOpenParrotID(parrotID);
         }
     };
+
+    const [selectedOption, setSelectedOption] = useState('true');
+
+    const handleOptionChange = (event) => {
+        setParrots({ ...parrots, gender: event.target.value });
+        setSelectedOption(event.target.value);
+    };
+
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        age: null,
+        status: null,
+        saleStatus: null,
+        pregnancyStatus: null,
+        healthStatus: null,
+        gender: null,
+        searchDate: null,
+        sortDate: null,
+        sortAge: null,
+    });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const sortData = await ParrotAPI.searchSortForParrot(sort);
+                setParrotList(sortData.listResult);
+                setTotalPage(sortData.totalPage);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        sortData();
+    }, [sort]);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 5,
+            age: null,
+            status: null,
+            saleStatus: null,
+            pregnancyStatus: null,
+            healthStatus: null,
+            gender: null,
+            searchDate: null,
+            sortDate: null,
+            sortAge: null,
+        });
+
+        setPage(newPage);
+    };
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 5,
+            age: null,
+            status: null,
+            saleStatus: null,
+            pregnancyStatus: null,
+            healthStatus: null,
+            gender: null,
+            searchDate: null,
+            sortDate: null,
+            sortAge: null,
+        });
+    };
+    useEffect(() => {
+        console.log(sort);
+    }, [sort]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title-container')}>
@@ -243,26 +311,68 @@ function AddParrot() {
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
                 </Buttons>
-                <div className={cx('sort-space')}>
-                    <form className={cx('sort-space-form')}>
-                        <select name="species" id="species">
-                            <option value="a">Species</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <select name="status" id="status">
-                            <option value="b">Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <input type="date" />
-                        <select name="price" id="price">
-                            <option value="c">Price</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </form>
-                </div>
+            </div>
+            <div className={cx('sort-space')}>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                {/* Sort 1 */}
+                <input type="number" placeholder="Age" onChange={(e) => setSort({ ...sort, age: e.target.value })} />
+                {/* Sort 2 */}
+                <input type="date" onChange={(e) => setSort({ ...sort, searchDate: e.target.value })} />
+                {/* Sort 3 */}
+                <select name="gender" id="gender" onChange={(e) => setSort({ ...sort, gender: e.target.value })}>
+                    <option value="b">Gender</option>
+                    <option value="true">Male</option>
+                    <option value="false">Female</option>
+                </select>
+                {/* Sort 4 */}
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
+                    <option value="b">Status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 5 */}
+                <select
+                    name="healthStatus"
+                    id="healthStatus"
+                    onChange={(e) => setSort({ ...sort, healthStatus: e.target.value })}
+                >
+                    <option value="b">Health status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 6 */}
+
+                <select
+                    name="pregnancyStatus"
+                    id="pregnancyStatus"
+                    onChange={(e) => setSort({ ...sort, pregnancyStatus: e.target.value })}
+                >
+                    <option value="b">Pregnancy status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 7 */}
+                <select
+                    name="saleStatus"
+                    id="saleStatus"
+                    onChange={(e) => setSort({ ...sort, saleStatus: e.target.value })}
+                >
+                    <option value="b">Sale status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                {/* Sort 8 */}
+                <select name="sortAge" id="sortAge" onChange={(e) => setSort({ ...sort, sortAge: e.target.value })}>
+                    <option value="b">Age</option>
+                    <option value="ADESC">Descending</option>
+                    <option value="AASC">Ascending</option>
+                </select>
+                {/* Sort 9 */}
+                <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="b">Date</option>
+                    <option value="DDESC">Descending</option>
+                    <option value="DASC">Ascending</option>
+                </select>
             </div>
             {show ? (
                 <form className={cx('inner')} onSubmit={handleSubmit}>
@@ -283,7 +393,7 @@ function AddParrot() {
                             ))}
                     </div>
                     <TableContainer className={cx('table-container')}>
-                        <Table size="xs ">
+                        <Table size="xs">
                             <Thead>
                                 <Tr>
                                     <Th colSpan={2}>Add parrot</Th>
@@ -368,7 +478,32 @@ function AddParrot() {
                                         />
                                     </Td>
                                 </Tr>
-
+                                {/* Parrot gender */}
+                                <Tr>
+                                    <Td>
+                                        <p>Parrot gender</p>
+                                    </Td>
+                                    <Td>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="true"
+                                                checked={selectedOption === 'true'}
+                                                onChange={handleOptionChange}
+                                            />
+                                            Male
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="false"
+                                                checked={selectedOption === 'false'}
+                                                onChange={handleOptionChange}
+                                            />
+                                            Female
+                                        </label>
+                                    </Td>
+                                </Tr>
                                 <Tr>
                                     <Td>
                                         <p>Parrot species </p>
@@ -397,7 +532,7 @@ function AddParrot() {
                                     </Td>
                                     <Td>
                                         {speciesColor.length === 0 ? (
-                                            <p>Species have no color</p>
+                                            'Species have no color'
                                         ) : (
                                             <select
                                                 className={cx('select-btn')}
@@ -450,7 +585,7 @@ function AddParrot() {
                 <></>
             )}
             <TableContainer className={cx('table-list')}>
-                <Table size="xs">
+                <Table size="md">
                     <Thead>
                         <Tr>
                             <Th>Parrot ID</Th>
@@ -462,6 +597,7 @@ function AddParrot() {
                             <Th>Color ID</Th>
                             <Th>Color</Th>
                             <Th>Specie</Th>
+                            <Th>Parrot gender</Th>
                             <Th>Status</Th>
                             <Th>Action</Th>
                         </Tr>
@@ -469,17 +605,18 @@ function AddParrot() {
                     <Tbody>
                         {combineData.map((parrot, index) => (
                             <>
-                                <Tr key={index}>
-                                    <Td key={index + 'a'}>{parrot.id}</Td>
-                                    <Td key={index + 'b'}>{parrot.age}</Td>
-                                    <Td key={index + 'c'}>{parrot.saleStatus.toString()}</Td>
-                                    <Td key={index + 'd'}>{parrot.pregnancyStatus.toString()}</Td>
-                                    <Td key={index + 'e'}>{parrot.healthStatus.toString()}</Td>
-                                    <Td key={index + 'f'}>{parrot.numberOfChildren}</Td>
-                                    <Td key={index + 'g'}>{parrot.colorID}</Td>
-                                    <Td key={index + 'h'}>{parrot.colorName}</Td>
-                                    <Td key={index + 'i'}>{parrot.specieName}</Td>
-                                    <Td key={index + 'j'}>
+                                <Tr key={index + 'a'}>
+                                    <Td>{parrot.id}</Td>
+                                    <Td>{parrot.age}</Td>
+                                    <Td>{parrot.saleStatus.toString()}</Td>
+                                    <Td>{parrot.pregnancyStatus.toString()}</Td>
+                                    <Td>{parrot.healthStatus.toString()}</Td>
+                                    <Td>{parrot.numberOfChildren}</Td>
+                                    <Td>{parrot.colorID}</Td>
+                                    <Td>{parrot.colorName}</Td>
+                                    <Td>{parrot.specieName}</Td>
+                                    <Td>{parrot.gender === true ? 'male' : 'female'}</Td>
+                                    <Td>
                                         <Switch
                                             onChange={() => handleStatus(index)}
                                             size="lg"
@@ -497,12 +634,13 @@ function AddParrot() {
                                             {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
                                         </Button>
                                     </Td>
-                                    <Td key={index + 'k'}></Td>
+                                    <Td key={index + 'l'}></Td>
                                 </Tr>
-                                <Tr>
+                                <Tr key={index + 'b'}>
                                     {openParrotID === parrot.id && (
                                         <Td colSpan={11}>
                                             <UpdateParrot
+                                                key={index}
                                                 parrot={parrot}
                                                 reloadData={handleUpdateSuccess}
                                             ></UpdateParrot>
@@ -514,6 +652,19 @@ function AddParrot() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </div>
     );
 }

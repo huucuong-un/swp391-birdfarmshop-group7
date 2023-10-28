@@ -29,6 +29,9 @@ public class NestUsageHistoryEntity extends BaseEntity {
     @OneToMany(mappedBy = "nestUsageHistory")
     private List<NestDevelopmentEntity> nestDevelopmentEntity;
 
+    @OneToOne(mappedBy = "nestUsageHistory")
+    private OrderDetailEntity orderDetailEntity;
+
     @Column(name = "start_date")
     private Date startDate;
 

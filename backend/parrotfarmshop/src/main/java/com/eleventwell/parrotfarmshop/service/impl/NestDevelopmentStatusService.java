@@ -55,19 +55,21 @@ public class NestDevelopmentStatusService implements IGenericService<NestDevelop
         } else {
             nestDevelopmentStatusEntity = (NestDevelopmentStatusEntity) genericConverter.toEntity(DTO, NestDevelopmentStatusEntity.class);
         }
+        int countObject = (int) nestDevelopmentStatusRepository.count();
+        nestDevelopmentStatusEntity.setSequence(countObject + 1);
         nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
         return (NestDevelopmentStatusDTO) genericConverter.toDTO(nestDevelopmentStatusEntity, NestDevelopmentStatusDTO.class);
     }
 
     @Override
     public void changeStatus(Long ids) {
-//        NestDevelopmentStatusEntity nestDevelopmentStatusEntity = nestDevelopmentStatusRepository.findOneById(ids);
-//        if (nestDevelopmentStatusEntity.getStatus() == true) {
-//            nestDevelopmentStatusEntity.setStatus(false);
-//        } else {
-//            nestDevelopmentStatusEntity.setStatus(true);
-//        }
-//        nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
+        NestDevelopmentStatusEntity nestDevelopmentStatusEntity = nestDevelopmentStatusRepository.findOneById(ids);
+        if (nestDevelopmentStatusEntity.getAvailable() == true) {
+            nestDevelopmentStatusEntity.setAvailable(false);
+        } else {
+            nestDevelopmentStatusEntity.setAvailable(true);
+        }
+        nestDevelopmentStatusRepository.save(nestDevelopmentStatusEntity);
     }
 
     public void changeSequence(Long ids, Integer newSequence) {

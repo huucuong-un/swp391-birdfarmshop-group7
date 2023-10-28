@@ -10,7 +10,7 @@
     align-items: center;
     width: 100%;
     flex-direction: column;
-    height: 570px;
+    min-height: 570px;
     div {
         overflow: hidden;
         display: flex;
@@ -19,6 +19,7 @@
         padding: 2px;
     }
     th {
+        padding: 20px;
         text-align: center;
         background-color: #f9ede9;
         color: var(--black);
@@ -75,5 +76,33 @@
 }
 .table-list {
     width: 100%;
-    padding: 10px;
+    padding: 10px !important;
+
+    th {
+        padding: 15px !important;
+    }
+    overflow: hidden !important;
+}
+.sort-space {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+    width: 100%;
+    margin-right: 20px;
+    flex-wrap: wrap;
+    input,
+    select {
+        border: 2px solid black;
+        border-radius: 50px;
+        padding: 0 1%;
+    }
+}
+.button-pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 }

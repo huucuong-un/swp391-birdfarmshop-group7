@@ -201,7 +201,7 @@ function AddParrotSpecies() {
                 price: 0,
                 speciesID: 0,
             });
-            setSpecies([...species, responseSpecies.data]);
+            // setSpecies([...species, responseSpecies.data]);
 
             setSubmissionStatus(true);
         } catch (error) {
@@ -411,19 +411,7 @@ function AddParrotSpecies() {
                 {/*END FORM TO ADD SPECIES  */}
             </form>
             {/* CRUD SPECIES LIST */}
-            <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
-                <select name="species" id="species">
-                    <option value="a">Species</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                <select name="status" id="status">
-                    <option value="b">Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
+
             <AddSpeciesColor key={addSpeciesColorKey} className={cx('addspeciescolor')}></AddSpeciesColor>
         </div>
     );

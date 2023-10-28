@@ -15,8 +15,6 @@ public class EmailController {
     private EmailService emailService;
 
 
-
-
     // Sending a simple Email
     @PostMapping("/api/send-mail")
     public String sendMail(@RequestBody EmailDetailsEntity details)

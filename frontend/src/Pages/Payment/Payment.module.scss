@@ -135,6 +135,15 @@ p {
 
 .payment-detail-items {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.payment-detail-items-info {
+    display: flex;
     align-items: center;
     justify-content: left;
     gap: 50px;
@@ -161,7 +170,7 @@ p {
 
 .payment-detail-promotions input {
     border: 1px solid #ccc;
-    min-width: 235px;
+    max-width: 245px;
     padding: 7px 3%;
     border-radius: 5px;
     width: 100%;

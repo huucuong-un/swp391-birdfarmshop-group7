@@ -27,6 +27,11 @@ const ParrotSpeciesAPI = {
         return axiosClinet.get(url);
     },
 
+    count() {
+        const url = '/parrot-species/total-item';
+        return axiosClinet.get(url);
+    },
+
     add(data) {
         const url = `/parrot-species`;
         return axiosClinet.post(url, data);

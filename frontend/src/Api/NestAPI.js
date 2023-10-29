@@ -55,6 +55,10 @@ const NestAPI = {
         const url = `/nest-development-status/${id}`;
         return axiosClinet.delete(url);
     },
+    changeSequenceForNestDevelopmentStatus(data) {
+        const url = `/nest-development-status/admin/update-sequence?id=${data.id}&sequence=${data.sequence}`;
+        return axiosClinet.put(url, data);
+    },
 };
 
 export default NestAPI;

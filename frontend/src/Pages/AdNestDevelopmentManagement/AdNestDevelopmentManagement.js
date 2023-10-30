@@ -18,29 +18,29 @@ import {
     AlertTitle,
     AlertDescription,
     Stack,
-    Text,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from '~/Pages/AdNestDevelopmentStatus/AdNestDevelopmentStatus.module.scss';
+import styles from '~/Pages/AdNestDevelopmentManagement/AdNestDevelopmentManagement.module.scss';
 import FAQSAPI from '~/Api/FAQSAPI';
 import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
-import { json } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function AdNestDevelopmentStatus() {
+function AdNestDevelopmentManagement() {
     const [faqsList, setFaqsList] = useState([]);
-    const [nestPrice, setNestPrice] = useState([]);
-    const [show, setShow] = useState(false);
-    const [showForUpdate, setShowForUpdate] = useState(false);
-    const [title, setTitle] = useState('');
+    const [nestDevelopmentStatus, setNestDevelopmentStatus] = useState([]);
+    const [nestUsageHistory, setNestUsageHistory] = useState([]);
+    const [usageHistory, setUsageHistory] = useState('');
+    const [devStatus, setDevStatus] = useState('');
+    const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
+    const [show, setShow] = useState(false);
     const [status, setStatus] = useState(false);
     const [addStatus, setAddStatus] = useState(false);
     const [addFail, setAddFail] = useState(1);
@@ -48,13 +48,11 @@ function AdNestDevelopmentStatus() {
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
     const [species, setSpecies] = useState([]);
-    const [devStatus, setDevStatus] = useState([]);
-    const [selectedValues, setSelectedValues] = useState(Array(faqsList.length).fill(''));
 
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
         updatedFaqs[index].status = !updatedFaqs[index].status;
-        const change = await NestAPI.changeStatusForNestDevelopmentStatus(id);
+        const change = await NestAPI.changeStatusForNestPrice(id);
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
@@ -66,7 +64,7 @@ function AdNestDevelopmentStatus() {
                     page: 1,
                     limit: 12,
                 };
-                const nestList = await NestAPI.getAllNestDevelopmentStatus(params);
+                const nestList = await NestAPI.getAllNestDevelopment(params);
                 setFaqsList(nestList.listResult);
             } catch (error) {
                 console.error(error);
@@ -79,10 +77,32 @@ function AdNestDevelopmentStatus() {
     }, [vinh]);
 
     useEffect(() => {
+        const getNestDevelopmentStatusWithID = async () => {
+            const data = [];
+            for (const item of faqsList) {
+                const nestDevelopment = { ...item };
+                try {
+                    nestDevelopment.statusName = await NestAPI.getNestDevelopmentStatusById(item.statusId);
+                    data.push(nestDevelopment);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            setCombineData(data);
+        };
+
+        getNestDevelopmentStatusWithID();
+    }, [faqsList]);
+
+    useEffect(() => {
         const getNestDevelopmentStatusList = async () => {
             try {
-                const nestPriceList = await NestAPI.getAll();
-                setNestPrice(nestPriceList);
+                const params = {
+                    page: 1,
+                    limit: 30,
+                };
+                const nestDevelopmentStatusList = await NestAPI.getAllNestDevelopmentStatus(params);
+                setNestDevelopmentStatus(nestDevelopmentStatusList.listResult);
             } catch (error) {
                 console.error(error);
             }
@@ -93,29 +113,35 @@ function AdNestDevelopmentStatus() {
     }, [show]);
 
     useEffect(() => {
-        const getSpecies = async () => {
+        const getNestUsageHistoryList = async () => {
             try {
-                const speciesList = await ParrotSpeciesAPI.getAll();
-                setSpecies(speciesList.listResult);
+                const params = {
+                    page: 1,
+                    limit: 3000,
+                };
+                const nestUsageHistoryList = await NestAPI.getAllNestUsageHistory(params);
+                setNestUsageHistory(nestUsageHistoryList.listResult);
             } catch (error) {
                 console.error(error);
             }
         };
-
-        getSpecies();
+        if (show) {
+            getNestUsageHistoryList();
+        }
     }, [show]);
 
     useEffect(() => {
-        console.log(status);
-    }, [status]);
+        console.log(nestUsageHistory);
+    }, [nestUsageHistory]);
 
     useEffect(() => {
         const addFaqs = async () => {
             try {
                 const data = {
-                    name: title,
+                    nestUsageHistoryId: usageHistory,
+                    statusId: devStatus,
+                    eventDate: date,
                     description: description,
-                    available: status,
                 };
                 if (addStatus === false) {
                     setAddFail((prev) => prev + 1);
@@ -124,7 +150,7 @@ function AdNestDevelopmentStatus() {
                         setSubmitStatus();
                     }, 50000);
                 } else {
-                    const add = await NestAPI.addNestDevelopmentStatus(data);
+                    const add = await NestAPI.addNestDevelopment(data);
                     setVinh(true);
                     setAddStatus(false);
                 }
@@ -151,12 +177,8 @@ function AdNestDevelopmentStatus() {
         setShow(!show);
     };
 
-    const handleShowForUpdate = () => {
-        setShowForUpdate(!showForUpdate);
-    };
-
     const handleSave = () => {
-        if (title === '' || description === '') {
+        if (usageHistory === '' || devStatus === '' || date === '' || description === '') {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
@@ -180,78 +202,19 @@ function AdNestDevelopmentStatus() {
         }
     };
 
-    const handleSelectChange = (index, e) => {
-        const selectedValue = JSON.parse(e.target.value);
-        const newSelectedValues = [...selectedValues];
-        newSelectedValues[index] = selectedValue;
-        setSelectedValues(newSelectedValues);
-    };
-
-    function hasDuplicateId(selectedValues) {
-        // const seenIds = {};
-        // for (const item of selectedValues) {
-        //     if (seenIds[item.id] || !item) {
-        //         return true; // Có id trùng lặp
-        //     }
-        //     seenIds[item.id] = true;
-        // }
-        // return false; // Không có id trùng lặp
-        const seenIds = {};
-        let hasDuplicateOrNull = false;
-
-        for (const item of selectedValues) {
-            if (!item || seenIds[item.id]) {
-                hasDuplicateOrNull = true;
-                break;
-            }
-            seenIds[item.id] = true;
-        }
-
-        return hasDuplicateOrNull;
-    }
-
-    const handleUpdateSequence = () => {
-        const hasDuplicates = hasDuplicateId(selectedValues);
-        if (hasDuplicates || selectedValues.length != faqsList.length) {
-            setAddFail((prev) => prev + 1);
-            setSubmitStatus(false);
-            setTimeout(() => {
-                setSubmitStatus();
-            }, 50000);
-        } else {
-            for (const item of selectedValues) {
-                let params = {
-                    id: item.id,
-                    sequence: item.sequence,
-                };
-                const updateSequence = NestAPI.changeSequenceForNestDevelopmentStatus(params);
-            }
-            setSubmitStatus(true);
-            setTimeout(() => {
-                setSubmitStatus();
-            }, 50000);
-        }
-    };
-
     useEffect(() => {
-        console.log(selectedValues);
-    }, [selectedValues]);
+        console.log(description);
+    }, [description]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
-                <h1>NEST DEVELOPMENT STATUS</h1>
+                <h1>NEST DEVELOPMENT</h1>
             </div>
             <div className={cx('add-btn')}>
                 <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-                <Button onClick={handleShowForUpdate} colorScheme="green" size="lg">
-                    Update
-                    <span className={cx('span-icon', { 'rotate-icon': showForUpdate })}>
-                        {showForUpdate ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
                 </Button>
             </div>
@@ -272,83 +235,56 @@ function AdNestDevelopmentStatus() {
                     </Stack>
                 ))}
 
-            {showForUpdate ? (
-                <div className={cx('change-sequence-container')}>
-                    <Text className={cx('change-sequence-title')}>Change Sequence</Text>
-                    <div className={cx('change-sequence-show')}>
-                        <p>Start</p>
-                        <FontAwesomeIcon icon={faArrowRight} />
-
-                        {faqsList &&
-                            faqsList.map((nestDevStatus, nestDevStatusIndex) => (
-                                <div key={nestDevStatusIndex} className={cx('change-sequence-show-item')}>
-                                    <p>{nestDevStatus.name}</p>
-                                    <FontAwesomeIcon icon={faArrowRight} />
-                                </div>
-                            ))}
-
-                        <p>End</p>
-                    </div>
-                    <div className={cx('update-zone')}>
-                        {Array.from({ length: faqsList.length }, (_, index) => (
-                            <div className={cx('update-zone-item')}>
-                                <p key={index} className={cx('number-page')}>
-                                    {index + 1}:
-                                </p>
-                                <select
-                                    value={JSON.stringify(selectedValues[index])}
-                                    onChange={(e) => handleSelectChange(index, e)}
-                                >
-                                    <option isChecked value={JSON.stringify(null)}>
-                                        Status
-                                    </option>
-                                    {faqsList &&
-                                        faqsList.map((nestDevStatus, nestDevStatusIndex) => (
-                                            <option
-                                                value={JSON.stringify({
-                                                    id: nestDevStatus.id,
-                                                    sequence: index + 1,
-                                                })}
-                                                key={nestDevStatusIndex}
-                                            >
-                                                {nestDevStatus.name}
-                                            </option>
-                                        ))}
-                                </select>
-                            </div>
-                        ))}
-                    </div>
-                    <Button
-                        colorScheme="green"
-                        onClick={() => handleUpdateSequence()}
-                        className={cx('save-btn')}
-                        fontSize={18}
-                    >
-                        Save
-                    </Button>
-                </div>
-            ) : (
-                <></>
-            )}
-
             {show ? (
                 <TableContainer paddingTop={10} paddingBottom={10}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>
-                                <Th colSpan={2}>New Nest Development Status</Th>
+                                <Th colSpan={2}>New Nest Price</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td>Name</Td>
+                                <Td>Nest Usage History</Td>
+                                <Td>
+                                    <select onChange={(e) => setUsageHistory(e.target.value)}>
+                                        <option isChecked value="">
+                                            History
+                                        </option>
+                                        {nestUsageHistory &&
+                                            nestUsageHistory.map((nestUsaHistory, nestUsaHistoryIndex) => (
+                                                <option key={nestUsaHistoryIndex} value={nestUsaHistory.id}>
+                                                    {nestUsaHistory.id}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Status</Td>
+                                <Td>
+                                    <select onChange={(e) => setDevStatus(e.target.value)}>
+                                        <option isChecked value="">
+                                            Status
+                                        </option>
+                                        {nestDevelopmentStatus &&
+                                            nestDevelopmentStatus.map((nestDevStatus, nestDevStatusIndex) => (
+                                                <option key={nestDevStatusIndex} value={nestDevStatus.id}>
+                                                    {nestDevStatus.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Event Date</Td>
                                 <Td>
                                     <Input
-                                        type="text"
+                                        type="date"
                                         borderColor="black"
-                                        placeholder="Name..."
+                                        placeholder="Price..."
                                         fontSize={18}
-                                        onChange={(e) => setTitle(e.target.value)}
+                                        onChange={(e) => setDate(e.target.value)}
                                     />
                                 </Td>
                             </Tr>
@@ -364,13 +300,12 @@ function AdNestDevelopmentStatus() {
                                     />
                                 </Td>
                             </Tr>
-
-                            <Tr>
+                            {/* <Tr>
                                 <Td>Status</Td>
                                 <Td>
                                     <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                 </Td>
-                            </Tr>
+                            </Tr> */}
                         </Tbody>
                     </Table>
                     <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
@@ -399,30 +334,31 @@ function AdNestDevelopmentStatus() {
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
-                            <Th>Name</Th>
+                            <Th>Nest Usage History ID</Th>
+                            <Th>Status</Th>
                             <Th>Description</Th>
-                            <Th>Sequence</Th>
+                            <Th>Event Date</Th>
                             <Th>Created Date</Th>
-                            <Th>Available</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {faqsList &&
-                            faqsList.map((faqs, index) => (
+                        {combineData &&
+                            combineData.map((faqs, index) => (
                                 <Tr key={index}>
                                     <Td>{faqs.id}</Td>
-                                    <Td>{faqs.name}</Td>
+                                    <Td>{faqs.nestUsageHistoryId}</Td>
+                                    <Td>{faqs.statusName.name}</Td>
                                     <Td>{faqs.description}</Td>
-                                    <Td>{faqs.sequence}</Td>
+                                    <Td>{formatDate(new Date(faqs.eventDate))}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
-                                    <Td>
+                                    {/* <Td>
                                         <Switch
                                             size="lg"
-                                            isChecked={faqs.available}
+                                            isChecked={faqs.status}
                                             colorScheme="green"
                                             onChange={() => changeStatus(faqs.id, index)}
                                         />
-                                    </Td>
+                                    </Td> */}
                                 </Tr>
                             ))}
                     </Tbody>
@@ -432,4 +368,4 @@ function AdNestDevelopmentStatus() {
     );
 }
 
-export default AdNestDevelopmentStatus;
+export default AdNestDevelopmentManagement;

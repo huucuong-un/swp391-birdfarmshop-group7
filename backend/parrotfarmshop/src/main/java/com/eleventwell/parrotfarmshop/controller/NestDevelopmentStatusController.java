@@ -3,6 +3,7 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.Model.PagingModel;
 import com.eleventwell.parrotfarmshop.dto.NestDevelopmentDTO;
 import com.eleventwell.parrotfarmshop.dto.NestDevelopmentStatusDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.service.impl.NestDevelopmentService;
 import com.eleventwell.parrotfarmshop.service.impl.NestDevelopmentStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -31,6 +33,12 @@ public class NestDevelopmentStatusController {
         result.setLimit(limit);
         return result;
 
+    }
+
+    @GetMapping(value = "find-one-status-by-id/{id}")
+    public NestDevelopmentStatusDTO findOneStatusById(@RequestBody @PathVariable("id") long id) {
+        NestDevelopmentStatusDTO nestDevelopmentStatusDTO = nestDevelopmentStatusService.findOneById(id);
+        return nestDevelopmentStatusDTO;
     }
 
     @PutMapping(value = "/admin/update-status")

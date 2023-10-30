@@ -44,13 +44,15 @@ import AdminAccountList from '~/Pages/AdminAccountList/AdminAccountList';
 import AdNestManagement from '~/Pages/AdNestManagement/AdNestManagement';
 import AdNestPriceManagement from '~/Pages/AdNestPriceManagement/AdNestPriceManagement';
 import AdNestDevelopmentStatus from '~/Pages/AdNestDevelopmentStatus/AdNestDevelopmentStatus';
+import AdNestDevelopmentManagement from '~/Pages/AdNestDevelopmentManagement/AdNestDevelopmentManagement';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
     { path: '/parrot-product', component: ParrotProduct },
     { path: '/nest', component: Nest },
     { path: '/payment', component: Payment },
-    { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
+    // { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
+    { path: '/parrot-product/parrot-detail', component: ParrotDetail },
     { path: '/order-history', component: OrderHistory },
     { path: '/order-history-new', component: OrderHistoryNew },
     { path: '/paid-success', component: PaidSuccess },
@@ -85,6 +87,7 @@ const publicRoutes = [
     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
     { path: '/admin/nest', component: AdNestManagement, layout: SystemLayout },
     { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
+    { path: '/admin/nest-development', component: AdNestDevelopmentManagement, layout: SystemLayout },
     { path: '/admin/nest-development-status', component: AdNestDevelopmentStatus, layout: SystemLayout },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
     { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },

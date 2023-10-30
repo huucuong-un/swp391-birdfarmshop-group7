@@ -110,7 +110,7 @@ function ParrotDetail() {
     useEffect(() => {
         const getParrotsSpecies = async () => {
             try {
-                const parrotSpeciesById = await ParrotSpeciesAPI.get(id);
+                const parrotSpeciesById = await ParrotSpeciesAPI.get(receivedData.parrotId);
                 setParrotSpecies(parrotSpeciesById);
                 console.log(parrotSpecies);
             } catch (error) {
@@ -306,7 +306,7 @@ function ParrotDetail() {
     useEffect(() => {
         const getAllImageBySpeciesId = async (id) => {
             try {
-                const data = await ParrotSpeciesColorAPI.getImageURLsBySpeciesId(id);
+                const data = await ParrotSpeciesColorAPI.getImageURLsBySpeciesId(receivedData.parrotId);
                 setImages(data);
                 console.log('images: ' + data);
             } catch (error) {
@@ -330,6 +330,7 @@ function ParrotDetail() {
                         <div className={cx('mini-img-container')}>
                             {images.map((img, imgIndex) => (
                                 <Image
+                                    key={imgIndex}
                                     boxSize="100px"
                                     objectFit="cover"
                                     src={img}

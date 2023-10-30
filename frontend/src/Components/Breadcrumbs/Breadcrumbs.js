@@ -8,6 +8,13 @@ function Breadcrumbs() {
     const location = useLocation();
     const pathnames = location.pathname.split('/').filter((x) => x);
 
+    // const modifiedPathnames = pathnames.map((name) => {
+    //     if (name === 'parrot-product') {
+    //         return 'Parrot product';
+    //     }
+    //     return name;
+    // });
+
     return (
         <nav>
             <ul>
@@ -18,11 +25,27 @@ function Breadcrumbs() {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
                     const isLast = index === pathnames.length - 1;
 
+                    // const displayName = name === 'parrot-product' ? 'Collections' : name;
+                    let displayName;
+                    if (name === 'parrot-product') {
+                        displayName = 'Collections';
+                    } else if (name === 'parrot-detail') {
+                        displayName = 'Details';
+                    } else if (name === 'faqs') {
+                        displayName = 'FAQS';
+                    } else if (name === 'shopping-cart') {
+                        displayName = 'Cart';
+                    } else if (name === 'payment') {
+                        displayName = 'Payment';
+                    } else {
+                        displayName = name;
+                    }
+
                     return isLast ? (
-                        <li key={name}>{name} / </li>
+                        <li key={name}>{displayName} / </li>
                     ) : (
                         <li key={name}>
-                            <Link to={routeTo}>{name} / </Link>
+                            <Link to={routeTo}>{displayName} / </Link>
                         </li>
                     );
                 })}

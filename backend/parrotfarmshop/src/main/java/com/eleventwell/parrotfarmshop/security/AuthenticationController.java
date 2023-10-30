@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/user")
 public class AuthenticationController {
 
@@ -24,19 +25,32 @@ public class AuthenticationController {
     ){
 return  ResponseEntity.ok(service.register(request));
     }
+//    @PostMapping(value = "authenticate")
+//    public ResponseEntity<AuthenticationResponse> authenticate(
+//            @RequestBody AuthenticationRequest request) {
+//        return ResponseEntity.ok(service.authenticate(request));
+//
+//    }
     @PostMapping(value = "authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public String authenticate(
             @RequestBody AuthenticationRequest request) {
-        return  ResponseEntity.ok(service.authenticate(request));
+        return service.authenticate(request).getToken();
 
     }
 
+//    @PostMapping(value = "/login-with-google/authenticate")
+//    public ResponseEntity<AuthenticationResponse> authenticateForUserLoginWithGoogle(
+//            @RequestBody AuthenticationRequest request){
+//        return  ResponseEntity.ok(service.authenticateForUserLoginWithGoogle(request));
+//
+//    }
     @PostMapping(value = "/login-with-google/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticateForUserLoginWithGoogle(
+    public ResponseEntity<String> authenticateForUserLoginWithGoogle(
             @RequestBody AuthenticationRequest request){
-        return  ResponseEntity.ok(service.authenticateForUserLoginWithGoogle(request));
+        return  ResponseEntity.ok(service.authenticateForUserLoginWithGoogle(request).getToken());
 
     }
+
 
     @PostMapping(value = "/change-password")
     public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest request) {

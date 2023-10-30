@@ -68,10 +68,10 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                         'Content-Type': 'application/json',
                     },
                 };
-                const data = await DeliveryInformationAPI.getAll(user.userId, config);
+                const data = await DeliveryInformationAPI.getAll(user.id, config);
 
                 const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
-                    user.userId,
+                    user.id,
                     config,
                 );
                 setDeliveryInfo(data);
@@ -94,7 +94,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
             setReloadStatus(false);
         }
         getAllDeliveryInfoByCustomerId();
-    }, [reloadStatus]);
+    }, [reloadStatus || user]);
 
     return (
         <Box className={cx('wrapper')}>

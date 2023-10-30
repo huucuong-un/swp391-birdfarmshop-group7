@@ -6,9 +6,11 @@ import com.eleventwell.parrotfarmshop.dto.NestUsageHistoryDTO;
 import com.eleventwell.parrotfarmshop.entity.NestDevelopmentEntity;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.entity.NestUsageHistoryEntity;
+import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.repository.NestDevelopmentRepository;
 import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.NestUsageHistoryRepository;
+import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,12 @@ import java.util.List;
 public class NestUsageHistoryService implements IGenericService<NestUsageHistoryDTO>{
     @Autowired
     NestUsageHistoryRepository nestUsageHistoryRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    NestService nestService;
 
     @Autowired
     NestRepository nestRepository;
@@ -83,5 +91,16 @@ public class NestUsageHistoryService implements IGenericService<NestUsageHistory
         }
 
         return result;
+    }
+
+    public void deleteByOrderDetailid(Long id){
+
+
+        OrderDetailEntity orderDetail = orderDetailRepository.findOneById(id);
+        orderDetailRepository.deleteById(id);
+        nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
+        nestService.changeStatus(id);
+
+
     }
 }

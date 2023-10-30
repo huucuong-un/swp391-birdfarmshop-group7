@@ -20,6 +20,9 @@ public class UserService implements IGenericService<UserDTO> {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    JwtService jwtService;
+
     //find an account by email
 
     public UserDTO findByUsername(String username) {
@@ -93,6 +96,11 @@ public class UserService implements IGenericService<UserDTO> {
 
         return (UserDTO) genericConverter.toDTO(userRepository.findOneById(id),UserDTO.class);
 
+    }
+
+    public UserDTO generateToken(String token){
+      String userName = jwtService.extractUserName(token);
+      return (UserDTO) genericConverter.toDTO(userRepository.findOneByUserName(userName),UserDTO.class);
     }
 
     @Override

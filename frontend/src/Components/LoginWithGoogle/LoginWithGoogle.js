@@ -7,6 +7,7 @@ import { useToast } from '@chakra-ui/react';
 import { ShopState } from '~/context/ShopProvider';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import UserAPI from '~/Api/UserAPI';
 
 const LoginWithGoogle = () => {
     const toast = useToast();
@@ -47,7 +48,7 @@ const LoginWithGoogle = () => {
 
                 const register = await RegisterAPI.register(dataForUser, config);
                 setUser(register);
-                localStorage.setItem('userInfo', JSON.stringify(register));
+                localStorage.setItem('accessToken', JSON.stringify(register));
                 console.log(register);
                 navigate('/');
             } catch (error) {
@@ -74,8 +75,13 @@ const LoginWithGoogle = () => {
                 },
                 config,
             );
-            setUser(dataLogin.data);
-            localStorage.setItem('userInfo', JSON.stringify(dataLogin.data));
+            const userLogin = UserAPI.getUserByToken(dataLogin.data);
+            userLogin.then((result) => {
+                setUser(result);
+                console.log(result);
+            });
+
+            localStorage.setItem('accessToken', JSON.stringify(dataLogin.data));
             console.log(dataLogin.data);
 
             navigate('/');

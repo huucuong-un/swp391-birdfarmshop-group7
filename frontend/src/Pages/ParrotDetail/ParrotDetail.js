@@ -41,6 +41,8 @@ function ParrotDetail() {
     const [colorSortList, setColorSortList] = useState([]);
     const [vinh, setVinh] = useState(1);
     const [images, setImages] = useState();
+    const [firstImg, setFirstImg] = useState();
+    const [imagesTag, setImagesTag] = useState([]);
     const feedback = {
         id: id,
         type: 'parrot',
@@ -297,10 +299,24 @@ function ParrotDetail() {
         }
         return stars;
     };
-    const changeMainImage = (smallImg) => {
-        var fullImg = document.getElementById('imageBox');
-        fullImg.src = smallImg;
-        console.log(smallImg);
+    const changeMainImage = (smallImg, imgId) => {
+        try {
+            var fullImg = document.getElementById('imageBox');
+
+            var countId = 0;
+            for (const img of images) {
+                document.getElementById('img' + countId).style.opacity = 0.6;
+                document.getElementById('img' + countId).style.borderStyle = 'none';
+                countId++;
+            }
+            console.log(imgId);
+
+            document.getElementById(imgId).style.opacity = 1;
+            document.getElementById(imgId).style.border = '1px solid black';
+
+            fullImg.src = smallImg;
+            console.log(smallImg);
+        } catch (error) {}
     };
 
     useEffect(() => {
@@ -316,6 +332,23 @@ function ParrotDetail() {
 
         getAllImageBySpeciesId(id);
     }, []);
+    useEffect(() => {
+        const chooseFirstImg = () => {
+            try {
+                setFirstImg(<img id="imageBox" src={images[0]} alt="main" />);
+            } catch (error) {}
+        };
+        chooseFirstImg();
+    }, [images]);
+    useEffect(() => {
+        const chooseFirstImgMini = () => {
+            try {
+                console.log(document.getElementById('img' + 0));
+                changeMainImage(images[0], 'img' + 0);
+            } catch (error) {}
+        };
+        chooseFirstImgMini();
+    }, [combineData]);
 
     // useEffect(() => {
     //     console.log('images: ' + images);
@@ -330,18 +363,17 @@ function ParrotDetail() {
                         <div className={cx('mini-img-container')}>
                             {images.map((img, imgIndex) => (
                                 <Image
+                                    id={'img' + imgIndex}
                                     boxSize="100px"
                                     objectFit="cover"
                                     src={img}
                                     alt="parrot"
-                                    onClick={() => changeMainImage(img)}
+                                    onClick={() => changeMainImage(img, 'img' + imgIndex)}
                                 />
                             ))}
                         </div>
 
-                        <div className={cx('main-img')}>
-                            <img id="imageBox" src={images[0]} alt="main" />
-                        </div>
+                        <div className={cx('main-img')}>{firstImg}</div>
 
                         <div className={cx('parrot-detail-container')}>
                             <p className={cx('parrot-detail-title')}>{parrot.name}</p>

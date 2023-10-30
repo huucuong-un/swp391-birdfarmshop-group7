@@ -214,14 +214,6 @@ function AdNestManagement() {
                             <Tr>
                                 <Td>Nest Price</Td>
                                 <Td>
-                                    {/* <Input
-                                        type="text"
-                                        borderColor="black"
-                                        placeholder="Title..."
-                                        fontSize={18}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    /> */}
-
                                     <select onChange={(e) => setTitle(e.target.value)}>
                                         <option isChecked>Species</option>
                                         {combineData &&

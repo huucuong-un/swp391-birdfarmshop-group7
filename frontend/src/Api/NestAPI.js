@@ -63,7 +63,7 @@ const NestAPI = {
         const url = `/nest-development-status/${id}`;
         return axiosClinet.delete(url);
     },
-<<<<<<< HEAD
+
     searchSortForNestPrice(params) {
         const url = '/nest-price/admin/search_sort';
         return axiosClinet.get(url, { params });
@@ -71,7 +71,7 @@ const NestAPI = {
     searchSortForNest(params) {
         const url = '/parrot-egg-nest/admin/search_sort';
         return axiosClinet.get(url, { params });
-=======
+    },
     changeSequenceForNestDevelopmentStatus(data) {
         const url = `/nest-development-status/admin/update-sequence?id=${data.id}&sequence=${data.sequence}`;
         return axiosClinet.put(url, data);
@@ -84,7 +84,6 @@ const NestAPI = {
     addNestDevelopment(data) {
         const url = `/nest-development`;
         return axiosClinet.post(url, data);
->>>>>>> c84b583c34059325bc47b9a74de31045d88aca3e
     },
 };
 

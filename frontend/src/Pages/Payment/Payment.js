@@ -331,10 +331,12 @@ function Payment() {
                 </div>
                 <div className={cx('payment-detail', 'col-md-4')}>
                     <Box className={cx('payment-detail-container')}>
+                        <Text fontWeight={600} textAlign="center">
+                            {checkNest ? 'Nest' : 'Parrot'} Service
+                        </Text>
                         {listOrder &&
                             listOrder.map((item, index) => (
                                 <div key={index} className={cx('payment-detail-items')}>
-                                    <Text fontWeight={600}>{checkNest ? 'Nest' : 'Parrot'} Service</Text>
                                     <div className={cx('payment-detail-items-info')}>
                                         <div className={cx('payment-detail-items-img')}>
                                             <img src={item.img} alt="product" />

@@ -3,6 +3,7 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.Model.PagingModel;
 import com.eleventwell.parrotfarmshop.dto.NestDevelopmentDTO;
 import com.eleventwell.parrotfarmshop.dto.NestDevelopmentStatusDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.service.impl.NestDevelopmentService;
 import com.eleventwell.parrotfarmshop.service.impl.NestDevelopmentStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -33,6 +35,12 @@ public class NestDevelopmentStatusController {
 
     }
 
+    @GetMapping(value = "find-one-status-by-id/{id}")
+    public NestDevelopmentStatusDTO findOneStatusById(@RequestBody @PathVariable("id") long id) {
+        NestDevelopmentStatusDTO nestDevelopmentStatusDTO = nestDevelopmentStatusService.findOneById(id);
+        return nestDevelopmentStatusDTO;
+    }
+
     @PutMapping(value = "/admin/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id) {
         nestDevelopmentStatusService.changeStatus(id);
@@ -46,5 +54,10 @@ public class NestDevelopmentStatusController {
     @PutMapping(value = "/admin/update-sequence")
     public void updateSequence(@RequestBody @RequestParam(value = "id") Long id, @RequestParam(value = "sequence") Integer sequence) {
         nestDevelopmentStatusService.changeSequence(id, sequence);
+    }
+
+    @DeleteMapping(value = "{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") long id){
+        nestDevelopmentStatusService.changeStatus(id);
     }
 }

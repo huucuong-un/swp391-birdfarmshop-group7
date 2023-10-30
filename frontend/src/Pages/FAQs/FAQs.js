@@ -26,7 +26,7 @@ function Faq() {
 
     return (
         <div className={cx('wrapper')}>
-            <StartPartPage>FAQS</StartPartPage>
+            <StartPartPage payment>FAQS</StartPartPage>
             <div className={cx('container')}>
                 <div className={cx('faqs-title')}>
                     <h1>Read answers to what most people ask us</h1>

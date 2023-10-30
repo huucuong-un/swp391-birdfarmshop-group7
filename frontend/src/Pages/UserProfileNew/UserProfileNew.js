@@ -85,6 +85,8 @@ function UserProfileNew() {
                 // localStorage.setItem('userInfo', JSON.stringify(updateInfo));
                 // setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
                 console.log(loggedUser);
+                localStorage.setItem('userInfo', JSON.stringify(updateInfo));
+                setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
                 toast({
                     title: 'Change successfully',
                     status: 'success',
@@ -149,6 +151,7 @@ function UserProfileNew() {
 
     //     setGenderTag([maleRadio, femaleRadio]);
     // }, [loggedUser]);
+
     return (
         <Container className={cx('container')} maxW="container.xl">
             <Box>
@@ -198,7 +201,6 @@ function UserProfileNew() {
                                     </Td>
                                     <Td>
                                         {/* {genderTag} */}
-
                                         <div className="" style={{ display: 'flex', fontSize: '14px', gap: '20px' }}>
                                             {gender === true ? (
                                                 <div style={{ display: 'flex' }}>

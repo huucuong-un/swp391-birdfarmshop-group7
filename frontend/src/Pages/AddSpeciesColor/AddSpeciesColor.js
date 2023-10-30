@@ -689,7 +689,7 @@ function AddSpeciesColor() {
                                                                 <Text
                                                                     style={{
                                                                         height: '100%',
-                                                                        padding: '20px 10px',
+                                                                        padding: '10px 10px',
                                                                         backgroundColor: '#444  ',
                                                                         color: 'white',
                                                                         borderRadius: '5px',
@@ -703,11 +703,11 @@ function AddSpeciesColor() {
                                                             </label>
                                                         </Td>
                                                         <Td className={cx('item-container-td')}>
-                                                            <div style={{ maxHeight: '100px', maxWidth: '100px' }}>
+                                                            <div style={{ maxHeight: '110px', maxWidth: '130px' }}>
                                                                 {data.images.map((imgItem, imgItemIndex) =>
                                                                     childObj.id === imgItem.parrotSpeciesColorId ? (
                                                                         <Image
-                                                                            boxSize="100px"
+                                                                            boxSize="110px"
                                                                             objectFit="cover"
                                                                             src={imgItem.imageUrl}
                                                                             alt="Parrot Color Img"

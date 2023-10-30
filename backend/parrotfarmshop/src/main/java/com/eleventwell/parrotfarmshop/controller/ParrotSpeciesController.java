@@ -65,6 +65,11 @@ public class ParrotSpeciesController {
 
     }
 
+    @GetMapping(value = "total-item")
+    public Integer totalItems() {
+        return parrotSpeciesService.totalItem();
+    }
+
     @GetMapping(value = "")
     public PagingModel showNew(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
@@ -73,6 +78,22 @@ public class ParrotSpeciesController {
             Pageable pageable = PageRequest.of(page - 1, limit);
             result.setListResult(parrotSpeciesService.findAll(pageable));
             result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
+            result.setLimit(limit);
+        } else {
+            result.setListResult(parrotSpeciesService.findAll());
+        }
+
+        return result;
+    }
+
+    @GetMapping(value = "admin/list")
+    public PagingModel showNewForAdmin(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
+        PagingModel result = new PagingModel();
+        if (page != null && limit != null) {
+            result.setPage(page);
+            Pageable pageable = PageRequest.of(page - 1, limit);
+            result.setListResult(parrotSpeciesService.findAll(pageable));
+            result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItemForAdmin()) / limit)));
             result.setLimit(limit);
         } else {
             result.setListResult(parrotSpeciesService.findAll());
@@ -166,6 +187,8 @@ public class ParrotSpeciesController {
 
         return result;
     }
+
+
 
 //    @GetMapping(value = "admin/search_sort")
 //    public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "speciesId",required = false) Long speciesId, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam(value = "username",required = false) String username, @RequestParam(value = "status",required = false) Boolean status , @RequestParam(value = "sortRating",required = false) String sortRating, @RequestParam(value = "sortDate",required = false)String sortDate) {

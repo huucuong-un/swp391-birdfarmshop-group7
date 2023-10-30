@@ -7,6 +7,7 @@ import com.eleventwell.parrotfarmshop.entity.UserEntity;
 import com.eleventwell.parrotfarmshop.repository.RoleRepository;
 import com.eleventwell.parrotfarmshop.repository.UserRepository;
 import com.eleventwell.parrotfarmshop.service.impl.JwtService;
+import com.eleventwell.parrotfarmshop.service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class AuthenticationService {
 
     @Autowired
     UserRepository repository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -50,6 +54,7 @@ public class AuthenticationService {
                 .role(role)
                 .status(request.getStatus())
                 .imgUrl(request.getImgUrl())
+                .gender(request.getGender())
                 .build();
         repository.save(user);
         UserEntity userToReturn = repository.findOneByUserName(user.getUsername());
@@ -66,20 +71,26 @@ public class AuthenticationService {
                 .email(userToReturn.getEmail())
                 .imgUrl(request.getImgUrl())
                 .roleId(role.getId())
+                .gender(request.getGender())
+
                 .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         //check login
+        String userName = userService.getUserNameByUserName(request.getEmail());
+if(userName==null){
+    userName = userService.getUserNameByEmail(request.getEmail());
+}
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        userName,
                         request.getPassword()
 
                 )
 
         );
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
+        var user = repository.findOneByUserName(userName);
 
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
@@ -92,6 +103,8 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .roleId(user.getRole().getId())
                 .imgUrl(user.getImgUrl())
+                .gender(user.getGender())
+
                 .build();
     }
 
@@ -159,6 +172,8 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .roleId(user.getRole().getId())
                 .imgUrl(user.getImgUrl())
+                .dob(user.getDob())
+                .gender(user.getGender())
                 .build();
     }
 

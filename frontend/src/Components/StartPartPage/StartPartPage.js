@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-function StartPartPage({ children, payment }) {
+function StartPartPage({ children, payment, totalSpecies }) {
     const classes = cx('product-quantity', { payment });
 
     return (
@@ -13,7 +13,7 @@ function StartPartPage({ children, payment }) {
                 <Breadcrumbs></Breadcrumbs>
                 <h1 className={cx('page-title')}>{children}</h1>
             </div>
-            <p className={cx(classes)}>100 product</p>
+            <p className={cx(classes)}>{totalSpecies} product</p>
         </div>
     );
 }

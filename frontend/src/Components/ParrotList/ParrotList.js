@@ -3,7 +3,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faMagnifyingGlass, faCircleXmark, faSolid } from '@fortawesome/free-solid-svg-icons';
+import {
+    faHeart,
+    faMagnifyingGlass,
+    faCircleXmark,
+    faAngleLeft,
+    faAngleRight,
+} from '@fortawesome/free-solid-svg-icons';
 
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
@@ -70,6 +76,7 @@ console.log(datas);
 
 function ParrotList(props) {
     const [parrotSpecies, setParrotSpecies] = useState([]);
+    const [totalSpecies, setTotalSpecies] = useState(0);
     const [combineData, setCombineData] = useState([]);
     const [combineDataWithCountReview, setcombineDataWithCountReview] = useState([]);
     const [selectedColor, setSelectedColor] = useState({});
@@ -95,13 +102,18 @@ function ParrotList(props) {
     });
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
-
+    const [parrotId, setParrotId] = useState();
     const dataToPass = {
         selectedColor,
         combineData,
         selectedColorId,
+        parrotId,
     };
     const { addToCartStatus, setAddToCartStatus } = useCartStatus();
+
+    const notifyTotalSpecies = (totalSpecies) => {
+        props.onTotalSpeciesChange(totalSpecies);
+    };
 
     useEffect(() => {
         setSearchWithPagination({
@@ -197,8 +209,11 @@ function ParrotList(props) {
                 //     limit: 12,
                 // };
                 const parrotSpeciesList = await ParrotSpeciesAPI.getAll(pagination);
+                const totalSpeciesNumber = await ParrotSpeciesAPI.count();
+                setTotalSpecies(totalSpeciesNumber);
                 setParrotSpecies(parrotSpeciesList.listResult);
                 setTotalPage(parrotSpeciesList.totalPage);
+                notifyTotalSpecies(totalSpeciesNumber);
             } catch (error) {
                 console.error(error);
             }
@@ -377,6 +392,22 @@ function ParrotList(props) {
     };
     console.log(combineData);
 
+    const handleSaveParrotId = (id) => {
+        // setParrotId(id);
+        navigate('/parrot-product/parrot-detail', {
+            state: {
+                selectedColor,
+                combineData,
+                selectedColorId,
+                parrotId: id,
+            },
+        });
+    };
+
+    useEffect(() => {
+        console.log(totalSpecies);
+    }, [totalSpecies]);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner', 'row')}>
@@ -384,9 +415,15 @@ function ParrotList(props) {
                     return (
                         <div className={cx('parrot-card', 'col-lg-3')} key={index}>
                             <div className={cx('parrot-img')}>
-                                <Link to={`/parrot-product/parrot-detail/${parrot.id}`} state={dataToPass}>
+                                <div
+                                    // to={`/parrot-product/parrot-detail/${parrot.id}`}
+                                    // state={dataToPass}
+                                    // to={`/parrot-product/parrot-detail`}
+                                    // state={dataToPass}
+                                    onClick={() => handleSaveParrotId(parrot.id)}
+                                >
                                     <img className={cx('img')} src={parrot.img} alt="parrot" />
-                                </Link>
+                                </div>
                                 <Link to="">
                                     <Tooltip
                                         label="Check to compare"
@@ -584,10 +621,15 @@ function ParrotList(props) {
 
             <div className={cx('button-pagination')}>
                 <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>
-                    Prev
+                    <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
                 <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)}>
-                    Next
+                    <FontAwesomeIcon icon={faAngleRight} />
                 </button>
             </div>
         </div>

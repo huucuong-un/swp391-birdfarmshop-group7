@@ -24,6 +24,7 @@ import UserProfileNew from '../UserProfileNew/UserProfileNew';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 import OrderHistory from '../OrderHistory/OrderHistory';
 import OrderHistoryNew from '../OrderHistoryNew/OrderHistoryNew';
+import DeliveryInformationForUserProfile from '../DeliveryInformationForUserProfile/DeliveryInformationForUserProfile';
 
 const cx = classNames.bind(styles);
 
@@ -50,7 +51,7 @@ function MyAccount() {
                         <UserProfileNew></UserProfileNew>
                     </TabPanel>
                     <TabPanel>
-                        <DeliveryInformation></DeliveryInformation>
+                        <DeliveryInformationForUserProfile></DeliveryInformationForUserProfile>
                     </TabPanel>
                     <TabPanel>
                         {/* <OrderHistory></OrderHistory> */}

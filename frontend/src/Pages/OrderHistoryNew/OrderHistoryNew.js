@@ -68,6 +68,7 @@ import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext'
 import OrderAPI from '~/Api/OrderAPI';
 import Rate from '~/Components/Rate/Rate';
 import UserAPI from '~/Api/UserAPI';
+import { use } from 'i18next';
 
 const cx = classNames.bind(styles);
 
@@ -109,12 +110,21 @@ function OrderHistoryNew() {
         console.log(textareaValue);
     };
     const [orderId, setOrderId] = useState({});
+    const { user } = ShopState();
+    const { addToCartStatus } = useCartStatus();
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 12,
+        date: null,
+        sortDate: null,
+        sortPrice: null,
+    });
     const handleStoreOrderId = (e) => {
         setOrderId(e);
     };
-    useEffect(() => {
-        console.log(orderId);
-    }, [orderId]);
     const handleSaveFeedback = () => {
         // Update the state variable with the new value from the textarea
         console.log(orders);
@@ -127,7 +137,6 @@ function OrderHistoryNew() {
             orderId: orderId.orderId,
             status: true,
         };
-        console.log(orderId);
         FeedbackAPI.create(feedbackParam);
         document.getElementById(orderId.btnId).disabled = true;
         document.getElementById(orderId.btnId).style.backgroundColor = 'grey';
@@ -162,9 +171,6 @@ function OrderHistoryNew() {
         getUserByToken();
     }, [token]);
 
-    const { user } = ShopState();
-    const { addToCartStatus } = useCartStatus();
-
     useEffect(() => {
         const getOrders = async () => {
             try {
@@ -175,8 +181,6 @@ function OrderHistoryNew() {
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
                 setOrders(orderList.listResult);
-                // console.log(orderList[0].orderDTO.createdDate);
-                console.log(orderList.listResult);
             } catch (error) {
                 console.error(error);
             }
@@ -185,21 +189,10 @@ function OrderHistoryNew() {
         getOrders();
     }, [loggedUser]);
 
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
-    const [totalPage, setTotalPage] = useState(1);
-    const [page, setPage] = useState(1);
+    // useEffect(() => {
+    //     console.log(loggedUser);
+    // }, [user]);
 
-    const [sort, setSort] = useState({
-        page: 1,
-        limit: 12,
-        date: null,
-        sortDate: null,
-        sortPrice: null,
-    });
-    console.log('sortsort');
-    console.log(sort);
     const handleClear = () => {
         setSort({
             page: 1,
@@ -236,17 +229,6 @@ function OrderHistoryNew() {
 
         setPage(newPage);
     };
-    useEffect(() => {
-        console.log(sort);
-    }, [sort]);
-
-    useEffect(() => {
-        console.log(totalPage);
-    }, [totalPage]);
-
-    useEffect(() => {
-        console.log(page);
-    }, [page]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <Box>

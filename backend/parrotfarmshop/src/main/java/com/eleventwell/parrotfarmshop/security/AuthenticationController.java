@@ -32,9 +32,9 @@ return  ResponseEntity.ok(service.register(request));
 //
 //    }
     @PostMapping(value = "authenticate")
-    public String authenticate(
+    public ResponseEntity<String> authenticate(
             @RequestBody AuthenticationRequest request) {
-        return service.authenticate(request).getToken();
+        return  ResponseEntity.ok(service.authenticate(request).getToken());
 
     }
 

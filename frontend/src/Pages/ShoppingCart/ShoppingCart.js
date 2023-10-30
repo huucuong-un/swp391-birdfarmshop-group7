@@ -229,7 +229,7 @@ function ShoppingCart() {
 
     return (
         <div className={cx('wrapper')}>
-            <StartPartPage>Shopping Cart</StartPartPage>
+            <StartPartPage payment>Shopping Cart</StartPartPage>
 
             <div className={cx('inner', 'row')}>
                 <div className={cx('inner-left', 'col-lg-9')}>

@@ -96,13 +96,14 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    padding: 10px 0;
+    // padding: 10px 0;
+    margin-bottom: 10px;
 
     button {
         background-color: var(--btn-color);
         opacity: 0.8;
         padding: 5px 10px;
-        border-radius: 50px;
+        border-radius: 50%;
         color: var(--white);
         font-weight: 600;
     }
@@ -335,4 +336,12 @@
 
 .parrot-price strong {
     font-size: 1.6rem;
+}
+
+.number-page {
+    margin: 0;
+    color: #2b2c30;
+    &:hover {
+        cursor: pointer;
+    }
 }

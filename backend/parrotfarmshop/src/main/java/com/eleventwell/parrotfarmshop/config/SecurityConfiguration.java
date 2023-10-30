@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests(customizer -> customizer
 //                        .requestMatchers(adminUrlMatcher()).authenticated()
-//                                .requestMatchers("api/user/register","api/user/login-with-google/authenticate","api/user/authenticate","api/role").permitAll()
+                                .requestMatchers("api/user/register","api/user/login-with-google/authenticate","api/user/authenticate","api/role").permitAll()
 //                        .anyRequest().authenticated()
                                 .anyRequest().permitAll()
                 )

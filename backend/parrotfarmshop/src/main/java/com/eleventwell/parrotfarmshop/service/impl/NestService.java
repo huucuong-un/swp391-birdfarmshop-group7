@@ -4,7 +4,9 @@ package com.eleventwell.parrotfarmshop.service.impl;
 
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.FAQsDTO;
 import com.eleventwell.parrotfarmshop.dto.NestDTO;
+import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.repository.NestRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -114,9 +117,10 @@ public class NestService implements IGenericService<NestDTO> {
 
         return results;
     }
-    public NestDTO findOneBySpeciesId(Long id){
+
+    public NestDTO findOneBySpeciesId(Long id) {
         List<NestEntity> nests = parrotEggNestRepository.findOneBySpeciesIdAndStatusTrue(id);
-return (NestDTO) genericConverter.toDTO(nests.get(0),NestDTO.class);
+        return (NestDTO) genericConverter.toDTO(nests.get(0), NestDTO.class);
 
     }
 
@@ -124,4 +128,16 @@ return (NestDTO) genericConverter.toDTO(nests.get(0),NestDTO.class);
     public int totalItem() {
         return (int) parrotEggNestRepository.count();
     }
+
+    public List<NestDTO> searchSortForNest(Date searchDate, Boolean status, String sortNestPriceID, Pageable pageable) {
+        List<NestDTO> results = new ArrayList();
+        List<NestEntity> entities = parrotEggNestRepository.searchSortForNest(searchDate, status, sortNestPriceID, pageable);
+        for (NestEntity item : entities) {
+            NestDTO newDTO = (NestDTO) genericConverter.toDTO(item, NestDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
+
+
 }

@@ -119,6 +119,7 @@ function AdNestManagement() {
                         setSubmitStatus();
                     }, 50000);
                 } else {
+                    console.log(data);
                     const add = await NestAPI.addNest(data);
                     setVinh(true);
                     setAddStatus(false);
@@ -170,6 +171,7 @@ function AdNestManagement() {
             setStatus(false);
         }
     };
+    console.log(combineData);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
@@ -224,7 +226,7 @@ function AdNestManagement() {
                                         <option isChecked>Species</option>
                                         {combineData &&
                                             combineData.map((nestPrice, nestPriceIndex) => (
-                                                <option key={nestPriceIndex} value={nestPrice.species.id}>
+                                                <option key={nestPriceIndex} value={nestPrice.id}>
                                                     {nestPrice.species.name}
                                                 </option>
                                             ))}

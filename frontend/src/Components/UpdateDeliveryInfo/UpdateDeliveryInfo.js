@@ -40,7 +40,7 @@ function UpdateDeliveryInfo(props) {
                     phoneNumber: newDeliveryInfo.phoneNumber,
                     address: newDeliveryInfo.address,
                     status: newDeliveryInfo.status,
-                    userId: user.userId,
+                    userId: user.id,
                     pickingStatus: newDeliveryInfo.pickingStatus,
                 },
                 config,

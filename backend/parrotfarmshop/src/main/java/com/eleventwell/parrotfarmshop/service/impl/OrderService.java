@@ -47,6 +47,10 @@ public class OrderService implements IGenericService<OrderDTO> {
     NestService nestService;
 
     @Autowired
+    NestUsageHistoryService nestUsageHistoryService;
+
+
+    @Autowired
     GenericConverter genericConverter;
 
     @Autowired
@@ -219,19 +223,35 @@ return orderDTO;
     }
 
     public void removeOrder(Long id){
-List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
-        for (OrderDetailEntity orderDetail: orderDetails ) {
-            if(orderDetail.getParrot()!=null){
-                parrotService.changeSaleStatus(orderDetail.getParrot().getId());
-            }else{
-            nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
-            nestService.changeStatus(orderDetail.getNestUsageHistory().getNest().getId());
-            }
-            orderDetailRepository.deleteById(orderDetail.getId());
+
+            List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
+                for (OrderDetailEntity orderDetail: orderDetails ) {
+if(checkParrotOrNest(orderDetail)){
+    parrotService.changeSaleStatus(getParrotId(orderDetail));
+    orderDetailRepository.deleteById(orderDetail.getId());
+}else{
+    nestUsageHistoryService.deleteByOrderDetailid(getNestUsageHistoryId(orderDetail));
+}
+
+                }
 
 
-        }
-        orderRepository.deleteById(id);
+            orderRepository.deleteById(id);
+
+
+    }
+    private Long getParrotId(OrderDetailEntity orderDetailEntity){
+        return orderDetailEntity.getParrot().getId();
+    }
+private boolean checkParrotOrNest(OrderDetailEntity orderDetailEntity){
+
+     return orderDetailEntity.getParrot()!=null?true:false;
+}
+private Long getNestUsageHistoryId(OrderDetailEntity orderDetail){
+        return orderDetail.getNestUsageHistory().getId();
+}
+    public void removeOrderLoop(){
+
     }
     @Override
     public int totalItem() {

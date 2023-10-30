@@ -138,7 +138,6 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         for(OrderDetailEntity item : entities) {
             OrderDetailDTO newDTO = (OrderDetailDTO) converter.toDTO(item,OrderDetailDTO.class);
             results.add(newDTO);
-
         }
 
         return results;

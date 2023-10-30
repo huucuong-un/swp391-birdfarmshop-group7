@@ -124,6 +124,8 @@ public class NestService implements IGenericService<NestDTO> {
 
     }
 
+
+
     @Override
     public int totalItem() {
         return (int) parrotEggNestRepository.count();

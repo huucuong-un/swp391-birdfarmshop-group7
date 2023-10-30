@@ -18,10 +18,12 @@ import java.util.List;
 @RequestMapping(value = "/api/user")
 public class UserController {
     @Autowired
-    IGenericService<UserDTO> userService;
+    UserService userService;
 
     @Autowired
     UserService userService1;
+
+
 
     @GetMapping(value = "get-user-by-email/{email}")
     public UserDTO getUserByEmail(@PathVariable("email") String email) {
@@ -40,7 +42,12 @@ public class UserController {
 
         return results;
     }
+    @GetMapping(value = "generate-token")
+    public UserDTO generateToken(@RequestBody @RequestParam("token") String token) {
 
+
+        return userService.generateToken(token);
+    }
     @PostMapping(value = "")
     public UserDTO createUser(@RequestBody UserDTO model) {
         return userService.save(model);

@@ -12,10 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import java.util.List;
 
 @Configuration
@@ -29,12 +33,15 @@ public class SecurityConfiguration {
     @Autowired
     AuthenticationProvider authenticationProvider;
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf()
                 .disable()
+<<<<<<< HEAD
                 .authorizeHttpRequests()
                 //check bằng đường dẫn này trở về sau
                 .requestMatchers("api/**").permitAll()
@@ -43,6 +50,14 @@ public class SecurityConfiguration {
 //                .anyRequest()
 //                .authenticated()
 //                .and()
+=======
+                .authorizeHttpRequests(customizer -> customizer
+//                        .requestMatchers(adminUrlMatcher()).authenticated()
+                                .requestMatchers("api/user/register","api/user/login-with-google/authenticate","api/user/authenticate","api/role").permitAll()
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
+                )
+>>>>>>> c84b583c34059325bc47b9a74de31045d88aca3e
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -52,6 +67,24 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
+
+
+
+    private RequestMatcher adminUrlMatcher() {
+        return request -> request.getServletPath().contains("admin");
+    }
+    private RequestMatcher customerUrlMatcher() {
+        return request -> request.getServletPath().contains("customer");
+    }
+    private RequestMatcher staffUrlMatcher() {
+        return request -> request.getServletPath().contains("staff");
+    }
+    private RequestMatcher marketingUrlMatcher() {
+        return request -> request.getServletPath().contains("marketing");
+    }
+
+
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

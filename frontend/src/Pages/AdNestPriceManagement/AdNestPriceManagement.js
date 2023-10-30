@@ -175,9 +175,9 @@ function AdNestPriceManagement() {
         setSort({
             page: newPage,
             limit: 10,
-            searchDate: null,
-            status: null,
-            sortPrice: null,
+            searchDate: sort.searchDate,
+            status: sort.status,
+            sortPrice: sort.sortPrice,
         });
 
         setPage(newPage);

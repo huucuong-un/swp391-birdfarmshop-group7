@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf()
                 .disable()
-<<<<<<< HEAD
+
                 .authorizeHttpRequests()
                 //check bằng đường dẫn này trở về sau
                 .requestMatchers("api/**").permitAll()
@@ -50,14 +50,12 @@ public class SecurityConfiguration {
 //                .anyRequest()
 //                .authenticated()
 //                .and()
-=======
                 .authorizeHttpRequests(customizer -> customizer
 //                        .requestMatchers(adminUrlMatcher()).authenticated()
                                 .requestMatchers("api/user/register","api/user/login-with-google/authenticate","api/user/authenticate","api/role").permitAll()
 //                        .anyRequest().authenticated()
                                 .anyRequest().permitAll()
                 )
->>>>>>> c84b583c34059325bc47b9a74de31045d88aca3e
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

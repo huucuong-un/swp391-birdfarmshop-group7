@@ -163,10 +163,10 @@ function AdFAQSManagement() {
         setSort({
             page: newPage,
             limit: 5,
-            searchTitle: null,
-            status: null,
-            searchDate: null,
-            sortTitle: null,
+            searchTitle: sort.searchTitle,
+            status: sort.status,
+            searchDate: sort.searchDate,
+            sortTitle: sort.sortTitle,
         });
 
         setPage(newPage);

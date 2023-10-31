@@ -119,6 +119,7 @@ function AdNestManagement() {
                         setSubmitStatus();
                     }, 50000);
                 } else {
+                    console.log(data);
                     const add = await NestAPI.addNest(data);
                     setVinh(true);
                     setAddStatus(false);

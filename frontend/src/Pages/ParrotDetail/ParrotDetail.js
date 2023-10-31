@@ -332,6 +332,7 @@ function ParrotDetail() {
 
         getAllImageBySpeciesId(id);
     }, []);
+
     useEffect(() => {
         const chooseFirstImg = () => {
             try {
@@ -364,7 +365,6 @@ function ParrotDetail() {
                             {images.map((img, imgIndex) => (
                                 <Image
                                     id={'img' + imgIndex}
-
                                     key={imgIndex}
                                     boxSize="100px"
                                     objectFit="cover"

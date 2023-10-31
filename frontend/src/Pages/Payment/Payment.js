@@ -311,12 +311,11 @@ function Payment() {
                     </div>
 
                     <div className={cx('payment-method-item-container')}>
-                        <button className={cx('payment-method-item')} onClick={() => handlePayment()}>
-                            <Box width="100%" height="24px">
-                                <Image src={Paypal} margin="auto auto" height="100%"></Image>
-                            </Box>
-                        </button>
-                        <button className={cx('payment-method-item')} onClick={() => handlePaymentSelection('vnpay')}>
+                        <button
+                            disabled
+                            className={cx('payment-method-item')}
+                            onClick={() => handlePaymentSelection('vnpay')}
+                        >
                             <Box width="100%" height="24px">
                                 <Image src={VnPay} margin="auto auto" height="100%"></Image>
                             </Box>

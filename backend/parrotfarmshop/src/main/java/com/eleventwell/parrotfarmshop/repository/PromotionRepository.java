@@ -16,7 +16,10 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     List<PromotionEntity> findAllByOrderByIdDesc();
 
 
-    @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code AND CURRENT_DATE BETWEEN p.startDate AND p.endDate")
+    @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code AND p.quantity > 0")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code")String code);
+
+    @Query ("SELECT p FROM PromotionEntity p WHERE p.id = :id AND p.quantity > 0")
+    PromotionEntity findOneByIdAndCheckValidDate(@Param("id")Long id);
 
 }

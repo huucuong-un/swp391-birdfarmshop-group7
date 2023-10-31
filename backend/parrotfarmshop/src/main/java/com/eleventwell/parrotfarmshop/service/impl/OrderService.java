@@ -81,6 +81,11 @@ public class OrderService implements IGenericService<OrderDTO> {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
 
+
+        if(promotionService.findOneByIdForOrder(DTO.getPromotionID()) !=null){
+return  null;
+        }
+
         orderRepository.save(orderEntity);
 
         return (OrderDTO) genericConverter.toDTO(orderEntity, OrderDTO.class);
@@ -188,7 +193,10 @@ return orderDTO;
     @Override
     public void changeStatus(Long ids) {
         OrderEntity orderEntity = orderRepository.findOneById(ids);
-   orderEntity.setStatus("Done");
+        if(orderEntity.getPromotion()!=null){
+            promotionService.calculateQuantity(orderEntity.getPromotion().getId(),true);
+        }
+        orderEntity.setStatus("Paid");
         orderRepository.save(orderEntity);
 
     }
@@ -225,6 +233,7 @@ return orderDTO;
     public void removeOrder(Long id){
 
             List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
+            OrderEntity orderEntity = orderRepository.findOneById(id);
                 for (OrderDetailEntity orderDetail: orderDetails ) {
 if(checkParrotOrNest(orderDetail)){
     parrotService.changeSaleStatus(getParrotId(orderDetail));
@@ -234,8 +243,9 @@ if(checkParrotOrNest(orderDetail)){
 }
 
                 }
-
-
+if(orderEntity.getPromotion()!=null){
+    promotionService.calculateQuantity(orderEntity.getPromotion().getId(),false);
+}
             orderRepository.deleteById(id);
 
 

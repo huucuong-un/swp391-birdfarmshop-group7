@@ -194,15 +194,18 @@ function Payment() {
 
                     await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                     const addOrder = await OrderAPI.add(data);
-
-                    const response = await VnpayAPI.add(addOrder);
-                    console.log(addOrder);
-                    console.log(response);
-                    window.location.href = response;
-                    if (response.status === 200) {
-                        console.log('Payment Sucessful');
+                    if (addOrder !== null) {
+                        const response = await VnpayAPI.add(addOrder);
+                        console.log(addOrder);
+                        console.log(response);
+                        window.location.href = response;
+                        if (response.status === 200) {
+                            console.log('Payment Sucessful');
+                        } else {
+                            console.error('payment not successful ', response.status);
+                        }
                     } else {
-                        console.error('payment not successful ', response.status);
+                        console.error('payment not successful ');
                     }
 
                     console.log('Order added:', addOrder);

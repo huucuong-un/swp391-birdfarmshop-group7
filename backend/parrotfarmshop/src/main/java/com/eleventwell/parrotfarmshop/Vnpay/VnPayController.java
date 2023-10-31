@@ -46,6 +46,7 @@ public class VnPayController {
             // Trạng thái thành công
 
             orderService.changeStatus(result);
+
             return new RedirectView("http://localhost:3000/paid-success");
 
             // Redirect to the specified URL when the condition is met

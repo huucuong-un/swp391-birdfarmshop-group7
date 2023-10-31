@@ -65,5 +65,8 @@ public class PromotionEntity extends BaseEntity {
 
 	@OneToMany(mappedBy = "promotion")
 	private List<OrderEntity> orders = new ArrayList<>();
+
+	@Column(name="quanity")
+	private int quantity;
 	
 }

@@ -55,16 +55,47 @@ public class PromotionService implements IGenericService<PromotionDTO> {
 
     public PromotionDTO findOneByCode(String code){
         PromotionDTO dto = new PromotionDTO();
+        Date currentDate = Calendar.getInstance().getTime();
+
         try{
 
              dto = (PromotionDTO)converter.toDTO(promotionRepository.findOneByCodeAndCheckValidDate(code),PromotionDTO.class);
+            if (currentDate.after(dto.getStartDate()) && currentDate.before(dto.getEndDate())) {
 
+                return dto;
+                // The promotion is not valid for the current date
+            }else{
+                return null;
+            }
         }catch (Exception e){
             return null;
         }
 
 
-    return dto;
+    }
+
+    public PromotionDTO findOneByIdForOrder(Long id){
+        PromotionDTO dto = new PromotionDTO();
+        Date currentDate = Calendar.getInstance().getTime();
+
+        try{
+if(id==null)
+{
+    return null;
+}
+            dto = (PromotionDTO)converter.toDTO(promotionRepository.findOneByIdAndCheckValidDate(id),PromotionDTO.class);
+            if (currentDate.after(dto.getStartDate()) && currentDate.before(dto.getEndDate())) {
+
+                return dto;
+                // The promotion is not valid for the current date
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            return null;
+        }
+
+
     }
     public PromotionDTO findOneById(Long id){
         return (PromotionDTO) converter.toDTO(promotionRepository.findOneById(id),PromotionDTO.class);
@@ -93,6 +124,17 @@ public class PromotionService implements IGenericService<PromotionDTO> {
             results.add(newDTO);
         }
         return results;
+    }
+
+    public void calculateQuantity(Long id, Boolean action){
+        PromotionEntity promotionEntity = promotionRepository.findOneById(id);
+        if(action){
+            promotionEntity.setQuantity(promotionEntity.getQuantity()-1);
+        }else{
+            promotionEntity.setQuantity(promotionEntity.getQuantity()+1);
+        }
+promotionRepository.save(promotionEntity);
+
     }
 
     @Override

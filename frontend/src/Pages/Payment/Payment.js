@@ -142,22 +142,32 @@ function Payment() {
 
     useEffect(() => {
         const updateListOrder = async () => {
-            let totalPrice = 0;
-            listOrder.forEach((item) => {
-                totalPrice += item.price * item.quantity;
-                let imgTemp = ParrotSpeciesColorAPI.getImagesByColorId(item.colorID);
-
-                imgTemp.then((result) => {
-                    item.img = result[0].imageUrl;
-                });
-            });
-            setTotalPrice(totalPrice);
-            setOriginTotalPrice(totalPrice);
+            try {
+                let totalPrice = 0;
+                console.log(listOrder.colorID);
+                if (listOrder[0].colorID != null) {
+                    listOrder.forEach((item) => {
+                        totalPrice += item.price * item.quantity;
+                        let imgTemp = ParrotSpeciesColorAPI.getImagesByColorId(item.colorID);
+                        console.log(totalPrice);
+                        imgTemp.then((result) => {
+                            item.img = result[0].imageUrl;
+                        });
+                    });
+                    console.log(totalPrice);
+                    setTotalPrice(totalPrice);
+                    setOriginTotalPrice(totalPrice);
+                } else {
+                    totalPrice = receivedData[0].nestPrice.price;
+                    setTotalPrice(totalPrice);
+                    setOriginTotalPrice(totalPrice);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         };
 
-        if (listOrder.colorID) {
-            updateListOrder();
-        }
+        updateListOrder();
     }, [listOrder]);
 
     useEffect(() => {
@@ -344,7 +354,7 @@ function Payment() {
                                             x{checkNest ? 1 : item.quantity}
                                         </p>
                                         <p className={cx('payment-detail-items-price')}>
-                                            $ {checkNest ? item.nestPrice.price : item.price * item.quantity}
+                                            $ {checkNest ? item.nestPrice.price : item.price}
                                         </p>
                                     </div>
                                 </div>

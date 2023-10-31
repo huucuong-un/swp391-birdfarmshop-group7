@@ -54,11 +54,10 @@ public class PromotionService implements IGenericService<PromotionDTO> {
     }
 
     public PromotionDTO findOneByCode(String code){
-        Date currentDate = Calendar.getInstance().getTime();
         PromotionDTO dto = new PromotionDTO();
         try{
 
-             dto = (PromotionDTO)converter.toDTO(promotionRepository.findOneByCodeAndCheckValidDate(code,currentDate),PromotionDTO.class);
+             dto = (PromotionDTO)converter.toDTO(promotionRepository.findOneByCodeAndCheckValidDate(code),PromotionDTO.class);
 
         }catch (Exception e){
             return null;

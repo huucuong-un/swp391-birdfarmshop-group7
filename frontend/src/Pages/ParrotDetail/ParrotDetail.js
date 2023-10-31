@@ -44,7 +44,7 @@ function ParrotDetail() {
     const [firstImg, setFirstImg] = useState();
     const [imagesTag, setImagesTag] = useState([]);
     const feedback = {
-        id: id,
+        id: receivedData.parrotId,
         type: 'parrot',
     };
 

@@ -43,6 +43,7 @@ function Navbar() {
     useEffect(() => {
         try {
             const userFromToken = UserAPI.getUserByToken(token);
+            user = userFromToken;
             setLoggedUser(userFromToken);
         } catch (error) {}
     }, [token]);

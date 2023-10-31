@@ -76,7 +76,7 @@ const publicRoutes = [
     { path: '/addslider', component: AddSlider, layout: SystemLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
-    { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
+    { path: '/user-profile/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faqs', component: FAQs },
     { path: '/add-parrot-species', component: AddParotSpecies, layout: SystemLayout },

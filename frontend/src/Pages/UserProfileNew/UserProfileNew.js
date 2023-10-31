@@ -32,11 +32,13 @@ import UserAPI from '~/Api/UserAPI';
 const cx = classNames.bind(styles);
 
 function UserProfileNew() {
-    const [loggedUser, setLoggedUser] = useState(JSON.parse(localStorage.getItem('userInfo')));
-    const [gender, setGender] = useState(loggedUser.gender);
+    const [loggedUser, setLoggedUser] = useState({});
+    const [accessToken, setAccessToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const [gender, setGender] = useState();
     const [loading, setLoading] = useState(false);
-    const [imgUrl, setImgUrl] = useState(loggedUser.imgUrl);
+    const [imgUrl, setImgUrl] = useState();
     const toast = useToast();
+
     const updateImg = (pic) => {
         setLoading(true);
 
@@ -77,8 +79,12 @@ function UserProfileNew() {
         try {
             if (loggedUser !== null) {
                 const updateInfo = await UserAPI.updateUserProfile(loggedUser);
-                localStorage.removeItem('userInfo');
+                // localStorage.removeItem('userInfo');
                 console.log(updateInfo);
+
+                // localStorage.setItem('userInfo', JSON.stringify(updateInfo));
+                // setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+                console.log(loggedUser);
                 localStorage.setItem('userInfo', JSON.stringify(updateInfo));
                 setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
                 toast({
@@ -97,8 +103,54 @@ function UserProfileNew() {
     };
 
     useEffect(() => {
+        const generateToken = async () => {
+            try {
+                console.log(accessToken);
+                const token = accessToken;
+                const user = await UserAPI.getUserByToken(token);
+
+                setLoggedUser(user);
+                setGender(user.gender);
+                setImgUrl(user.imgUrl);
+                console.log(user);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        generateToken();
+    }, [accessToken]);
+
+    useEffect(() => {
         console.log(loggedUser);
     }, [loggedUser]);
+    const [genderTag, setGenderTag] = useState([]);
+    // useEffect(() => {
+    //     const maleRadio = (
+    //         <input
+    //             name="gender"
+    //             type="radio"
+    //             value="true"
+    //             checked={loggedUser.gender === true}
+    //             onChange={(e) => {
+    //                 setLoggedUser({ ...loggedUser, gender: e.target.value });
+    //             }}
+    //         ></input>
+    //     );
+
+    //     const femaleRadio = (
+    //         <input
+    //             name="gender"
+    //             type="radio"
+    //             value="false"
+    //             checked={loggedUser.gender === false}
+    //             onChange={(e) => {
+    //                 setLoggedUser({ ...loggedUser, gender: e.target.value });
+    //             }}
+    //         ></input>
+    //     );
+
+    //     setGenderTag([maleRadio, femaleRadio]);
+    // }, [loggedUser]);
 
     return (
         <Container className={cx('container')} maxW="container.xl">
@@ -148,69 +200,135 @@ function UserProfileNew() {
                                         <Text className={cx('text-userinfo')}>Gender</Text>
                                     </Td>
                                     <Td>
-                                        <RadioGroup>
-                                            <Stack direction="row" spacing={10}>
-                                                {loggedUser.gender === true || loggedUser.gender === 'true' ? (
-                                                    <>
-                                                        <Radio
-                                                            name="gender"
-                                                            size="lg"
-                                                            value="true"
-                                                            defaultChecked
-                                                            onChange={(e) => {
-                                                                setLoggedUser({
-                                                                    ...loggedUser,
-                                                                    gender: e.target.value,
-                                                                });
-                                                                setGender(e.target.value);
-                                                            }}
-                                                        >
-                                                            <Text className={cx('gender-text')}>Male</Text>
-                                                        </Radio>
+                                        {/* {genderTag} */}
+                                        <div className="" style={{ display: 'flex', fontSize: '14px', gap: '20px' }}>
+                                            {gender === true ? (
+                                                <div style={{ display: 'flex' }}>
+                                                    <input
+                                                        name="gender"
+                                                        type="radio"
+                                                        size="lg"
+                                                        value="true"
+                                                        checked
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
+                                                    />
+                                                    <p className={cx('gender-text')}>Male</p>
+                                                </div>
+                                            ) : (
+                                                <div style={{ display: 'flex' }}>
+                                                    <input
+                                                        name="gender"
+                                                        type="radio"
+                                                        size="lg"
+                                                        value="true"
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
+                                                    />
+                                                    <p className={cx('gender-text')}>Male</p>
+                                                </div>
+                                            )}
 
-                                                        <Radio
-                                                            name="gender"
-                                                            size="lg"
-                                                            value="false"
-                                                            onChange={(e) =>
-                                                                setLoggedUser({ ...loggedUser, gender: e.target.value })
-                                                            }
-                                                        >
-                                                            <Text className={cx('gender-text')}>Female</Text>
-                                                        </Radio>
-                                                    </>
+                                            {gender === false ? (
+                                                <div style={{ display: 'flex' }}>
+                                                    <input
+                                                        name="gender"
+                                                        type="radio"
+                                                        size="lg"
+                                                        checked
+                                                        value="false"
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
+                                                    />
+                                                    <p className={cx('gender-text')}>Female</p>
+                                                </div>
+                                            ) : (
+                                                <div style={{ display: 'flex' }}>
+                                                    <input
+                                                        name="gender"
+                                                        type="radio"
+                                                        size="lg"
+                                                        value="false"
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
+                                                    ></input>
+                                                    <p className={cx('gender-text')}>Female</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* <input
+                                            name="gender"
+                                            type="radio"
+                                            value="true"
+                                            checked={loggedUser.gender === true}
+                                            onChange={(e) => {
+                                                setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                            }}
+                                        ></input>
+                                        <input
+                                            name="gender"
+                                            type="radio"
+                                            value="false"
+                                            checked={loggedUser.gender === false}
+                                            onChange={(e) => {
+                                                setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                            }}
+                                        ></input> */}
+                                        {/* {gender === true ? (
+                                                    <Radio
+                                                        size="lg"
+                                                        value="true"
+                                                        checked
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
+                                                    >
+                                                        <Text className={cx('gender-text')}>Male</Text>
+                                                    </Radio>
                                                 ) : (
-                                                    <>
-                                                        <Radio
-                                                            name="gender"
-                                                            size="lg"
-                                                            value="true"
-                                                            onChange={(e) => {
-                                                                setLoggedUser({
-                                                                    ...loggedUser,
-                                                                    gender: e.target.value,
-                                                                });
-                                                                setGender(e.target.value);
-                                                            }}
-                                                        >
-                                                            <Text className={cx('gender-text')}>Male</Text>
-                                                        </Radio>
-
-                                                        <Radio
-                                                            name="gender"
-                                                            size="lg"
-                                                            value="false"
-                                                            defaultChecked
-                                                            onChange={(e) =>
-                                                                setLoggedUser({ ...loggedUser, gender: e.target.value })
-                                                            }
-                                                        >
-                                                            <Text className={cx('gender-text')}>Female</Text>
-                                                        </Radio>
-                                                    </>
+                                                    <Radio
+                                                        size="lg"
+                                                        value="true"
+                                                        onChange={(e) => {
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value });
+                                                            setGender(e.target.value);
+                                                        }}
+                                                    >
+                                                        <Text className={cx('gender-text')}>Male</Text>
+                                                    </Radio>
                                                 )}
-                                            </Stack>
-                                        </RadioGroup>
+
+                                                {gender === false ? (
+                                                    <Radio
+                                                        size="lg"
+                                                        value="false"
+                                                        checked
+                                                        onChange={(e) =>
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value })
+                                                        }
+                                                    >
+                                                        <Text className={cx('gender-text')}>Female</Text>
+                                                    </Radio>
+                                                ) : (
+                                                    <Radio
+                                                        size="lg"
+                                                        value="false"
+                                                        onChange={(e) =>
+                                                            setLoggedUser({ ...loggedUser, gender: e.target.value })
+                                                        }
+                                                    >
+                                                        <Text className={cx('gender-text')}>Female</Text>
+                                                    </Radio>
+                                                )} */}
                                     </Td>
                                 </Tr>
                                 <Tr>

@@ -1,11 +1,13 @@
 package com.eleventwell.parrotfarmshop.repository;
 
+import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface NestRepository extends JpaRepository<NestEntity, Long> {
@@ -22,6 +24,12 @@ public interface NestRepository extends JpaRepository<NestEntity, Long> {
 //    List<NestEntity> findTopNByStatusIsTrue(@Param("speciesId") Long speciesId, Pageable pageable);
 //
 //    Long countAllBySaleStatusAndStatusAndBreedStatusAndSpeciesEggPriceParrotSpeciesId(Boolean saleStatus,Boolean status ,String breedStatus, Long id);
+@Query("SELECT u FROM NestEntity u WHERE  (:searchDate IS NULL OR DATE(u.createdDate) = :searchDate) AND (:status IS NULL OR u.status = :status)"+
+        "ORDER BY " +
+        "CASE WHEN :sortNestPriceID = 'NPASC' THEN u.nestPrice.price END ASC , " +
+        "CASE WHEN :sortNestPriceID = 'NPDESC' THEN u.nestPrice.price END DESC, "+
+        "u.id DESC")
+List<NestEntity> searchSortForNest(@Param("searchDate") Date searchDate, @Param("status") Boolean status, @Param("sortNestPriceID") String sortNestPriceID, Pageable pageable);
 
 
 

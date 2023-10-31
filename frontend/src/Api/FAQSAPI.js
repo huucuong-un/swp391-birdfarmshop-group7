@@ -1,5 +1,6 @@
 import axios from 'axios';
 import axiosClinet from './AxiosClient';
+import axiosClient from './AxiosClient';
 
 const FAQSAPI = {
     getAll(params) {
@@ -15,6 +16,10 @@ const FAQSAPI = {
     changeStatus(id) {
         const url = `/faqs/${id}`;
         return axiosClinet.delete(url);
+    },
+    sortSearchForFaqs(params) {
+        const url = '/faqs/admin/search_sort';
+        return axiosClient.get(url, { params });
     },
 };
 

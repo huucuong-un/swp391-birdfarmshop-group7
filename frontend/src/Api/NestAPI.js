@@ -66,6 +66,15 @@ const NestAPI = {
         const url = `/nest-development-status/${id}`;
         return axiosClinet.delete(url);
     },
+
+    searchSortForNestPrice(params) {
+        const url = '/nest-price/admin/search_sort';
+        return axiosClinet.get(url, { params });
+    },
+    searchSortForNest(params) {
+        const url = '/parrot-egg-nest/admin/search_sort';
+        return axiosClinet.get(url, { params });
+    },
     changeSequenceForNestDevelopmentStatus(data) {
         const url = `/nest-development-status/admin/update-sequence?id=${data.id}&sequence=${data.sequence}`;
         return axiosClinet.put(url, data);

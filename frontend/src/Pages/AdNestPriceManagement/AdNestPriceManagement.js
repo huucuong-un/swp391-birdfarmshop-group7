@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -45,7 +45,7 @@ function AdNestPriceManagement() {
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
     const [species, setSpecies] = useState([]);
-
+    const [sort, setSort] = useState({ page: 1, limit: 10, searchDate: null, status: null, sortPrice: null });
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
         updatedFaqs[index].status = !updatedFaqs[index].status;
@@ -57,12 +57,9 @@ function AdNestPriceManagement() {
     useEffect(() => {
         const getNestPriceList = async () => {
             try {
-                // const params = {
-                //     page: 1,
-                //     limit: 12,
-                // };
-                const nestList = await NestAPI.getAll();
-                setFaqsList(nestList);
+                const sortData = await NestAPI.searchSortForNestPrice(sort);
+                setFaqsList(sortData.listResult);
+                setTotalPage(sortData.totalPage);
             } catch (error) {
                 console.error(error);
             }
@@ -71,7 +68,8 @@ function AdNestPriceManagement() {
             getNestPriceList();
             setVinh(false);
         }
-    }, [vinh]);
+        getNestPriceList();
+    }, [sort, vinh]);
 
     useEffect(() => {
         const getNestPriceWithSpeciesName = async () => {
@@ -188,6 +186,31 @@ function AdNestPriceManagement() {
             setStatus(false);
         }
     };
+
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 10,
+            searchDate: sort.searchDate,
+            status: sort.status,
+            sortPrice: sort.sortPrice,
+        });
+
+        setPage(newPage);
+    };
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 10,
+            searchDate: null,
+            status: null,
+            sortPrice: null,
+        });
+    };
+
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
@@ -277,15 +300,32 @@ function AdNestPriceManagement() {
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <input type="text" placeholder="Title" />
-                <input type="date" />
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    onChange={(e) => setSort({ ...sort, searchDate: e.target.value })}
+                />
 
-                <select name="status" id="status">
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
                     <option value="" disabled selected>
                         Status
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+
+                <select
+                    name="sortPrice"
+                    id="sortPrice"
+                    onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}
+                >
+                    <option value="" disabled selected>
+                        Price
+                    </option>
+                    <option value="PDESC">Descending</option>
+                    <option value="PASC">Ascending</option>
                 </select>
 
                 <button></button>
@@ -322,6 +362,19 @@ function AdNestPriceManagement() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </Container>
     );
 }

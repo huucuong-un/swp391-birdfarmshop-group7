@@ -15,6 +15,7 @@ import axios from 'axios';
 import LoginWithGoogle from '~/Components/LoginWithGoogle/LoginWithGoogle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faFaceGrinTongueSquint } from '@fortawesome/free-solid-svg-icons';
+import UserAPI from '~/Api/UserAPI';
 const cx = classNames.bind(styles);
 
 function UserLogin() {
@@ -48,6 +49,8 @@ function UserLogin() {
                     'Content-Type': 'application/json',
                 },
             };
+            const userName = null;
+
             const data = await axios.post(
                 'http://localhost:8086/api/user/authenticate',
                 {
@@ -64,8 +67,10 @@ function UserLogin() {
                 isClosable: true,
                 position: 'bottom',
             });
-            setUser(data.data);
-            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            localStorage.setItem('accessToken', JSON.stringify(data.data));
+            const userFromToken = await UserAPI.getUserByToken(JSON.parse(localStorage.getItem('accessToken')));
+            setUser(userFromToken);
+
             console.log(data.data);
             setLoading(false);
             // // setLoading(false);

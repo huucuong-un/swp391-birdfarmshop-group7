@@ -22,7 +22,9 @@ private static final String SECRET_KEY="c38fa49f1f8e88e74d0b520443bb68696d5f3f2c
         return exreactClaim(token,Claims::getSubject);
     }
     public String generateToken(UserDetails userDetails){
+
         return  generateToken(new HashMap<>(),userDetails);
+
     }
 public String generateToken(
         Map<String, Object> extraClaims,
@@ -58,10 +60,10 @@ return claimsResolver.apply(claims);
     private Claims extracAllClaims(String token){
        return Jwts
                .parserBuilder()
-                .setSigningKey(getSignInkey())
+               .setSigningKey(getSignInkey())
                .build()
                .parseClaimsJws(token)
-                .getBody();
+               .getBody();
     }
 
     public Key getSignInkey(){

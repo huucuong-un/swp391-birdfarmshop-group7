@@ -24,6 +24,7 @@ import ParrotAPI from '~/Api/ParrotAPI';
 import ParrotCoupleAPI from '~/Api/ParrotCoupleAPI';
 import NestUsageHistoryAPI from '~/Api/NestUsageHistoryAPI';
 import NestAPI from '~/Api/NestAPI';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -34,6 +35,7 @@ function Payment() {
     const receivedData = location.state;
     console.log(receivedData);
     const navigate = useNavigate();
+    const { user } = ShopState();
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
@@ -42,6 +44,7 @@ function Payment() {
     const { paymentStatus, setPaymentStatus } = useCartStatus;
     const [discount, setDiscount] = useState(0);
     const [promotion, setPromotion] = useState(null);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
     // const { paymentStatus, setPaymentStatus } = useCartStatus;
     const [orderInfo, setOrderInfo] = useState({
         id: 1,
@@ -60,16 +63,23 @@ function Payment() {
     const [checkNest, setCheckNest] = useState(false);
 
     useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                setLoggedUser(userByToken);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         console.log(loggedUser);
     }, [loggedUser]);
     useEffect(() => {
         console.log(orderInfo);
     }, [orderInfo]);
-
-    const { user } = ShopState();
 
     const handlePaymentSelection = (paymentMethod) => {
         setPaymentMethod(paymentMethod);
@@ -164,7 +174,7 @@ function Payment() {
                             // userID: 1,
                             deliveryInformationId: selectedDelivery.id,
                             promotionID: promotion,
-                            userID: user.userId,
+                            userID: user.id,
                             status: 'pending',
                         },
                         cartList: cartList,
@@ -218,7 +228,7 @@ function Payment() {
                             // userID: 1,
                             deliveryInformationId: selectedDelivery.id,
                             promotionID: promotion,
-                            userID: user.userId,
+                            userID: user.id,
                             status: 'pending',
                         },
                         cartList: cartList,

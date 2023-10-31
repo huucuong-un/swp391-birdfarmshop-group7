@@ -108,12 +108,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Assuming that the role is stored as a role name (e.g., "ROLE_USER")
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.getName())); // Modify as per your role structure
-        // Add more authorities if needed
-
-        return authorities;
+        return List.of(new SimpleGrantedAuthority(role.getName()));
     }
 
     @Override

@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -44,7 +44,13 @@ function AdNestManagement() {
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
     const [combineDataNest, setCombineDataNest] = useState([]);
-
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        searchDate: null,
+        status: null,
+        sortNestPriceID: null,
+    });
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
         updatedFaqs[index].status = !updatedFaqs[index].status;
@@ -52,13 +58,24 @@ function AdNestManagement() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
-
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const nestList = await NestAPI.searchSortForNest(sort);
+                setFaqsList(nestList.listResult);
+                setTotalPage(nestList.totalPage);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        sortData();
+    }, [sort]);
     useEffect(() => {
         const getNestList = async () => {
             try {
                 const params = {
                     page: 1,
-                    limit: 12,
+                    limit: 5,
                 };
                 const nestList = await NestAPI.getAllNest(params);
                 setFaqsList(nestList.listResult);
@@ -102,7 +119,7 @@ function AdNestManagement() {
         if (show) {
             getNestPriceList();
         }
-    }, [show]);
+    }, [sort, show]);
 
     useEffect(() => {
         const getNestPriceWithSpecies = async () => {
@@ -138,6 +155,7 @@ function AdNestManagement() {
                         setSubmitStatus();
                     }, 50000);
                 } else {
+                    console.log(data);
                     const add = await NestAPI.addNest(data);
                     setVinh(true);
                     setAddStatus(false);
@@ -189,6 +207,34 @@ function AdNestManagement() {
             setStatus(false);
         }
     };
+
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 5,
+            searchDate: sort.searchDate,
+            status: sort.status,
+            sortNestPriceId: sort.sortNestPriceID,
+        });
+        setPage(newPage);
+    };
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 5,
+            searchDate: null,
+            status: null,
+            sortNestPriceId: null,
+        });
+    };
+
+    useEffect(() => {
+        console.log(sort);
+        console.log(faqsList);
+    }, [sort]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
@@ -231,14 +277,6 @@ function AdNestManagement() {
                             <Tr>
                                 <Td>Nest Price</Td>
                                 <Td>
-                                    {/* <Input
-                                        type="text"
-                                        borderColor="black"
-                                        placeholder="Title..."
-                                        fontSize={18}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    /> */}
-
                                     <select onChange={(e) => setTitle(e.target.value)}>
                                         <option isChecked>Species</option>
                                         {combineData &&
@@ -266,15 +304,32 @@ function AdNestManagement() {
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <input type="text" placeholder="Title" />
-                <input type="date" />
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="date"
+                    id="searchDate"
+                    name="searchDate"
+                    onChange={(e) => setSort({ ...sort, searchDate: e.target.value })}
+                />
 
-                <select name="status" id="status">
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
                     <option value="" disabled selected>
                         Status
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+
+                <select
+                    name="sortPrice"
+                    id="sortPrice"
+                    onChange={(e) => setSort({ ...sort, sortNestPriceID: e.target.value })}
+                >
+                    <option value="" disabled selected>
+                        Price
+                    </option>
+                    <option value="NPDESC">Descending</option>
+                    <option value="NPASC">Ascending</option>
                 </select>
 
                 <button></button>
@@ -309,6 +364,19 @@ function AdNestManagement() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </Container>
     );
 }

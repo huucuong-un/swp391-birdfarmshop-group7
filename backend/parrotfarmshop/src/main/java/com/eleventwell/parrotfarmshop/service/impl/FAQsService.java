@@ -8,13 +8,16 @@ import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.repository.FAQsRepositoty;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 @Service
-public class FAQsService  implements IGenericService<FAQsDTO> {
+public class FAQsService implements IGenericService<FAQsDTO> {
 
     @Autowired
     private FAQsRepositoty faqsRepository;
@@ -23,14 +26,13 @@ public class FAQsService  implements IGenericService<FAQsDTO> {
     private GenericConverter converter;
 
 
-
     @Override
     public List findAll() {
         List<FAQsDTO> result = new ArrayList<>();
         List<FAQEntity> entities = faqsRepository.findAllByOrderByIdDesc();
 
-        for (FAQEntity entity: entities
-             ) {
+        for (FAQEntity entity : entities
+        ) {
             FAQsDTO faQsDTO = (FAQsDTO) converter.toDTO(entity, FAQsDTO.class);
             result.add(faQsDTO);
         }
@@ -40,13 +42,13 @@ public class FAQsService  implements IGenericService<FAQsDTO> {
     @Override
     public FAQsDTO save(FAQsDTO faQsDTO) {
         FAQEntity faqEntity = new FAQEntity();
-        if(faQsDTO.getStatus() == null){
+        if (faQsDTO.getStatus() == null) {
             faQsDTO.setStatus(false);
         }
-        if(faQsDTO.getId() != null){
+        if (faQsDTO.getId() != null) {
             FAQEntity oldEntity = faqsRepository.findOneById(faQsDTO.getId());
             faqEntity = (FAQEntity) converter.updateEntity(faQsDTO, oldEntity);
-        }else{
+        } else {
             faqEntity = (FAQEntity) converter.toEntity(faQsDTO, FAQEntity.class);
         }
 
@@ -55,25 +57,25 @@ public class FAQsService  implements IGenericService<FAQsDTO> {
     }
 
 
-
     @Override
     public void changeStatus(Long ids) {
         FAQEntity faqEntity = faqsRepository.findOneById(ids);
-        if(faqEntity.getStatus() == true){
+        if (faqEntity.getStatus() == true) {
             faqEntity.setStatus(false);
-        }else{
+        } else {
             faqEntity.setStatus(true);
         }
         faqsRepository.save(faqEntity);
     }
+
     @Override
-    public List<FAQsDTO> findAll(Pageable pageable){
+    public List<FAQsDTO> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         List<FAQsDTO> results = new ArrayList();
         List<FAQEntity> entities = faqsRepository.findAll(pageable).getContent();
 
-        for(FAQEntity item : entities) {
-            FAQsDTO newDTO = (FAQsDTO) converter.toDTO(item,FAQsDTO.class);
+        for (FAQEntity item : entities) {
+            FAQsDTO newDTO = (FAQsDTO) converter.toDTO(item, FAQsDTO.class);
             results.add(newDTO);
 
         }
@@ -83,8 +85,21 @@ public class FAQsService  implements IGenericService<FAQsDTO> {
 
     @Override
     public int totalItem() {
-        return (int)faqsRepository.count();
+        return (int) faqsRepository.count();
     }
 
 
+    public List<FAQsDTO> searchSortForFaqs(String searchTitle, Date searchDate, Boolean status, String sortTitle, Pageable pageable) {
+        // TODO Auto-generated method stub
+        List<FAQsDTO> results = new ArrayList();
+        List<FAQEntity> entities = faqsRepository.searchSortForFaqs(searchTitle, searchDate, status, sortTitle, pageable);
+
+        for (FAQEntity item : entities) {
+            FAQsDTO newDTO = (FAQsDTO) converter.toDTO(item, FAQsDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
 }

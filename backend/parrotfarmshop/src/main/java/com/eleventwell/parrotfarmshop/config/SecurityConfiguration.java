@@ -41,6 +41,15 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .csrf()
                 .disable()
+
+                .authorizeHttpRequests()
+                //check bằng đường dẫn này trở về sau
+                .requestMatchers("api/**").permitAll()
+                .and()
+//                .authorizeHttpRequests().requestMatchers("api/order/admin/**").authenticated()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
                 .authorizeHttpRequests(customizer -> customizer
 //                        .requestMatchers(adminUrlMatcher()).authenticated()
                                 .requestMatchers("api/user/register","api/user/login-with-google/authenticate","api/user/authenticate","api/role").permitAll()

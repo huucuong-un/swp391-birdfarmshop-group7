@@ -57,7 +57,7 @@ public class SliderController {
         return (SliderDTO) sliderService.save(model);
     }
 
-    @PutMapping(value= "{id}")
+    @PutMapping(value= "{id}")  
     public SliderDTO updateSlider(@RequestBody SliderDTO model, @PathVariable("id") long id){
         model.setId(id);
         return (SliderDTO) sliderService.save(model);

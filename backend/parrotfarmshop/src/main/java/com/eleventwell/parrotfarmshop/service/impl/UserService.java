@@ -103,8 +103,13 @@ public class UserService implements IGenericService<UserDTO> {
     }
 
     public UserDTO generateToken(String token){
-      String userName = jwtService.extractUserName(token);
-      return (UserDTO) genericConverter.toDTO(userRepository.findOneByUserName(userName),UserDTO.class);
+        try {
+            String userName = jwtService.extractUserName(token);
+            return (UserDTO) genericConverter.toDTO(userRepository.findOneByUserName(userName),UserDTO.class);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     public String getUserNameByEmail(String email){

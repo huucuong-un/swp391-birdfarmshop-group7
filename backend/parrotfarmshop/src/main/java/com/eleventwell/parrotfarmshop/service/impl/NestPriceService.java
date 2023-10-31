@@ -3,8 +3,10 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.FAQsDTO;
 import com.eleventwell.parrotfarmshop.dto.NestPriceDTO;
+import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
 import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.NestPriceEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.repository.NestPriceRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
@@ -38,6 +40,12 @@ public class NestPriceService implements IGenericService<NestPriceDTO> {
         }
         return nestPriceDTOs;
 
+    }
+
+    public NestPriceDTO findOneNestPriceById(Long id) {
+        NestPriceEntity entity = nestPriceRepository.findOneById(id);
+        NestPriceDTO dto = (NestPriceDTO) converter.toDTO(entity, NestPriceDTO.class);
+        return dto;
     }
 
     @Override

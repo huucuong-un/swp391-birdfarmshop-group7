@@ -46,13 +46,14 @@ public class VnPayController {
             // Trạng thái thành công
 
             orderService.changeStatus(result);
+
             return new RedirectView("http://localhost:3000/paid-success");
 
             // Redirect to the specified URL when the condition is met
         } else {
             orderService.removeOrder(result);
             // Trạng thái thất bại
-            return new RedirectView("http://localhost:3000/error");
+            return new RedirectView("http://localhost:3000/paid-fail");
         }
     }
 

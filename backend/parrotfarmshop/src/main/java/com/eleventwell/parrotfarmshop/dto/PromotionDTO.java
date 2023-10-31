@@ -26,5 +26,6 @@ public class PromotionDTO extends BaseDTO{
     private Date startDate;
     private Date endDate;
     private Boolean status;
+    private Integer quantity;
 
 }

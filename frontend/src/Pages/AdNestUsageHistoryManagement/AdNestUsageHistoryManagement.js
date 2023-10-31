@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -32,7 +32,7 @@ import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 const cx = classNames.bind(styles);
 
-function AdNestPriceManagement() {
+function AdNestUsageHistoryManagement() {
     const [faqsList, setFaqsList] = useState([]);
     const [nestPrice, setNestPrice] = useState([]);
     const [show, setShow] = useState(false);
@@ -45,7 +45,7 @@ function AdNestPriceManagement() {
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
     const [species, setSpecies] = useState([]);
-    const [sort, setSort] = useState({ page: 1, limit: 10, searchDate: null, status: null, sortPrice: null });
+
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
         updatedFaqs[index].status = !updatedFaqs[index].status;
@@ -57,9 +57,12 @@ function AdNestPriceManagement() {
     useEffect(() => {
         const getNestPriceList = async () => {
             try {
-                const sortData = await NestAPI.searchSortForNestPrice(sort);
-                setFaqsList(sortData.listResult);
-                setTotalPage(sortData.totalPage);
+                const params = {
+                    page: 1,
+                    limit: 100000,
+                };
+                const nestList = await NestAPI.getAllNestUsageHistory(params);
+                setFaqsList(nestList.listResult);
             } catch (error) {
                 console.error(error);
             }
@@ -68,53 +71,11 @@ function AdNestPriceManagement() {
             getNestPriceList();
             setVinh(false);
         }
-        getNestPriceList();
-    }, [sort, vinh]);
+    }, [vinh]);
 
     useEffect(() => {
-        const getNestPriceWithSpeciesName = async () => {
-            const data = [];
-            for (const item of faqsList) {
-                const nestPrice = { ...item };
-                nestPrice.species = await ParrotSpeciesAPI.get(item.speciesId);
-                data.push(nestPrice);
-            }
-            setCombineData(data);
-        };
-
-        getNestPriceWithSpeciesName();
+        console.log(faqsList);
     }, [faqsList]);
-
-    useEffect(() => {
-        console.log(combineData);
-    }, [combineData]);
-
-    useEffect(() => {
-        const getNestPriceList = async () => {
-            try {
-                const nestPriceList = await NestAPI.getAll();
-                setNestPrice(nestPriceList);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        if (show) {
-            getNestPriceList();
-        }
-    }, [show]);
-
-    useEffect(() => {
-        const getSpecies = async () => {
-            try {
-                const speciesList = await ParrotSpeciesAPI.getAll();
-                setSpecies(speciesList.listResult);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getSpecies();
-    }, [show]);
 
     useEffect(() => {
         console.log(title);
@@ -186,35 +147,10 @@ function AdNestPriceManagement() {
             setStatus(false);
         }
     };
-
-    const [totalPage, setTotalPage] = useState(1);
-    const [page, setPage] = useState(1);
-    const handlePageChange = (newPage) => {
-        setSort({
-            page: newPage,
-            limit: 10,
-            searchDate: sort.searchDate,
-            status: sort.status,
-            sortPrice: sort.sortPrice,
-        });
-
-        setPage(newPage);
-    };
-
-    const handleClear = () => {
-        setSort({
-            page: 1,
-            limit: 10,
-            searchDate: null,
-            status: null,
-            sortPrice: null,
-        });
-    };
-
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
-                <h1>NEST PRICE</h1>
+                <h1>NEST USAGE HISTORY</h1>
             </div>
             <div className={cx('add-btn')}>
                 <Button onClick={handleShow} colorScheme="green" size="lg">
@@ -300,32 +236,15 @@ function AdNestPriceManagement() {
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
-                <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    onChange={(e) => setSort({ ...sort, searchDate: e.target.value })}
-                />
+                <input type="text" placeholder="Title" />
+                <input type="date" />
 
-                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
+                <select name="status" id="status">
                     <option value="" disabled selected>
                         Status
                     </option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                </select>
-
-                <select
-                    name="sortPrice"
-                    id="sortPrice"
-                    onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}
-                >
-                    <option value="" disabled selected>
-                        Price
-                    </option>
-                    <option value="PDESC">Descending</option>
-                    <option value="PASC">Ascending</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
                 </select>
 
                 <button></button>
@@ -335,60 +254,34 @@ function AdNestPriceManagement() {
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
-                            <Th>Species</Th>
-                            <Th>Price</Th>
-                            <Th>Created Date</Th>
-                            <Th>Status</Th>
+                            <Th>Parrot Couple Id</Th>
+                            <Th>Nest Id</Th>
+                            <Th>Start Date</Th>
+                            <Th>End Date</Th>
+                            <Th>Create Date</Th>
+                            <Th>Update</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {combineData &&
-                            combineData.map((faqs, index) => (
+                        {faqsList &&
+                            faqsList.map((faqs, index) => (
                                 <Tr key={index}>
                                     <Td>{faqs.id}</Td>
-                                    <Td>{faqs.species[0].name}</Td>
-                                    <Td>{faqs.price}</Td>
+                                    <Td>{faqs.parrotCoupleId}</Td>
+                                    <Td>{faqs.nestId}</Td>
+                                    <Td>{formatDate(new Date(faqs.startDate))}</Td>
+                                    <Td>{formatDate(new Date(faqs.endDate))}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>
-                                        <Switch
-                                            size="lg"
-                                            isChecked={faqs.status}
-                                            colorScheme="green"
-                                            onChange={() => changeStatus(faqs.id, index)}
-                                        />
+                                        <Button colorScheme="green">Update</Button>
                                     </Td>
                                 </Tr>
                             ))}
                     </Tbody>
                 </Table>
             </TableContainer>
-            <div className={cx('button-pagination')}>
-                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
-                    <FontAwesomeIcon icon={faAngleLeft} />
-                </button>
-                {Array.from({ length: totalPage }, (_, index) => (
-                    <p
-                        key={index}
-                        className={cx('number-page')}
-                        onClick={() => handlePageChange(index + 1)}
-                        style={{
-                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
-                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
-                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
-                            backgroundColor: page === index + 1 ? '#ff0000' : 'transparent', // Change background color when on the current page
-                            color: page === index + 1 ? '#ffffff' : '#000000', // Change text color when on the current page
-                            padding: page === index + 1 ? '5px 7px' : '0px',
-                        }}
-                    >
-                        {index + 1}
-                    </p>
-                ))}
-                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
-                    <FontAwesomeIcon icon={faAngleRight} />
-                </button>
-            </div>
         </Container>
     );
 }
 
-export default AdNestPriceManagement;
+export default AdNestUsageHistoryManagement;

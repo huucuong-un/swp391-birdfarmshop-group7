@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Container,
@@ -19,24 +19,99 @@ import { Col, Row } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import styles from './AdminDashboard.module.scss';
 import classNames from 'classnames/bind';
+import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
 function AdminDashboard() {
+    const [totalItem, setTotalItem] = useState(0);
+    const [totalItemInCurrentDay, setTotalItemInCurrentDay] = useState(0);
+    const [totalItemInCurrentMonth, setTotalItemInCurrentMonth] = useState(0);
+    const [totalItemInCurrentYear, setTotalItemInCurrentYear] = useState(0);
+    const [totalPriceInCurrentDay, setTotalPriceInCurrentDay] = useState(0);
+    const [totalPriceInCurrentMonth, setTotalPriceInCurrentMonth] = useState(0);
+    const [totalPriceInCurrentYear, setTotalPriceInCurrentYear] = useState(0);
+    //total-price-month
+    const [totalPriceInJanuary, setTotalPriceInJanuary] = useState(0);
+    const [totalPriceInFebruary, setTotalPriceInFebruary] = useState(0);
+    const [totalPriceInMarch, setTotalPriceInMarch] = useState(0);
+    const [totalPriceInApril, setTotalPriceInApril] = useState(0);
+    const [totalPriceInMay, setTotalPriceInMay] = useState(0);
+    const [totalPriceInJune, setTotalPriceInJune] = useState(0);
+    const [totalPriceInJuly, setTotalPriceInJuly] = useState(0);
+    const [totalPriceInAugust, setTotalPriceInAugust] = useState(0);
+    const [totalPriceInSeptember, setTotalPriceInSeptember] = useState(0);
+    const [totalPriceInOctober, setTotalPriceInOctober] = useState(0);
+    const [totalPriceInNovember, setTotalPriceInNovember] = useState(0);
+    const [totalPriceInDecember, setTotalPriceInDecember] = useState(0);
+
     const data = [
-        { month: 'Jan', earnings: 40000 },
-        { month: 'Feb', earnings: 30000 },
-        { month: 'Mar', earnings: 45000 },
-        { month: 'Apr', earnings: 35000 },
-        { month: 'May', earnings: 50000 },
-        { month: 'Jun', earnings: 60000 },
-        { month: 'Jul', earnings: 55000 },
-        { month: 'Aug', earnings: 65000 },
-        { month: 'Sep', earnings: 70000 },
-        { month: 'Oct', earnings: 80000 },
-        { month: 'Nov', earnings: 90000 },
-        { month: 'Dec', earnings: 100000 },
+        { month: 'Jan', earnings: totalPriceInJanuary },
+        { month: 'Feb', earnings: totalPriceInFebruary },
+        { month: 'Mar', earnings: totalPriceInMarch },
+        { month: 'Apr', earnings: totalPriceInApril },
+        { month: 'May', earnings: totalPriceInMay },
+        { month: 'Jun', earnings: totalPriceInJune },
+        { month: 'Jul', earnings: totalPriceInJuly },
+        { month: 'Aug', earnings: totalPriceInAugust },
+        { month: 'Sep', earnings: totalPriceInSeptember },
+        { month: 'Oct', earnings: totalPriceInOctober },
+        { month: 'Nov', earnings: totalPriceInNovember },
+        { month: 'Dec', earnings: totalPriceInDecember },
     ];
+
+    useEffect(() => {
+        const getTotalItem = async () => {
+            try {
+                const totalItem = await OrderAPI.totalItem();
+                const totalItemInCurrentDay = await OrderAPI.totalItemInCurrentDay();
+                const totalItemInCurrentMonth = await OrderAPI.totalItemInCurrentMonth();
+                const totalItemInCurrentYear = await OrderAPI.totalItemInCurrentYear();
+                const totalPriceInCurrentDay = await OrderAPI.totalPriceInCurrentDay();
+                const totalPriceInCurrentMonth = await OrderAPI.totalPriceInCurrentMonth();
+                const totalPriceInCurrentYear = await OrderAPI.totalPriceInCurrentYear();
+                //total-price
+                const totalPriceInJanuary = await OrderAPI.totalPriceInJanuary();
+                const totalPriceInFebruary = await OrderAPI.totalPriceInFebruary();
+                const totalPriceInMarch = await OrderAPI.totalPriceInMarch();
+                const totalPriceInApril = await OrderAPI.totalPriceInApril();
+                const totalPriceInMay = await OrderAPI.totalPriceInMay();
+                const totalPriceInJune = await OrderAPI.totalPriceInJune();
+                const totalPriceInJuly = await OrderAPI.totalPriceInJuly();
+                const totalPriceInAugust = await OrderAPI.totalPriceInAugust();
+                const totalPriceInSeptember = await OrderAPI.totalPriceInSeptember();
+                const totalPriceInOctober = await OrderAPI.totalPriceInOctober();
+                const totalPriceInNovember = await OrderAPI.totalPriceInNovember();
+                const totalPriceInDecember = await OrderAPI.totalPriceInDecember();
+                setTotalItem(totalItem);
+                setTotalItemInCurrentDay(totalItemInCurrentDay);
+                setTotalItemInCurrentMonth(totalItemInCurrentMonth);
+                setTotalItemInCurrentYear(totalItemInCurrentYear);
+                setTotalPriceInCurrentDay(totalPriceInCurrentDay);
+                setTotalPriceInCurrentMonth(totalPriceInCurrentMonth);
+                setTotalPriceInCurrentYear(totalPriceInCurrentYear);
+                setTotalPriceInJanuary(totalPriceInJanuary);
+                setTotalPriceInFebruary(totalPriceInFebruary);
+                setTotalPriceInMarch(totalPriceInMarch);
+                setTotalPriceInApril(totalPriceInApril);
+                setTotalPriceInMay(totalPriceInMay);
+                setTotalPriceInJune(totalPriceInJune);
+                setTotalPriceInJuly(totalPriceInJuly);
+                setTotalPriceInAugust(totalPriceInAugust);
+                setTotalPriceInSeptember(totalPriceInSeptember);
+                setTotalPriceInOctober(totalPriceInOctober);
+                setTotalPriceInNovember(totalPriceInNovember);
+                setTotalPriceInDecember(totalPriceInDecember);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getTotalItem();
+    }, []);
+
+    useEffect(() => {
+        console.log(totalPriceInCurrentYear);
+    }, [totalPriceInCurrentYear]);
 
     return (
         <Container maxW="container.xl">
@@ -47,25 +122,45 @@ function AdminDashboard() {
                 <Col xs lg="3" margin="2%">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Total Orders</Text>
-                        <Text fontWeight={600}>999</Text>
+                        <Text fontWeight={600}>{totalItem}</Text>
                     </Box>
                 </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')}>
+                        <Text fontSize={14}>Total Orders Today</Text>
+                        <Text fontWeight={600}>{totalItemInCurrentDay}</Text>
+                    </Box>
+                </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')}>
+                        <Text fontSize={14}>Total Orders In Month</Text>
+                        <Text fontWeight={600}>{totalItemInCurrentMonth}</Text>
+                    </Box>
+                </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')}>
+                        <Text fontSize={14}>Total Orders In Year</Text>
+                        <Text fontWeight={600}>{totalItemInCurrentYear}</Text>
+                    </Box>
+                </Col>
+            </Row>
+            <Row>
                 <Col md="auto" lg="3">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Earnings (Today)</Text>
-                        <Text fontWeight={600}>$40,000</Text>
+                        <Text fontWeight={600}>${totalPriceInCurrentDay}</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Earnings (Monthly)</Text>
-                        <Text fontWeight={600}>$40,000</Text>
+                        <Text fontWeight={600}>${totalPriceInCurrentMonth}</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
                     <Box className={cx('statistic-item')}>
-                        <Text fontSize={14}>Earnings (Monthly)</Text>
-                        <Text fontWeight={600}>$40,000</Text>
+                        <Text fontSize={14}>Earnings (Yearly)</Text>
+                        <Text fontWeight={600}>${totalPriceInCurrentYear}</Text>
                     </Box>
                 </Col>
             </Row>

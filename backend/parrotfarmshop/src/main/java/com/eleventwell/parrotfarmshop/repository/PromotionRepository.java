@@ -18,6 +18,7 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     List<PromotionEntity> findAllByOrderByIdDesc();
 
 
+<<<<<<< HEAD
     @Query("SELECT p FROM PromotionEntity p WHERE p.code = :code AND :currentDate BETWEEN p.startDate AND p.endDate")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code") String code, @Param("currentDate") Date currentDate);
 
@@ -28,5 +29,12 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
             "u.id DESC")
     List<PromotionEntity> searchSortForPromotion(@Param("searchStartDate") Date searchStartDate, @Param("searchEndDate") Date searchEndDate, @Param("sortDate") String sortDate, @Param("status") Boolean status, Pageable pageable);
 
+=======
+    @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code AND p.quantity > 0")
+    PromotionEntity findOneByCodeAndCheckValidDate(@Param("code")String code);
+
+    @Query ("SELECT p FROM PromotionEntity p WHERE p.id = :id AND p.quantity > 0")
+    PromotionEntity findOneByIdAndCheckValidDate(@Param("id")Long id);
+>>>>>>> 98c158a81024911277e8cc2b3184cf0142346a8a
 
 }

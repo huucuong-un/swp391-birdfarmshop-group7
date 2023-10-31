@@ -43,6 +43,7 @@ function AdNestManagement() {
     const [submitStatus, setSubmitStatus] = useState();
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
+    const [combineDataNest, setCombineDataNest] = useState([]);
     const [sort, setSort] = useState({
         page: 1,
         limit: 5,
@@ -87,6 +88,24 @@ function AdNestManagement() {
             setVinh(false);
         }
     }, [vinh]);
+
+    useEffect(() => {
+        const getNestPriceWithSpeciesName = async () => {
+            const data = [];
+            for (const item of faqsList) {
+                const nest = { ...item };
+                const nestPrice = await NestAPI.getNestPriceById(item.nestPriceId);
+                nest.species = await ParrotSpeciesAPI.get(nestPrice.speciesId);
+                data.push(nest);
+            }
+            setCombineDataNest(data);
+        };
+        getNestPriceWithSpeciesName();
+    }, [faqsList]);
+
+    useEffect(() => {
+        console.log(combineDataNest);
+    }, [combineDataNest]);
 
     useEffect(() => {
         const getNestPriceList = async () => {
@@ -320,17 +339,17 @@ function AdNestManagement() {
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
-                            <Th>Nest Price Id</Th>
+                            <Th>Nest Price Of Species</Th>
                             <Th>Create Date</Th>
                             <Th>Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {faqsList &&
-                            faqsList.map((faqs, index) => (
+                        {combineDataNest &&
+                            combineDataNest.map((faqs, index) => (
                                 <Tr key={index}>
                                     <Td>{faqs.id}</Td>
-                                    <Td>{faqs.nestPriceId}</Td>
+                                    <Td>{faqs.species[0].name}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>
                                         <Switch

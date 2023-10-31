@@ -87,7 +87,7 @@ function Feedback({ feedbackType, colorSortList }) {
                 //     page: 1,
                 //     limit: 12,
                 // };
-
+                console.log(param);
                 const feedbackListp = await FeedbackAPI.getAll(param);
                 setFeedbacksList(feedbackListp.listResult);
                 setTotalPage(feedbackListp.totalPage);

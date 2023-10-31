@@ -21,6 +21,7 @@ import { Avatar, Box, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '
 import { Link } from 'react-router-dom';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import GoogleTranslate from '~/Components/gg/gg';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -32,15 +33,19 @@ function Navbar() {
 
     const { addToCartStatus } = useCartStatus();
     const { removeCartItemStatus } = useCartStatus();
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
 
     const logoutHandler = () => {
-        localStorage.removeItem('userInfo');
+        localStorage.removeItem('accessToken');
         navigate('/login-user');
     };
 
     useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+        try {
+            const userFromToken = UserAPI.getUserByToken(token);
+            setLoggedUser(userFromToken);
+        } catch (error) {}
+    }, [token]);
 
     const activeNavs = [
         {
@@ -148,14 +153,14 @@ function Navbar() {
                             <>
                                 <Box
                                     display="flex"
-                                    justifyContent="space-between"
+                                    justifyContent="space-evenly"
                                     alignItems="center"
                                     w="90%"
                                     p="5px 10px 5px 10px"
                                 >
                                     <Menu>
                                         <MenuButton as={Button}>
-                                            <Avatar size="lg" cursor="pointer" name={user.userName} src={user.imgUrl} />
+                                            <Avatar size="lg" cursor="pointer" src={user.imgUrl} />
                                         </MenuButton>
                                         <MenuList mt={20} ml={20} className={cx('profile-list')}>
                                             <MenuItem padding={5} onClick={showProfile}>

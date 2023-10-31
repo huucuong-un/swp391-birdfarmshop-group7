@@ -20,10 +20,10 @@ public class AuthenticationController {
     UserService userService;
 
     @PostMapping(value = "register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<String> register(
             @RequestBody RegisterRequest request
     ){
-return  ResponseEntity.ok(service.register(request));
+return  ResponseEntity.ok(service.register(request).getToken());
     }
 //    @PostMapping(value = "authenticate")
 //    public ResponseEntity<AuthenticationResponse> authenticate(

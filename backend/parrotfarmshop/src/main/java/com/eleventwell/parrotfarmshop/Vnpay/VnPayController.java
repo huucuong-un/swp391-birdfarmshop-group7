@@ -52,7 +52,7 @@ public class VnPayController {
         } else {
             orderService.removeOrder(result);
             // Trạng thái thất bại
-            return new RedirectView("http://localhost:3000/error");
+            return new RedirectView("http://localhost:3000/paid-fail");
         }
     }
 

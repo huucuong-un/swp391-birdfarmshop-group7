@@ -45,6 +45,7 @@ import AdNestManagement from '~/Pages/AdNestManagement/AdNestManagement';
 import AdNestPriceManagement from '~/Pages/AdNestPriceManagement/AdNestPriceManagement';
 import AdNestDevelopmentStatus from '~/Pages/AdNestDevelopmentStatus/AdNestDevelopmentStatus';
 import AdNestDevelopmentManagement from '~/Pages/AdNestDevelopmentManagement/AdNestDevelopmentManagement';
+import AdNestUsageHistoryManagement from '~/Pages/AdNestUsageHistoryManagement/AdNestUsageHistoryManagement';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -89,6 +90,7 @@ const publicRoutes = [
     { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
     { path: '/admin/nest-development', component: AdNestDevelopmentManagement, layout: SystemLayout },
     { path: '/admin/nest-development-status', component: AdNestDevelopmentStatus, layout: SystemLayout },
+    { path: '/admin/nest-usage-history', component: AdNestUsageHistoryManagement, layout: SystemLayout },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
     { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },
     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },

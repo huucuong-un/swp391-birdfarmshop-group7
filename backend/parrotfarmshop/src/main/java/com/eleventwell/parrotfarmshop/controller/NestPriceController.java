@@ -29,6 +29,11 @@ public class NestPriceController {
 
         return nestPriceService.findOneBySpeciesId(speciesId);
     }
+
+    @GetMapping(value = "find-one-by-id")
+    public NestPriceDTO findOneById(@RequestBody @RequestParam(value = "id") Long id) {
+        return nestPriceService.findOneNestPriceById(id);
+    }
 //    @GetMapping(value = "find-by-species-id/{speciesId}")
 //    public List<NestPriceDTO> findBySpeciesId(@RequestBody @PathVariable("speciesId") Long id) {
 //        List<SpeciesEggPriceDTO> results = new ArrayList<>();

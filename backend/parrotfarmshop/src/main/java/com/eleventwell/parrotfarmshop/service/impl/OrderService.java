@@ -237,4 +237,84 @@ List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(
     public int totalItem() {
         return (int)orderRepository.count();
     }
+
+    public int totalItemWithStatusDone() {
+        return (int)orderRepository.countByStatusEquals("Done");
+    }
+
+    public int countOrdersCreatedToday() {
+        Date today = new Date(); // Lấy ngày hôm nay
+        return (int)orderRepository.countByCreatedDate(today);
+    }
+
+    public int countRecordsCreatedInCurrentMonth() {
+        Date today = new Date(); // Lấy ngày hiện tại
+        return (int)orderRepository.countByCreatedDateInCurrentMonth(today);
+    }
+
+    public int countRecordsCreatedInCurrentYear() {
+        Date today = new Date(); // Lấy ngày hiện tại
+        return (int)orderRepository.countByCreatedDateInCurrentYear(today);
+    }
+
+    public Double calculateTotalPriceForDoneOrdersToday() {
+        Date today = new Date(); // Lấy ngày hiện tại
+        return (Double) orderRepository.sumTotalPriceForDoneOrdersToday(today);
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInCurrentMonth() {
+        return (Double) orderRepository.sumTotalPriceForDoneOrdersInCurrentMonth();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInCurrentYear() {
+        return (Double)orderRepository.sumTotalPriceForDoneOrdersInCurrentYear();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInJanuary() {
+        return orderRepository.sumTotalPriceForDoneOrdersInJanuary();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInFebruary() {
+        return orderRepository.sumTotalPriceForDoneOrdersInFebruary();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInMarch() {
+        return orderRepository.sumTotalPriceForDoneOrdersInMarch();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInApril() {
+        return orderRepository.sumTotalPriceForDoneOrdersInApril();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInMay() {
+        return orderRepository.sumTotalPriceForDoneOrdersInMay();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInJune() {
+        return orderRepository.sumTotalPriceForDoneOrdersInJune();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInJuly() {
+        return orderRepository.sumTotalPriceForDoneOrdersInJuly();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInAugust() {
+        return orderRepository.sumTotalPriceForDoneOrdersInAugust();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInSeptember() {
+        return orderRepository.sumTotalPriceForDoneOrdersInSeptember();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInOctober() {
+        return orderRepository.sumTotalPriceForDoneOrdersInOctober();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInNovember() {
+        return orderRepository.sumTotalPriceForDoneOrdersInNovember();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInDecember() {
+        return orderRepository.sumTotalPriceForDoneOrdersInDecember();
+    }
 }

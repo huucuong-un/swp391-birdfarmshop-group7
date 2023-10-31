@@ -33,7 +33,10 @@ const NestAPI = {
         const url = '/nest-price';
         return axiosClinet.get(url, { params });
     },
-
+    getNestPriceById(id) {
+        const url = `/nest-price/find-one-by-id?id=${id}`;
+        return axiosClinet.get(url);
+    },
     getNestPriceBySpeciesId(id) {
         const url = `/nest-price/find-by-species-id?speciesId=${id}`;
         return axiosClinet.get(url);

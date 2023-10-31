@@ -68,9 +68,6 @@ public class OrderController {
     @GetMapping(value = "admin/order_management/search")
     @PreAuthorize("hasAnyAuthority('1')")
     public PagingModel searchOrderByPhoneAnd(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "email", required = false) String email,@RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,@RequestParam(value = "status",required = false) String status,@RequestParam(value = "sortPrice", required = false) String sortPrice,@RequestParam(value = "sortDate", required = false) String sortDate) {
-
-
-
         PagingModel result = new PagingModel();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
@@ -187,6 +184,99 @@ public class OrderController {
         orderService.changeStatus(id);
     }
 
+    @GetMapping(value = "total-item")
+    public Integer totalItems() {
+        return orderService.totalItemWithStatusDone();
+    }
 
+    @GetMapping(value = "total-item-in-current-day")
+    public Integer totalItemsInCurrentDay() {
+        return orderService.countOrdersCreatedToday();
+    }
+
+    @GetMapping(value = "total-item-in-current-month")
+    public Integer totalItemsInCurrentMonth() {
+        return orderService.countRecordsCreatedInCurrentMonth();
+    }
+
+    @GetMapping(value = "total-item-in-current-year")
+    public Integer totalItemsInCurrentYear() {
+        return orderService.countRecordsCreatedInCurrentYear();
+    }
+
+    @GetMapping(value = "total-price-in-current-day")
+    public Double totalPriceInCurrentDay() {
+        return orderService.calculateTotalPriceForDoneOrdersToday();
+    }
+
+    @GetMapping(value = "total-price-in-current-month")
+    public Double totalPriceInCurrentMonth() {
+        return orderService.calculateTotalPriceForDoneOrdersInCurrentMonth();
+    }
+
+    @GetMapping(value = "total-price-in-current-year")
+    public Double totalPriceInCurrentYear() {
+        return orderService.calculateTotalPriceForDoneOrdersInCurrentYear();
+    }
+
+    @GetMapping(value = "total-price-in-january")
+    public Double totalPriceInJanuary() {
+        return orderService.calculateTotalPriceForDoneOrdersInJanuary();
+    }
+
+    @GetMapping(value = "total-price-in-February")
+    public Double totalPriceInFebruary() {
+        return orderService.calculateTotalPriceForDoneOrdersInFebruary();
+    }
+
+    @GetMapping(value = "total-price-in-March")
+    public Double totalPriceInMarch() {
+        return orderService.calculateTotalPriceForDoneOrdersInMarch();
+    }
+
+    @GetMapping(value = "total-price-in-April")
+    public Double totalPriceInApril() {
+        return orderService.calculateTotalPriceForDoneOrdersInApril();
+    }
+
+    @GetMapping(value = "total-price-in-May")
+    public Double totalPriceInMay() {
+        return orderService.calculateTotalPriceForDoneOrdersInMay();
+    }
+
+    @GetMapping(value = "total-price-in-June")
+    public Double totalPriceInJune() {
+        return orderService.calculateTotalPriceForDoneOrdersInJune();
+    }
+
+    @GetMapping(value = "total-price-in-July")
+    public Double totalPriceInJuly() {
+        return orderService.calculateTotalPriceForDoneOrdersInJuly();
+    }
+
+    @GetMapping(value = "total-price-in-August")
+    public Double totalPriceInAugust() {
+        return orderService.calculateTotalPriceForDoneOrdersInAugust();
+    }
+
+    @GetMapping(value = "total-price-in-September")
+    public Double totalPriceInSeptember() {
+        return orderService.calculateTotalPriceForDoneOrdersInSeptember();
+    }
+
+    @GetMapping(value = "total-price-in-October")
+    public Double totalPriceInOctober() {
+        return orderService.calculateTotalPriceForDoneOrdersInOctober();
+    }
+
+    @GetMapping(value = "total-price-in-November")
+    public Double totalPriceInNovember() {
+        return orderService.calculateTotalPriceForDoneOrdersInNovember();
+    }
+
+    @GetMapping(value = "total-price-in-December")
+    public Double totalPriceInDecember() {
+        return orderService.calculateTotalPriceForDoneOrdersInDecember();
+    }
 }
 

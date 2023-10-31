@@ -25,111 +25,69 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from '~/Pages/AdNestPriceManagement/AdNestPriceManagement.module.scss';
+import styles from '~/Pages/AdNestManagement/AdNestManagement.module.scss';
 import FAQSAPI from '~/Api/FAQSAPI';
 import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 const cx = classNames.bind(styles);
 
-function AdNestManagement() {
+function AdNestUsageHistoryManagement() {
     const [faqsList, setFaqsList] = useState([]);
     const [nestPrice, setNestPrice] = useState([]);
     const [show, setShow] = useState(false);
     const [title, setTitle] = useState('');
+    const [price, setPrice] = useState(0);
     const [status, setStatus] = useState(false);
     const [addStatus, setAddStatus] = useState(false);
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
-    const [combineDataNest, setCombineDataNest] = useState([]);
+    const [species, setSpecies] = useState([]);
 
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
         updatedFaqs[index].status = !updatedFaqs[index].status;
-        const change = await NestAPI.changeStatusForNest(id);
+        const change = await NestAPI.changeStatusForNestPrice(id);
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
 
     useEffect(() => {
-        const getNestList = async () => {
+        const getNestPriceList = async () => {
             try {
                 const params = {
                     page: 1,
-                    limit: 12,
+                    limit: 100000,
                 };
-                const nestList = await NestAPI.getAllNest(params);
+                const nestList = await NestAPI.getAllNestUsageHistory(params);
                 setFaqsList(nestList.listResult);
             } catch (error) {
                 console.error(error);
             }
         };
         if (vinh) {
-            getNestList();
+            getNestPriceList();
             setVinh(false);
         }
     }, [vinh]);
 
     useEffect(() => {
-        const getNestPriceWithSpeciesName = async () => {
-            const data = [];
-            for (const item of faqsList) {
-                const nest = { ...item };
-                const nestPrice = await NestAPI.getNestPriceById(item.nestPriceId);
-                nest.species = await ParrotSpeciesAPI.get(nestPrice.speciesId);
-                data.push(nest);
-            }
-            setCombineDataNest(data);
-        };
-        getNestPriceWithSpeciesName();
+        console.log(faqsList);
     }, [faqsList]);
 
     useEffect(() => {
-        console.log(combineDataNest);
-    }, [combineDataNest]);
-
-    useEffect(() => {
-        const getNestPriceList = async () => {
-            try {
-                const nestPriceList = await NestAPI.getAll();
-                setNestPrice(nestPriceList);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        if (show) {
-            getNestPriceList();
-        }
-    }, [show]);
-
-    useEffect(() => {
-        const getNestPriceWithSpecies = async () => {
-            const data = [];
-            for (const item of nestPrice) {
-                const nestPriceItem = { ...item };
-                try {
-                    if (item.status) {
-                        nestPriceItem.species = await ParrotSpeciesAPI.getSpeciesBySpeciesIdObject(item.speciesId);
-                        data.push(nestPriceItem);
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-            setCombineData(data);
-        };
-
-        getNestPriceWithSpecies();
-    }, [nestPrice]);
+        console.log(title);
+    }, [title]);
 
     useEffect(() => {
         const addFaqs = async () => {
             try {
                 const data = {
+                    speciesId: title,
+                    price: price,
                     status: status,
-                    nestPriceId: title,
                 };
                 if (addStatus === false) {
                     setAddFail((prev) => prev + 1);
@@ -138,7 +96,7 @@ function AdNestManagement() {
                         setSubmitStatus();
                     }, 50000);
                 } else {
-                    const add = await NestAPI.addNest(data);
+                    const add = await NestAPI.addNestPrice(data);
                     setVinh(true);
                     setAddStatus(false);
                 }
@@ -166,7 +124,7 @@ function AdNestManagement() {
     };
 
     const handleSave = () => {
-        if (title === '' || title === 'Species') {
+        if (title === '' || title === 'Species' || price === 0) {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
@@ -192,7 +150,7 @@ function AdNestManagement() {
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
-                <h1>NEST</h1>
+                <h1>NEST USAGE HISTORY</h1>
             </div>
             <div className={cx('add-btn')}>
                 <Button onClick={handleShow} colorScheme="green" size="lg">
@@ -224,12 +182,12 @@ function AdNestManagement() {
                     <Table variant="simple">
                         <Thead>
                             <Tr>
-                                <Th colSpan={2}>New Nest</Th>
+                                <Th colSpan={2}>New Nest Price</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td>Nest Price</Td>
+                                <Td>Species</Td>
                                 <Td>
                                     {/* <Input
                                         type="text"
@@ -241,13 +199,25 @@ function AdNestManagement() {
 
                                     <select onChange={(e) => setTitle(e.target.value)}>
                                         <option isChecked>Species</option>
-                                        {combineData &&
-                                            combineData.map((nestPrice, nestPriceIndex) => (
+                                        {species &&
+                                            species.map((nestPrice, nestPriceIndex) => (
                                                 <option key={nestPriceIndex} value={nestPrice.id}>
-                                                    {nestPrice.species.name}
+                                                    {nestPrice.name}
                                                 </option>
                                             ))}
                                     </select>
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Price</Td>
+                                <Td>
+                                    <Input
+                                        type="number"
+                                        borderColor="black"
+                                        placeholder="Price..."
+                                        fontSize={18}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                    />
                                 </Td>
                             </Tr>
                             <Tr>
@@ -284,25 +254,26 @@ function AdNestManagement() {
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
-                            <Th>Nest Price Of Species</Th>
+                            <Th>Parrot Couple Id</Th>
+                            <Th>Nest Id</Th>
+                            <Th>Start Date</Th>
+                            <Th>End Date</Th>
                             <Th>Create Date</Th>
-                            <Th>Status</Th>
+                            <Th>Update</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {combineDataNest &&
-                            combineDataNest.map((faqs, index) => (
+                        {faqsList &&
+                            faqsList.map((faqs, index) => (
                                 <Tr key={index}>
                                     <Td>{faqs.id}</Td>
-                                    <Td>{faqs.species[0].name}</Td>
+                                    <Td>{faqs.parrotCoupleId}</Td>
+                                    <Td>{faqs.nestId}</Td>
+                                    <Td>{formatDate(new Date(faqs.startDate))}</Td>
+                                    <Td>{formatDate(new Date(faqs.endDate))}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>
-                                        <Switch
-                                            size="lg"
-                                            isChecked={faqs.status}
-                                            colorScheme="green"
-                                            onChange={() => changeStatus(faqs.id, index)}
-                                        />
+                                        <Button colorScheme="green">Update</Button>
                                     </Td>
                                 </Tr>
                             ))}
@@ -313,4 +284,4 @@ function AdNestManagement() {
     );
 }
 
-export default AdNestManagement;
+export default AdNestUsageHistoryManagement;

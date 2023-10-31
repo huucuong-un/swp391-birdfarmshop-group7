@@ -74,6 +74,24 @@ function AdNestPriceManagement() {
     }, [vinh]);
 
     useEffect(() => {
+        const getNestPriceWithSpeciesName = async () => {
+            const data = [];
+            for (const item of faqsList) {
+                const nestPrice = { ...item };
+                nestPrice.species = await ParrotSpeciesAPI.get(item.speciesId);
+                data.push(nestPrice);
+            }
+            setCombineData(data);
+        };
+
+        getNestPriceWithSpeciesName();
+    }, [faqsList]);
+
+    useEffect(() => {
+        console.log(combineData);
+    }, [combineData]);
+
+    useEffect(() => {
         const getNestPriceList = async () => {
             try {
                 const nestPriceList = await NestAPI.getAll();
@@ -277,18 +295,18 @@ function AdNestPriceManagement() {
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
-                            <Th>Species ID</Th>
+                            <Th>Species</Th>
                             <Th>Price</Th>
                             <Th>Created Date</Th>
                             <Th>Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {faqsList &&
-                            faqsList.map((faqs, index) => (
+                        {combineData &&
+                            combineData.map((faqs, index) => (
                                 <Tr key={index}>
                                     <Td>{faqs.id}</Td>
-                                    <Td>{faqs.speciesId}</Td>
+                                    <Td>{faqs.species[0].name}</Td>
                                     <Td>{faqs.price}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>
                                     <Td>

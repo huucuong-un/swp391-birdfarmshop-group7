@@ -14,6 +14,7 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Container,
 } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrot/AddParrot.module.scss';
@@ -41,6 +42,19 @@ function AddParrot() {
     const [healthStatus, setHealthStatus] = useState(false);
     const [pregnancyStatus, setPregnancyStatus] = useState(false);
     const [show, setShow] = useState(false);
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        age: null,
+        status: null,
+        saleStatus: null,
+        pregnancyStatus: null,
+        healthStatus: null,
+        gender: null,
+        searchDate: null,
+        sortDate: null,
+        sortAge: null,
+    });
     const handleSaleStatus = () => {
         setSaleStatus(!saleStatus);
     };
@@ -119,25 +133,18 @@ function AddParrot() {
     useEffect(() => {
         const fetchParrotSpeciesColorbyID = async () => {
             try {
-                if (speciesColorByID === 'a') {
+                if (
+                    speciesColorByID === 'Select a color' ||
+                    speciesColorByID === 'Selected specie' ||
+                    speciesColorByID === 'a'
+                ) {
                     return;
                 }
-                if (
-                    speciesColorByID !== undefined ||
-                    speciesColorByID !== 'Select a color' ||
-                    speciesColorByID !== 'Selected specie' ||
-                    speciesColorByID.length !== 0
-                ) {
+                if (speciesColorByID !== undefined && speciesColorByID.length !== 0) {
                     const listSpeciesColorById = await ParrotSpeciesAPI.getListBySpeciesId(speciesColorByID);
                     if (listSpeciesColorById != null) {
                         setSpeciesColor(listSpeciesColorById);
                     }
-                } else {
-                    // // Handle the case where the response is null
-                    // console.error('Received a null response from ParrotSpeciesAPI.getListBySpeciesId');
-                    // // You can set an empty array or perform other error handling here
-                    setSpeciesColor([]);
-                    return;
                 }
             } catch (error) {
                 console.log(error);
@@ -146,14 +153,42 @@ function AddParrot() {
 
         fetchParrotSpeciesColorbyID();
     }, [speciesColorByID]);
+    // useEffect(() => {
+    //     const fetchParrotSpeciesColorbyID = async () => {
+    //         try {
+    //             if (speciesColorByID === 'a' || speciesColorByID === undefined) {
+    //                 return;
+    //             }
+    //             console.log(speciesColorByID);
+    //             if (
+    //                 speciesColorByID !== undefined ||
+    //                 speciesColorByID !== 'Select a color' ||
+    //                 speciesColorByID !== 'Selected specie' ||
+    //                 speciesColorByID.length !== 0
+    //             ) {
+    //                 const listSpeciesColorById = await ParrotSpeciesAPI.getListBySpeciesId(speciesColorByID);
+    //                 if (listSpeciesColorById != null) {
+    //                     setSpeciesColor(listSpeciesColorById);
+    //                 }
+    //             } else {
+    //                 return;
+    //             }
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+
+    //     fetchParrotSpeciesColorbyID();
+    // }, [speciesColorByID]);
     // Fetch parrot list
     const [parrotList, setParrotList] = useState([]);
     const [combineData, setCombineData] = useState([]);
     useEffect(() => {
         const fetchParrotList = async () => {
             try {
-                const parrotList = await ParrotAPI.getAll();
-                setParrotList(parrotList);
+                const parrotList = await ParrotAPI.searchSortForParrot(sort);
+                setParrotList(parrotList.listResult);
+                setTotalPage(parrotList.totalPage);
             } catch (error) {
                 console.error(error + ' At Add parrot fetch parrot species color by id');
             }
@@ -168,8 +203,7 @@ function AddParrot() {
         } else {
             fetchParrotList();
         }
-    }, [shouldFetchData, reloadData]);
-
+    }, [sort, shouldFetchData, reloadData]);
     useEffect(() => {
         const fetchData = async () => {
             const data = [];
@@ -177,8 +211,9 @@ function AddParrot() {
             try {
                 for (const parrot of parrotList) {
                     const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
+                    console.log(colors);
                     const listParrot = { ...parrot };
-                    const species = await ParrotSpeciesAPI.get(colors[0].id);
+                    const species = await ParrotSpeciesAPI.get(colors[0].speciesID);
                     const colorName = colors[0].color;
                     const specieName = species[0].name;
                     listParrot.colorName = colorName;
@@ -235,34 +270,9 @@ function AddParrot() {
         setSelectedOption(event.target.value);
     };
 
-    const [sort, setSort] = useState({
-        page: 1,
-        limit: 5,
-        age: null,
-        status: null,
-        saleStatus: null,
-        pregnancyStatus: null,
-        healthStatus: null,
-        gender: null,
-        searchDate: null,
-        sortDate: null,
-        sortAge: null,
-    });
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
 
-    useEffect(() => {
-        const sortData = async () => {
-            try {
-                const sortData = await ParrotAPI.searchSortForParrot(sort);
-                setParrotList(sortData.listResult);
-                setTotalPage(sortData.totalPage);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        sortData();
-    }, [sort]);
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
@@ -277,7 +287,6 @@ function AddParrot() {
             sortDate: null,
             sortAge: null,
         });
-
         setPage(newPage);
     };
 
@@ -296,21 +305,19 @@ function AddParrot() {
             sortAge: null,
         });
     };
-    useEffect(() => {
-        console.log(sort);
-    }, [sort]);
     return (
-        <div className={cx('wrapper')}>
+        // <div className={cx('wrapper')}>
+        <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title-container')}>
-                <Title system>Add Parrot</Title>
+                <h1>ADD PARROT</h1>
             </div>
             <div className={cx('add-btn')}>
-                <Buttons onClick={handleShow} add>
+                <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Buttons>
+                </Button>
             </div>
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
@@ -511,7 +518,10 @@ function AddParrot() {
                                     <Td>
                                         <select
                                             className={cx('select-btn')}
-                                            onChange={(e) => setSpeciesColorById(e.target.value)}
+                                            onChange={(e) => {
+                                                setSpeciesColor([]);
+                                                setSpeciesColorById(e.target.value);
+                                            }}
                                         >
                                             <option key={'a'} value={'a'}>
                                                 Selected specie
@@ -539,8 +549,7 @@ function AddParrot() {
                                                 onChange={(e) => {
                                                     const selectedColorId = e.target.value;
                                                     console.log('Selected color ID:', selectedColorId);
-
-                                                    setParrots({ ...parrots, colorID: selectedColorId });
+                                                    setParrots({ ...parrots, colorID: e.target.value });
                                                 }}
                                             >
                                                 <option key={'color'}>Select a color</option>
@@ -553,7 +562,6 @@ function AddParrot() {
                                                         >
                                                             {item.color}
                                                         </option>
-                                                        <p>{item.name}</p>
                                                     </>
                                                 ))}
                                             </select>
@@ -657,7 +665,19 @@ function AddParrot() {
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 {Array.from({ length: totalPage }, (_, index) => (
-                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#ff0000' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? '#ffffff' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                        }}
+                    >
                         {index + 1}
                     </p>
                 ))}
@@ -665,7 +685,7 @@ function AddParrot() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </button>
             </div>
-        </div>
+        </Container>
     );
 }
 

@@ -1,8 +1,10 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
+import com.eleventwell.parrotfarmshop.dto.FAQsDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
+import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.PromotionEntity;
 import com.eleventwell.parrotfarmshop.entity.RoleEntity;
 import com.eleventwell.parrotfarmshop.repository.PromotionRepository;
@@ -102,6 +104,18 @@ public class PromotionService implements IGenericService<PromotionDTO> {
 
     }
 
+    public List<PromotionDTO> searchSortForPromotion(Date searchStartDate,Date searchEndDate,String sortDate, Boolean status, Pageable pageable) {
+        // TODO Auto-generated method stub
+        List<PromotionDTO> results = new ArrayList();
+//        List<PromotionEntity> entities = promotionRepository.searchSortForPromotion(searchStartDate, searchEndDate, status, pageable);
+    List<PromotionEntity> entities = promotionRepository.searchSortForPromotion(searchStartDate, searchEndDate, sortDate,status, pageable);
+        for (PromotionEntity item : entities) {
+            PromotionDTO newDTO = (PromotionDTO) converter.toDTO(item, PromotionDTO.class);
+            results.add(newDTO);
 
+        }
+
+        return results;
+    }
 
 }

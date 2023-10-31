@@ -34,6 +34,7 @@ return  ResponseEntity.ok(service.register(request).getToken());
     @PostMapping(value = "authenticate")
     public ResponseEntity<String> authenticate(
             @RequestBody AuthenticationRequest request) {
+
         return  ResponseEntity.ok(service.authenticate(request).getToken());
 
     }
@@ -47,8 +48,11 @@ return  ResponseEntity.ok(service.register(request).getToken());
     @PostMapping(value = "/login-with-google/authenticate")
     public ResponseEntity<String> authenticateForUserLoginWithGoogle(
             @RequestBody AuthenticationRequest request){
+    if(service.authenticateForUserLoginWithGoogle(request) !=null){
         return  ResponseEntity.ok(service.authenticateForUserLoginWithGoogle(request).getToken());
 
+    }
+return null;
     }
 
 

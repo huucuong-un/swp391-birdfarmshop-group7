@@ -75,10 +75,18 @@ function UserLogin() {
             setLoading(false);
             // // setLoading(false);
             navigate('/');
+            if (userFromToken == null) {
+                toast({
+                    title: 'Error occur!',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            }
         } catch (error) {
             toast({
                 title: 'Error occur!',
-                description: error.response.data.message,
                 status: 'error',
                 duration: 5000,
                 isClosable: true,

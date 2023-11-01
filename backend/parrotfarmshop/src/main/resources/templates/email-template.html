@@ -8,6 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 600px;
@@ -18,22 +20,45 @@
             padding: 20px;
         }
         h1 {
-            color: #333333;
+            color: #007bff;
+            text-align: center;
         }
         p {
-            color: #555555;
+            color: #333333;
+            font-size: 16px;
         }
         .button {
             display: inline-block;
             padding: 10px 20px;
             background-color: #007bff;
-            color: #ffffff;
+            color: white;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
+            margin-top: 20px;
         }
         .button:hover {
             background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        img {
+            max-width: 100px;
+            max-height: 100px;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -41,29 +66,40 @@
 <div class="container">
     <h1>Order Confirmation</h1>
     <p>Dear <span th:text="${customerName}"></span>,</p>
-    <p>Thank you for placing your order with Online Shop. Below are the details of your order:</p>
+    <p>Thank you for placing your order with 11-twell Parrot Shop. Below are the details of your order:</p>
 
     <table>
         <thead>
         <tr>
+            <th>Image</th>
             <th>Product</th>
+            <th th:if="${orderDetailHistoryModelList[0].color != null}">Category</th>
+            <th>Service</th>
             <th>Quantity</th>
             <th>Price</th>
         </tr>
         </thead>
         <tbody>
+        <th:block th:each="orderDetail : ${orderDetailHistoryModelList}">
+            <tr>
+                <td><img th:src="${orderDetail.img}" alt="Product Image"></td>
+                <td><span th:text="${orderDetail.SpeciesName}"></span></td>
+                <td th:if="${orderDetail.color != null}" >
+                    <span th:text="${orderDetail.color}"></span>
+                </td>
+                <td><span th:if="${orderDetail.color != null}" th:text="Parrot"></span>
+                    <span th:unless="${orderDetail.color != null}" th:text="Nest"></span>
+                </td>
 
-        <tr>
-            <td><span th:text="${productName}"></span></td>
-            <td><span th:text="${quantity}"></span></td>
-            <td><span th:text="${price}">VND</span></td>
-        </tr>
-
+                <td><span th:text="${orderDetail.quantity}"></span></td>
+                <td><span th:text="${orderDetail.totalPrice}"></span> VND</td>
+            </tr>
+        </th:block>
         </tbody>
+
     </table>
 
-    <h4>Total Amount: <span th:text="${totalAmount}"></span></h4>
-    <h4>Total Price: <span th:text="${totalAmount * price}"></span></h4>
+    <h4>Total Price: <span th:text="${totalPrice}"> VND</span></h4>
 
     <p>Thank you for shopping with us!</p>
     <a th:href="${shopLink}" class="button">Visit Our Shop</a>

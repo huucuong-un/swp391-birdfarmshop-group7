@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.validation.constraints.PositiveOrZero;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class NestPriceEntity extends BaseEntity {
   @OneToMany(mappedBy = "nestPrice")
   List<NestEntity> nest = new ArrayList<>();
 
-
+  @PositiveOrZero
   @Column(name="price")
   private Double price;
 

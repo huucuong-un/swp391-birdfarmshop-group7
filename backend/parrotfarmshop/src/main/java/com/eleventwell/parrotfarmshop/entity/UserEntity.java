@@ -59,7 +59,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @NotBlank
     @JsonIgnore
     @Column
-    @Size(min = 6, max = 20)
+    @Size(min = 6)
     private String password;
 
     @NotBlank

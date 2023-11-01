@@ -62,6 +62,17 @@ private OrderRepository orderRepository;
         return templateEngine.process("email-template", context);
     }
 
+    private String processThymeleafTemplate(String code,String userName) {
+        Context context = new Context();
+        context.setVariable("customerName", userName);
+        context.setVariable("OTP", code);
+
+
+
+
+        return templateEngine.process("email-template", context);
+    }
+
     //Method 1
     //To send a simple mail
     @Override
@@ -72,8 +83,13 @@ private OrderRepository orderRepository;
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
-            String emailContent = processThymeleafTemplate(details.getOrderId());
+            String emailContent=null;
+            if(details.getCheck().equals("order")) {
+                emailContent = processThymeleafTemplate(details.getOrderId());
+            }else if(details.getCheck().equals("password")){
+//                emailContent = processThymeleafTemplate();
 
+            }
             mimeMessageHelper.setSubject(details.getSubject());
             mimeMessageHelper.setText(emailContent, true); // Set the content type to HTML
 
@@ -136,6 +152,7 @@ private OrderRepository orderRepository;
     EmailDetailsEntity emailDetailsEntity = new EmailDetailsEntity();
     emailDetailsEntity.setRecipient(orderEntity.getUser().getEmail());
     emailDetailsEntity.setSubject("Order Confirmation");
+    emailDetailsEntity.setCheck("order");
     emailDetailsEntity.setOrderId(id);
     emailDetailsEntity.setMsgBody("Test send mail Parrot Farm Shop project \n\nThis is a Simple Email \n\nThanks");
 

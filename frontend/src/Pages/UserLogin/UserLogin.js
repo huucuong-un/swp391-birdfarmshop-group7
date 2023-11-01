@@ -49,7 +49,6 @@ function UserLogin() {
                     'Content-Type': 'application/json',
                 },
             };
-            const userName = null;
 
             const data = await axios.post(
                 'http://localhost:8086/api/user/authenticate',

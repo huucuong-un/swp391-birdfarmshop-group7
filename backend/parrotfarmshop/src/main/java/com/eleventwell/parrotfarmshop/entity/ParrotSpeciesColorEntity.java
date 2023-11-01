@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @ToString
 @Builder
@@ -31,6 +33,7 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
 
 
     @Unsigned
+    @PositiveOrZero
     @Column(name = "price")
     private Double price;
 
@@ -39,6 +42,7 @@ public class ParrotSpeciesColorEntity extends BaseEntity {
 
 
     @NotBlank
+    @Size(min = 1, max = 10)
     @Column(name = "color")
     private String color;
 

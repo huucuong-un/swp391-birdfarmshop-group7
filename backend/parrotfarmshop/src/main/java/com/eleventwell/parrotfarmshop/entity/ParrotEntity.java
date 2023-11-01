@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.PositiveOrZero;
 
 /**
  * parrotID:pk parrotName, #parrotSpeciesDetailID: fk #ParrotEggNest parrotAge
@@ -34,12 +35,14 @@ import lombok.ToString;
 @Getter
 @Setter
 
+
 @Entity
 @Table(name = "parrot")
 public class ParrotEntity extends BaseEntity {
 
-   
-@Unsigned
+
+    @Unsigned
+    @PositiveOrZero
     @Column(name = "age")
     private int age;
 
@@ -60,34 +63,31 @@ public class ParrotEntity extends BaseEntity {
     @Column(name = "number_of_children")
     private Long numberOfChildren;
 
-    
-    
-      @ManyToOne
+
+    @ManyToOne
     @JoinColumn(name = "owner_Id")
     private UserEntity owner;
 
-//	
+    //
 //	
     @ManyToOne
     @JoinColumn(name = "color_ID")
     private ParrotSpeciesColorEntity parrotSpeciesColor;
 
     @Column(name = "gender")
-    private  Boolean gender;
+    private Boolean gender;
 
-//    @OneToOne(mappedBy = "parrot")
+    //    @OneToOne(mappedBy = "parrot")
 //    private OrderDetailEntity orderDetail;
     @OneToOne(mappedBy = "parrot")
     @PrimaryKeyJoinColumn
     private OrderDetailEntity orderDetail;
-//
-	@OneToMany(mappedBy = "parrotMale")
-	private List<ParrotCoupleEntity> parrotMales = new ArrayList<>();
+    //
+    @OneToMany(mappedBy = "parrotMale")
+    private List<ParrotCoupleEntity> parrotMales = new ArrayList<>();
 
     @OneToMany(mappedBy = "parrotFemale")
     private List<ParrotCoupleEntity> parrotFemale = new ArrayList<>();
-
-
 
 
 //    @OneToMany(mappedBy = "parrot")

@@ -21,6 +21,10 @@ public class OTPService {
     public OTPDTO save(OTPDTO otpdto){
         try {
             OTPEnity otpEnity = (OTPEnity) genericConverter.toEntity(otpdto, OTPEnity.class);
+            OTPEnity oTemp = otpRepository.findOneByEmail(otpdto.getEmail());
+            if(oTemp !=null){
+otpRepository.deleteById(oTemp.getId());
+            }
             otpRepository.save(otpEnity);
             scheduleOtpCleanup(otpEnity.getId());
             return (OTPDTO) genericConverter.toDTO(otpEnity,OTPDTO.class);
@@ -28,9 +32,8 @@ public class OTPService {
             throw new RuntimeException(e);
         }
 
-
-
     }
+
 
     public void scheduleOtpCleanup(Long otp) {
         Timer timer = new Timer();
@@ -43,9 +46,9 @@ public class OTPService {
         }, 120000); // 2 phút (120,000 milliseconds)
     }
 
-    public OTPDTO findOTP(OTPDTO otpdto){
+    public OTPDTO findOTP(String email, String code){
         try {
-            return (OTPDTO) genericConverter.toDTO(otpRepository.findOneByEmailAndCode(otpdto.getEmail(),otpdto.getCode()),OTPDTO.class);
+            return (OTPDTO) genericConverter.toDTO(otpRepository.findOneByEmailAndCode(email,code),OTPDTO.class);
 
         }catch (Exception e){
             return null;

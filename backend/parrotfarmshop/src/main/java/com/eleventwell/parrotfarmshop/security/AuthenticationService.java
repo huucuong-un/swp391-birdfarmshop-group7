@@ -165,6 +165,24 @@ try {
                 .build();
     }
 
+
+    public  AuthenticationResponse resetPassword(ResetPasswordRequest request) {
+        UserEntity user = repository.findByEmail(request.getEmail()).get();
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        repository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .userId(user.getId())
+                .userName(user.getUsername())
+                .userId(user.getId())
+                .fullName(user.getFullName())
+                .status(user.getStatus())
+                .email(user.getEmail())
+                .roleId(user.getRole().getId())
+                .imgUrl(user.getImgUrl())
+                .build();
+    }
     public  AuthenticationResponse updateProfile(UpdateProfileRequest request) {
         try {
             UserEntity user = repository.findOneByUserName(request.getUserName());

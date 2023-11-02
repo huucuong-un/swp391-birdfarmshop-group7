@@ -19,6 +19,5 @@ public class EmailDetailsEntity {
     private String subject;
     private String attachment;
     private Long orderId;
-    private String OTP;
     private String check;
 }

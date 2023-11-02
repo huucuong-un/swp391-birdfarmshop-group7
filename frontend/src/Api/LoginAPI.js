@@ -16,6 +16,10 @@ const LoginAPI = {
         const url = `/user/change-password`;
         return axiosClient.post(url, data, config);
     },
+    resetPassword(data) {
+        const url = `/user/reset-password`;
+        return axiosClient.post(url, data);
+    },
 };
 
 export default LoginAPI;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/admin/OTP")
+@RequestMapping(value = "/api/OTP")
 public class OTPController {
 
     @Autowired
@@ -17,10 +17,10 @@ public class OTPController {
 
         return otpService.save(otpdto);
     }
-    @GetMapping(value = "/find-one-by-code-and-email")
-    public OTPDTO findOTP(@RequestBody OTPDTO otpdto){
+    @GetMapping(value = "find-one-by-code-and-email")
+    public OTPDTO findOTP(@RequestParam(value = "email") String email, @RequestParam(value = "code") String code){
 
-        return otpService.findOTP(otpdto);
+        return otpService.findOTP(email,code);
     }
 
 }

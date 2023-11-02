@@ -22,7 +22,11 @@ public class EmailController {
         String status = emailService.sendSimpleMail(details);
         return status;
     }
+    //ko xai cai nay
 
+
+
+    //======================================
     // Sending email with attachment
     @PostMapping("/api/send-mail-with-attachment")
     public String sendMailWithAttachment(@RequestBody EmailDetailsEntity details)

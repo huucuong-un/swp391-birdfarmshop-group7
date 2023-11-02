@@ -46,7 +46,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
 try {
     RoleEntity role = roleRepository.findOneById(request.getRoleId());
-    var user = UserEntity.builder()
+    UserEntity user = UserEntity.builder()
             .userName(request.getUserName())
             .fullName(request.getFullName())
             .email(request.getEmail())
@@ -75,6 +75,7 @@ try {
 
             .build();
 }catch (Exception e){
+    e.printStackTrace();
     return null;
 }
 

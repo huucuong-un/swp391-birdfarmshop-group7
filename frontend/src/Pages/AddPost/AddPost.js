@@ -324,9 +324,11 @@ function AddPost() {
                             (submissionStatus === false && (
                                 <Alert status="error">
                                     <AlertIcon />
+                                    <br />
                                     <AlertTitle>
                                         <Text fontSize="sm" lineHeight="1.4">
                                             {validate.title}
+                                            <br />
                                             {validate.description}
                                         </Text>
                                     </AlertTitle>

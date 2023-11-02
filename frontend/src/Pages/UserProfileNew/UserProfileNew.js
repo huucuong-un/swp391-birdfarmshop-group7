@@ -28,6 +28,7 @@ import {
 } from '@chakra-ui/react';
 import { Col, Row } from 'react-bootstrap';
 import UserAPI from '~/Api/UserAPI';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -388,6 +389,12 @@ function UserProfileNew() {
                     </Box>
                     <Box textAlign="center" marginTop={5}>
                         <Text fontSize={14}>File extension: .JPEG, .PNG, .JPG</Text>
+                    </Box>
+
+                    <Box textAlign="center" marginTop={55} color="blue" textDecoration="underline">
+                        <Link fontSize="14px" to="change-password">
+                            Change Password
+                        </Link>
                     </Box>
                 </Col>
             </Row>

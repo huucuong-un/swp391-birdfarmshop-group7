@@ -9,7 +9,7 @@ import Line from '~/Components/Line/Line';
 import { useEffect, useState } from 'react';
 import LoginAPI from '~/Api/LoginAPI';
 import { ShopState } from '~/context/ShopProvider';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { InputGroup, InputRightElement, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import LoginWithGoogle from '~/Components/LoginWithGoogle/LoginWithGoogle';
@@ -49,7 +49,6 @@ function UserLogin() {
                     'Content-Type': 'application/json',
                 },
             };
-            const userName = null;
 
             const data = await axios.post(
                 'http://localhost:8086/api/user/authenticate',
@@ -134,7 +133,9 @@ function UserLogin() {
                     <div className={cx('checkbox-section')}>
                         <div className={cx('section-remember')}></div>
 
-                        <Button className={cx('section-forgot')}>Forgot password ?</Button>
+                        <Link className={cx('section-forgot')} to="/forgot-password">
+                            Forgot password ?
+                        </Link>
                     </div>
 
                     <Button classname={cx('login-btn')} loginSystemBtn onClick={() => logins()}>

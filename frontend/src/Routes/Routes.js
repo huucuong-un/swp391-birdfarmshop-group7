@@ -47,6 +47,10 @@ import AdNestDevelopmentStatus from '~/Pages/AdNestDevelopmentStatus/AdNestDevel
 import AdNestDevelopmentManagement from '~/Pages/AdNestDevelopmentManagement/AdNestDevelopmentManagement';
 import AdNestUsageHistoryManagement from '~/Pages/AdNestUsageHistoryManagement/AdNestUsageHistoryManagement';
 import PaidFail from '~/Pages/PaidFail/PaidFail';
+import ForgotPassword from '~/Pages/ForgotPassword/ForgotPassword';
+import ForgotPasswordOTP from '~/Pages/ForgotPasswordOTP/ForgotPasswordOTP';
+import ResetPassword from '~/Pages/ResetPassword/ResetPassword';
+
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -76,7 +80,7 @@ const publicRoutes = [
     { path: '/addslider', component: AddSlider, layout: SystemLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/admin-parrot-species', component: AdParrotSpecies, layout: SystemLayout },
-    { path: '/change-password', component: ChangePassword, layout: LoginSystemLayout },
+    { path: '/profile/change-password', component: ChangePassword, layout: LoginSystemLayout },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faqs', component: FAQs },
     { path: '/add-parrot-species', component: AddParotSpecies, layout: SystemLayout },
@@ -96,6 +100,9 @@ const publicRoutes = [
     { path: '/admin/promotion', component: AdminPromotion, layout: SystemLayout },
     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },
     { path: '/paid-fail', component: PaidFail },
+    { path: '/forgot-password', component: ForgotPassword },
+    { path: '/forgot-password/otp', component: ForgotPasswordOTP },
+    { path: '/forgot-password/otp/reset-password', component: ResetPassword },
 ];
 
 //Dành cho những người đăng nhập mới coi được

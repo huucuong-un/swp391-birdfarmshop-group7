@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,15 +38,17 @@ public class PostEntity extends BaseEntity {
 
 
 	@NotBlank
+	@Size(min = 3, max = 100)
 	@Column(name = "title")
 	private String title;
 
 	@NotBlank
-
+	@Size(min = 10, max = 300)
 	@Column(name = "content")
 	private String content;
 
 	@NotBlank
+	@Size(min = 3, max = 100)
 	@Column(name = "description")
 	private String description;
 

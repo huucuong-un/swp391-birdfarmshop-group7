@@ -32,18 +32,12 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     List<PromotionEntity> searchSortForPromotion(@Param("searchStartDate") Date searchStartDate, @Param("searchEndDate") Date searchEndDate, @Param("sortDate") String sortDate, @Param("sortPrice") String sortPrice, @Param("status") Boolean status, Pageable pageable);
 
 
-<<<<<<< HEAD
-=======
 
->>>>>>> c37d5efafe699890ed77a0af7ebbb16dc2b3d4f3
     @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code AND p.quantity > 0")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code")String code);
 
     @Query ("SELECT p FROM PromotionEntity p WHERE p.id = :id AND p.quantity > 0")
     PromotionEntity findOneByIdAndCheckValidDate(@Param("id")Long id);
-<<<<<<< HEAD
-=======
 
->>>>>>> c37d5efafe699890ed77a0af7ebbb16dc2b3d4f3
 
 }

@@ -3,6 +3,8 @@
 }
 
 .save-btn {
+    background-color: #f9ede9 !important;
+    color: black !important;
     width: 100% !important;
     min-height: 40px;
 }
@@ -40,7 +42,7 @@ th {
     justify-content: center;
     gap: 20px;
     cursor: pointer;
-
+    margin-top: 20px;
     p {
         /* Default styles */
         border: none;
@@ -54,5 +56,14 @@ th {
             /* Hover styles */
             opacity: 0.5 !important;
         }
+    }
+}
+.table-chakra-crud,
+.table-chakra {
+    th {
+        padding: 15px !important;
+    }
+    thead {
+        background-color: #f9ede9 !important;
     }
 }

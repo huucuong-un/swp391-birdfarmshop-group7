@@ -242,60 +242,56 @@ function AdNestPriceManagement() {
                 ))}
 
             {show ? (
-                <TableContainer paddingTop={10} paddingBottom={10}>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th colSpan={2}>New Nest Price</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td>Species</Td>
-                                <Td>
-                                    {/* <Input
-                                        type="text"
-                                        borderColor="black"
-                                        placeholder="Title..."
-                                        fontSize={18}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    /> */}
-
-                                    <select onChange={(e) => setTitle(e.target.value)}>
-                                        <option isChecked>Species</option>
-                                        {species &&
-                                            species.map((nestPrice, nestPriceIndex) => (
-                                                <option key={nestPriceIndex} value={nestPrice.id}>
-                                                    {nestPrice.name}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </Td>
-                            </Tr>
-                            <Tr>
-                                <Td>Price</Td>
-                                <Td>
-                                    <Input
-                                        type="number"
-                                        borderColor="black"
-                                        placeholder="Price..."
-                                        fontSize={18}
-                                        onChange={(e) => setPrice(e.target.value)}
-                                    />
-                                </Td>
-                            </Tr>
-                            <Tr>
-                                <Td>Status</Td>
-                                <Td>
-                                    <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                    <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
-                </TableContainer>
+                <form>
+                    <TableContainer paddingTop={10} paddingBottom={10}>
+                        <Table variant="simple" className={cx('table-chakra')}>
+                            <Thead>
+                                <Tr>
+                                    <Th colSpan={2}>New Nest Price</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                <Tr>
+                                    <Td>Species</Td>
+                                    <Td>
+                                        <select onChange={(e) => setTitle(e.target.value)}>
+                                            <option isChecked>Species</option>
+                                            {species &&
+                                                species.map((nestPrice, nestPriceIndex) => (
+                                                    <option key={nestPriceIndex} value={nestPrice.id}>
+                                                        {nestPrice.name}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    </Td>
+                                </Tr>
+                                <Tr>
+                                    <Td>Price</Td>
+                                    <Td>
+                                        <Input
+                                            type="number"
+                                            borderColor="black"
+                                            placeholder="Price..."
+                                            min="0"
+                                            step="0.01" // Allows decimal values
+                                            fontSize={18}
+                                            onChange={(e) => setPrice(e.target.value)}
+                                        />
+                                    </Td>
+                                </Tr>
+                                <Tr>
+                                    <Td>Status</Td>
+                                    <Td>
+                                        <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
+                                    </Td>
+                                </Tr>
+                            </Tbody>
+                        </Table>
+                        <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
+                            Save
+                        </Button>
+                    </TableContainer>
+                </form>
             ) : (
                 <></>
             )}
@@ -331,7 +327,7 @@ function AdNestPriceManagement() {
                 <button></button>
             </div>
             <TableContainer>
-                <Table size="lg">
+                <Table size="lg" className={cx('table-chakra-crud')}>
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
@@ -375,9 +371,10 @@ function AdNestPriceManagement() {
                             border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
                             borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
                             opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
-                            backgroundColor: page === index + 1 ? '#ff0000' : 'transparent', // Change background color when on the current page
-                            color: page === index + 1 ? '#ffffff' : '#000000', // Change text color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
                             padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
                         }}
                     >
                         {index + 1}

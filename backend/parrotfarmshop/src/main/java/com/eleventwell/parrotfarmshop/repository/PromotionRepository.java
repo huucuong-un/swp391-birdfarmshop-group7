@@ -18,23 +18,24 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     List<PromotionEntity> findAllByOrderByIdDesc();
 
 
-<<<<<<< HEAD
+
     @Query("SELECT p FROM PromotionEntity p WHERE p.code = :code AND :currentDate BETWEEN p.startDate AND p.endDate")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code") String code, @Param("currentDate") Date currentDate);
 
     @Query("SELECT u FROM PromotionEntity u WHERE (:searchStartDate IS NULL OR DATE(u.startDate) = :searchStartDate) AND (:searchEndDate IS NULL OR DATE(u.endDate) = :searchEndDate)  AND (:status IS NULL OR u.status = :status)" +
             "ORDER BY " +
-            "CASE WHEN :sortDate = 'DASC' THEN u.createdDate END ASC , " +
-            "CASE WHEN :sortDate = 'DDESC' THEN u.createdDate END DESC, " +
+            "CASE WHEN :sortDate = 'DASC' THEN u.id END ASC , " +
+            "CASE WHEN :sortDate = 'DDESC' THEN u.id END DESC, " +
+            "CASE WHEN :sortPrice = 'PASC' THEN u.value END ASC , " +
+            "CASE WHEN :sortPrice = 'PDESC' THEN u.value END DESC, " +
             "u.id DESC")
-    List<PromotionEntity> searchSortForPromotion(@Param("searchStartDate") Date searchStartDate, @Param("searchEndDate") Date searchEndDate, @Param("sortDate") String sortDate, @Param("status") Boolean status, Pageable pageable);
+    List<PromotionEntity> searchSortForPromotion(@Param("searchStartDate") Date searchStartDate, @Param("searchEndDate") Date searchEndDate, @Param("sortDate") String sortDate, @Param("sortPrice") String sortPrice, @Param("status") Boolean status, Pageable pageable);
 
-=======
+
     @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code AND p.quantity > 0")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code")String code);
 
     @Query ("SELECT p FROM PromotionEntity p WHERE p.id = :id AND p.quantity > 0")
     PromotionEntity findOneByIdAndCheckValidDate(@Param("id")Long id);
->>>>>>> 98c158a81024911277e8cc2b3184cf0142346a8a
 
 }

@@ -17,6 +17,7 @@ import {
     AlertDescription,
     Switch,
     Text,
+    Container,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
@@ -32,7 +33,16 @@ const cx = classNames.bind(styles);
 function AddSlider() {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [loading, setLoading] = useState(false);
-
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 10,
+        name: null,
+        status: null,
+        date: null,
+        sortDate: null,
+    });
     const [img, setImg] = useState('');
     const [show, setShow] = useState(false);
     // Toast
@@ -53,8 +63,9 @@ function AddSlider() {
     };
     useEffect(() => {
         const fetchData = async () => {
-            const sliderList = await SliderAPI.getAll();
+            const sliderList = await SliderAPI.searchSortForSlider(sort);
             setSliderList(sliderList.listResult);
+            setTotalPage(sliderList.totalPage);
         };
         if (reloadData) {
             fetchData();
@@ -62,7 +73,7 @@ function AddSlider() {
         } else {
             fetchData();
         }
-    }, [reloadData, slider]);
+    }, [sort, reloadData, slider]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -159,28 +170,6 @@ function AddSlider() {
 
     // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    const [sort, setSort] = useState({
-        page: 1,
-        limit: 10,
-        name: null,
-        status: null,
-        date: null,
-        sortDate: null,
-    });
-    const [totalPage, setTotalPage] = useState(1);
-    const [page, setPage] = useState(1);
-    useEffect(() => {
-        const sortData = async () => {
-            try {
-                const sliderSortList = await SliderAPI.searchSortForSlider(sort);
-                setSliderList(sliderSortList.listResult);
-                setTotalPage(sliderSortList.totalPage);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        sortData();
-    }, [sort]);
 
     const handlePageChange = (newPage) => {
         setSort({
@@ -207,9 +196,9 @@ function AddSlider() {
 
     console.log(sliderList);
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('title-container')}>
-                <Title system>Add slider</Title>
+        <Container className={cx('wrapper')} maxW="container.xl">
+            <div className={cx('title-wrapper')}>
+                <h1>Add slider</h1>
             </div>
             <div className={cx('add-btn')}>
                 <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
@@ -417,7 +406,20 @@ function AddSlider() {
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 {Array.from({ length: totalPage }, (_, index) => (
-                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
+                        }}
+                    >
                         {index + 1}
                     </p>
                 ))}
@@ -425,7 +427,7 @@ function AddSlider() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </button>
             </div>
-        </div>
+        </Container>
     );
 }
 

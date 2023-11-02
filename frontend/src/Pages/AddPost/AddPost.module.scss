@@ -188,8 +188,7 @@
     }
 }
 .add-btn {
-    margin-top: 20px;
-    width: 90%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     span {
@@ -198,6 +197,7 @@
     }
 }
 .title-wrapper {
+    padding: 20px 0;
     width: 100%;
     display: flex;
     justify-content: start;
@@ -208,6 +208,7 @@
 .sort-space {
     display: flex;
     justify-content: end;
+    flex-wrap: wrap;
     align-items: center;
     padding: 20px 0;
     gap: 20px;
@@ -238,4 +239,20 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    cursor: pointer;
+
+    p {
+        /* Default styles */
+        border: none;
+        border-radius: none;
+        opacity: 1;
+        background-color: transparent;
+        color: #000000;
+        padding: 0px;
+
+        &:hover {
+            /* Hover styles */
+            opacity: 0.5 !important;
+        }
+    }
 }

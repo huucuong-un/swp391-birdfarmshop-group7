@@ -75,18 +75,32 @@ function AdFAQSManagement() {
             getFaqsList();
         }
     }, [sort, vinh]);
-
+    const [validate, setValidate] = useState({ title: '', content: '' });
     useEffect(() => {
         const addFaqs = async () => {
             try {
-                const data = {
-                    title: title,
-                    content: content,
-                    status: status,
-                };
+                if (
+                    (title.length !== 0 && content.length !== 0 && title.length < 3) ||
+                    title.length > 150 ||
+                    content.length < 2 ||
+                    content.length > 200
+                ) {
+                    if (content.length < 2 || content.length > 200) {
+                        setValidate({ title: '', content: 'Content must be in 2 to 200 charactes' });
+                    } else if (title.length < 3 || title.length > 150) {
+                        setValidate({ title: 'Title must be in 3 to 150 charactes', content: '' });
+                    }
+                    setVinh(false);
+                } else {
+                    const data = {
+                        title: title,
+                        content: content,
+                        status: status,
+                    };
 
-                const add = await FAQSAPI.add(data);
-                setVinh(true);
+                    const add = await FAQSAPI.add(data);
+                    setVinh(true);
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -189,6 +203,19 @@ function AdFAQSManagement() {
                     </span>
                 </Button>
             </div>
+            {(vinh === true && <></>) ||
+                (vinh === false && (
+                    <Stack spacing={3}>
+                        <Alert status="error">
+                            <AlertIcon />
+                            <AlertTitle>
+                                {validate.content}
+                                <br />
+                                {validate.title}
+                            </AlertTitle>
+                        </Alert>
+                    </Stack>
+                ))}
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">

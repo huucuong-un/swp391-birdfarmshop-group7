@@ -163,7 +163,7 @@ function AdNestPriceManagement() {
     };
 
     const handleSave = () => {
-        if (title === '' || title === 'Species' || price === 0) {
+        if (title === '' || title === 'Species' || price === 0 || price < 0) {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
@@ -273,9 +273,11 @@ function AdNestPriceManagement() {
                                             borderColor="black"
                                             placeholder="Price..."
                                             min="0"
-                                            step="0.01" // Allows decimal values
+                                            step="0.01"
                                             fontSize={18}
-                                            onChange={(e) => setPrice(e.target.value)}
+                                            value={price}
+                                            onChange={(e) => setPrice(parseFloat(e.target.value))} // Convert input value to a number
+                                            required
                                         />
                                     </Td>
                                 </Tr>

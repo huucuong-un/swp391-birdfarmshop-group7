@@ -134,6 +134,9 @@ function AdNestDevelopmentManagement() {
         console.log(nestUsageHistory);
     }, [nestUsageHistory]);
 
+    const [validate, setValidate] = useState({
+        description: '',
+    });
     useEffect(() => {
         const addFaqs = async () => {
             try {
@@ -178,7 +181,17 @@ function AdNestDevelopmentManagement() {
     };
 
     const handleSave = () => {
-        if (usageHistory === '' || devStatus === '' || date === '' || description === '') {
+        if (
+            usageHistory === '' ||
+            devStatus === '' ||
+            date === '' ||
+            description === '' ||
+            description.length > 150 ||
+            description.length < 3
+        ) {
+            if (description.length > 150 || description.length < 3) {
+                setValidate({ description: 'Descrip must be in 3 to 150 word' });
+            }
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
@@ -203,7 +216,7 @@ function AdNestDevelopmentManagement() {
     };
 
     useEffect(() => {
-        console.log(description);
+        console.log(description.length);
     }, [description]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -222,7 +235,7 @@ function AdNestDevelopmentManagement() {
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Added success
                     </Alert>
                 </Stack>
             )) ||
@@ -231,6 +244,7 @@ function AdNestDevelopmentManagement() {
                         <Alert status="error">
                             <AlertIcon />
                             There was an error processing your request
+                            <AlertTitle>{validate.description}</AlertTitle>
                         </Alert>
                     </Stack>
                 ))}

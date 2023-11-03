@@ -414,11 +414,15 @@ function AddParrot() {
                                     <Td>
                                         <Input
                                             type="number"
+                                            min={0}
+                                            step={0.01}
                                             id="age"
                                             name="age"
-                                            variant="filled"
                                             placeholder="Parrot age"
-                                            onChange={(e) => setParrots({ ...parrots, age: e.target.value })}
+                                            value={parrots.age} // Ensure that the input value reflects the state
+                                            onChange={(e) =>
+                                                setParrots({ ...parrots, age: parseFloat(e.target.value) })
+                                            } // Parse the value as a float
                                             required
                                         />
                                     </Td>

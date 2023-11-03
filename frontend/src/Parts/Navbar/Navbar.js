@@ -201,13 +201,13 @@ function Navbar() {
                         <img className={cx('logo')} src={logo} alt="Logo" />
                     </Link>
                     <div className={cx('active-right')}>
-                        <Button
+                        {/* <Button
                             text
                             className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
-                            Language {/* <GoogleTranslate></GoogleTranslate> */}
-                        </Button>
+                            Language 
+                        </Button> */}
                         <Tippy
                             interactive
                             // delay={[0, 700]}
@@ -297,7 +297,7 @@ function Navbar() {
                     </div>
                     <div className={cx('subnav')}>
                         <Link to="/faqs" className={cx('subnavbtn')}>
-                            FAQS
+                            FAQs
                         </Link>
                     </div>
                 </div>

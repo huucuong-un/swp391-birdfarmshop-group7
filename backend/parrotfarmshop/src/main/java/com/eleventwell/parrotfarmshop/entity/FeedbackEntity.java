@@ -57,6 +57,7 @@ public class FeedbackEntity extends BaseEntity {
 	private UserEntity replyer;
 
 
+	@Size(min = 0, max = 150)
 	@Column(name = "reply_content")
 	private String replyContent;
 

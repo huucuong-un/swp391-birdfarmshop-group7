@@ -18,12 +18,21 @@ import {
     Switch,
     Text,
     Container,
+    Box,
+    Flex,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
@@ -74,9 +83,46 @@ function AddSlider() {
             fetchData();
         }
     }, [sort, reloadData, slider]);
+    const [validate, setValidate] = useState({
+        title: null,
+        description: null,
+    });
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (
+                slider.sliderName.length !== 0 &&
+                slider.sliderDescription.length !== 0 &&
+                (slider.sliderName.length > 50 ||
+                    slider.sliderName.length < 3 ||
+                    slider.sliderDescription.length > 150 ||
+                    slider.sliderDescription.length < 20)
+            ) {
+                if (
+                    (slider.sliderName.length > 50 || slider.sliderName.length < 3) &&
+                    (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20)
+                ) {
+                    setValidate({
+                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                    });
+                } else if (slider.sliderName.length > 50 || slider.sliderName.length < 3) {
+                    setValidate({
+                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderDescription: '',
+                    });
+                } else if (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20) {
+                    setValidate({
+                        sliderName: '',
+                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                    });
+                }
+
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus('');
+                }, 5000);
+            }
             const responsePost = await axios.post('http://localhost:8086/api/slider', {
                 sliderName: slider.sliderName,
                 sliderDescription: slider.sliderDescription,
@@ -197,17 +243,16 @@ function AddSlider() {
     console.log(sliderList);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title-wrapper')}>
-                <h1>Add slider</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    SLIDER MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add slider</Text>
+            </Flex>
             {show ? (
                 <form className={cx('inner')} onSubmit={handleSubmit}>
                     <TableContainer className={cx('table-container')}>
@@ -221,6 +266,13 @@ function AddSlider() {
                             (submissionStatus === false && (
                                 <Alert status="error">
                                     <AlertIcon />
+                                    <AlertTitle>
+                                        <Text fontSize="sm" lineHeight="1.4">
+                                            {validate.sliderName}
+                                            <br />
+                                            {validate.sliderDescription}
+                                        </Text>
+                                    </AlertTitle>
                                     <AlertTitle>Failed to add parrot species - </AlertTitle>
                                     <AlertDescription>Please check your input!!!</AlertDescription>
                                 </Alert>

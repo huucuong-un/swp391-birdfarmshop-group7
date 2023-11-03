@@ -26,12 +26,20 @@ import {
     SlideFade,
     Collapse,
     Box,
+    Flex,
 } from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 import Title from '~/Components/Title/Title';
 import axios from 'axios';
 import PostAPI from '~/Api/PostAPI';
@@ -283,17 +291,16 @@ function AddPost() {
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title-wrapper')}>
-                <h1>Add post</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    POST MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add post</Text>
+            </Flex>
 
             {show ? (
                 <div className={cx('inner-up')}>

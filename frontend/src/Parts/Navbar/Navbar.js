@@ -28,6 +28,7 @@ const cx = classNames.bind(styles);
 function Navbar() {
     const [loggedUser, setLoggedUser] = useState();
     const { user } = ShopState();
+    const { setUser } = ShopState();
 
     const navigate = useNavigate();
 
@@ -37,6 +38,7 @@ function Navbar() {
 
     const logoutHandler = () => {
         localStorage.removeItem('accessToken');
+        setUser(null);
         navigate('/login-user');
     };
 
@@ -44,6 +46,7 @@ function Navbar() {
         try {
             const userFromToken = UserAPI.getUserByToken(token);
             user = userFromToken;
+
             setLoggedUser(userFromToken);
         } catch (error) {}
     }, [token]);
@@ -198,13 +201,13 @@ function Navbar() {
                         <img className={cx('logo')} src={logo} alt="Logo" />
                     </Link>
                     <div className={cx('active-right')}>
-                        <Button
+                        {/* <Button
                             text
                             className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
-                            Language {/* <GoogleTranslate></GoogleTranslate> */}
-                        </Button>
+                            Language 
+                        </Button> */}
                         <Tippy
                             interactive
                             // delay={[0, 700]}
@@ -294,7 +297,7 @@ function Navbar() {
                     </div>
                     <div className={cx('subnav')}>
                         <Link to="/faqs" className={cx('subnavbtn')}>
-                            FAQS
+                            FAQs
                         </Link>
                     </div>
                 </div>

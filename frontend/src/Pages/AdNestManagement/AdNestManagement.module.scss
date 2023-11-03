@@ -3,8 +3,7 @@
 }
 
 .save-btn {
-    background-color: #ffcd4b !important;
-    // color: black !important;
+    color: black !important;
     width: 100% !important;
     min-height: 40px;
 }
@@ -72,8 +71,8 @@ th {
 }
 
 .add-button:hover {
-    cursor: pointer;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .add-role-text {

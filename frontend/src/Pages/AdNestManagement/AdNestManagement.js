@@ -18,8 +18,9 @@ import {
     AlertTitle,
     AlertDescription,
     Stack,
-    Flex,
+    Box,
     Text,
+    Flex,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -237,21 +238,16 @@ function AdNestManagement() {
     }, [sort]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>NEST</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Flex className={cx('add-button')} onClick={handleShow}>
-                    <FontAwesomeIcon icon={faCirclePlus} />
-                    <Text className={cx('add-role-text')}>Add new account</Text>
-                </Flex>
-                {/* <Button onClick={handleShow} colorScheme="green" size="lg">
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button> */}
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    NEST MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add nest</Text>
+            </Flex>
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">

@@ -161,6 +161,7 @@ function Feedback({ feedbackType, colorSortList }) {
                 var params = {
                     rating: i,
                     colorId: colorSortSelect,
+                    speciesId: feedbackType.id,
                 };
                 const numberOfFeedback = await FeedbackAPI.countReview(params);
 

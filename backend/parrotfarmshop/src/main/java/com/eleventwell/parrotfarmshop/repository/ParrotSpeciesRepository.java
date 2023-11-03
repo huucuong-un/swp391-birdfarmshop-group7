@@ -94,7 +94,12 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
                                                  @Param("sortDate") String sortDate, Pageable pageable);
 
+
+    @Query("SELECT  o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity o  group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by AVG(o.parrot.parrotSpeciesColor.price) ")
+    List<ParrotSpeciesEntity> findTop3Salse();
+
 }
+
 //    @NotBlank
 //    @Size(max = 30)
 //    @Column(name = "name")

@@ -87,7 +87,7 @@ function Feedback({ feedbackType, colorSortList }) {
                 //     page: 1,
                 //     limit: 12,
                 // };
-
+                console.log(param);
                 const feedbackListp = await FeedbackAPI.getAll(param);
                 setFeedbacksList(feedbackListp.listResult);
                 setTotalPage(feedbackListp.totalPage);
@@ -161,6 +161,7 @@ function Feedback({ feedbackType, colorSortList }) {
                 var params = {
                     rating: i,
                     colorId: colorSortSelect,
+                    speciesId: feedbackType.id,
                 };
                 const numberOfFeedback = await FeedbackAPI.countReview(params);
 

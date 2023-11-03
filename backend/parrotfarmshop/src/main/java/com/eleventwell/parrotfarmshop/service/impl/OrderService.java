@@ -47,6 +47,10 @@ public class OrderService implements IGenericService<OrderDTO> {
     NestService nestService;
 
     @Autowired
+    NestUsageHistoryService nestUsageHistoryService;
+
+
+    @Autowired
     GenericConverter genericConverter;
 
     @Autowired
@@ -76,6 +80,11 @@ public class OrderService implements IGenericService<OrderDTO> {
     public OrderDTO save(OrderDTO DTO) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
+
+
+        if(promotionService.findOneByIdForOrder(DTO.getPromotionID()) !=null){
+return  null;
+        }
 
         orderRepository.save(orderEntity);
 
@@ -184,7 +193,10 @@ return orderDTO;
     @Override
     public void changeStatus(Long ids) {
         OrderEntity orderEntity = orderRepository.findOneById(ids);
-   orderEntity.setStatus("Done");
+        if(orderEntity.getPromotion()!=null){
+            promotionService.calculateQuantity(orderEntity.getPromotion().getId(),true);
+        }
+        orderEntity.setStatus("Paid");
         orderRepository.save(orderEntity);
 
     }
@@ -219,22 +231,120 @@ return orderDTO;
     }
 
     public void removeOrder(Long id){
-List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
-        for (OrderDetailEntity orderDetail: orderDetails ) {
-            if(orderDetail.getParrot()!=null){
-                parrotService.changeSaleStatus(orderDetail.getParrot().getId());
-            }else{
-            nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
-            nestService.changeStatus(orderDetail.getNestUsageHistory().getNest().getId());
-            }
-            orderDetailRepository.deleteById(orderDetail.getId());
+
+            List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
+            OrderEntity orderEntity = orderRepository.findOneById(id);
+                for (OrderDetailEntity orderDetail: orderDetails ) {
+if(checkParrotOrNest(orderDetail)){
+    parrotService.changeSaleStatus(getParrotId(orderDetail));
+    orderDetailRepository.deleteById(orderDetail.getId());
+}else{
+    nestUsageHistoryService.deleteByOrderDetailid(getNestUsageHistoryId(orderDetail));
+}
+
+                }
+if(orderEntity.getPromotion()!=null){
+    promotionService.calculateQuantity(orderEntity.getPromotion().getId(),false);
+}
+            orderRepository.deleteById(id);
 
 
-        }
-        orderRepository.deleteById(id);
+    }
+    private Long getParrotId(OrderDetailEntity orderDetailEntity){
+        return orderDetailEntity.getParrot().getId();
+    }
+private boolean checkParrotOrNest(OrderDetailEntity orderDetailEntity){
+
+     return orderDetailEntity.getParrot()!=null?true:false;
+}
+private Long getNestUsageHistoryId(OrderDetailEntity orderDetail){
+        return orderDetail.getNestUsageHistory().getId();
+}
+    public void removeOrderLoop(){
+
     }
     @Override
     public int totalItem() {
         return (int)orderRepository.count();
+    }
+
+    public int totalItemWithStatusDone() {
+        return (int)orderRepository.countByStatusEquals("Done");
+    }
+
+    public int countOrdersCreatedToday() {
+        Date today = new Date(); // Lấy ngày hôm nay
+        return (int)orderRepository.countByCreatedDate(today);
+    }
+
+    public int countRecordsCreatedInCurrentMonth() {
+        Date today = new Date(); // Lấy ngày hiện tại
+        return (int)orderRepository.countByCreatedDateInCurrentMonth(today);
+    }
+
+    public int countRecordsCreatedInCurrentYear() {
+        Date today = new Date(); // Lấy ngày hiện tại
+        return (int)orderRepository.countByCreatedDateInCurrentYear(today);
+    }
+
+    public Double calculateTotalPriceForDoneOrdersToday() {
+        Date today = new Date(); // Lấy ngày hiện tại
+        return (Double) orderRepository.sumTotalPriceForDoneOrdersToday(today);
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInCurrentMonth() {
+        return (Double) orderRepository.sumTotalPriceForDoneOrdersInCurrentMonth();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInCurrentYear() {
+        return (Double)orderRepository.sumTotalPriceForDoneOrdersInCurrentYear();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInJanuary() {
+        return orderRepository.sumTotalPriceForDoneOrdersInJanuary();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInFebruary() {
+        return orderRepository.sumTotalPriceForDoneOrdersInFebruary();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInMarch() {
+        return orderRepository.sumTotalPriceForDoneOrdersInMarch();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInApril() {
+        return orderRepository.sumTotalPriceForDoneOrdersInApril();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInMay() {
+        return orderRepository.sumTotalPriceForDoneOrdersInMay();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInJune() {
+        return orderRepository.sumTotalPriceForDoneOrdersInJune();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInJuly() {
+        return orderRepository.sumTotalPriceForDoneOrdersInJuly();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInAugust() {
+        return orderRepository.sumTotalPriceForDoneOrdersInAugust();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInSeptember() {
+        return orderRepository.sumTotalPriceForDoneOrdersInSeptember();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInOctober() {
+        return orderRepository.sumTotalPriceForDoneOrdersInOctober();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInNovember() {
+        return orderRepository.sumTotalPriceForDoneOrdersInNovember();
+    }
+
+    public Double calculateTotalPriceForDoneOrdersInDecember() {
+        return orderRepository.sumTotalPriceForDoneOrdersInDecember();
     }
 }

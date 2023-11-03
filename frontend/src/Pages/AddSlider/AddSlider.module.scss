@@ -1,7 +1,18 @@
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.add-role-text {
+    margin: 0 5px;
+}
 .wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
 }
 .inner {
@@ -12,7 +23,7 @@
     }
     th {
         text-align: center;
-        background-color: #f57c7c;
+        background-color: #f9ede9;
         color: var(--black);
     }
     tbody,
@@ -36,6 +47,10 @@
 }
 .table-container {
     width: 50%;
+    th {
+        padding: 10px;
+        background-color: #f9ede9;
+    }
 }
 .submit-btn {
     display: flex;
@@ -45,10 +60,10 @@
         font-weight: bold;
         font-size: 16px;
         padding: 20px;
-        background-color: #f57c7c;
+        background-color: #f9ede9;
         color: var(--black);
         &:hover {
-            background-color: #f57c7c;
+            background-color: #f9ede9;
             opacity: 0.7;
         }
     }
@@ -56,18 +71,20 @@
 .select-btn {
     width: 100%;
 }
-.title-container {
+.title-wrapper {
+    padding: 20px 0;
     width: 100%;
+    display: flex;
+    justify-content: start;
 }
 .title-post {
     display: flex;
     width: 100%;
     justify-content: center;
-    background-color: #f57c7c;
+    background-color: #f9ede9;
 }
 .add-btn {
-    margin-top: 20px;
-    width: 90%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     span {
@@ -115,4 +132,20 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    cursor: pointer;
+
+    p {
+        /* Default styles */
+        border: none;
+        border-radius: none;
+        opacity: 1;
+        background-color: transparent;
+        color: #000000;
+        padding: 0px;
+
+        &:hover {
+            /* Hover styles */
+            opacity: 0.5 !important;
+        }
+    }
 }

@@ -36,7 +36,7 @@ public class ParrotSpeciesEntity extends BaseEntity{
 
 	// Đổi tên cột để phù hợp với quy tắc đặt tên
 	@NotBlank
-	@Size(max = 30)
+	@Size(min = 3, max = 20)
 	@Column(name = "name")
 	private String name;
 
@@ -47,6 +47,7 @@ public class ParrotSpeciesEntity extends BaseEntity{
 	private Long nestQuantity;
 
 	@NotBlank
+	@Size(min = 5, max = 150)
 	@Column(name = "description")
 	private String description;
 

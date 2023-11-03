@@ -75,7 +75,7 @@ function Register() {
                 roleId: 1,
             };
             const register = await RegisterAPI.register(dataForUser, config);
-
+            console.log(register);
             const dataForDeliveryInfo = {
                 name,
                 phoneNumber,

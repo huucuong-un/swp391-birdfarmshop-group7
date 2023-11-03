@@ -67,6 +67,7 @@ import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext'
 
 import OrderAPI from '~/Api/OrderAPI';
 import Rate from '~/Components/Rate/Rate';
+import UserAPI from '~/Api/UserAPI';
 import { use } from 'i18next';
 
 const cx = classNames.bind(styles);
@@ -92,6 +93,8 @@ function OrderHistoryNew() {
     const [textareaValue, setTextareaValue] = useState('');
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+
     const { activeStep } = useSteps({
         index: 1,
         count: steps.length,
@@ -156,8 +159,17 @@ function OrderHistoryNew() {
     }, [orders]);
 
     useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                setLoggedUser(userByToken);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
 
     useEffect(() => {
         const getOrders = async () => {
@@ -165,7 +177,7 @@ function OrderHistoryNew() {
                 const param = {
                     page: 1,
                     limit: 12,
-                    userId: user.userId,
+                    userId: user.id,
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
                 setOrders(orderList.listResult);
@@ -185,7 +197,7 @@ function OrderHistoryNew() {
         setSort({
             page: 1,
             limit: 12,
-            userId: user.userId,
+            userId: user.id,
             date: null,
             sortDate: null,
             sortPrice: null,
@@ -197,6 +209,7 @@ function OrderHistoryNew() {
                 const orderHistoryNew = await OrderAPI.findAllByUserIdAndSearchSort(sort);
                 setOrders(orderHistoryNew.listResult);
                 setTotalPage(orderHistoryNew.totalPage);
+                console.log(orders);
             } catch (error) {
                 console.log(error);
             }
@@ -289,7 +302,7 @@ function OrderHistoryNew() {
                                                     <Image
                                                         borderRadius="full"
                                                         boxSize="60px"
-                                                        src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                        src= {parrot.img}
                                                         alt="Dan Abramov"
                                                     />
                                                 </Td>
@@ -320,101 +333,106 @@ function OrderHistoryNew() {
                                 <Divider />
                                 <CardFooter>
                                     <ButtonGroup spacing="2" className={cx('btn-container')}>
-                                        <div className={cx('rating-btn')}>
-                                            <button
-                                                className={cx('feedback-btn')}
-                                                id={'btnf' + order.orderDTO.id}
-                                                backgroundColorBlue
-                                                colorScheme="blue"
-                                                size="lg"
-                                                fontSize={'15px'}
-                                                onClick={() => {
-                                                    handleStoreOrderId({
-                                                        orderId: order.orderDTO.id,
-                                                        userId: order.orderDTO.userID,
-                                                        colorId: order.listOrderDetailHistoryModel[0].colorId,
-                                                        btnId: 'btnf' + order.orderDTO.id,
-                                                    });
-                                                    setOverlay(<OverlayOne />);
-                                                    onOpen();
-                                                }}
-                                            >
-                                                Feedback
-                                            </button>
-                                            <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
-                                                {overlay}
-                                                <ModalContent>
-                                                    <ModalHeader>Rate Product</ModalHeader>
-                                                    <ModalCloseButton />
-                                                    <ModalBody>
-                                                        <div className={cx('rate-area')}>
-                                                            <div className={cx('product-container')}>
-                                                                <div className={cx('product-img')}>
-                                                                    <img
-                                                                        src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                                                        alt="product-img"
-                                                                    />
-                                                                </div>
-                                                                <div className={cx('product-info')}>
-                                                                    <div className={cx('product-title')}>
-                                                                        <p>
-                                                                            {
-                                                                                order.listOrderDetailHistoryModel[0]
-                                                                                    .speciesName
-                                                                            }
-                                                                        </p>
+                                        {order.listOrderDetailHistoryModel[0].color !== null ? (
+                                            <div className={cx('rating-btn')}>
+                                                <button
+                                                    className={cx('feedback-btn')}
+                                                    id={'btnf' + order.orderDTO.id}
+                                                    backgroundColorBlue
+                                                    colorScheme="blue"
+                                                    size="lg"
+                                                    fontSize={'15px'}
+                                                    onClick={() => {
+                                                        handleStoreOrderId({
+                                                            orderId: order.orderDTO.id,
+                                                            userId: order.orderDTO.userID,
+                                                            colorId: order.listOrderDetailHistoryModel[0].colorId,
+                                                            btnId: 'btnf' + order.orderDTO.id,
+                                                        });
+                                                        setOverlay(<OverlayOne />);
+                                                        onOpen();
+                                                    }}
+                                                >
+                                                    Feedback
+                                                </button>
+                                                <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
+                                                    {overlay}
+                                                    <ModalContent>
+                                                        <ModalHeader>Rate Product</ModalHeader>
+                                                        <ModalCloseButton />
+                                                        <ModalBody>
+                                                            <div className={cx('rate-area')}>
+                                                                <div className={cx('product-container')}>
+                                                                    <div className={cx('product-img')}>
+                                                                        <img
+                                                                            src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                                            alt="product-img"
+                                                                        />
                                                                     </div>
-                                                                    <div className={cx('product-type')}>
-                                                                        <p>
-                                                                            Category:{' '}
-                                                                            {order.listOrderDetailHistoryModel[0].color}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className={cx('rating-star-container')}>
-                                                                <div className={cx('rating-star-title')}>
-                                                                    <p>Rating:</p>
-                                                                </div>
-                                                                <div className={cx('rating-star-icon')}>
-                                                                    <div className={cx('row')}>
-                                                                        <div className={cx('col text-center')}>
-                                                                            <Rate
-                                                                                rating={rating}
-                                                                                onRating={(rate) => setRating(rate)}
-                                                                            />
+                                                                    <div className={cx('product-info')}>
+                                                                        <div className={cx('product-title')}>
+                                                                            <p>
+                                                                                {
+                                                                                    order.listOrderDetailHistoryModel[0]
+                                                                                        .speciesName
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className={cx('product-type')}>
+                                                                            <p>
+                                                                                Category:{' '}
+                                                                                {
+                                                                                    order.listOrderDetailHistoryModel[0]
+                                                                                        .color
+                                                                                }
+                                                                            </p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div className={cx('rating-input')}>
-                                                                <p>Description:</p>
-                                                                <textarea
-                                                                    maxLength={150}
-                                                                    value={textareaValue}
-                                                                    onChange={handleTextareaChange}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </ModalBody>
-                                                    <ModalFooter className={cx('button-footer')}>
-                                                        <Button
-                                                            key={order.orderDTO.id + 1000}
-                                                            value={order.orderDTO.id}
-                                                            onClick={() => {
-                                                                handleSaveFeedback();
-                                                            }}
-                                                        >
-                                                            Save
-                                                        </Button>
+                                                                <div className={cx('rating-star-container')}>
+                                                                    <div className={cx('rating-star-title')}>
+                                                                        <p>Rating:</p>
+                                                                    </div>
+                                                                    <div className={cx('rating-star-icon')}>
+                                                                        <div className={cx('row')}>
+                                                                            <div className={cx('col text-center')}>
+                                                                                <Rate
+                                                                                    rating={rating}
+                                                                                    onRating={(rate) => setRating(rate)}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                                                        <Button onClick={onClose}>Close</Button>
-                                                    </ModalFooter>
-                                                </ModalContent>
-                                            </Modal>
-                                        </div>
+                                                                <div className={cx('rating-input')}>
+                                                                    <p>Description:</p>
+                                                                    <textarea
+                                                                        maxLength={150}
+                                                                        value={textareaValue}
+                                                                        onChange={handleTextareaChange}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </ModalBody>
+                                                        <ModalFooter className={cx('button-footer')}>
+                                                            <Button
+                                                                key={order.orderDTO.id + 1000}
+                                                                value={order.orderDTO.id}
+                                                                onClick={() => {
+                                                                    handleSaveFeedback();
+                                                                }}
+                                                            >
+                                                                Save
+                                                            </Button>
+
+                                                            <Button onClick={onClose}>Close</Button>
+                                                        </ModalFooter>
+                                                    </ModalContent>
+                                                </Modal>
+                                            </div>
+                                        ) : null}
 
                                         <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
                                             Track Process

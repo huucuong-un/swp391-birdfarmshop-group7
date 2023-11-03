@@ -13,11 +13,13 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Flex,
+    Text,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 
@@ -218,14 +220,10 @@ function AddParrotSpecies() {
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add species</Text>
+            </Flex>
 
             {/* FORM TO ADD SPECIES  */}
             <form className={cx('inner')} onSubmit={handleSubmit}>
@@ -356,6 +354,8 @@ function AddParrotSpecies() {
                                             type="number"
                                             id="price"
                                             name="price"
+                                            min="0"
+                                            step="0.01" // Allows decimal values
                                             value={parrotSpeciesColor.price}
                                             onChange={(e) =>
                                                 setParrotSpeciesColor({

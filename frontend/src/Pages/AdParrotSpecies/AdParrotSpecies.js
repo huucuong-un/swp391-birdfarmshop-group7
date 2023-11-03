@@ -1,5 +1,5 @@
 import Title from '~/Components/Title/Title';
-
+import { Box, Container, Text } from '@chakra-ui/react';
 import { Switch, Stack } from '@chakra-ui/react';
 import styles from '~/Pages/AdParrotSpecies/AdParrotSpecies.module.scss';
 import classNames from 'classnames/bind';
@@ -28,11 +28,14 @@ function AdParrotSpecies() {
     }, []);
 
     return (
-        <div className={cx('wrapper')}>
-            <Title system>Parrot Species</Title>
-
+        <Container className={cx('wrapper')} maxW="container.xl">
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    PARROT SPECIES MANAGEMENT
+                </Text>
+            </Box>
             <AddParrotSpecies></AddParrotSpecies>
-        </div>
+        </Container>
     );
 }
 

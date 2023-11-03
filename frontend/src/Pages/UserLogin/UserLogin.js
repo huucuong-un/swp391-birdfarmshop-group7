@@ -9,12 +9,13 @@ import Line from '~/Components/Line/Line';
 import { useEffect, useState } from 'react';
 import LoginAPI from '~/Api/LoginAPI';
 import { ShopState } from '~/context/ShopProvider';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { InputGroup, InputRightElement, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import LoginWithGoogle from '~/Components/LoginWithGoogle/LoginWithGoogle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faFaceGrinTongueSquint } from '@fortawesome/free-solid-svg-icons';
+import UserAPI from '~/Api/UserAPI';
 const cx = classNames.bind(styles);
 
 function UserLogin() {
@@ -48,6 +49,7 @@ function UserLogin() {
                     'Content-Type': 'application/json',
                 },
             };
+
             const data = await axios.post(
                 'http://localhost:8086/api/user/authenticate',
                 {
@@ -64,16 +66,26 @@ function UserLogin() {
                 isClosable: true,
                 position: 'bottom',
             });
-            setUser(data.data);
-            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            localStorage.setItem('accessToken', JSON.stringify(data.data));
+            const userFromToken = await UserAPI.getUserByToken(JSON.parse(localStorage.getItem('accessToken')));
+            setUser(userFromToken);
+
             console.log(data.data);
             setLoading(false);
             // // setLoading(false);
             navigate('/');
+            if (userFromToken == null) {
+                toast({
+                    title: 'Error occur!',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            }
         } catch (error) {
             toast({
                 title: 'Error occur!',
-                description: error.response.data.message,
                 status: 'error',
                 duration: 5000,
                 isClosable: true,
@@ -121,7 +133,9 @@ function UserLogin() {
                     <div className={cx('checkbox-section')}>
                         <div className={cx('section-remember')}></div>
 
-                        <Button className={cx('section-forgot')}>Forgot password ?</Button>
+                        <Link className={cx('section-forgot')} to="/forgot-password">
+                            Forgot password ?
+                        </Link>
                     </div>
 
                     <Button classname={cx('login-btn')} loginSystemBtn onClick={() => logins()}>

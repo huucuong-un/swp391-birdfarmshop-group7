@@ -45,18 +45,20 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     };
 
     const handleAdd = (newInfo) => {
+        try {
+            const updatedDeliveryInfo = [...deliveryInfo];
+
+            // Add the new info to the array
+            updatedDeliveryInfo.push(newInfo);
+
+            // Update the state
+            setDeliveryInfo(updatedDeliveryInfo);
+            if (deliveryInfo.length === 1) {
+                setSelectedDeliveryId(deliveryInfo[0].id);
+                selectedDelivery(deliveryInfo[0]);
+            }
+        } catch (error) {}
         // Create a copy of the deliveryInfo array
-        const updatedDeliveryInfo = [...deliveryInfo];
-
-        // Add the new info to the array
-        updatedDeliveryInfo.push(newInfo);
-
-        // Update the state
-        setDeliveryInfo(updatedDeliveryInfo);
-        if (deliveryInfo.length === 1) {
-            setSelectedDeliveryId(deliveryInfo[0].id);
-            selectedDelivery(deliveryInfo[0]);
-        }
     };
 
     // Load initial state from localStorage or use an empty array if no data is saved
@@ -68,10 +70,10 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                         'Content-Type': 'application/json',
                     },
                 };
-                const data = await DeliveryInformationAPI.getAll(user.userId, config);
+                const data = await DeliveryInformationAPI.getAll(user.id, config);
 
                 const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
-                    user.userId,
+                    user.id,
                     config,
                 );
                 setDeliveryInfo(data);
@@ -94,7 +96,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
             setReloadStatus(false);
         }
         getAllDeliveryInfoByCustomerId();
-    }, [reloadStatus]);
+    }, [reloadStatus || user]);
 
     return (
         <Box className={cx('wrapper')}>

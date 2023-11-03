@@ -1,3 +1,16 @@
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.add-role-text {
+    margin: 0 5px;
+}
+
 td {
     text-align: center !important;
 }
@@ -32,4 +45,28 @@ th {
 .save-btn {
     width: 100% !important;
     min-height: 40px;
+    margin: auto auto;
+}
+.button-pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    p {
+        /* Default styles */
+        border: none;
+        border-radius: none;
+        opacity: 1;
+        background-color: transparent;
+        color: #000000;
+        padding: 0px;
+
+        &:hover {
+            /* Hover styles */
+            opacity: 0.5 !important;
+        }
+    }
 }

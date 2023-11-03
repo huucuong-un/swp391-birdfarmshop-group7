@@ -1004,9 +1004,11 @@ function AddSpeciesColor() {
                                                         <Td>Price</Td>
                                                         <Td className={cx('specie-color-input')}>
                                                             <Input
-                                                                type="text"
+                                                                type="number"
                                                                 id="price"
                                                                 name="price"
+                                                                min="0"
+                                                                step="0.01" // Allows decimal values
                                                                 placeholder="Enter price"
                                                                 value={
                                                                     colorInputs[dataIndex]
@@ -1083,7 +1085,20 @@ function AddSpeciesColor() {
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 {Array.from({ length: totalPage }, (_, index) => (
-                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
+                        }}
+                    >
                         {index + 1}
                     </p>
                 ))}

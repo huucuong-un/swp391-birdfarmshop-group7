@@ -24,6 +24,7 @@ import ParrotAPI from '~/Api/ParrotAPI';
 import ParrotCoupleAPI from '~/Api/ParrotCoupleAPI';
 import NestUsageHistoryAPI from '~/Api/NestUsageHistoryAPI';
 import NestAPI from '~/Api/NestAPI';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -34,6 +35,7 @@ function Payment() {
     const receivedData = location.state;
     console.log(receivedData);
     const navigate = useNavigate();
+    const { user } = ShopState();
     const [payStatus, setPayStatus] = useState(false);
     const [selectedDelivery, setSelectedDelivery] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
@@ -42,6 +44,7 @@ function Payment() {
     const { paymentStatus, setPaymentStatus } = useCartStatus;
     const [discount, setDiscount] = useState(0);
     const [promotion, setPromotion] = useState(null);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
     // const { paymentStatus, setPaymentStatus } = useCartStatus;
     const [orderInfo, setOrderInfo] = useState({
         id: 1,
@@ -60,16 +63,23 @@ function Payment() {
     const [checkNest, setCheckNest] = useState(false);
 
     useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                setLoggedUser(userByToken);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         console.log(loggedUser);
     }, [loggedUser]);
     useEffect(() => {
         console.log(orderInfo);
     }, [orderInfo]);
-
-    const { user } = ShopState();
 
     const handlePaymentSelection = (paymentMethod) => {
         setPaymentMethod(paymentMethod);
@@ -132,22 +142,32 @@ function Payment() {
 
     useEffect(() => {
         const updateListOrder = async () => {
-            let totalPrice = 0;
-            listOrder.forEach((item) => {
-                totalPrice += item.price * item.quantity;
-                let imgTemp = ParrotSpeciesColorAPI.getImagesByColorId(item.colorID);
-
-                imgTemp.then((result) => {
-                    item.img = result[0].imageUrl;
-                });
-            });
-            setTotalPrice(totalPrice);
-            setOriginTotalPrice(totalPrice);
+            try {
+                let totalPrice = 0;
+                console.log(listOrder.colorID);
+                if (listOrder[0].colorID != null) {
+                    listOrder.forEach((item) => {
+                        totalPrice += item.price * item.quantity;
+                        let imgTemp = ParrotSpeciesColorAPI.getImagesByColorId(item.colorID);
+                        console.log(totalPrice);
+                        imgTemp.then((result) => {
+                            item.img = result[0].imageUrl;
+                        });
+                    });
+                    console.log(totalPrice);
+                    setTotalPrice(totalPrice);
+                    setOriginTotalPrice(totalPrice);
+                } else {
+                    totalPrice = receivedData[0].nestPrice.price;
+                    setTotalPrice(totalPrice);
+                    setOriginTotalPrice(totalPrice);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         };
 
-        if (listOrder.colorID) {
-            updateListOrder();
-        }
+        updateListOrder();
     }, [listOrder]);
 
     useEffect(() => {
@@ -164,7 +184,7 @@ function Payment() {
                             // userID: 1,
                             deliveryInformationId: selectedDelivery.id,
                             promotionID: promotion,
-                            userID: user.userId,
+                            userID: user.id,
                             status: 'pending',
                         },
                         cartList: cartList,
@@ -174,15 +194,18 @@ function Payment() {
 
                     await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                     const addOrder = await OrderAPI.add(data);
-
-                    const response = await VnpayAPI.add(addOrder);
-                    console.log(addOrder);
-                    console.log(response);
-                    window.location.href = response;
-                    if (response.status === 200) {
-                        console.log('Payment Sucessful');
+                    if (addOrder !== null) {
+                        const response = await VnpayAPI.add(addOrder);
+                        console.log(addOrder);
+                        console.log(response);
+                        window.location.href = response;
+                        if (response.status === 200) {
+                            console.log('Payment Sucessful');
+                        } else {
+                            console.error('payment not successful ', response.status);
+                        }
                     } else {
-                        console.error('payment not successful ', response.status);
+                        console.error('payment not successful ');
                     }
 
                     console.log('Order added:', addOrder);
@@ -218,7 +241,7 @@ function Payment() {
                             // userID: 1,
                             deliveryInformationId: selectedDelivery.id,
                             promotionID: promotion,
-                            userID: user.userId,
+                            userID: user.id,
                             status: 'pending',
                         },
                         cartList: cartList,
@@ -301,12 +324,11 @@ function Payment() {
                     </div>
 
                     <div className={cx('payment-method-item-container')}>
-                        <button className={cx('payment-method-item')} onClick={() => handlePayment()}>
-                            <Box width="100%" height="24px">
-                                <Image src={Paypal} margin="auto auto" height="100%"></Image>
-                            </Box>
-                        </button>
-                        <button className={cx('payment-method-item')} onClick={() => handlePaymentSelection('vnpay')}>
+                        <button
+                            disabled
+                            className={cx('payment-method-item')}
+                            onClick={() => handlePaymentSelection('vnpay')}
+                        >
                             <Box width="100%" height="24px">
                                 <Image src={VnPay} margin="auto auto" height="100%"></Image>
                             </Box>
@@ -335,7 +357,7 @@ function Payment() {
                                             x{checkNest ? 1 : item.quantity}
                                         </p>
                                         <p className={cx('payment-detail-items-price')}>
-                                            $ {checkNest ? item.nestPrice.price : item.price * item.quantity}
+                                            $ {checkNest ? item.nestPrice.price : item.price}
                                         </p>
                                     </div>
                                 </div>

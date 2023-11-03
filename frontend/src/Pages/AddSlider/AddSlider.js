@@ -17,12 +17,22 @@ import {
     AlertDescription,
     Switch,
     Text,
+    Container,
+    Box,
+    Flex,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
@@ -32,7 +42,16 @@ const cx = classNames.bind(styles);
 function AddSlider() {
     const [submissionStatus, setSubmissionStatus] = useState();
     const [loading, setLoading] = useState(false);
-
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 10,
+        name: null,
+        status: null,
+        date: null,
+        sortDate: null,
+    });
     const [img, setImg] = useState('');
     const [show, setShow] = useState(false);
     // Toast
@@ -53,8 +72,9 @@ function AddSlider() {
     };
     useEffect(() => {
         const fetchData = async () => {
-            const sliderList = await SliderAPI.getAll();
+            const sliderList = await SliderAPI.searchSortForSlider(sort);
             setSliderList(sliderList.listResult);
+            setTotalPage(sliderList.totalPage);
         };
         if (reloadData) {
             fetchData();
@@ -62,10 +82,47 @@ function AddSlider() {
         } else {
             fetchData();
         }
-    }, [reloadData, slider]);
+    }, [sort, reloadData, slider]);
+    const [validate, setValidate] = useState({
+        title: null,
+        description: null,
+    });
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (
+                slider.sliderName.length !== 0 &&
+                slider.sliderDescription.length !== 0 &&
+                (slider.sliderName.length > 50 ||
+                    slider.sliderName.length < 3 ||
+                    slider.sliderDescription.length > 150 ||
+                    slider.sliderDescription.length < 20)
+            ) {
+                if (
+                    (slider.sliderName.length > 50 || slider.sliderName.length < 3) &&
+                    (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20)
+                ) {
+                    setValidate({
+                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                    });
+                } else if (slider.sliderName.length > 50 || slider.sliderName.length < 3) {
+                    setValidate({
+                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderDescription: '',
+                    });
+                } else if (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20) {
+                    setValidate({
+                        sliderName: '',
+                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                    });
+                }
+
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus('');
+                }, 5000);
+            }
             const responsePost = await axios.post('http://localhost:8086/api/slider', {
                 sliderName: slider.sliderName,
                 sliderDescription: slider.sliderDescription,
@@ -159,28 +216,6 @@ function AddSlider() {
 
     // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     // SORTING SPACEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    const [sort, setSort] = useState({
-        page: 1,
-        limit: 10,
-        name: null,
-        status: null,
-        date: null,
-        sortDate: null,
-    });
-    const [totalPage, setTotalPage] = useState(1);
-    const [page, setPage] = useState(1);
-    useEffect(() => {
-        const sortData = async () => {
-            try {
-                const sliderSortList = await SliderAPI.searchSortForSlider(sort);
-                setSliderList(sliderSortList.listResult);
-                setTotalPage(sliderSortList.totalPage);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        sortData();
-    }, [sort]);
 
     const handlePageChange = (newPage) => {
         setSort({
@@ -207,18 +242,17 @@ function AddSlider() {
 
     console.log(sliderList);
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('title-container')}>
-                <Title system>Add slider</Title>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+        <Container className={cx('wrapper')} maxW="container.xl">
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    SLIDER MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add slider</Text>
+            </Flex>
             {show ? (
                 <form className={cx('inner')} onSubmit={handleSubmit}>
                     <TableContainer className={cx('table-container')}>
@@ -232,6 +266,13 @@ function AddSlider() {
                             (submissionStatus === false && (
                                 <Alert status="error">
                                     <AlertIcon />
+                                    <AlertTitle>
+                                        <Text fontSize="sm" lineHeight="1.4">
+                                            {validate.sliderName}
+                                            <br />
+                                            {validate.sliderDescription}
+                                        </Text>
+                                    </AlertTitle>
                                     <AlertTitle>Failed to add parrot species - </AlertTitle>
                                     <AlertDescription>Please check your input!!!</AlertDescription>
                                 </Alert>
@@ -417,7 +458,20 @@ function AddSlider() {
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 {Array.from({ length: totalPage }, (_, index) => (
-                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
+                        }}
+                    >
                         {index + 1}
                     </p>
                 ))}
@@ -425,7 +479,7 @@ function AddSlider() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </button>
             </div>
-        </div>
+        </Container>
     );
 }
 

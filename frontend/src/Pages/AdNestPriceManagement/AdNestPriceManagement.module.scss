@@ -5,6 +5,8 @@
 .save-btn {
     width: 100% !important;
     min-height: 40px;
+    background-color: #f9ede9 !important;
+    color: black !important;
 }
 
 td {
@@ -31,5 +33,51 @@ th {
         border: 2px solid black;
         border-radius: 50px;
         padding: 0 1%;
+    }
+}
+.sort-space {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+
+    input,
+    select {
+        border: 2px solid black;
+        border-radius: 50px;
+        padding: 0 1%;
+    }
+}
+.button-pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    p {
+        /* Default styles */
+        border: none;
+        border-radius: none;
+        opacity: 1;
+        background-color: transparent;
+        color: #000000;
+        padding: 0px;
+
+        &:hover {
+            /* Hover styles */
+            opacity: 0.5 !important;
+        }
+    }
+}
+.table-chakra-crud,
+.table-chakra {
+    th {
+        padding: 15px !important;
+    }
+    thead {
+        background-color: #f9ede9 !important;
     }
 }

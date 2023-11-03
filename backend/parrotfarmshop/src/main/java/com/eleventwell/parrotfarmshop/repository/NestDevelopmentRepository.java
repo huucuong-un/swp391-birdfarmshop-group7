@@ -14,4 +14,6 @@ import java.util.List;
 public interface NestDevelopmentRepository extends JpaRepository<NestDevelopmentEntity,Long> {
     NestDevelopmentEntity findOneById(Long id);
     List<NestDevelopmentEntity> findAllByOrderByIdDesc();
+
+    List<NestDevelopmentEntity> findAllByNestUsageHistoryId(Long id);
 }

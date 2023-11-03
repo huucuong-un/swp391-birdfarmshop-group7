@@ -1,10 +1,16 @@
 package com.eleventwell.parrotfarmshop.controller;
 
+import com.eleventwell.parrotfarmshop.Model.PagingModel;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
+import com.eleventwell.parrotfarmshop.service.impl.FAQsService;
 import com.eleventwell.parrotfarmshop.service.impl.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -15,40 +21,60 @@ public class PromotionController {
     @Autowired
     PromotionService promotionService;
 
-    @GetMapping(value= "")
-    public List<PromotionDTO> show(){
+    @GetMapping(value = "")
+    public List<PromotionDTO> show() {
 
-       List<PromotionDTO> list = promotionService.findAll();
+        List<PromotionDTO> list = promotionService.findAll();
         return list;
 
     }
 
-    @GetMapping(value= "find-one-by-code")
-    public PromotionDTO findOneByCode(@RequestBody @RequestParam("code") String code){
+    @GetMapping(value = "find-one-by-code")
+    public PromotionDTO findOneByCode(@RequestBody @RequestParam("code") String code) {
 
-      return promotionService.findOneByCode(code);
+        return promotionService.findOneByCode(code);
 
     }
 
 
-    @PostMapping(value= "")
-    public PromotionDTO create(@RequestBody PromotionDTO model){
+    @PostMapping(value = "")
+    public PromotionDTO create(@RequestBody PromotionDTO model) {
         return (PromotionDTO) promotionService.save(model);
     }
 
-    @PutMapping(value= "{id}")
-    public PromotionDTO update(@RequestBody PromotionDTO model, @PathVariable("id") long id){
+    @PutMapping(value = "{id}")
+    public PromotionDTO update(@RequestBody PromotionDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return (PromotionDTO) promotionService.save(model);
     }
 
-//    @DeleteMapping(value = "")
+    //    @DeleteMapping(value = "")
 //    public void delete(@RequestBody long[] ids){
 //        promotionService.delete(ids);
 //    }
     @PutMapping(value = "change-status/{id}")
-    public void changeStatus(@RequestBody @PathVariable("id") Long id){
+    public void changeStatus(@RequestBody @PathVariable("id") Long id) {
         promotionService.changeStatus(id);
+    }
+
+    @GetMapping(value = "admin/search_sort")
+    public PagingModel searchSortForPromotion(@RequestBody @RequestParam(value = "page", required = false) Integer page,
+                                              @RequestParam(value = "limit", required = false) Integer limit,
+                                              @RequestParam(value = "searchStartDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchStartDate,
+                                              @RequestParam(value = "searchEndDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchEndDate,
+                                              @RequestParam(value = "sortDate", required = false) String sortDate,
+                                              @RequestParam(value = "sortPrice", required = false) String sortPrice,
+                                              @RequestParam(value = "status", required = false) Boolean status) {
+
+        PagingModel result = new PagingModel();
+        result.setPage(page);
+        Pageable pageable = PageRequest.of(page - 1, limit);
+
+
+        result.setListResult(promotionService.searchSortForPromotion(searchStartDate, searchEndDate, sortDate, sortPrice, status, pageable));
+        result.setTotalPage(((int) Math.ceil((double) (promotionService.totalItem()) / limit)));
+        result.setLimit(limit);
+        return result;
     }
 
 

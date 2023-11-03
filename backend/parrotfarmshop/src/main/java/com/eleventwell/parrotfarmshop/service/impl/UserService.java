@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IGenericService<UserDTO> {
@@ -20,11 +21,17 @@ public class UserService implements IGenericService<UserDTO> {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    JwtService jwtService;
+
     //find an account by email
 
     public UserDTO findByUsername(String username) {
-        if (userRepository.findOneByUserName(username) != null) return (UserDTO)genericConverter.toDTO(userRepository.findOneByUserName(username), UserDTO.class);
-        return null;
+
+            if (userRepository.findOneByUserName(username) != null)
+ return (UserDTO)genericConverter.toDTO(userRepository.findOneByUserName(username), UserDTO.class);
+
+     return null;
     }
     public UserDTO findByEmail(String email) {
 
@@ -92,6 +99,30 @@ public class UserService implements IGenericService<UserDTO> {
     public UserDTO findOneById(Long id){
 
         return (UserDTO) genericConverter.toDTO(userRepository.findOneById(id),UserDTO.class);
+
+    }
+
+    public UserDTO generateToken(String token){
+        try {
+            String userName = jwtService.extractUserName(token);
+            return (UserDTO) genericConverter.toDTO(userRepository.findOneByUserName(userName),UserDTO.class);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
+    public String getUserNameByEmail(String email){
+        Optional<UserEntity> userDTO = userRepository.findByEmail(email);
+        return userDTO.get().getUsername();
+    }
+    public String getUserNameByUserName(String userName){
+        try {
+            UserEntity userEntity = userRepository.findOneByUserName(userName);
+            return userEntity.getUsername();
+        }catch (Exception e){
+            return null;
+        }
 
     }
 

@@ -18,10 +18,20 @@ import {
     AlertTitle,
     AlertDescription,
     Stack,
+    Box,
+    Text,
+    Flex,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -41,6 +51,15 @@ function AdFAQSManagement() {
     const [submitStatus, setSubmitStatus] = useState();
     const [vinh, setVinh] = useState(true);
 
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 10,
+        searchTitle: null,
+        searchDate: null,
+        status: null,
+        sortTitle: null,
+    });
+
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
         updatedFaqs[index].status = !updatedFaqs[index].status;
@@ -52,8 +71,9 @@ function AdFAQSManagement() {
     useEffect(() => {
         const getFaqsList = async () => {
             try {
-                const faqsList = await FAQSAPI.getAll();
+                const faqsList = await FAQSAPI.sortSearchForFaqs(sort);
                 setFaqsList(faqsList.listResult);
+                setTotalPage(faqsList.totalPage);
             } catch (error) {
                 console.error(error);
             }
@@ -61,8 +81,10 @@ function AdFAQSManagement() {
         if (vinh) {
             getFaqsList();
             setVinh(false);
+        } else {
+            getFaqsList();
         }
-    }, [vinh]);
+    }, [sort, vinh]);
 
     useEffect(() => {
         const addFaqs = async () => {
@@ -135,19 +157,48 @@ function AdFAQSManagement() {
         console.log(vinh);
     }, [vinh]);
 
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 5,
+            searchTitle: sort.searchTitle,
+            status: sort.status,
+            searchDate: sort.searchDate,
+            sortTitle: sort.sortTitle,
+        });
+
+        setPage(newPage);
+    };
+
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 5,
+            searchTitle: null,
+            status: null,
+            searchDate: null,
+            sortTitle: null,
+        });
+    };
+
+    useEffect(() => {
+        console.log(sort);
+    }, [sort]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>FAQS</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    FAQs MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add new faqs</Text>
+            </Flex>
+
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
@@ -203,28 +254,60 @@ function AdFAQSManagement() {
                                     <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td>
+                                    <Button
+                                        colorScheme="green"
+                                        onClick={handleSave}
+                                        className={cx('save-btn')}
+                                        fontSize={18}
+                                    >
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <input type="text" placeholder="Title" />
-                <input type="date" />
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="text"
+                    id="searchTitle"
+                    name="searchTitle"
+                    placeholder="Title"
+                    onChange={(e) => setSort({ ...sort, searchTitle: e.target.value })}
+                />
+                <input
+                    type="date"
+                    placeholder="Date"
+                    id="searchDate"
+                    name="searchDate"
+                    onChange={(e) => setSort({ ...sort, searchDate: e.target.value })}
+                />
 
-                <select name="status" id="status">
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
                     <option value="" disabled selected>
                         Status
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                 </select>
-
-                <button></button>
+                <select
+                    name="sortTitle"
+                    id="sortTitle"
+                    onChange={(e) => setSort({ ...sort, sortTitle: e.target.value })}
+                >
+                    <option value="" disabled selected>
+                        Title
+                    </option>
+                    <option value="TDESC">A-Z</option>
+                    <option value="TASC">Z-A</option>
+                </select>
             </div>
             <TableContainer>
                 <Table size="lg">
@@ -258,6 +341,31 @@ function AdFAQSManagement() {
                     </Tbody>
                 </Table>
             </TableContainer>
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#ff0000' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? '#ffffff' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                        }}
+                    >
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </Container>
     );
 }

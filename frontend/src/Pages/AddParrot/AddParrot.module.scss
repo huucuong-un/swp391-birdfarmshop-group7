@@ -1,7 +1,19 @@
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.add-role-text {
+    margin: 0 5px;
+}
+
 .wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
 }
 .inner {
@@ -63,10 +75,10 @@
 }
 .title-container {
     width: 100%;
+    padding: 20px 0;
 }
 .add-btn {
-    margin-top: 20px;
-    width: 90%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     span {
@@ -105,4 +117,20 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    cursor: pointer;
+
+    p {
+        /* Default styles */
+        border: none;
+        border-radius: none;
+        opacity: 1;
+        background-color: transparent;
+        color: #000000;
+        padding: 0px;
+
+        &:hover {
+            /* Hover styles */
+            opacity: 0.5 !important;
+        }
+    }
 }

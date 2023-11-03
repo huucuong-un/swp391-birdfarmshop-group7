@@ -1,25 +1,23 @@
 import classNames from 'classnames/bind';
 import styles from './ChangePasswordForm.module.scss';
 
-import Input from '~/Components/Input/Input';
-import Title from '~/Components/Title/Title';
-import Button from '~/Components/Button/Button';
-import Line from '~/Components/Line/Line';
-
 //hook
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 //fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEyeLowVision, faEye } from '@fortawesome/free-solid-svg-icons';
-import { useToast } from '@chakra-ui/react';
+import { Box, Container, Input, InputRightElement, Text, useToast, Button } from '@chakra-ui/react';
 import { ShopState } from '~/context/ShopProvider';
 import axios from 'axios';
 import LoginAPI from '~/Api/LoginAPI';
+import { InputGroup } from '@chakra-ui/react';
 
 const cx = classNames.bind(styles);
 
 function ChangePasswordForm() {
+    const navigate = useNavigate();
     const toast = useToast();
     const { user } = ShopState();
 
@@ -90,7 +88,7 @@ function ChangePasswordForm() {
                 isClosable: true,
                 position: 'bottom',
             });
-
+            navigate('/login-user');
             console.log(data);
         } catch (error) {
             toast({
@@ -105,27 +103,29 @@ function ChangePasswordForm() {
     };
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('container')}>
-                <div className={cx('inner')}>
-                    <Title className={cx('title-login')}>Change password</Title>
-                    <div className={cx('notification-container')}>
-                        {/* <div className={cx('notification')}>
-                            <Title children={'Your password has been changed successfully'}></Title>
-                        </div> */}
-                    </div>
+        <Container className={cx('container')} maxW="container.xl">
+            <Box>
+                <Text fontSize="24px" fontWeight="600" borderBottom="1px solid #ccc" width="90%" padding="10px 0">
+                    Change Password
+                </Text>
+            </Box>
+            <Box width="40%" marginTop={10}>
+                <Text fontSize="16px" fontWeight={500}>
+                    Current Password
+                </Text>
 
-                    <div className={cx('password-container')}>
-                        <div className={cx('input-line')}>
-                            <Input
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder={'Enter current password'}
-                                required
-                            ></Input>
-                            <Line></Line>
-                        </div>
+                <InputGroup size="md">
+                    <Input
+                        pr="4.5rem"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        fontSize="16px"
+                        padding="4% 2%"
+                    />
+                    <InputRightElement width="4.5rem" height="100%">
                         <i className={cx('check')}>
                             {showPassword ? (
                                 <FontAwesomeIcon onClick={togglePasswordVisibility} icon={faEyeLowVision} />
@@ -133,19 +133,27 @@ function ChangePasswordForm() {
                                 <FontAwesomeIcon onClick={togglePasswordVisibility} icon={faEye} />
                             )}
                         </i>
-                    </div>
+                    </InputRightElement>
+                </InputGroup>
+            </Box>
 
-                    <div className={cx('password-container')}>
-                        <div className={cx('input-line')}>
-                            <Input
-                                type={showPasswordNew ? 'text' : 'password'}
-                                value={passwordNew}
-                                onChange={(e) => setPasswordNew(e.target.value)}
-                                placeholder={'Enter new password'}
-                                required
-                            ></Input>
-                            <Line></Line>
-                        </div>
+            <Box width="40%" marginTop={10}>
+                <Text fontSize="16px" fontWeight={500}>
+                    New Password
+                </Text>
+
+                <InputGroup size="md">
+                    <Input
+                        pr="4.5rem"
+                        type={showPasswordNew ? 'text' : 'password'}
+                        placeholder="Enter new password"
+                        value={passwordNew}
+                        onChange={(e) => setPasswordNew(e.target.value)}
+                        required
+                        fontSize="16px"
+                        padding="4% 2%"
+                    />
+                    <InputRightElement width="4.5rem" height="100%">
                         <i className={cx('check')}>
                             {showPasswordNew ? (
                                 <FontAwesomeIcon onClick={togglePasswordVisibilityNew} icon={faEyeLowVision} />
@@ -153,18 +161,26 @@ function ChangePasswordForm() {
                                 <FontAwesomeIcon onClick={togglePasswordVisibilityNew} icon={faEye} />
                             )}
                         </i>
-                    </div>
-                    <div className={cx('password-container')}>
-                        <div className={cx('input-line')}>
-                            <Input
-                                type={showConfirmPasswordNew ? 'text' : 'password'}
-                                placeholder={'Confirm new password'}
-                                onChange={(e) => setConfirmPasswordNew(e.target.value)}
-                                value={confirmPasswordNew}
-                                required
-                            ></Input>
-                            <Line></Line>
-                        </div>
+                    </InputRightElement>
+                </InputGroup>
+            </Box>
+            <Box width="40%" marginTop={10}>
+                <Text fontSize="16px" fontWeight={500}>
+                    Confirm New Password
+                </Text>
+
+                <InputGroup size="md">
+                    <Input
+                        pr="4.5rem"
+                        type={showConfirmPasswordNew ? 'text' : 'password'}
+                        placeholder="Confirm password"
+                        value={confirmPasswordNew}
+                        onChange={(e) => setConfirmPasswordNew(e.target.value)}
+                        required
+                        fontSize="16px"
+                        padding="4% 2%"
+                    />
+                    <InputRightElement width="4.5rem" height="100%">
                         <i className={cx('check')}>
                             {showConfirmPasswordNew ? (
                                 <FontAwesomeIcon onClick={togglePasswordVisibilityConFirmNew} icon={faEyeLowVision} />
@@ -172,18 +188,20 @@ function ChangePasswordForm() {
                                 <FontAwesomeIcon onClick={togglePasswordVisibilityConFirmNew} icon={faEye} />
                             )}
                         </i>
-                    </div>
-
-                    <div className={cx('change-btn')}>
-                        <Button loginSystemBtn onClick={handleClick}>
-                            Confirm
-                        </Button>
-                    </div>
-
-                    <Button className={cx('login-btn')}>Forgot password?</Button>
-                </div>
-            </div>
-        </div>
+                    </InputRightElement>
+                </InputGroup>
+            </Box>
+            <Button
+                onClick={() => handleClick()}
+                colorScheme="blue"
+                width="40%"
+                padding="2%"
+                fontSize="16px"
+                marginTop={10}
+            >
+                Save change
+            </Button>
+        </Container>
     );
 }
 

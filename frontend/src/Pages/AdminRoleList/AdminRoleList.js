@@ -47,23 +47,27 @@ const AdminRoleList = () => {
         setRoles(updatedRole);
     };
     const handleStatus = async (id) => {
-        try {
-            // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/role/${id}`);
+        var userResponse = window.confirm('Are you sure to change status ?');
+        if (userResponse) {
+            try {
+                await axios.delete(`http://localhost:8086/api/role/${id}`);
+                setReloadStatus(true);
 
-            // If the request is successful, update the state
+                // Send a request to update the status on the server
 
-            setReloadStatus(true);
-        } catch (error) {
-            toast({
-                title: 'Error occur!',
-                description: error.response.data.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            console.log(error);
+                // If the request is successful, update the state
+            } catch (error) {
+                toast({
+                    title: 'Error occur!',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                console.log(error);
+            }
+        } else {
         }
     };
     const handleShow = () => {
@@ -156,7 +160,7 @@ const AdminRoleList = () => {
                                         <Td minWidth={150}>
                                             <div className={cx('haha')}>
                                                 <Switch
-                                                    onChange={() => handleStatus(index)}
+                                                    onChange={() => handleStatus(role.id)}
                                                     size="lg"
                                                     isChecked={role.status}
                                                     colorScheme="green"

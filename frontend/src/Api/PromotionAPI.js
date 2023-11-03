@@ -18,6 +18,10 @@ const PromotionAPI = {
         const url = `/promotion`;
         return axiosClinet.post(url, data);
     },
+    searchSortForPromotion(params) {
+        const url = '/promotion/admin/search_sort';
+        return axiosClinet.get(url, { params });
+    },
 };
 
 export default PromotionAPI;

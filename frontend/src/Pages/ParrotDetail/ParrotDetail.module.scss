@@ -23,6 +23,7 @@
 }
 
 .mini-img-container img {
+    border-radius: 5px;
     max-width: 100px;
     min-height: 100px;
     border: 1px solid #e8e8e1;
@@ -31,7 +32,7 @@
 }
 
 .mini-img-container img:hover {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 .main-img {

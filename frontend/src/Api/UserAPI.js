@@ -12,5 +12,14 @@ const UserAPI = {
         const url = `/user/update-profile`;
         return axiosClient.put(url, data);
     },
+    getUserByToken(data) {
+        const url = `/user/generate-token?token=${data}`;
+        return axiosClient.get(url);
+    },
+
+    getOTP(data) {
+        const url = `/send-mail/forgot-password`;
+        return axiosClient.post(url, data);
+    },
 };
 export default UserAPI;

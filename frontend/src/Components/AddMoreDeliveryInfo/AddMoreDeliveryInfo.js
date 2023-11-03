@@ -34,7 +34,7 @@ function AddMoreDeliveryInfo(props) {
                 },
             };
 
-            const data = await DeliveryInformationAPI.getAll(user.userId, config);
+            const data = await DeliveryInformationAPI.getAll(user.id, config);
 
             if (data === null || data === '' || data.length === 0) {
                 const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
@@ -43,7 +43,7 @@ function AddMoreDeliveryInfo(props) {
                         phoneNumber: newDeliveryInfo.phoneNumber,
                         address: newDeliveryInfo.address,
                         status: newDeliveryInfo.status,
-                        userId: user.userId,
+                        userId: user.id,
                         pickingStatus: true,
                     },
                     config,
@@ -60,7 +60,7 @@ function AddMoreDeliveryInfo(props) {
                         phoneNumber: newDeliveryInfo.phoneNumber,
                         address: newDeliveryInfo.address,
                         status: newDeliveryInfo.status,
-                        userId: user.userId,
+                        userId: user.id,
                         pickingStatus: false,
                     },
                     config,

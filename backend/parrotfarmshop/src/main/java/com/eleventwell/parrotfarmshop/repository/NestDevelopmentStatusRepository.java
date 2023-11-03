@@ -9,4 +9,5 @@ import java.util.List;
 public interface NestDevelopmentStatusRepository extends JpaRepository<NestDevelopmentStatusEntity, Long> {
     NestDevelopmentStatusEntity findOneById(Long id);
     List<NestDevelopmentStatusEntity> findAllByOrderByIdDesc();
+    NestDevelopmentStatusEntity findOneBySequence(Integer sequence);
 }

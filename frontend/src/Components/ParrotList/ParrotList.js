@@ -276,46 +276,48 @@ function ParrotList(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = [];
-            for (const item of parrotSpecies) {
-                const parrot = { ...item };
-                try {
+            try {
+                const data = [];
+                for (const item of parrotSpecies) {
+                    const parrot = { ...item };
+
                     const params = {
                         id: item.id,
                     };
+                    console.log(params);
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
-                    parrot.countReview = await FeedbackAPI.countReview(params);
+                    parrot.countReview = await FeedbackAPI.countReview2(params);
                     data.push(parrot);
-                } catch (error) {
-                    console.error(error);
                 }
+
+                const initialSelectedColor = {};
+                data.forEach((parrot) => {
+                    if (parrot.colors.length > 0) {
+                        let maxColorId = parrot.colors[0].id;
+                        parrot.colors.forEach((color) => {
+                            if (color.id > maxColorId) {
+                                maxColorId = color.id;
+                            }
+                        });
+                        initialSelectedColor[parrot.id] = {
+                            color: parrot.colors[0].color,
+                            price: parrot.colors[0].price,
+                            colorId: maxColorId,
+                        };
+                    }
+                });
+
+                setSelectedColor(initialSelectedColor);
+
+                const initialQuantities = {};
+                data.forEach((parrot) => {
+                    initialQuantities[parrot.id] = 1;
+                });
+                setQuantities(initialQuantities);
+                setCombineData(data);
+            } catch (error) {
+                console.error(error);
             }
-
-            const initialSelectedColor = {};
-            data.forEach((parrot) => {
-                if (parrot.colors.length > 0) {
-                    let maxColorId = parrot.colors[0].id;
-                    parrot.colors.forEach((color) => {
-                        if (color.id > maxColorId) {
-                            maxColorId = color.id;
-                        }
-                    });
-                    initialSelectedColor[parrot.id] = {
-                        color: parrot.colors[0].color,
-                        price: parrot.colors[0].price,
-                        colorId: maxColorId,
-                    };
-                }
-            });
-
-            setSelectedColor(initialSelectedColor);
-
-            const initialQuantities = {};
-            data.forEach((parrot) => {
-                initialQuantities[parrot.id] = 1;
-            });
-            setQuantities(initialQuantities);
-            setCombineData(data);
         };
 
         fetchData();

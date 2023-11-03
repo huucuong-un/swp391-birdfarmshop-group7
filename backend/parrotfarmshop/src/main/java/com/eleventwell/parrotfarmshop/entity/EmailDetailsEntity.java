@@ -18,4 +18,6 @@ public class EmailDetailsEntity {
     private String msgBody;
     private String subject;
     private String attachment;
+    private Long orderId;
+    private String check;
 }

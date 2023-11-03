@@ -40,6 +40,7 @@ public class RoleEntity extends BaseEntity {
 	private String name;
 
 	@NotBlank
+	@Size(min = 10, max = 100)
 	@Column(name ="description")
 	private String description;
 	

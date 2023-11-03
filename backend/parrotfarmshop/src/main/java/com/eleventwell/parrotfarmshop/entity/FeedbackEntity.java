@@ -7,6 +7,7 @@ import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesColorDTO;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,7 @@ import java.util.Date;
 public class FeedbackEntity extends BaseEntity {
 
 	@NotBlank
+	@Size(min = 0, max = 150)
 	@Column(name = "content")
 	private String content;
 
@@ -55,6 +57,7 @@ public class FeedbackEntity extends BaseEntity {
 	private UserEntity replyer;
 
 
+	@Size(min = 0, max = 150)
 	@Column(name = "reply_content")
 	private String replyContent;
 

@@ -1,8 +1,7 @@
 package com.eleventwell.parrotfarmshop.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.eleventwell.parrotfarmshop.converter.DateConverter;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 //*PromotionID
 //PromotionName
@@ -52,11 +52,18 @@ public class PromotionEntity extends BaseEntity {
 	@Unsigned
 	@Column(name = "value")
 	private Double value;
-	
+
+
+	@Temporal(TemporalType.DATE) // Specify that only the date part should be stored
+	// Specify that only the date part should be stored
 	@Column(name = "start_date")
+	@Convert(converter = DateConverter.class) // Use a custom converter
 	private Date startDate;
-	
+
+
+	@Temporal(TemporalType.DATE) // Specify that only the date part should be stored
 	@Column(name = "end_date")
+	@Convert(converter = DateConverter.class) // Use a custom converter
 	private Date endDate;
 	
 	@Column(name = "status")
@@ -65,5 +72,8 @@ public class PromotionEntity extends BaseEntity {
 
 	@OneToMany(mappedBy = "promotion")
 	private List<OrderEntity> orders = new ArrayList<>();
+
+	@Column(name="quanity")
+	private int quantity;
 	
 }

@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
@@ -43,13 +43,23 @@ function MngVoucherPromotion() {
     const [addStatus, setAddStatus] = useState(1);
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 10,
+        searchStartDate: null,
+        searchEndDate: null,
+        status: null,
+        sortDate: null,
+        sortPrice: null,
+    });
 
     useEffect(() => {
         const getVoucherList = async () => {
             try {
-                const voucherList = await PromotionAPI.getAll();
-                console.log(voucherList);
-                setVoucherList(voucherList);
+                const voucherList = await PromotionAPI.searchSortForPromotion(sort);
+                console.log(voucherList.listResult);
+                setVoucherList(voucherList.listResult);
+                setTotalPage(voucherList.totalPage);
                 setVinh(false);
             } catch (error) {
                 console.error(error);
@@ -60,8 +70,10 @@ function MngVoucherPromotion() {
             getVoucherList();
             setVinh(false);
         }
-    }, [vinh]);
-
+        getVoucherList();
+    }, [sort, vinh]);
+    console.log(startDate);
+    console.log(endDate);
     useEffect(() => {
         const addPromotion = async () => {
             try {
@@ -73,9 +85,17 @@ function MngVoucherPromotion() {
                     endDate: endDate,
                     status: status,
                 };
+                // Check if at least one field in data has a value
+                const hasData = Object.values(data).some((value) => value !== '' && value !== 0 && value !== false);
 
-                const add = await PromotionAPI.add(data);
-                setVinh(true);
+                if (hasData) {
+                    console.log(data);
+                    const add = await PromotionAPI.add(data);
+                    setVinh(true);
+                } else {
+                    // Handle the case where there is no data to add
+                    console.log('No data to add');
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -131,10 +151,32 @@ function MngVoucherPromotion() {
             setStatus(false);
         }
     };
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 10,
+            searchStartDate: sort.searchStartDate,
+            searchEndDate: sort.searchEndDate,
+            status: sort.status,
+            sortDate: sort.sortDate,
+            sortPrice: sort.sortPrice,
+        });
+        setPage(newPage);
+    };
 
-    useEffect(() => {
-        console.log(status);
-    }, [status]);
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 10,
+            searchStartDate: null,
+            searchEndDate: null,
+            status: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -251,34 +293,45 @@ function MngVoucherPromotion() {
                 <></>
             )}
             <div className={cx('sort-space')}>
-                <select name="status" id="status">
-                    <option value="" disabled selected>
-                        Rating
-                    </option>
+                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                <input
+                    type="date"
+                    id="searchStartDate"
+                    name="searchStartDate"
+                    onChange={(e) => setSort({ ...sort, searchStartDate: e.target.value })}
+                />
+                <input
+                    type="date"
+                    id="searchEndDate"
+                    name="searchEndDate"
+                    onChange={(e) => setSort({ ...sort, searchEndDate: e.target.value })}
+                />
 
-                    <option value="active">1</option>
-                    <option value="active">2</option>
-                    <option value="active">3</option>
-                    <option value="active">4</option>
-                    <option value="active">5</option>
-                </select>
-
-                <select name="status" id="status">
-                    <option value="" disabled selected>
+                <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
+                    <option value="" disabled>
                         Status
                     </option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                 </select>
-
-                <input type="date" />
-                <select name="price" id="price">
-                    <option value="" disabled selected>
-                        Price
+                <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
+                    <option value="" disabled>
+                        Date
                     </option>
+                    <option value="DDESC">Newest</option>
+                    <option value="DASC">Oldest</option>
                 </select>
-
-                <button></button>
+                <select
+                    name="sortPrice"
+                    id="sortPrice"
+                    onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}
+                >
+                    <option value="" disabled selected>
+                        Date
+                    </option>
+                    <option value="PDESC">Descending</option>
+                    <option value="PASC">Ascending</option>
+                </select>
             </div>
             <TableContainer>
                 <Table size="lg">
@@ -318,6 +371,33 @@ function MngVoucherPromotion() {
                     </Tbody>
                 </Table>
             </TableContainer>
+
+            <div className={cx('button-pagination')}>
+                <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                {Array.from({ length: totalPage }, (_, index) => (
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
+                        }}
+                    >
+                        {index + 1}
+                    </p>
+                ))}
+                <button disabled={page === totalPage} onClick={() => handlePageChange(page + 1)} colorScheme="pink">
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+            </div>
         </Container>
     );
 }

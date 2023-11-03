@@ -58,18 +58,7 @@ function AdNestManagement() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
-    useEffect(() => {
-        const sortData = async () => {
-            try {
-                const nestList = await NestAPI.searchSortForNest(sort);
-                setFaqsList(nestList.listResult);
-                setTotalPage(nestList.totalPage);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        sortData();
-    }, [sort]);
+
     useEffect(() => {
         const getNestList = async () => {
             try {
@@ -77,8 +66,9 @@ function AdNestManagement() {
                     page: 1,
                     limit: 5,
                 };
-                const nestList = await NestAPI.getAllNest(params);
+                const nestList = await NestAPI.searchSortForNest(sort);
                 setFaqsList(nestList.listResult);
+                setTotalPage(nestList.totalPage);
             } catch (error) {
                 console.error(error);
             }
@@ -87,7 +77,8 @@ function AdNestManagement() {
             getNestList();
             setVinh(false);
         }
-    }, [vinh]);
+        getNestList();
+    }, [sort, vinh]);
 
     useEffect(() => {
         const getNestPriceWithSpeciesName = async () => {
@@ -267,7 +258,7 @@ function AdNestManagement() {
 
             {show ? (
                 <TableContainer paddingTop={10} paddingBottom={10}>
-                    <Table variant="simple">
+                    <Table variant="simple" className={cx('table-chakra')}>
                         <Thead>
                             <Tr>
                                 <Th colSpan={2}>New Nest</Th>
@@ -335,7 +326,7 @@ function AdNestManagement() {
                 <button></button>
             </div>
             <TableContainer>
-                <Table size="lg">
+                <Table size="lg" className={cx('table-chakra-crud')}>
                     <Thead>
                         <Tr>
                             <Th>ID</Th>
@@ -377,9 +368,10 @@ function AdNestManagement() {
                             border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
                             borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
                             opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
-                            backgroundColor: page === index + 1 ? '#ff0000' : 'transparent', // Change background color when on the current page
-                            color: page === index + 1 ? '#ffffff' : '#000000', // Change text color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
                             padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
                         }}
                     >
                         {index + 1}

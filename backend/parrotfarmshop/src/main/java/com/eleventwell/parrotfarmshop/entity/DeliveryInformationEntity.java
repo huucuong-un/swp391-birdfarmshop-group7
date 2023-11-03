@@ -28,6 +28,7 @@ import java.util.List;
 public class DeliveryInformationEntity extends BaseEntity {
 
 	@NotBlank
+	@Size(min = 3, max = 20)
 	@Column(name = "name")
 	private String name;
 	
@@ -38,6 +39,7 @@ public class DeliveryInformationEntity extends BaseEntity {
 
 
 	@NotBlank
+	@Size(min = 10, max = 50)
 	@Column(name = "address")
 	private String address;
 	

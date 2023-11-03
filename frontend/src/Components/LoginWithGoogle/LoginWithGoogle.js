@@ -47,8 +47,10 @@ const LoginWithGoogle = () => {
                 console.log(dataForUser);
 
                 const register = await RegisterAPI.register(dataForUser, config);
-                setUser(register);
+
                 localStorage.setItem('accessToken', JSON.stringify(register));
+                const userFromToken = await UserAPI.getUserByToken(JSON.parse(localStorage.getItem('accessToken')));
+                setUser(userFromToken);
                 console.log(register);
                 navigate('/');
             } catch (error) {

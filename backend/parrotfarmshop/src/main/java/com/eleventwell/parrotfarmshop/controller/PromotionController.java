@@ -63,6 +63,7 @@ public class PromotionController {
                                               @RequestParam(value = "searchStartDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchStartDate,
                                               @RequestParam(value = "searchEndDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchEndDate,
                                               @RequestParam(value = "sortDate", required = false) String sortDate,
+                                              @RequestParam(value = "sortPrice", required = false) String sortPrice,
                                               @RequestParam(value = "status", required = false) Boolean status) {
 
         PagingModel result = new PagingModel();
@@ -70,13 +71,11 @@ public class PromotionController {
         Pageable pageable = PageRequest.of(page - 1, limit);
 
 
-        result.setListResult(promotionService.searchSortForPromotion(searchStartDate,searchEndDate,sortDate,status,pageable));
+        result.setListResult(promotionService.searchSortForPromotion(searchStartDate, searchEndDate, sortDate, sortPrice, status, pageable));
         result.setTotalPage(((int) Math.ceil((double) (promotionService.totalItem()) / limit)));
         result.setLimit(limit);
         return result;
     }
-
-
 
 
 }

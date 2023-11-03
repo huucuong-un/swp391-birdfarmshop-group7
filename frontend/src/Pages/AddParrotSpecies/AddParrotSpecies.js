@@ -356,6 +356,8 @@ function AddParrotSpecies() {
                                             type="number"
                                             id="price"
                                             name="price"
+                                            min="0"
+                                            step="0.01" // Allows decimal values
                                             value={parrotSpeciesColor.price}
                                             onChange={(e) =>
                                                 setParrotSpeciesColor({

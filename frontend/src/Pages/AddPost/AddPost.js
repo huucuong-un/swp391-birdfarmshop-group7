@@ -19,6 +19,13 @@ import {
     Textarea,
     Text,
     Switch,
+    Container,
+    Fade,
+    ScaleFade,
+    Slide,
+    SlideFade,
+    Collapse,
+    Box,
 } from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
@@ -39,6 +46,19 @@ function AddPost() {
     const [show, setShow] = useState(false);
     const [status, setStatus] = useState(false);
     const [reloadData, setReloadData] = useState(false);
+    const [sort, setSort] = useState({
+        page: 1,
+        limit: 5,
+        searchDate: null,
+        status: null,
+        title: null,
+        content: null,
+        description: null,
+        sortTile: null,
+        sortDate: null,
+    });
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
     const handleUpdateSuccess = () => {
         setReloadData(true); // Set reloadData to true when the update is successful
     };
@@ -124,27 +144,69 @@ function AddPost() {
             return;
         }
     };
-
+    const [validate, setValidate] = useState({
+        title: null,
+        description: null,
+    });
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const responsePost = await axios.post('http://localhost:8086/api/post', {
-                endDate: post.endDate,
-                status: post.status,
-                title: post.title,
-                description: post.description,
-                content: post.content,
-                startDate: post.startDate,
-                imageUrl: img,
-            });
-            if (responsePost.status === 200) {
-                console.log('POST request was successful at species!!');
-                // Assuming the response contains the newly created post data
-                setPost({ ...post, ...responsePost.data });
-                setSubmissionStatus(true);
-            } else {
-                console.error('POST request failed with status code - species: ', responsePost.status);
+            if (
+                post.title.length !== 0 &&
+                post.content.length !== 0 &&
+                (post.title.length > 150 ||
+                    post.title.length < 3 ||
+                    post.content.length > 300 ||
+                    post.content.length < 10)
+            ) {
+                if (
+                    (post.title.length > 150 || post.title.length < 3) &&
+                    (post.content.length > 300 || post.content.length < 10)
+                ) {
+                    setValidate({
+                        title: 'Title must be between 3 and 150 characters',
+                        description: 'Content must be between 10 and 300 character',
+                    });
+                } else if (post.title.length > 150 || post.title.length < 3) {
+                    setValidate({
+                        title: 'Title must be between 3 and 150 characters',
+                        description: '',
+                    });
+                } else if (post.content.length > 300 || post.content.length < 10) {
+                    setValidate({
+                        title: '',
+                        description: 'Content must be between 10 and 300 character',
+                    });
+                }
+
                 setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus('');
+                }, 5000);
+            } else {
+                // Reset the error messages if the validation criteria are met
+                setValidate({
+                    title: null,
+                    description: null,
+                });
+                const responsePost = await axios.post('http://localhost:8086/api/post', {
+                    endDate: post.endDate,
+                    status: post.status,
+                    title: post.title,
+                    description: post.description,
+                    content: post.content,
+                    startDate: post.startDate,
+                    imageUrl: img,
+                });
+                if (responsePost.status === 200) {
+                    console.log('POST request was successful at species!!');
+                    // Assuming the response contains the newly created post data
+                    setPost({ ...post, ...responsePost.data });
+                    setSubmissionStatus(true);
+                } else {
+                    console.error('POST request failed with status code - species: ', responsePost.status);
+                    setSubmissionStatus(false);
+                }
             }
         } catch (error) {
             console.error('Error while making POST request:', error);
@@ -154,8 +216,9 @@ function AddPost() {
     const [postList, setPostList] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            const postList = await PostAPI.getAll();
+            const postList = await PostAPI.searchSortForPost(sort);
             setPostList(postList.listResult);
+            setTotalPage(postList.totalPage);
         };
         if (reloadData) {
             fetchData();
@@ -163,7 +226,7 @@ function AddPost() {
         } else {
             fetchData();
         }
-    }, [reloadData, post]);
+    }, [reloadData, post, sort]);
     const convertToTrueFormat = (timeText) => {
         let [date, time] = timeText.split('T');
         let [hours, mins, secs] = time.split(':');
@@ -173,7 +236,7 @@ function AddPost() {
             return date + ' ' + hours + ':' + mins + ':00';
         }
     };
-    console.log(postList);
+    // console.log(postList);
     const [openPostID, setOpenPostID] = useState(null);
     const toggleEditForm = (postID) => {
         if (openPostID === postID) {
@@ -189,32 +252,6 @@ function AddPost() {
     // Sorting
     // Sorting
     // Sorting
-    const [sort, setSort] = useState({
-        page: 1,
-        limit: 5,
-        searchDate: null,
-        status: null,
-        title: null,
-        content: null,
-        description: null,
-        sortTile: null,
-        sortDate: null,
-    });
-    const [totalPage, setTotalPage] = useState(1);
-    const [page, setPage] = useState(1);
-
-    useEffect(() => {
-        const sortData = async () => {
-            try {
-                const postSortList = await PostAPI.searchSortForPost(sort);
-                setPostList(postSortList.listResult);
-                setTotalPage(postSortList.totalPage);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        sortData();
-    }, [sort]);
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
@@ -245,9 +282,9 @@ function AddPost() {
     };
 
     return (
-        <div className={cx('wrapper')}>
+        <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title-wrapper')}>
-                <Title system>Add post</Title>
+                <h1>Add post</h1>
             </div>
             <div className={cx('add-btn')}>
                 <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
@@ -287,8 +324,14 @@ function AddPost() {
                             (submissionStatus === false && (
                                 <Alert status="error">
                                     <AlertIcon />
-                                    <AlertTitle>Failed to add parrot species - </AlertTitle>
-                                    <AlertDescription>Please check your input!!!</AlertDescription>
+                                    <br />
+                                    <AlertTitle>
+                                        <Text fontSize="sm" lineHeight="1.4">
+                                            {validate.title}
+                                            <br />
+                                            {validate.description}
+                                        </Text>
+                                    </AlertTitle>
                                 </Alert>
                             ))}
                         <div className={cx('title-container')}>
@@ -438,10 +481,10 @@ function AddPost() {
                 </select>
             </div>
             <TableContainer className={cx('table-container')}>
-                <Table size="xs ">
+                <Table size="xs">
                     <Thead>
                         <Tr>
-                            <Th className={cx('text-center')}>Post ID</Th>
+                            <Th className={cx('text-center')}>ID</Th>
                             <Th className={cx('text-center')}>Title</Th>
                             <Th className={cx('text-center')}>Content</Th>
                             <Th className={cx('text-center')}>Description</Th>
@@ -522,7 +565,20 @@ function AddPost() {
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 {Array.from({ length: totalPage }, (_, index) => (
-                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            border: page === index + 1 ? '1px solid black' : 'none', // Change background color when on the current page
+                            borderRadius: page === index + 1 ? '4px ' : 'none', // Change background color when on the current page
+                            opacity: page === index + 1 ? '0.5' : '1', // Change background color when on the current page
+                            backgroundColor: page === index + 1 ? '#f9ede9' : 'transparent', // Change background color when on the current page
+                            color: page === index + 1 ? 'black' : '#000000', // Change text color when on the current page
+                            padding: page === index + 1 ? '5px 7px' : '0px',
+                            fontWeight: '600',
+                        }}
+                    >
                         {index + 1}
                     </p>
                 ))}
@@ -530,7 +586,7 @@ function AddPost() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </button>
             </div>
-        </div>
+        </Container>
     );
 }
 

@@ -1,6 +1,7 @@
 package com.eleventwell.parrotfarmshop.Vnpay;
 
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
+import com.eleventwell.parrotfarmshop.service.impl.EmailService;
 import com.eleventwell.parrotfarmshop.service.impl.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class VnPayController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    EmailService emailService;
 
 
 
@@ -47,6 +51,7 @@ public class VnPayController {
 
             orderService.changeStatus(result);
 
+           emailService.createEmailDetailByOrderId(result);
             return new RedirectView("http://localhost:3000/paid-success");
 
             // Redirect to the specified URL when the condition is met

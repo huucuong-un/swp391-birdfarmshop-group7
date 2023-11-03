@@ -145,11 +145,11 @@ promotionRepository.save(promotionEntity);
 
     }
 
-    public List<PromotionDTO> searchSortForPromotion(Date searchStartDate,Date searchEndDate,String sortDate, Boolean status, Pageable pageable) {
+    public List<PromotionDTO> searchSortForPromotion(Date searchStartDate,Date searchEndDate,String sortDate, String sortPrice,Boolean status, Pageable pageable) {
         // TODO Auto-generated method stub
         List<PromotionDTO> results = new ArrayList();
 //        List<PromotionEntity> entities = promotionRepository.searchSortForPromotion(searchStartDate, searchEndDate, status, pageable);
-    List<PromotionEntity> entities = promotionRepository.searchSortForPromotion(searchStartDate, searchEndDate, sortDate,status, pageable);
+    List<PromotionEntity> entities = promotionRepository.searchSortForPromotion(searchStartDate, searchEndDate, sortDate,sortPrice,status, pageable);
         for (PromotionEntity item : entities) {
             PromotionDTO newDTO = (PromotionDTO) converter.toDTO(item, PromotionDTO.class);
             results.add(newDTO);

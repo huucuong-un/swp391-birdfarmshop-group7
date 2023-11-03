@@ -41,6 +41,17 @@ public class NestDevelopmentService implements IGenericService<NestDevelopmentDT
     return result;
     }
 
+    public List<NestDevelopmentDTO> findAllByNestUsageHistoryId(Long id) {
+        List<NestDevelopmentDTO> result = new ArrayList<>();
+        List<NestDevelopmentEntity> nestDevelopmentEntities = nestDevelopmentRepository.findAllByNestUsageHistoryId(id);
+        for (NestDevelopmentEntity entity : nestDevelopmentEntities) {
+            NestDevelopmentDTO nestDevelopmentDTO = (NestDevelopmentDTO) genericConverter.toDTO(entity, NestDevelopmentDTO.class);
+            result.add(nestDevelopmentDTO);
+        }
+        return result;
+    }
+
+
     @Override
     public NestDevelopmentDTO save(NestDevelopmentDTO DTO) {
         NestDevelopmentEntity nestDevelopmentEntity = new NestDevelopmentEntity();

@@ -49,6 +49,10 @@ const NestAPI = {
         const url = `/nest-price/${id}`;
         return axiosClinet.delete(url);
     },
+    updateNestPrice(data, id) {
+        const url = `/nest-price/${id}`;
+        return axiosClinet.put(url, data);
+    },
     //Nest-development-status
     getAllNestDevelopmentStatus(params) {
         const url = '/nest-development-status';
@@ -56,6 +60,10 @@ const NestAPI = {
     },
     getNestDevelopmentStatusById(id) {
         const url = `/nest-development-status/find-one-status-by-id/${id}`;
+        return axiosClinet.get(url);
+    },
+    getNestDevelopmentStatusBySequence(id) {
+        const url = `/nest-development-status/find-one-by-sequence/${id}`;
         return axiosClinet.get(url);
     },
     addNestDevelopmentStatus(data) {
@@ -83,6 +91,10 @@ const NestAPI = {
     getAllNestDevelopment(params) {
         const url = '/nest-development';
         return axiosClinet.get(url, { params });
+    },
+    getAllNestDevelopmentWithUsageId(id) {
+        const url = `/nest-development/find-all-by-nest-usage-history-id/${id}`;
+        return axiosClinet.get(url);
     },
     addNestDevelopment(data) {
         const url = `/nest-development`;

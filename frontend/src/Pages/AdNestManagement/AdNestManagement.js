@@ -25,7 +25,7 @@ import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@for
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from '~/Pages/AdNestPriceManagement/AdNestPriceManagement.module.scss';
+import styles from '~/Pages/AdNestManagement/AdNestManagement.module.scss';
 import FAQSAPI from '~/Api/FAQSAPI';
 import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';

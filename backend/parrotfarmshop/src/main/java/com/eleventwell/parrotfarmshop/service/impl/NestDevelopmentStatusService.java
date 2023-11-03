@@ -100,6 +100,13 @@ public class NestDevelopmentStatusService implements IGenericService<NestDevelop
         Collections.sort(result, Comparator.comparing(NestDevelopmentStatusDTO::getSequence));
         return result;
     }
+
+    public NestDevelopmentStatusDTO findOneBySequence(Integer sequence) {
+        NestDevelopmentStatusEntity entity = nestDevelopmentStatusRepository.findOneBySequence(sequence);
+        NestDevelopmentStatusDTO nestDevelopmentStatusDTO = (NestDevelopmentStatusDTO) genericConverter.toDTO(entity, NestDevelopmentStatusDTO.class);
+        return  nestDevelopmentStatusDTO;
+    }
+
     }
 
 

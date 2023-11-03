@@ -3,6 +3,7 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.Model.PagingModel;
 import com.eleventwell.parrotfarmshop.dto.NestDTO;
 import com.eleventwell.parrotfarmshop.dto.NestPriceDTO;
+import com.eleventwell.parrotfarmshop.dto.PostDTO;
 import com.eleventwell.parrotfarmshop.service.impl.FAQsService;
 import com.eleventwell.parrotfarmshop.service.impl.NestPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,11 @@ public class NestPriceController {
     }
 
     //accept editing description and status only
-    @PutMapping(value = "{id}")
-    public NestPriceDTO updateRole(@RequestBody NestPriceDTO model, @PathVariable("id") long id) {
-        model.setId(id);
-        return nestPriceService.save(model);
-    }
+//    @PutMapping(value = "{id}")
+//    public NestPriceDTO updateRole(@RequestBody NestPriceDTO model, @PathVariable("id") long id) {
+//        model.setId(id);
+//        return nestPriceService.save(model);
+//    }
 
     @DeleteMapping(value = "{id}")
     public void changeStatus(@RequestBody @PathVariable("id") long id) {
@@ -80,6 +81,12 @@ public class NestPriceController {
         result.setTotalPage(((int) Math.ceil((double) (nestPriceService.totalItem()) / limit)));
 
         return result;
+    }
+
+    @PutMapping(value="{id}")
+    public NestPriceDTO updateNestPrice(@RequestBody NestPriceDTO model, @PathVariable("id") long id){
+        model.setId(id);
+        return (NestPriceDTO) nestPriceService.save(model);
     }
 
 }

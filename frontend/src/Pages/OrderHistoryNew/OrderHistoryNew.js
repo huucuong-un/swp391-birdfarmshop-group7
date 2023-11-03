@@ -302,7 +302,7 @@ function OrderHistoryNew() {
                                                     <Image
                                                         borderRadius="full"
                                                         boxSize="60px"
-                                                        src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                        src= {parrot.img}
                                                         alt="Dan Abramov"
                                                     />
                                                 </Td>

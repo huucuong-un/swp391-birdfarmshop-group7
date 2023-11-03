@@ -18,10 +18,19 @@ import {
     AlertTitle,
     AlertDescription,
     Stack,
+    Flex,
+    Text,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -232,12 +241,16 @@ function AdNestManagement() {
                 <h1>NEST</h1>
             </div>
             <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
+                <Flex className={cx('add-button')} onClick={handleShow}>
+                    <FontAwesomeIcon icon={faCirclePlus} />
+                    <Text className={cx('add-role-text')}>Add new account</Text>
+                </Flex>
+                {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Button>
+                </Button> */}
             </div>
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>

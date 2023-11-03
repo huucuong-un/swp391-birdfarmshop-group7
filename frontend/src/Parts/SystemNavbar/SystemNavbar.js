@@ -51,20 +51,32 @@ function SystemNavbar({ staff, manager }) {
                     <img className={cx('logo')} src={logo} alt="logo" />
                 </Link>
                 <div className={cx('nav-items')}>
+                    <Link to="/admin/dashboard">
+                        <p>DASHBOARD</p>
+                    </Link>
+                    <Link to="/admin/order">
+                        <p>ORDER</p>
+                    </Link>
                     <Link to="/admin/account">
-                        <p>ACCOUNTS</p>
+                        <p>ACCOUNT</p>
                     </Link>
                     <Link to="/admin/role">
-                        <p>ROLES</p>
+                        <p>ROLE</p>
                     </Link>
-                    <Link>
-                        <p>SERVICE</p>
-                    </Link>
-                    <Link to="/add-parrot-species">
+                    <Link to="/admin/parrot-species">
                         <p>SPECIES</p>
                     </Link>
-                    <Link to="/add-parrot">
-                        <p>PARROTS</p>
+                    <Link to="/admin/parrot">
+                        <p>PARROT</p>
+                    </Link>
+                    <Link to="/admin/promotion">
+                        <p>PROMOTION</p>
+                    </Link>
+                    <Link to="/admin/nest">
+                        <p>NEST</p>
+                    </Link>
+                    <Link to="/admin/faqs">
+                        <p>FAQs</p>
                     </Link>
                 </div>
 

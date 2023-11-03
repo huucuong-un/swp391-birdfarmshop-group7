@@ -83,9 +83,46 @@ function AddSlider() {
             fetchData();
         }
     }, [sort, reloadData, slider]);
+    const [validate, setValidate] = useState({
+        title: null,
+        description: null,
+    });
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (
+                slider.sliderName.length !== 0 &&
+                slider.sliderDescription.length !== 0 &&
+                (slider.sliderName.length > 50 ||
+                    slider.sliderName.length < 3 ||
+                    slider.sliderDescription.length > 150 ||
+                    slider.sliderDescription.length < 20)
+            ) {
+                if (
+                    (slider.sliderName.length > 50 || slider.sliderName.length < 3) &&
+                    (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20)
+                ) {
+                    setValidate({
+                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                    });
+                } else if (slider.sliderName.length > 50 || slider.sliderName.length < 3) {
+                    setValidate({
+                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderDescription: '',
+                    });
+                } else if (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20) {
+                    setValidate({
+                        sliderName: '',
+                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                    });
+                }
+
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus('');
+                }, 5000);
+            }
             const responsePost = await axios.post('http://localhost:8086/api/slider', {
                 sliderName: slider.sliderName,
                 sliderDescription: slider.sliderDescription,
@@ -229,6 +266,13 @@ function AddSlider() {
                             (submissionStatus === false && (
                                 <Alert status="error">
                                     <AlertIcon />
+                                    <AlertTitle>
+                                        <Text fontSize="sm" lineHeight="1.4">
+                                            {validate.sliderName}
+                                            <br />
+                                            {validate.sliderDescription}
+                                        </Text>
+                                    </AlertTitle>
                                     <AlertTitle>Failed to add parrot species - </AlertTitle>
                                     <AlertDescription>Please check your input!!!</AlertDescription>
                                 </Alert>

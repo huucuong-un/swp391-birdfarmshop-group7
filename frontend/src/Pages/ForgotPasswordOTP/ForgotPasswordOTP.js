@@ -1,10 +1,25 @@
 import { Box, Button, Container, Input, InputGroup, Text } from '@chakra-ui/react';
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import OTPAPI from '~/Api/OTPAPI';
 
 const ForgotPasswordOTP = () => {
+    const location = useLocation();
     const navigate = useNavigate();
+    const handleValidateOTP = async () => {
+        try {
+            const email = location.state.email;
+            const code = document.getElementById('OTP').value;
 
+            console.log(document.getElementById('OTP').value);
+            console.log(location.state.email);
+            const OTP = await OTPAPI.getOTP(email, code);
+            if (OTP.id !== null && OTP.id !== undefined) {
+                navigate('reset-password', { state: { email } });
+            }
+        } catch (error) {}
+    };
     return (
         <Container minHeight={700} maxW="container.xl">
             <Box>
@@ -26,6 +41,7 @@ const ForgotPasswordOTP = () => {
 
                 <InputGroup size="md">
                     <Input
+                        id="OTP"
                         pr="4.5rem"
                         type={'text'}
                         placeholder="Enter OTP code that we have sent to your email"
@@ -43,7 +59,7 @@ const ForgotPasswordOTP = () => {
                 fontSize="16px"
                 marginTop={10}
                 onClick={() => {
-                    navigate('reset-password');
+                    handleValidateOTP();
                 }}
             >
                 Send

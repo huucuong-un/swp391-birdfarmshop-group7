@@ -3,10 +3,7 @@ package com.eleventwell.parrotfarmshop.controller;
 import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
 import com.eleventwell.parrotfarmshop.Model.PagingModel;
 import com.eleventwell.parrotfarmshop.Response.OrderResponseForManagement;
-import com.eleventwell.parrotfarmshop.dto.NestDevelopmentDTO;
-import com.eleventwell.parrotfarmshop.dto.OrderDTO;
-import com.eleventwell.parrotfarmshop.dto.PostDTO;
-import com.eleventwell.parrotfarmshop.dto.UserDTO;
+import com.eleventwell.parrotfarmshop.dto.*;
 import com.eleventwell.parrotfarmshop.output.ListOutput;
 import com.eleventwell.parrotfarmshop.service.impl.NestDevelopmentService;
 import com.eleventwell.parrotfarmshop.service.impl.SliderService;
@@ -40,6 +37,13 @@ public class NestDevelopmentController {
         result.setLimit(limit);
         return result;
 
+    }
+
+    @GetMapping(value = "find-all-by-nest-usage-history-id/{id}")
+    public List<NestDevelopmentDTO> findAllByNestUsageHistoryId(@RequestBody @PathVariable("id") long id) {
+        List<NestDevelopmentDTO> list = new ArrayList<>();
+        list = nestDevelopmentService.findAllByNestUsageHistoryId(id);
+        return list;
     }
 
     @PutMapping(value = "/admin/update-status")

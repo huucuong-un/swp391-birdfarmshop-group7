@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/AboutUs/AboutUs.module.scss';
 
 const cx = classNames.bind(styles);
@@ -6,6 +7,7 @@ const cx = classNames.bind(styles);
 function AboutUs() {
     return (
         <div className={cx('wrapper')}>
+            <StartPartPage payment>About us</StartPartPage>
             <div className={cx('inner')}>
                 <div className={cx('header')}>
                     <img

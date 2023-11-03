@@ -3,6 +3,7 @@ import styles from './ChangePasswordForm.module.scss';
 
 //hook
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 //fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +17,7 @@ import { InputGroup } from '@chakra-ui/react';
 const cx = classNames.bind(styles);
 
 function ChangePasswordForm() {
+    const navigate = useNavigate();
     const toast = useToast();
     const { user } = ShopState();
 
@@ -86,7 +88,7 @@ function ChangePasswordForm() {
                 isClosable: true,
                 position: 'bottom',
             });
-
+            navigate('/login-user');
             console.log(data);
         } catch (error) {
             toast({
@@ -189,7 +191,14 @@ function ChangePasswordForm() {
                     </InputRightElement>
                 </InputGroup>
             </Box>
-            <Button colorScheme="blue" width="40%" padding="2%" fontSize="16px" marginTop={10}>
+            <Button
+                onClick={() => handleClick()}
+                colorScheme="blue"
+                width="40%"
+                padding="2%"
+                fontSize="16px"
+                marginTop={10}
+            >
                 Save change
             </Button>
         </Container>

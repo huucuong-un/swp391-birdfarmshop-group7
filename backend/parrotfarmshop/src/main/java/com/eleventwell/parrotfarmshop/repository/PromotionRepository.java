@@ -18,7 +18,6 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     List<PromotionEntity> findAllByOrderByIdDesc();
 
 
-
     @Query("SELECT p FROM PromotionEntity p WHERE p.code = :code AND :currentDate BETWEEN p.startDate AND p.endDate")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code") String code, @Param("currentDate") Date currentDate);
 
@@ -29,9 +28,8 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
             "CASE WHEN :sortPrice = 'PASC' THEN u.value END ASC , " +
             "CASE WHEN :sortPrice = 'PDESC' THEN u.value END DESC, " +
             "u.id DESC")
+
     List<PromotionEntity> searchSortForPromotion(@Param("searchStartDate") Date searchStartDate, @Param("searchEndDate") Date searchEndDate, @Param("sortDate") String sortDate, @Param("sortPrice") String sortPrice, @Param("status") Boolean status, Pageable pageable);
-
-
 
     @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code AND p.quantity > 0")
     PromotionEntity findOneByCodeAndCheckValidDate(@Param("code")String code);

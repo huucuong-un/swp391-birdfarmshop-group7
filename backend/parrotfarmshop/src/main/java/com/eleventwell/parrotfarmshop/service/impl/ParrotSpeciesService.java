@@ -18,6 +18,7 @@ import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -248,7 +249,18 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 //        return results;
 //    }
 
+    public List<ParrotSpeciesDTO> findTop3Sale() {
+        List<ParrotSpeciesDTO> result = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 3);
 
+        List<ParrotSpeciesEntity> listEntity =  parrotSpeciesRepository.findTop3Sales(pageable);
+        for (ParrotSpeciesEntity entity: listEntity) {
+            ParrotSpeciesDTO dto = (ParrotSpeciesDTO)genericConverter.toDTO(entity, ParrotSpeciesDTO.class);
+            result.add(dto);
+        }
+
+        return result;
+    }
 
 
 }

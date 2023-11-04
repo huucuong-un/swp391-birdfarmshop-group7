@@ -157,7 +157,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                 </Text>
             </div>
             <div className={cx('fade-container', { show: show })}>
-                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
+                {show && <AddMoreDeliveryInfo iveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
             </div>
         </Box>
     );

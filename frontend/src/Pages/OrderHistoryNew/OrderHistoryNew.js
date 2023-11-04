@@ -77,15 +77,9 @@ function OrderHistoryNew() {
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
-<<<<<<< HEAD
-    const [submissionStatus, setSubmissionStatus] = useState();
-    const { activeStep } = useSteps({
-        index: 1,
-        count: steps.length,
-    });
 
-=======
->>>>>>> d1c0f46fd90dfcc86904d71222c3c45680d73cd2
+    const [submissionStatus, setSubmissionStatus] = useState();
+
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [overlay, setOverlay] = React.useState(<OverlayOne />);

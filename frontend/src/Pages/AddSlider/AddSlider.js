@@ -122,7 +122,6 @@ function AddSlider() {
                 setTimeout(() => {
                     setSubmissionStatus('');
                 }, 5000);
-<<<<<<< HEAD
             } else {
                 const responsePost = await axios.post('http://localhost:8086/api/slider', {
                     sliderName: slider.sliderName,
@@ -130,15 +129,6 @@ function AddSlider() {
                     sliderImageURL: img,
                     status: slider.status,
                 });
-=======
-            }
-            const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
-                sliderName: slider.sliderName,
-                sliderDescription: slider.sliderDescription,
-                sliderImageURL: img,
-                status: slider.status,
-            });
->>>>>>> d1c0f46fd90dfcc86904d71222c3c45680d73cd2
 
                 console.log('POST request was successful at species!!');
                 // Assuming the response contains the newly created post data

@@ -15,6 +15,7 @@ public interface FAQsRepositoty extends JpaRepository<FAQEntity, Long> {
 
     FAQEntity findOneById(long id);
     List<FAQEntity> findAllByOrderByIdDesc();
+    List<FAQEntity> findAllByStatus(boolean status);
 
     @Query("SELECT u FROM FAQEntity u WHERE  (:searchTitle IS NULL OR u.title LIKE CONCAT('%', :searchTitle ,'%')) AND (:searchDate IS NULL OR DATE(u.createdDate) = :searchDate) AND (:status IS NULL OR u.status = :status)"+
             "ORDER BY " +

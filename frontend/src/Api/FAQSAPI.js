@@ -18,7 +18,7 @@ const FAQSAPI = {
         return axiosClinet.delete(url);
     },
     sortSearchForFaqs(params) {
-        const url = '/faqs/admin/search_sort';
+        const url = '/admin/faqs/search_sort';
         return axiosClient.get(url, { params });
     },
 };

@@ -277,5 +277,10 @@ public class OrderController {
     public Double totalPriceInDecember() {
         return orderService.calculateTotalPriceForDoneOrdersInDecember();
     }
+
+    @GetMapping(value = "find-one-by-usage-history-id/{id}")
+    public OrderDTO findOneByUsageHistory(@RequestBody @PathVariable Long id) {
+        return orderService.findOneByUsageHistoryId(id);
+    }
 }
 

@@ -6,6 +6,7 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.FAQsDTO;
 import com.eleventwell.parrotfarmshop.dto.NestDTO;
+import com.eleventwell.parrotfarmshop.dto.UserDTO;
 import com.eleventwell.parrotfarmshop.entity.FAQEntity;
 import com.eleventwell.parrotfarmshop.entity.NestEntity;
 import com.eleventwell.parrotfarmshop.repository.NestRepository;
@@ -141,5 +142,7 @@ public class NestService implements IGenericService<NestDTO> {
         return results;
     }
 
-
+    public NestDTO findOneById(Long id){
+        return (NestDTO) genericConverter.toDTO(parrotEggNestRepository.findOneById(id),NestDTO.class);
+    }
 }

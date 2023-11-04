@@ -41,6 +41,8 @@ import styles from '~/Pages/AdNestUsageHistoryManagement/AdNestUsageHistoryManag
 import FAQSAPI from '~/Api/FAQSAPI';
 import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import OrderAPI from '~/Api/OrderAPI';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -70,6 +72,7 @@ function AdNestUsageHistoryManagement() {
     const [nestDevStatusCurrent, setNestDevStatusCurrent] = useState();
     const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
     const [disabled, setDisabled] = useState(false);
+    const [combineData, setCombineData] = useState([]);
 
     useEffect(() => {
         const getNestPriceList = async () => {
@@ -89,6 +92,32 @@ function AdNestUsageHistoryManagement() {
             setVinh(false);
         }
     }, [vinh]);
+
+    useEffect(() => {
+        const getNestPriceByNestId = async () => {
+            const data = [];
+            try {
+                for (const item of faqsList) {
+                    const usageHistory = { ...item };
+                    const getNestById = await NestAPI.getNestById(item.nestId);
+                    const getNestPriceById = await NestAPI.getNestPriceById(getNestById.nestPriceId);
+                    const getOrderByUsageHistory = await OrderAPI.getOneByUsageHistory(item.id);
+                    usageHistory.user = await UserAPI.getUserById(getOrderByUsageHistory.userID);
+                    usageHistory.species = await ParrotSpeciesAPI.get(getNestPriceById.speciesId);
+                    data.push(usageHistory);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+            setCombineData(data);
+        };
+
+        getNestPriceByNestId();
+    }, [faqsList]);
+
+    useEffect(() => {
+        console.log(combineData);
+    }, [combineData]);
 
     useEffect(() => {
         const getNestDevStatusList = async () => {
@@ -127,7 +156,9 @@ function AdNestUsageHistoryManagement() {
                 console.error(error);
             }
         };
-        getStepper();
+        if (nestDevWithUsageHistoryId.length != 0) {
+            getStepper();
+        }
     }, [nestDevWithUsageHistoryId]);
 
     useEffect(() => {
@@ -186,17 +217,20 @@ function AdNestUsageHistoryManagement() {
                     }, 50000);
                 } else {
                     const add = await NestAPI.addNestDevelopment(nestDev);
-
                     setVinh(true);
                     setAddStatus(false);
                 }
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
         };
 
         addFaqs();
     }, [addStatus]);
+
+    useEffect(() => {
+        console.log(nestDev);
+    }, [nestDev]);
 
     function formatDate(date) {
         const day = date.getDate();
@@ -216,7 +250,12 @@ function AdNestUsageHistoryManagement() {
     };
 
     const handleSave = () => {
-        if (nestDev.statusId === null || nestDev.description === null || nestDev.description === '') {
+        if (
+            nestDev.statusId === null ||
+            nestDev.description === null ||
+            nestDev.description === '' ||
+            nestDev.description.length < 10
+        ) {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
@@ -381,12 +420,12 @@ function AdNestUsageHistoryManagement() {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {faqsList &&
-                            faqsList.map((faqs, index) => (
+                        {combineData &&
+                            combineData.map((faqs, index) => (
                                 <Tr key={index}>
                                     <Td>{faqs.id}</Td>
-                                    <Td>{faqs.parrotCoupleId}</Td>
-                                    <Td>{faqs.nestId}</Td>
+                                    <Td>{faqs.user.fullName}</Td>
+                                    <Td>{faqs.species[0].name}</Td>
                                     <Td>{formatDate(new Date(faqs.startDate))}</Td>
                                     <Td>{formatDate(new Date(faqs.endDate))}</Td>
                                     <Td>{formatDate(new Date(faqs.createdDate))}</Td>

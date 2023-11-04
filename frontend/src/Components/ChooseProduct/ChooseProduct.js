@@ -6,6 +6,7 @@ import parrot1 from '~/Assets/image/SelectProduct/pngegg.png';
 import nest from '~/Assets/image/SelectProduct/nestreal.png';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Tooltip } from '@chakra-ui/react';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,11 @@ function ChooseProduct() {
                     <Link className={cx('item')} to="/parrot-product">
                         <img className={cx('parrot-img')} src={parrot1} />
                     </Link>
+                    <Tooltip label="Shopping time!!!" placement="right" fontSize="xl">
+                        <Link className={cx('item')} to="/parrot-product">
+                            <img className={cx('parrot-img')} src={parrot1} />
+                        </Link>
+                    </Tooltip>
                 </div>
             </div>
         </div>

@@ -6,6 +6,10 @@ const NestAPI = {
         const url = '/parrot-egg-nest';
         return axiosClinet.get(url, { params });
     },
+    getNestById(id) {
+        const url = `/parrot-egg-nest/find-one-by-id?id=${id}`;
+        return axiosClinet.get(url);
+    },
     changeStatusForNest(id) {
         const url = `/parrot-egg-nest/${id}`;
         return axiosClinet.delete(url);
@@ -23,6 +27,10 @@ const NestAPI = {
     getAllNestUsageHistory(params) {
         const url = '/nest-usage-history';
         return axiosClinet.get(url, { params });
+    },
+    getOneByOrderId(id) {
+        const url = `/nest-usage-history/find-by-parrot-id/${id}`;
+        return axiosClinet.get(url);
     },
     add(data) {
         const url = `/nest-usage-history`;

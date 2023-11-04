@@ -19,7 +19,7 @@ const PromotionAPI = {
         return axiosClinet.post(url, data);
     },
     searchSortForPromotion(params) {
-        const url = '/promotion/admin/search_sort';
+        const url = '/admin/promotion/search_sort';
         return axiosClinet.get(url, { params });
     },
 };

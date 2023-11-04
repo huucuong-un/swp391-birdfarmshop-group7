@@ -19,6 +19,7 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddRole/AddRole.module.scss';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import RoleAPI from '~/Api/RoleAPI';
 const cx = classNames.bind(styles);
 function AddRole(props) {
     const [submissionStatus, setSubmissionStatus] = useState();
@@ -35,29 +36,28 @@ function AddRole(props) {
     const handleStatus = () => {
         setStatus(!status);
     };
-    useEffect(() => {
-        console.log(status);
-    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             // Make a POST request to the first API endpoint
-            const responseParrots = await axios.post('http://localhost:8086/api/role', {
-                // Add other fields you want to send to the first API
-                name: role.name,
-                description: role.description,
-                status: status,
-            });
-            props.onAdd(responseParrots.data);
-            console.log(responseParrots.data);
-            if (responseParrots.status === 200) {
-                console.log('POST request was successful at ROLE!!');
-            } else {
-                console.error('POST request failed with status code - ROLE: ', responseParrots.status);
-            }
+            if (role.description.length < 10) window.alert('Can not add!! Description must be in range 10..100');
+            else {
+                const responseParrots = await RoleAPI.addRole({
+                    // Add other fields you want to send to the first API
+                    name: role.name,
+                    description: role.description,
+                    status: status,
+                });
+                props.onAdd(responseParrots);
+                if (responseParrots.status === 200) {
+                    console.log('POST request was successful at ROLE!!');
+                } else {
+                    console.error('POST request failed with status code - ROLE: ', responseParrots.status);
+                }
 
-            setSubmissionStatus(true);
+                setSubmissionStatus(true);
+            }
         } catch (error) {
             console.error('Error:', error);
             setSubmissionStatus(false);
@@ -76,7 +76,7 @@ function AddRole(props) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Role name</Td>
                                 <Td>
                                     <Input
@@ -93,7 +93,7 @@ function AddRole(props) {
                                 </Td>
                             </Tr>
 
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Description</Td>
                                 <Td>
                                     <Input
@@ -114,7 +114,15 @@ function AddRole(props) {
                                 <Td>
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
-                                        {status ? <p fontSize={16}>On Processing</p> : <p fontSize={16}>Disabled</p>}
+                                        {status ? (
+                                            <p fontSize={16} style={{ margin: '0' }}>
+                                                On Processing
+                                            </p>
+                                        ) : (
+                                            <p fontSize={16} style={{ margin: '0' }}>
+                                                Disabled
+                                            </p>
+                                        )}
                                     </div>
                                     <Input
                                         type="hidden"

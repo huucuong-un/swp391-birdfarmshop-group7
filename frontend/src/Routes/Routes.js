@@ -37,7 +37,6 @@ import AddParrotNestService from '~/Pages/AddParrotNestService/AddParrotNestServ
 import OrderHistoryNew from '~/Pages/OrderHistoryNew/OrderHistoryNew';
 import AdminDashboard from '~/Pages/AdminDashboard/AdminDashboard';
 import AdminRoleList from '~/Pages/AdminRoleList/AdminRoleList';
-import AdminPromotion from '~/Pages/AdminPromotion/AdminPromotion';
 import StaffOrderManagement from '~/Pages/StaffOrderManagement/StaffOrderManagement';
 import AdFAQSManagement from '~/Pages/AdFAQSManagement/AdFAQSManagement';
 import AdminAccountList from '~/Pages/AdminAccountList/AdminAccountList';

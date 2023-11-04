@@ -42,6 +42,10 @@ public class NestController {
         return nestService.findOneBySpeciesId(speciesId);
     }
 
+    @GetMapping(value = "find-one-by-id")
+    public NestDTO findOneById(@RequestBody @RequestParam(value = "id") Long id) {
+        return nestService.findOneById(id);
+    }
 
     //add a parrot egg nest by Post method
     @PostMapping(value = "")

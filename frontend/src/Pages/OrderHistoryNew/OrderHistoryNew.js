@@ -69,43 +69,22 @@ import OrderAPI from '~/Api/OrderAPI';
 import Rate from '~/Components/Rate/Rate';
 import UserAPI from '~/Api/UserAPI';
 import { use } from 'i18next';
+import NestAPI from '~/Api/NestAPI';
 
 const cx = classNames.bind(styles);
 
-const steps = [
-    { title: 'Watiting for parrot', description: 'Contact Info' },
-    { title: 'Parrot received', description: 'Date & Time' },
-    { title: 'Inspecting', description: 'Select Rooms' },
-    { title: 'Verification successful', description: 'Select Rooms' },
-    { title: 'Start pairing', description: 'Select Rooms' },
-    { title: 'Pregnant', description: 'Select Rooms' },
-    { title: 'Gave birth', description: 'Select Rooms' },
-    { title: 'Incubating', description: 'Select Rooms' },
-    { title: 'Hatched', description: 'Select Rooms' },
-    { title: 'Ready to deliver', description: 'Select Rooms' },
-    { title: 'Delivered to the shipping unit', description: 'Select Rooms' },
-    { title: 'Delivering to you', description: 'Select Rooms' },
-    { title: 'Delivered successfully', description: 'Select Rooms' },
-];
-
 function OrderHistoryNew() {
+    const [show, setShow] = useState(false);
     const [rating, setRating] = useState(0);
     const [textareaValue, setTextareaValue] = useState('');
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
-
-    const { activeStep } = useSteps({
-        index: 1,
-        count: steps.length,
-    });
-
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [overlay, setOverlay] = React.useState(<OverlayOne />);
     const btnRef = React.useRef();
     const handleTextareaChange = (event) => {
-        // Update the state variable with the new value from the textarea
         setTextareaValue(event.target.value);
         console.log(textareaValue);
     };
@@ -114,7 +93,6 @@ function OrderHistoryNew() {
     const { addToCartStatus } = useCartStatus();
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
-
     const [sort, setSort] = useState({
         page: 1,
         limit: 12,
@@ -122,6 +100,108 @@ function OrderHistoryNew() {
         sortDate: null,
         sortPrice: null,
     });
+    const [orderIdToGetUsage, setOrderIdToGetUsage] = useState(null);
+    const [nestDevStatus, setNestDevStatus] = useState([]);
+    const [usageHistoryByOrderId, setUsageHistoryByOrderId] = useState([]);
+    const [nestDevWithUsageHistoryId, setNestDevWithUsageHistoryId] = useState([]);
+    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
+
+    const { activeStep } = useSteps({
+        index: 1,
+        count: nestDevStatus.length,
+    });
+    // const steps = [
+    //     { title: 'Watiting for parrot', description: 'Contact Info' },
+    //     { title: 'Parrot received', description: 'Date & Time' },
+    //     { title: 'Inspecting', description: 'Select Rooms' },
+    //     { title: 'Verification successful', description: 'Select Rooms' },
+    //     { title: 'Start pairing', description: 'Select Rooms' },
+    //     { title: 'Pregnant', description: 'Select Rooms' },
+    //     { title: 'Gave birth', description: 'Select Rooms' },
+    //     { title: 'Incubating', description: 'Select Rooms' },
+    //     { title: 'Hatched', description: 'Select Rooms' },
+    //     { title: 'Ready to deliver', description: 'Select Rooms' },
+    //     { title: 'Delivered to the shipping unit', description: 'Select Rooms' },
+    //     { title: 'Delivering to you', description: 'Select Rooms' },
+    //     { title: 'Delivered successfully', description: 'Select Rooms' },
+    // ];
+
+    useEffect(() => {
+        const getNestDevStatusList = async () => {
+            try {
+                const params = {
+                    page: 1,
+                    limit: 10000,
+                };
+                const nestDevStatusList = await NestAPI.getAllNestDevelopmentStatus(params);
+                setNestDevStatus(nestDevStatusList.listResult);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getNestDevStatusList();
+    }, []);
+
+    useEffect(() => {
+        const getUsageHistoryByOrderId = async () => {
+            try {
+                const usageHistoryByOrderId = await NestAPI.getOneByOrderId(orderIdToGetUsage);
+                setUsageHistoryByOrderId(usageHistoryByOrderId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (show) {
+            getUsageHistoryByOrderId();
+        }
+    }, [show]);
+
+    useEffect(() => {
+        const getNestDevWithUsageHistory = async () => {
+            try {
+                const nestDevWithUsageId = await NestAPI.getAllNestDevelopmentWithUsageId(usageHistoryByOrderId.id);
+                setNestDevWithUsageHistoryId(nestDevWithUsageId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getNestDevWithUsageHistory();
+    }, [usageHistoryByOrderId]);
+
+    useEffect(() => {
+        const getStepper = async () => {
+            try {
+                let maxId = 0;
+                let itemWithMaxId = null;
+                for (const item of nestDevWithUsageHistoryId) {
+                    if (item.id > maxId) {
+                        maxId = item.id;
+                        itemWithMaxId = item;
+                    }
+                }
+                const devStatusById = await NestAPI.getNestDevelopmentStatusById(itemWithMaxId.statusId);
+                setNestDevStatusWithSequenceToUseStepper(devStatusById.sequence);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getStepper();
+    }, [nestDevWithUsageHistoryId]);
+
+    useEffect(() => {
+        console.log(nestDevWithUsageHistoryId);
+    }, [nestDevWithUsageHistoryId]);
+
+    const handleShow = (id) => {
+        setShow(!show);
+        setOrderIdToGetUsage(id);
+    };
+
+    useEffect(() => {
+        console.log(orderIdToGetUsage);
+    }, [orderIdToGetUsage]);
+
     const handleStoreOrderId = (e) => {
         setOrderId(e);
     };
@@ -302,7 +382,7 @@ function OrderHistoryNew() {
                                                     <Image
                                                         borderRadius="full"
                                                         boxSize="60px"
-                                                        src= {parrot.img}
+                                                        src={parrot.img}
                                                         alt="Dan Abramov"
                                                     />
                                                 </Td>
@@ -434,7 +514,14 @@ function OrderHistoryNew() {
                                             </div>
                                         ) : null}
 
-                                        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+                                        <Button
+                                            ref={btnRef}
+                                            colorScheme="teal"
+                                            onClick={() => {
+                                                onOpen();
+                                                handleShow(order.orderDTO.id);
+                                            }}
+                                        >
                                             Track Process
                                         </Button>
                                     </ButtonGroup>
@@ -443,30 +530,23 @@ function OrderHistoryNew() {
                         </div>
                     </div>
                 ))}
-                {/* <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
-                    <DrawerOverlay />
-                    <DrawerContent>
-                        <DrawerCloseButton />
-                        <DrawerHeader>Create your account</DrawerHeader>
 
-                        <DrawerBody></DrawerBody>
-
-                        <DrawerFooter>
-                            <Button variant="outline" mr={3} onClick={onClose}>
-                                Cancel
-                            </Button>
-                            <Button colorScheme="blue">Save</Button>
-                        </DrawerFooter>
-                    </DrawerContent>
-                </Drawer> */}
-                {/* <Modal isCentered isOpen={isOpen} onClose={onClose} size="5xl">
+                <Modal
+                    isCentered
+                    isOpen={isOpen}
+                    onClose={() => {
+                        onClose();
+                        setShow(!show);
+                    }}
+                    size="5xl"
+                >
                     {overlay}
                     <ModalContent>
-                        <ModalHeader>Modal Title</ModalHeader>
-<ModalCloseButton />
+                        <ModalHeader>Haching Process</ModalHeader>
+                        <ModalCloseButton />
                         <ModalBody>
-                            <Stepper size="lg" index={activeStep} orientation="vertical">
-                                {steps.map((step, index) => (
+                            <Stepper size="lg" index={nestDevStatusWithSequenceToUseStepper} orientation="vertical">
+                                {nestDevStatus.map((step, index) => (
                                     <Step key={index}>
                                         <StepIndicator>
                                             <StepStatus
@@ -477,7 +557,7 @@ function OrderHistoryNew() {
                                         </StepIndicator>
 
                                         <Box flexShrink="0">
-                                            <StepTitle>{step.title}</StepTitle>
+                                            <StepTitle>{step.name}</StepTitle>
                                             <StepDescription>{step.description}</StepDescription>
                                         </Box>
 
@@ -487,10 +567,17 @@ function OrderHistoryNew() {
                             </Stepper>
                         </ModalBody>
                         <ModalFooter>
-                            <Button onClick={onClose}>Close</Button>
+                            <Button
+                                onClick={() => {
+                                    onClose();
+                                    setShow(!show);
+                                }}
+                            >
+                                Close
+                            </Button>
                         </ModalFooter>
                     </ModalContent>
-                </Modal> */}
+                </Modal>
             </div>
         </Container>
     );

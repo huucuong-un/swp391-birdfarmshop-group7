@@ -18,6 +18,7 @@ import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -236,27 +237,27 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     }
 
-    public List<ParrotSpeciesDTO> findTop3HighestSalse(){
-        try {
-            List<ParrotSpeciesDTO> results = new ArrayList();
-            List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findTop3Salse();
-            int count =0;
-            for (ParrotSpeciesEntity item : entities) {
-                if(count==3){
-                    break;
-                }
-                ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item, ParrotSpeciesDTO.class);
-                results.add(newDTO);
-                count++;
-            }
-
-            return results;
-
-        }catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public List<ParrotSpeciesDTO> findTop3HighestSalse(){
+//        try {
+//            List<ParrotSpeciesDTO> results = new ArrayList();
+//            List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findTop3Salse();
+//            int count =0;
+//            for (ParrotSpeciesEntity item : entities) {
+//                if(count==3){
+//                    break;
+//                }
+//                ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item, ParrotSpeciesDTO.class);
+//                results.add(newDTO);
+//                count++;
+//            }
+//
+//            return results;
+//
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
 
 //    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username, Boolean status, String sortRating, String sortDate, Pageable pageable) {
@@ -270,7 +271,18 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 //        return results;
 //    }
 
+    public List<ParrotSpeciesDTO> findTop3Sale() {
+        List<ParrotSpeciesDTO> result = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 3);
 
+        List<ParrotSpeciesEntity> listEntity =  parrotSpeciesRepository.findTop3Sales(pageable);
+        for (ParrotSpeciesEntity entity: listEntity) {
+            ParrotSpeciesDTO dto = (ParrotSpeciesDTO)genericConverter.toDTO(entity, ParrotSpeciesDTO.class);
+            result.add(dto);
+        }
+
+        return result;
+    }
 
 
 }

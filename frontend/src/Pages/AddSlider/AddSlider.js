@@ -122,6 +122,7 @@ function AddSlider() {
                 setTimeout(() => {
                     setSubmissionStatus('');
                 }, 5000);
+<<<<<<< HEAD
             } else {
                 const responsePost = await axios.post('http://localhost:8086/api/slider', {
                     sliderName: slider.sliderName,
@@ -129,6 +130,15 @@ function AddSlider() {
                     sliderImageURL: img,
                     status: slider.status,
                 });
+=======
+            }
+            const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
+                sliderName: slider.sliderName,
+                sliderDescription: slider.sliderDescription,
+                sliderImageURL: img,
+                status: slider.status,
+            });
+>>>>>>> d1c0f46fd90dfcc86904d71222c3c45680d73cd2
 
                 console.log('POST request was successful at species!!');
                 // Assuming the response contains the newly created post data
@@ -185,23 +195,27 @@ function AddSlider() {
         }
     };
     const handleStatus = async (index) => {
-        try {
-            const updatedSlider = [...sliderList];
-            updatedSlider[index].status = !updatedSlider[index].status;
-            await axios.delete(`http://localhost:8086/api/slider/${updatedSlider[index].id}`);
-            console.log('slider list in change status');
-            console.log(updatedSlider);
-            setSliderList(updatedSlider);
-        } catch (error) {
-            toast({
-                title: 'Error occur!',
-                description: error.response.data.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            console.log(error);
+        var sliderResponse = window.confirm('Are you sure to change status ?');
+        if (sliderResponse) {
+            try {
+                const updatedSlider = [...sliderList];
+                updatedSlider[index].status = !updatedSlider[index].status;
+                await axios.delete(`http://localhost:8086/api/marketer/slider/${updatedSlider[index].id}`);
+                console.log('slider list in change status');
+                console.log(updatedSlider);
+                setSliderList(updatedSlider);
+            } catch (error) {
+                toast({
+                    title: 'Error occur!',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                console.log(error);
+            }
+        } else {
         }
     };
     const [openSliderID, setOpenSliderID] = useState(null);
@@ -318,7 +332,7 @@ function AddSlider() {
                                     </Td>
                                 </Tr>
                                 <Tr>
-                                    <Td>Parrot image</Td>
+                                    <Td>Slider image</Td>
                                     <Td>
                                         <Input
                                             type="file"

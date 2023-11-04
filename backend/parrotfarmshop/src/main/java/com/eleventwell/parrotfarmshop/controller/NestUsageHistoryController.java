@@ -1,10 +1,7 @@
 package com.eleventwell.parrotfarmshop.controller;
 
 import com.eleventwell.parrotfarmshop.Model.PagingModel;
-import com.eleventwell.parrotfarmshop.dto.NestDevelopmentDTO;
-import com.eleventwell.parrotfarmshop.dto.NestDevelopmentStatusDTO;
-import com.eleventwell.parrotfarmshop.dto.NestUsageHistoryDTO;
-import com.eleventwell.parrotfarmshop.dto.ParrotSpeciesDTO;
+import com.eleventwell.parrotfarmshop.dto.*;
 import com.eleventwell.parrotfarmshop.service.impl.NestDevelopmentService;
 import com.eleventwell.parrotfarmshop.service.impl.NestUsageHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,11 @@ public class NestUsageHistoryController {
         return result;
 
     }
+    @GetMapping(value = "find-by-parrot-id/{id}")
+    public NestUsageHistoryDTO findOneByOrderId(@PathVariable("id") Long id) {
+        NestUsageHistoryDTO nestUsageHistoryDTO = nestUsageHistoryService.findOneByOrderId(id);
+        return  nestUsageHistoryDTO;
+    }
 
     @PutMapping(value = "/admin/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id) {
@@ -45,4 +47,6 @@ public class NestUsageHistoryController {
     public NestUsageHistoryDTO createNestUsageHistory(@RequestBody NestUsageHistoryDTO model) {
         return (NestUsageHistoryDTO) nestUsageHistoryService.save(model);
     }
+
+
 }

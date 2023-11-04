@@ -237,6 +237,28 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     }
 
+    public List<ParrotSpeciesDTO> findTop3HighestSalse(){
+        try {
+            List<ParrotSpeciesDTO> results = new ArrayList();
+            List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findTop3Salse();
+            int count =0;
+            for (ParrotSpeciesEntity item : entities) {
+                if(count==3){
+                    break;
+                }
+                ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item, ParrotSpeciesDTO.class);
+                results.add(newDTO);
+                count++;
+            }
+
+            return results;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 //    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username, Boolean status, String sortRating, String sortDate, Pageable pageable) {
 //        List<FeedbackDTO> results = new ArrayList();

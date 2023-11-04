@@ -9,6 +9,7 @@ import styles from '~/Pages/ChangePassword/ChangePassword.module.scss';
 import { faEye, faEyeLowVision } from '@fortawesome/free-solid-svg-icons';
 import UserAPI from '~/Api/UserAPI';
 import LoginAPI from '~/Api/LoginAPI';
+import { useEffect } from 'react';
 
 const ResetPassword = () => {
     const location = useLocation();

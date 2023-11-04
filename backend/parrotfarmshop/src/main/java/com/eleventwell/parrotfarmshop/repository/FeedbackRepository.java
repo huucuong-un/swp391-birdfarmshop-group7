@@ -32,7 +32,7 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
 
     Integer countAllByRating(Integer id);
 
-    @Query("SELECT COUNT(u) FROM FeedbackEntity u   WHERE u.status =true AND (:speciesId IS NULL OR u.rating = :speciesId) AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
+    @Query("SELECT COUNT(u) FROM FeedbackEntity u   WHERE u.status =true AND (:speciesId IS NULL OR u.parrotSpeciesColor.parrotSpecies.id = :speciesId) AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
 
     Integer countAllByParrotSpeciesColorIdAndRating(@Param("speciesId") Long speciesId,@Param("colorId") Long colorId,@Param("rating") Integer rating);
     Integer countAllByParrotSpeciesColorParrotSpeciesIdAndStatusIsTrue(Long colorId);

@@ -248,7 +248,6 @@ function AdNestManagement() {
                 <FontAwesomeIcon icon={faCirclePlus} />
                 <Text className={cx('add-role-text')}>Add nest</Text>
             </Flex>
-
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">

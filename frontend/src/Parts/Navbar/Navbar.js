@@ -28,6 +28,7 @@ const cx = classNames.bind(styles);
 function Navbar() {
     const [loggedUser, setLoggedUser] = useState();
     const { user } = ShopState();
+    const { setUser } = ShopState();
 
     const navigate = useNavigate();
 
@@ -37,6 +38,7 @@ function Navbar() {
 
     const logoutHandler = () => {
         localStorage.removeItem('accessToken');
+        setUser(null);
         navigate('/login-user');
     };
 
@@ -44,6 +46,7 @@ function Navbar() {
         try {
             const userFromToken = UserAPI.getUserByToken(token);
             user = userFromToken;
+
             setLoggedUser(userFromToken);
         } catch (error) {}
     }, [token]);

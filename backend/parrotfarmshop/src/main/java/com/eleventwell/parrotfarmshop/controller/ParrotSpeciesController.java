@@ -209,4 +209,9 @@ public class ParrotSpeciesController {
 //
 //        return result;
 //    }
+
+    @GetMapping(value = "admin/find-top3-sale")
+    public List<ParrotSpeciesDTO> findTop3Sale() {
+        return  parrotSpeciesService.findTop3Sale();
+    }
 }

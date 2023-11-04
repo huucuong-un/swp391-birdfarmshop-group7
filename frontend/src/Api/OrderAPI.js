@@ -5,7 +5,10 @@ const OrderAPI = {
         const url = '/order/admin/order_management/list';
         return axiosClinet.get(url, { params });
     },
-
+    getOneByUsageHistory(id) {
+        const url = `/order/find-one-by-usage-history-id/${id}`;
+        return axiosClinet.get(url);
+    },
     searchByEmailAndPhone(params) {
         const url = '/order/admin/order_management/search';
         return axiosClinet.get(url, { params });

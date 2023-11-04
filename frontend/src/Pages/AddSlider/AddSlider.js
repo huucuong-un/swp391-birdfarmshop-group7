@@ -18,12 +18,21 @@ import {
     Switch,
     Text,
     Container,
+    Box,
+    Flex,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import Title from '~/Components/Title/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
@@ -75,8 +84,8 @@ function AddSlider() {
         }
     }, [sort, reloadData, slider]);
     const [validate, setValidate] = useState({
-        title: null,
-        description: null,
+        sliderName: '',
+        sliderDescription: '',
     });
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -113,18 +122,29 @@ function AddSlider() {
                 setTimeout(() => {
                     setSubmissionStatus('');
                 }, 5000);
+<<<<<<< HEAD
+            } else {
+                const responsePost = await axios.post('http://localhost:8086/api/slider', {
+                    sliderName: slider.sliderName,
+                    sliderDescription: slider.sliderDescription,
+                    sliderImageURL: img,
+                    status: slider.status,
+                });
+=======
             }
-            const responsePost = await axios.post('http://localhost:8086/api/slider', {
+            const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
                 sliderName: slider.sliderName,
                 sliderDescription: slider.sliderDescription,
                 sliderImageURL: img,
                 status: slider.status,
             });
+>>>>>>> d1c0f46fd90dfcc86904d71222c3c45680d73cd2
 
-            console.log('POST request was successful at species!!');
-            // Assuming the response contains the newly created post data
-            setSlider({ ...slider, ...responsePost.data });
-            setSubmissionStatus(true);
+                console.log('POST request was successful at species!!');
+                // Assuming the response contains the newly created post data
+                setSlider({ ...slider, ...responsePost.data });
+                setSubmissionStatus(true);
+            }
         } catch (error) {
             console.error('Error while making POST request:', error);
             setSubmissionStatus(false);
@@ -175,23 +195,27 @@ function AddSlider() {
         }
     };
     const handleStatus = async (index) => {
-        try {
-            const updatedSlider = [...sliderList];
-            updatedSlider[index].status = !updatedSlider[index].status;
-            await axios.delete(`http://localhost:8086/api/slider/${updatedSlider[index].id}`);
-            console.log('slider list in change status');
-            console.log(updatedSlider);
-            setSliderList(updatedSlider);
-        } catch (error) {
-            toast({
-                title: 'Error occur!',
-                description: error.response.data.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            console.log(error);
+        var sliderResponse = window.confirm('Are you sure to change status ?');
+        if (sliderResponse) {
+            try {
+                const updatedSlider = [...sliderList];
+                updatedSlider[index].status = !updatedSlider[index].status;
+                await axios.delete(`http://localhost:8086/api/marketer/slider/${updatedSlider[index].id}`);
+                console.log('slider list in change status');
+                console.log(updatedSlider);
+                setSliderList(updatedSlider);
+            } catch (error) {
+                toast({
+                    title: 'Error occur!',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                console.log(error);
+            }
+        } else {
         }
     };
     const [openSliderID, setOpenSliderID] = useState(null);
@@ -234,17 +258,16 @@ function AddSlider() {
     console.log(sliderList);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title-wrapper')}>
-                <h1>Add slider</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    SLIDER MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add slider</Text>
+            </Flex>
             {show ? (
                 <form className={cx('inner')} onSubmit={handleSubmit}>
                     <TableContainer className={cx('table-container')}>
@@ -309,7 +332,7 @@ function AddSlider() {
                                     </Td>
                                 </Tr>
                                 <Tr>
-                                    <Td>Parrot image</Td>
+                                    <Td>Slider image</Td>
                                     <Td>
                                         <Input
                                             type="file"

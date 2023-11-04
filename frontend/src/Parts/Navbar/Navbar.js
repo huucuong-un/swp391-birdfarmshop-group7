@@ -1,7 +1,7 @@
 import styles from '~/Parts/Navbar/Navbar.module.scss';
 import classNames from 'classnames/bind';
 
-import { Button as Buttons, ButtonGroup } from '@chakra-ui/react';
+import { Button as Buttons, ButtonGroup, Tooltip } from '@chakra-ui/react';
 
 //tippy
 import Tippy from '@tippyjs/react/headless';
@@ -28,6 +28,7 @@ const cx = classNames.bind(styles);
 function Navbar() {
     const [loggedUser, setLoggedUser] = useState();
     const { user } = ShopState();
+    const { setUser } = ShopState();
 
     const navigate = useNavigate();
 
@@ -37,6 +38,7 @@ function Navbar() {
 
     const logoutHandler = () => {
         localStorage.removeItem('accessToken');
+        setUser(null);
         navigate('/login-user');
     };
 
@@ -44,6 +46,7 @@ function Navbar() {
         try {
             const userFromToken = UserAPI.getUserByToken(token);
             user = userFromToken;
+
             setLoggedUser(userFromToken);
         } catch (error) {}
     }, [token]);
@@ -173,7 +176,9 @@ function Navbar() {
                                             </MenuItem>
                                         </MenuList>
                                     </Menu>
-                                    <span>{user.userName}</span>
+                                    <Tooltip label="My Name" fontSize="xl">
+                                        <span>{user.userName}</span>
+                                    </Tooltip>
                                 </Box>
 
                                 {/* <Button className={cx('nav-top-btn-left-register')} to="/register">
@@ -194,17 +199,19 @@ function Navbar() {
                             </>
                         )}
                     </div>
-                    <Link className={cx('logo-container')} to="/">
-                        <img className={cx('logo')} src={logo} alt="Logo" />
-                    </Link>
+                    <Tooltip label="Homepage" placement="right" fontSize="lg">
+                        <Link className={cx('logo-container')} to="/">
+                            <img className={cx('logo')} src={logo} alt="Logo" />
+                        </Link>
+                    </Tooltip>
                     <div className={cx('active-right')}>
-                        <Button
+                        {/* <Button
                             text
                             className={cx('language-and-cart')}
                             leftIcon={<FontAwesomeIcon className={cx('icon')} icon={faGlobe} />}
                         >
-                            Language {/* <GoogleTranslate></GoogleTranslate> */}
-                        </Button>
+                            Language
+                        </Button> */}
                         <Tippy
                             interactive
                             // delay={[0, 700]}
@@ -242,6 +249,7 @@ function Navbar() {
                                                         <p>$ {totalPrice.toFixed(2)}</p>
                                                     </div>
                                                 </div>
+
                                                 <Link to="/shopping-cart">
                                                     <Buttons
                                                         colorScheme="blue"
@@ -278,24 +286,32 @@ function Navbar() {
                 </div>
                 <div className={cx('nav-bottom')}>
                     <div className={cx('subnav')}>
-                        <Link to="/parrot-product" className={cx('subnavbtn')}>
-                            PARROT
-                        </Link>
+                        <Tooltip label="Let's explore the word of parrot!" fontSize="lg" placement="left">
+                            <Link to="/parrot-product" className={cx('subnavbtn')}>
+                                PARROT
+                            </Link>
+                        </Tooltip>
                     </div>
                     <div className={cx('subnav')}>
-                        <Link to="/add-parrot-nest-service" className={cx('subnavbtn')}>
-                            NEST
-                        </Link>
+                        <Tooltip label="Love zone!!!" fontSize="xl" placement="bottom">
+                            <Link to="/add-parrot-nest-service" className={cx('subnavbtn')}>
+                                NEST
+                            </Link>
+                        </Tooltip>
                     </div>
                     <div className={cx('subnav')}>
-                        <Link to="/about-us" className={cx('subnavbtn')}>
-                            ABOUT
-                        </Link>
+                        <Tooltip label="Wanna know more about me!" fontSize="xl" placement="bottom">
+                            <Link to="/about-us" className={cx('subnavbtn')}>
+                                ABOUT
+                            </Link>
+                        </Tooltip>
                     </div>
                     <div className={cx('subnav')}>
-                        <Link to="/faqs" className={cx('subnavbtn')}>
-                            FAQS
-                        </Link>
+                        <Tooltip label="Where you will need it" fontSize="lg" placement="right">
+                            <Link to="/faqs" className={cx('subnavbtn')}>
+                                FAQs
+                            </Link>
+                        </Tooltip>
                     </div>
                 </div>
             </div>

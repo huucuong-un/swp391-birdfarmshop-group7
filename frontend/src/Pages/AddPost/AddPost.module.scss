@@ -1,7 +1,18 @@
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.add-role-text {
+    margin: 0 5px;
+}
 .wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
 }
 .inner {
@@ -255,4 +266,9 @@
             opacity: 0.5 !important;
         }
     }
+}
+.td-content {
+    width: 200px;
+    text-align: center;
+    margin: auto auto;
 }

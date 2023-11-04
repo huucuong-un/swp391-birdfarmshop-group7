@@ -1,10 +1,11 @@
-import { Box, Button, Container, Input, InputGroup, Text } from '@chakra-ui/react';
+import { Box, Button, Container, Input, InputGroup, Text, Toast, useToast } from '@chakra-ui/react';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import OTPAPI from '~/Api/OTPAPI';
 
 const ForgotPasswordOTP = () => {
+    const toast = useToast();
     const location = useLocation();
     const navigate = useNavigate();
     const handleValidateOTP = async () => {
@@ -17,6 +18,15 @@ const ForgotPasswordOTP = () => {
             const OTP = await OTPAPI.getOTP(email, code);
             if (OTP.id !== null && OTP.id !== undefined) {
                 navigate('reset-password', { state: { email } });
+            } else {
+                toast({
+                    title: 'Wrong OTP',
+                    // description: error.register.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
             }
         } catch (error) {}
     };

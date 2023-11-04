@@ -3,7 +3,6 @@
 }
 
 .save-btn {
-    background-color: #f9ede9 !important;
     color: black !important;
     width: 100% !important;
     min-height: 40px;
@@ -66,4 +65,16 @@ th {
     thead {
         background-color: #f9ede9 !important;
     }
+}
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.add-role-text {
+    margin: 0 5px;
 }

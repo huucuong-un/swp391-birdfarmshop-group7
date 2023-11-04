@@ -26,12 +26,20 @@ import {
     SlideFade,
     Collapse,
     Box,
+    Flex,
 } from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 import Title from '~/Components/Title/Title';
 import axios from 'axios';
 import PostAPI from '~/Api/PostAPI';
@@ -66,22 +74,26 @@ function AddPost() {
         const updatedPost = [...postList];
         updatedPost[index].status = !updatedPost[index].status;
 
-        try {
-            // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/post/${updatedPost[index].id}`);
+        var postResponse = window.confirm('Are you sure to change status ?');
+        if (postResponse) {
+            try {
+                // Send a request to update the status on the server
+                await PostAPI.changePostStatus(updatedPost[index].id);
 
-            // If the request is successful, update the state
-            setPostList(updatedPost);
-        } catch (error) {
-            toast({
-                title: 'Error occur!',
-                description: error.response.data.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            console.log(error);
+                // If the request is successful, update the state
+                setPostList(updatedPost);
+            } catch (error) {
+                toast({
+                    title: 'Error occur!',
+                    description: error.response.data.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                console.log(error);
+            }
+        } else {
         }
     };
     // Toast
@@ -91,7 +103,7 @@ function AddPost() {
         setShow(!show);
     };
     const [post, setPost] = useState({
-        description: 'Default by Hnam',
+        description: '',
         title: '',
         content: '',
         imageUrl: null,
@@ -189,7 +201,7 @@ function AddPost() {
                     title: null,
                     description: null,
                 });
-                const responsePost = await axios.post('http://localhost:8086/api/post', {
+                const responsePost = await PostAPI.addPost({
                     endDate: post.endDate,
                     status: post.status,
                     title: post.title,
@@ -198,15 +210,11 @@ function AddPost() {
                     startDate: post.startDate,
                     imageUrl: img,
                 });
-                if (responsePost.status === 200) {
-                    console.log('POST request was successful at species!!');
-                    // Assuming the response contains the newly created post data
-                    setPost({ ...post, ...responsePost.data });
-                    setSubmissionStatus(true);
-                } else {
-                    console.error('POST request failed with status code - species: ', responsePost.status);
-                    setSubmissionStatus(false);
-                }
+
+                console.log('POST request was successful at species!!');
+                // Assuming the response contains the newly created post data
+                setPost({ ...post, ...responsePost.data });
+                setSubmissionStatus(true);
             }
         } catch (error) {
             console.error('Error while making POST request:', error);
@@ -283,17 +291,16 @@ function AddPost() {
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title-wrapper')}>
-                <h1>Add post</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme={'green'} size={'lg'}>
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    POST MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add post</Text>
+            </Flex>
 
             {show ? (
                 <div className={cx('inner-up')}>
@@ -352,6 +359,23 @@ function AddPost() {
                                             }}
                                             variant="filled"
                                             placeholder="Title"
+                                            required
+                                        />
+                                    </Td>
+                                </Tr>
+                                <Tr>
+                                    <Td>Description</Td>
+                                    <Td>
+                                        <Input
+                                            type="text"
+                                            id="description"
+                                            name="description"
+                                            value={post.description}
+                                            onChange={(e) => {
+                                                setPost({ ...post, description: e.target.value });
+                                            }}
+                                            variant="filled"
+                                            placeholder="Description"
                                             required
                                         />
                                     </Td>
@@ -444,11 +468,7 @@ function AddPost() {
                     onChange={(e) => setSort({ ...sort, content: e.target.value })}
                 />
                 <input type="text" placeholder="Title" onChange={(e) => setSort({ ...sort, title: e.target.value })} />
-                <input
-                    type="text"
-                    placeholder="Description"
-                    onChange={(e) => setSort({ ...sort, description: e.target.value })}
-                />
+
                 {/* Sort date */}
                 <input
                     type="date"
@@ -475,91 +495,90 @@ function AddPost() {
                     id="sortStatus"
                     onChange={(e) => setSort({ ...sort, status: e.target.value })}
                 >
-                    <option value="b">Status</option>
+                    <option value="">Status</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
             </div>
-            <TableContainer className={cx('table-container')}>
-                <Table size="xs">
-                    <Thead>
-                        <Tr>
-                            <Th className={cx('text-center')}>ID</Th>
-                            <Th className={cx('text-center')}>Title</Th>
-                            <Th className={cx('text-center')}>Content</Th>
-                            <Th className={cx('text-center')}>Description</Th>
-                            <Th className={cx('text-center')}>Image</Th>
-                            <Th className={cx('text-center')}>Start date</Th>
-                            <Th className={cx('text-center')}>End date</Th>
-                            <Th className={cx('text-center')}>Status</Th>
-                            <Th>Action</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {postList.map((post, index) => (
-                            <>
-                                <Tr key={index}>
-                                    <Td>{post.id}</Td>
-                                    <Td>{post.title}</Td>
-                                    <Td>
-                                        <div className={cx('td-content')}>{post.content}</div>
-                                    </Td>
-                                    <Td>{post.description}</Td>
-                                    <Td>
-                                        <img src={post.imageUrl} />
-                                    </Td>
-                                    <Td>{post.startDate}</Td>
-                                    <Td>{post.endDate}</Td>
-                                    <Td>
-                                        <Switch
-                                            onChange={() => handleStatus(index)}
-                                            size="lg"
-                                            isChecked={post.status}
-                                            colorScheme="green"
-                                        />
-                                        {post.status ? (
-                                            <Text color="green" fontSize={12} overflow="hidden">
-                                                On Processing
-                                            </Text>
-                                        ) : (
-                                            <Text color="red" fontSize={12} overflow="hidden">
-                                                Disabled
-                                            </Text>
-                                        )}
 
-                                        <Input
-                                            type="hidden"
-                                            id="status"
-                                            name="status"
-                                            variant="filled"
-                                            value={status}
-                                            onChange={(e) => setPost({ ...post, status: e.target.value })}
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <Button
-                                            key={post.id}
-                                            onClick={() => toggleEditForm(post.id)}
-                                            colorScheme={'green'}
-                                            size={'lg'}
-                                        >
-                                            {openPostID === post.id ? 'Close Edit' : 'Edit'}
-                                        </Button>
-                                    </Td>
-                                </Tr>
-
-                                <Tr key={index + 'post'}>
-                                    {openPostID === post.id && (
-                                        <Td colSpan={10}>
-                                            <UpdatePost postId={post.id} reloadData={handleUpdateSuccess} />
-                                        </Td>
+            <table>
+                <thead>
+                    <tr>
+                        <th className={cx('text-center')}>ID</th>
+                        <th className={cx('text-center')}>Title</th>
+                        <th className={cx('text-center')}>Description</th>
+                        <th className={cx('text-center')}>Content</th>
+                        <th className={cx('text-center')}>Image</th>
+                        <th className={cx('text-center')}>Start date</th>
+                        <th className={cx('text-center')}>End date</th>
+                        <th className={cx('text-center')}>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {postList.map((post, index) => (
+                        <>
+                            <tr key={index}>
+                                <td>{post.id} </td>
+                                <td>{post.title} </td>
+                                <td>{post.description}</td>
+                                <td>
+                                    <div className={cx('td-content')}>{post.content}</div>
+                                </td>
+                                <td>
+                                    <img src={post.imageUrl} width="150px" height="150px" />
+                                </td>
+                                <td>{post.startDate} </td>
+                                <td>{post.endDate} </td>
+                                <td>
+                                    <Switch
+                                        onChange={() => handleStatus(index)}
+                                        size="lg"
+                                        isChecked={post.status}
+                                        colorScheme="green"
+                                    />
+                                    {post.status ? (
+                                        <Text color="green" fontSize={12} overflow="hidden">
+                                            On Processing
+                                        </Text>
+                                    ) : (
+                                        <Text color="red" fontSize={12} overflow="hidden">
+                                            Disabled
+                                        </Text>
                                     )}
-                                </Tr>
-                            </>
-                        ))}
-                    </Tbody>
-                </Table>
-            </TableContainer>
+
+                                    <Input
+                                        type="hidden"
+                                        id="status"
+                                        name="status"
+                                        variant="filled"
+                                        value={status}
+                                        onChange={(e) => setPost({ ...post, status: e.target.value })}
+                                    />
+                                </td>
+                                <td>
+                                    <Button
+                                        key={post.id}
+                                        onClick={() => toggleEditForm(post.id)}
+                                        colorScheme={'green'}
+                                        size={'lg'}
+                                    >
+                                        {openPostID === post.id ? 'Close Edit' : 'Edit'}
+                                    </Button>
+                                </td>
+                            </tr>
+
+                            <tr key={index + 'post'}>
+                                {openPostID === post.id && (
+                                    <td colSpan={10}>
+                                        <UpdatePost postId={post.id} reloadData={handleUpdateSuccess} />
+                                    </td>
+                                )}
+                            </tr>
+                        </>
+                    ))}
+                </tbody>
+            </table>
             <div className={cx('button-pagination')}>
                 <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
                     <FontAwesomeIcon icon={faAngleLeft} />

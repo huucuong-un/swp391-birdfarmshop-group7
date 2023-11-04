@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from '~/Pages/MngOrder/MngOrder.module.scss';
 
-import { Input, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
+import { Input, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Box, Text } from '@chakra-ui/react';
 import Buttons from '~/Components/Button/Button';
 
 const cx = classNames.bind(styles);
@@ -10,9 +10,11 @@ function MngOrder() {
     return (
         <div className={cx('wrapper')}>
             {/* Title */}
-            <div className={cx('title')}>
-                <h1>Order</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    ORDER MANAGEMENT
+                </Text>
+            </Box>
             {/* Sort space */}
             <div className={cx('add-btn')}>
                 <div className={cx('sort-space')}>

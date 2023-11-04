@@ -7,14 +7,10 @@ import ButtonT from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
+    AlertIcon,
+    AlertTitle,
+    Alert,
     Box,
-    MinusIcon,
-    AddIcon,
     Container,
     Image,
     Card,
@@ -58,6 +54,7 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
+    AlertDescription,
 } from '@chakra-ui/react';
 
 import React, { useState, useEffect } from 'react';
@@ -69,43 +66,31 @@ import OrderAPI from '~/Api/OrderAPI';
 import Rate from '~/Components/Rate/Rate';
 import UserAPI from '~/Api/UserAPI';
 import { use } from 'i18next';
+import NestAPI from '~/Api/NestAPI';
 
 const cx = classNames.bind(styles);
 
-const steps = [
-    { title: 'Watiting for parrot', description: 'Contact Info' },
-    { title: 'Parrot received', description: 'Date & Time' },
-    { title: 'Inspecting', description: 'Select Rooms' },
-    { title: 'Verification successful', description: 'Select Rooms' },
-    { title: 'Start pairing', description: 'Select Rooms' },
-    { title: 'Pregnant', description: 'Select Rooms' },
-    { title: 'Gave birth', description: 'Select Rooms' },
-    { title: 'Incubating', description: 'Select Rooms' },
-    { title: 'Hatched', description: 'Select Rooms' },
-    { title: 'Ready to deliver', description: 'Select Rooms' },
-    { title: 'Delivered to the shipping unit', description: 'Select Rooms' },
-    { title: 'Delivering to you', description: 'Select Rooms' },
-    { title: 'Delivered successfully', description: 'Select Rooms' },
-];
-
 function OrderHistoryNew() {
+    const [show, setShow] = useState(false);
     const [rating, setRating] = useState(0);
     const [textareaValue, setTextareaValue] = useState('');
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
-
+<<<<<<< HEAD
+    const [submissionStatus, setSubmissionStatus] = useState();
     const { activeStep } = useSteps({
         index: 1,
         count: steps.length,
     });
 
+=======
+>>>>>>> d1c0f46fd90dfcc86904d71222c3c45680d73cd2
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [overlay, setOverlay] = React.useState(<OverlayOne />);
     const btnRef = React.useRef();
     const handleTextareaChange = (event) => {
-        // Update the state variable with the new value from the textarea
         setTextareaValue(event.target.value);
         console.log(textareaValue);
     };
@@ -114,7 +99,6 @@ function OrderHistoryNew() {
     const { addToCartStatus } = useCartStatus();
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
-
     const [sort, setSort] = useState({
         page: 1,
         limit: 12,
@@ -122,26 +106,146 @@ function OrderHistoryNew() {
         sortDate: null,
         sortPrice: null,
     });
+    const [orderIdToGetUsage, setOrderIdToGetUsage] = useState(null);
+    const [nestDevStatus, setNestDevStatus] = useState([]);
+    const [usageHistoryByOrderId, setUsageHistoryByOrderId] = useState([]);
+    const [nestDevWithUsageHistoryId, setNestDevWithUsageHistoryId] = useState([]);
+    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
+
+    const { activeStep } = useSteps({
+        index: 1,
+        count: nestDevStatus.length,
+    });
+    // const steps = [
+    //     { title: 'Watiting for parrot', description: 'Contact Info' },
+    //     { title: 'Parrot received', description: 'Date & Time' },
+    //     { title: 'Inspecting', description: 'Select Rooms' },
+    //     { title: 'Verification successful', description: 'Select Rooms' },
+    //     { title: 'Start pairing', description: 'Select Rooms' },
+    //     { title: 'Pregnant', description: 'Select Rooms' },
+    //     { title: 'Gave birth', description: 'Select Rooms' },
+    //     { title: 'Incubating', description: 'Select Rooms' },
+    //     { title: 'Hatched', description: 'Select Rooms' },
+    //     { title: 'Ready to deliver', description: 'Select Rooms' },
+    //     { title: 'Delivered to the shipping unit', description: 'Select Rooms' },
+    //     { title: 'Delivering to you', description: 'Select Rooms' },
+    //     { title: 'Delivered successfully', description: 'Select Rooms' },
+    // ];
+
+    useEffect(() => {
+        const getNestDevStatusList = async () => {
+            try {
+                const params = {
+                    page: 1,
+                    limit: 10000,
+                };
+                const nestDevStatusList = await NestAPI.getAllNestDevelopmentStatus(params);
+                setNestDevStatus(nestDevStatusList.listResult);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getNestDevStatusList();
+    }, []);
+
+    useEffect(() => {
+        const getUsageHistoryByOrderId = async () => {
+            try {
+                const usageHistoryByOrderId = await NestAPI.getOneByOrderId(orderIdToGetUsage);
+                setUsageHistoryByOrderId(usageHistoryByOrderId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (show) {
+            getUsageHistoryByOrderId();
+        }
+    }, [show]);
+
+    useEffect(() => {
+        const getNestDevWithUsageHistory = async () => {
+            try {
+                const nestDevWithUsageId = await NestAPI.getAllNestDevelopmentWithUsageId(usageHistoryByOrderId.id);
+                setNestDevWithUsageHistoryId(nestDevWithUsageId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getNestDevWithUsageHistory();
+    }, [usageHistoryByOrderId]);
+
+    useEffect(() => {
+        const getStepper = async () => {
+            try {
+                let maxId = 0;
+                let itemWithMaxId = null;
+                for (const item of nestDevWithUsageHistoryId) {
+                    if (item.id > maxId) {
+                        maxId = item.id;
+                        itemWithMaxId = item;
+                    }
+                }
+                const devStatusById = await NestAPI.getNestDevelopmentStatusById(itemWithMaxId.statusId);
+                setNestDevStatusWithSequenceToUseStepper(devStatusById.sequence);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getStepper();
+    }, [nestDevWithUsageHistoryId]);
+
+    useEffect(() => {
+        console.log(nestDevWithUsageHistoryId);
+    }, [nestDevWithUsageHistoryId]);
+
+    const handleShow = (id) => {
+        setShow(!show);
+        setOrderIdToGetUsage(id);
+    };
+
+    useEffect(() => {
+        console.log(orderIdToGetUsage);
+    }, [orderIdToGetUsage]);
+
     const handleStoreOrderId = (e) => {
         setOrderId(e);
     };
+    const [validate, setValidate] = useState({ error: '' });
     const handleSaveFeedback = () => {
         // Update the state variable with the new value from the textarea
         console.log(orders);
-        const feedbackParam = {
-            content: textareaValue,
-            rating: rating,
-            belongTo: 'parrot',
-            userId: orderId.userId,
-            colorId: orderId.colorId,
-            orderId: orderId.orderId,
-            status: true,
-        };
-        FeedbackAPI.create(feedbackParam);
-        document.getElementById(orderId.btnId).disabled = true;
-        document.getElementById(orderId.btnId).style.backgroundColor = 'grey';
-
-        onClose();
+        if (textareaValue.length === 0) {
+            setValidate({ error: 'Please enter feedback' });
+            setSubmissionStatus(false);
+            setTimeout(() => {
+                setSubmissionStatus();
+            }, 5000);
+            return;
+        }
+        if (textareaValue.length !== 0 && textareaValue.length > 150) {
+            if (textareaValue.length > 150) {
+                setValidate({ error: 'Feedback do not moreover than 150 characters' });
+            }
+            setSubmissionStatus(false);
+            setTimeout(() => {
+                setSubmissionStatus();
+            }, 5000);
+        } else {
+            const feedbackParam = {
+                content: textareaValue,
+                rating: rating,
+                belongTo: 'parrot',
+                userId: orderId.userId,
+                colorId: orderId.colorId,
+                orderId: orderId.orderId,
+                status: true,
+            };
+            FeedbackAPI.create(feedbackParam);
+            document.getElementById(orderId.btnId).disabled = true;
+            document.getElementById(orderId.btnId).style.backgroundColor = 'grey';
+            onClose();
+        }
     };
 
     useEffect(() => {
@@ -241,15 +345,7 @@ function OrderHistoryNew() {
             {/* Sorting Space */}
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
-
                 <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
-                {/* <select name="status" id="status" onChange={(e) => setSort({...sort, status:e.target.value})}>
-                    <option value="" disabled selected>
-                        Status
-                    </option>
-                    <option value="false">Active</option>
-                    <option value="true">Inactive</option>
-                </select> */}
                 <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
                     <option value="" disabled selected>
                         Sort Date
@@ -302,7 +398,7 @@ function OrderHistoryNew() {
                                                     <Image
                                                         borderRadius="full"
                                                         boxSize="60px"
-                                                        src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                        src={parrot.img}
                                                         alt="Dan Abramov"
                                                     />
                                                 </Td>
@@ -355,6 +451,7 @@ function OrderHistoryNew() {
                                                 >
                                                     Feedback
                                                 </button>
+
                                                 <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
                                                     {overlay}
                                                     <ModalContent>
@@ -362,6 +459,26 @@ function OrderHistoryNew() {
                                                         <ModalCloseButton />
                                                         <ModalBody>
                                                             <div className={cx('rate-area')}>
+                                                                {(submissionStatus === true && (
+                                                                    <Alert status="success">
+                                                                        <AlertIcon />
+                                                                        <AlertTitle>Success!</AlertTitle>
+                                                                        <AlertDescription>
+                                                                            Your form has been submitted successfully.
+                                                                        </AlertDescription>
+                                                                    </Alert>
+                                                                )) ||
+                                                                    (submissionStatus === false && (
+                                                                        <Alert status="error">
+                                                                            <AlertIcon />
+                                                                            <br />
+                                                                            <AlertTitle>
+                                                                                <Text fontSize="sm" lineHeight="1.4">
+                                                                                    {validate.error}
+                                                                                </Text>
+                                                                            </AlertTitle>
+                                                                        </Alert>
+                                                                    ))}
                                                                 <div className={cx('product-container')}>
                                                                     <div className={cx('product-img')}>
                                                                         <img
@@ -434,7 +551,14 @@ function OrderHistoryNew() {
                                             </div>
                                         ) : null}
 
-                                        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+                                        <Button
+                                            ref={btnRef}
+                                            colorScheme="teal"
+                                            onClick={() => {
+                                                onOpen();
+                                                handleShow(order.orderDTO.id);
+                                            }}
+                                        >
                                             Track Process
                                         </Button>
                                     </ButtonGroup>
@@ -443,30 +567,23 @@ function OrderHistoryNew() {
                         </div>
                     </div>
                 ))}
-                {/* <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
-                    <DrawerOverlay />
-                    <DrawerContent>
-                        <DrawerCloseButton />
-                        <DrawerHeader>Create your account</DrawerHeader>
 
-                        <DrawerBody></DrawerBody>
-
-                        <DrawerFooter>
-                            <Button variant="outline" mr={3} onClick={onClose}>
-                                Cancel
-                            </Button>
-                            <Button colorScheme="blue">Save</Button>
-                        </DrawerFooter>
-                    </DrawerContent>
-                </Drawer> */}
-                {/* <Modal isCentered isOpen={isOpen} onClose={onClose} size="5xl">
+                <Modal
+                    isCentered
+                    isOpen={isOpen}
+                    onClose={() => {
+                        onClose();
+                        setShow(!show);
+                    }}
+                    size="5xl"
+                >
                     {overlay}
                     <ModalContent>
-                        <ModalHeader>Modal Title</ModalHeader>
-<ModalCloseButton />
+                        <ModalHeader>Haching Process</ModalHeader>
+                        <ModalCloseButton />
                         <ModalBody>
-                            <Stepper size="lg" index={activeStep} orientation="vertical">
-                                {steps.map((step, index) => (
+                            <Stepper size="lg" index={nestDevStatusWithSequenceToUseStepper} orientation="vertical">
+                                {nestDevStatus.map((step, index) => (
                                     <Step key={index}>
                                         <StepIndicator>
                                             <StepStatus
@@ -477,7 +594,7 @@ function OrderHistoryNew() {
                                         </StepIndicator>
 
                                         <Box flexShrink="0">
-                                            <StepTitle>{step.title}</StepTitle>
+                                            <StepTitle>{step.name}</StepTitle>
                                             <StepDescription>{step.description}</StepDescription>
                                         </Box>
 
@@ -487,10 +604,17 @@ function OrderHistoryNew() {
                             </Stepper>
                         </ModalBody>
                         <ModalFooter>
-                            <Button onClick={onClose}>Close</Button>
+                            <Button
+                                onClick={() => {
+                                    onClose();
+                                    setShow(!show);
+                                }}
+                            >
+                                Close
+                            </Button>
                         </ModalFooter>
                     </ModalContent>
-                </Modal> */}
+                </Modal>
             </div>
         </Container>
     );

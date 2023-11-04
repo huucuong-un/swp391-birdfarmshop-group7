@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/parrot-species")
+@RequestMapping(value = "/api")
 public class ParrotSpeciesController {
     @Autowired
     private ParrotSpeciesService parrotSpeciesService;
@@ -39,38 +39,38 @@ public class ParrotSpeciesController {
 //        return result.getListResult();
 //    }
 
-    @GetMapping(value = "find-one-species-by-id/{id}")
+    @GetMapping(value = "parrot-species/find-one-species-by-id/{id}")
     public List<ParrotSpeciesDTO> findOneSpeciesById(@RequestBody @PathVariable("id") long id) {
         List<ParrotSpeciesDTO> list = new ArrayList<>();
         list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id));
         return list;
     }
 
-    @GetMapping(value = "find-one-species-by-id-object/{id}")
+    @GetMapping(value = "parrot-species/find-one-species-by-id-object/{id}")
     public ParrotSpeciesDTO findOneSpeciesByIdInNest(@RequestBody @PathVariable("id") long id) {
         ParrotSpeciesDTO list = parrotSpeciesService.findOneSpeciesById(id);
         return list;
     }
 
-    @GetMapping(value = "find-one-species-by-parrot-id/{id}")
+    @GetMapping(value = "parrot-species/find-one-species-by-parrot-id/{id}")
     public List<ParrotSpeciesDTO> findOneSpeciesByParrotId(@RequestBody @PathVariable("id") long id) {
         List<ParrotSpeciesDTO> list = new ArrayList<>();
         list.add((ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesParrotById(id));
         return list;
     }
-    @GetMapping(value = "find-one-species-by-color-id/{id}")
+    @GetMapping(value = "parrot-species/find-one-species-by-color-id/{id}")
     public ParrotSpeciesDTO findOneSpeciesByColorId(@RequestBody @PathVariable("id") long id) {
 
         return (ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id);
 
     }
 
-    @GetMapping(value = "total-item")
+    @GetMapping(value = "parrot-species/total-item")
     public Integer totalItems() {
         return parrotSpeciesService.totalItem();
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "parrot-species")
     public PagingModel showNew(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         if (page != null && limit != null) {
@@ -85,8 +85,23 @@ public class ParrotSpeciesController {
 
         return result;
     }
+    @GetMapping(value = "parrot-species-true")
+    public PagingModel showTrue(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
+        PagingModel result = new PagingModel();
+        if (page != null && limit != null) {
+            result.setPage(page);
+            Pageable pageable = PageRequest.of(page - 1, limit);
+            result.setListResult(parrotSpeciesService.findAllByStatusIsTrue(pageable));
+            result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItem()) / limit)));
+            result.setLimit(limit);
+        } else {
+            result.setListResult(parrotSpeciesService.findAll());
+        }
 
-    @GetMapping(value = "admin/list")
+        return result;
+    }
+
+    @GetMapping(value = "parrot-species/list")
     public PagingModel showNewForAdmin(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         if (page != null && limit != null) {
@@ -102,7 +117,7 @@ public class ParrotSpeciesController {
         return result;
     }
 
-    @GetMapping(value = "sort")
+    @GetMapping(value = "parrot-species/sort")
     public PagingModel showSort(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,  @RequestParam(value = "sortway", required = false) String sortway) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -123,7 +138,7 @@ public class ParrotSpeciesController {
         return result;
     }
     
-      @GetMapping(value = "search")
+      @GetMapping(value = "parrot-species/search")
     public PagingModel showSearch(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,  @RequestParam(value = "name", required = false) String name) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -143,23 +158,23 @@ public class ParrotSpeciesController {
         return result;
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "admin/parrot-species/create")
     public ParrotSpeciesDTO createParrotSpecies(@RequestBody ParrotSpeciesDTO model) {
         return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "admin/parrot-species/update/{id}")
     public ParrotSpeciesDTO updateParrotSpecies(@RequestBody ParrotSpeciesDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return (ParrotSpeciesDTO) parrotSpeciesService.save(model);
     }
 
-    @DeleteMapping(value = "{ids}")
+    @DeleteMapping(value = "admin/parrot-species/change-status/{ids}")
     public void deleteParrotSpecies(@RequestBody @PathVariable("ids") Long ids) {
         parrotSpeciesService.changeStatus(ids);
     }
 
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "admin/parrot-species/search_sort")
     public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page,
                                        @RequestParam(value = "limit", required = false) Integer limit,
                                        @RequestParam(value = "name", required = false) String name,
@@ -187,11 +202,11 @@ public class ParrotSpeciesController {
 
         return result;
     }
-    @GetMapping(value = "admin/top-3-sales")
-    public List<ParrotSpeciesDTO> top3Sales() {
-
-        return parrotSpeciesService.findTop3HighestSalse();
-    }
+//    @GetMapping(value = "admin/top-3-sales")
+//    public List<ParrotSpeciesDTO> top3Sales() {
+//
+//        return parrotSpeciesService.findTop3HighestSalse();
+//    }
 
 
 
@@ -209,4 +224,26 @@ public class ParrotSpeciesController {
 //
 //        return result;
 //    }
+@GetMapping(value = "parrot-species/search_sort")
+public PagingModel searchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page,
+                                   @RequestParam(value = "limit", required = false) Integer limit,
+                                   @RequestParam(value = "name", required = false) String name,
+                                   @RequestParam(value = "sortName", required = false) String sortName,
+                                   @RequestParam(value = "sortParrotAverageRating", required = false) String sortParrotAverageRating,
+                                   @RequestParam(value = "sortDate", required = false) String sortDate
+){
+    PagingModel result = new PagingModel();
+    result.setPage(page);
+    Pageable pageable = PageRequest.of(page - 1, limit);
+
+    result.setListResult(parrotSpeciesService.searchSort(name, sortName, sortParrotAverageRating, sortDate, pageable));
+    result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItemForAdmin()) / limit)));
+    result.setLimit(limit);
+
+    return result;
+}
+    @GetMapping(value = "admin/parrot-species/find-top3-sale")
+    public List<ParrotSpeciesDTO> findTop3Sale() {
+        return  parrotSpeciesService.findTop3Sale();
+    }
 }

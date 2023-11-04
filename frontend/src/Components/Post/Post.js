@@ -16,9 +16,9 @@ function Post() {
     useEffect(() => {
         const getPost = async () => {
             try {
-                const getPostList = PostAPI.getAll();
+                const getPostList = PostAPI.getAllByTrueStatus();
                 getPostList.then((result) => {
-                    setPostList(result.listResult);
+                    setPostList(result);
                 });
             } catch (error) {
                 console.error(error);
@@ -40,10 +40,7 @@ function Post() {
                         <div className={cx('post-inner')}>
                             <div className={cx('scheme-swirl')}></div>
                             <div className={cx('post-img')}>
-                                <img
-                                    src="https://www.meowingtons.com/cdn/shop/files/DSC02273_6ed7c0c1-0867-4dc8-a2dc-e15f47999142_540x.png?v=1666191045"
-                                    alt="post-background"
-                                />
+                                <img src={post.imageUrl} alt="post-background" />
                             </div>
                             <div className={cx('post-title')}>{post.title}</div>
                             <div className={cx('post-content')}>{post.description}</div>

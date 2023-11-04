@@ -5,6 +5,10 @@ const ParrotSpeciesAPI = {
         const url = '/parrot-species';
         return axiosClinet.get(url, { params });
     },
+    getAllTrue(params) {
+        const url = '/parrot-species-true';
+        return axiosClinet.get(url, { params });
+    },
     getListBySpeciesId(speciesId) {
         const url = `/parrot-species-color/find-by-parrot-species-id/${speciesId}`;
         return axiosClinet.get(url);
@@ -33,17 +37,17 @@ const ParrotSpeciesAPI = {
     },
 
     add(data) {
-        const url = `/parrot-species`;
+        const url = `/admin/parrot-species/create`;
         return axiosClinet.post(url, data);
     },
 
     update(data) {
-        const url = `/parrot-species/${data.id}`;
+        const url = `/admin/parrot-species/update/${data.id}`;
         return axiosClinet.put(url, data);
     },
 
     remove(id) {
-        const url = `/parrot-species/${id}`;
+        const url = `/admin/parrot-species/change-status/${id}`;
         return axiosClinet.delete(url);
     },
     sort(params) {
@@ -52,6 +56,10 @@ const ParrotSpeciesAPI = {
     },
     search(params) {
         const url = `/parrot-species/search`;
+        return axiosClinet.get(url, { params });
+    },
+    searchSortParrotSpeciesPublic(params) {
+        const url = '/parrot-species/search_sort';
         return axiosClinet.get(url, { params });
     },
 };

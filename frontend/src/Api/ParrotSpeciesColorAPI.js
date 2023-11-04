@@ -65,7 +65,7 @@ const ParrotSpeciesColorAPI = {
         return axiosClinet.post(url);
     },
     searchSortParrotSpecies(params) {
-        const url = '/parrot-species/admin/search_sort';
+        const url = '/admin/parrot-species/search_sort';
         return axiosClinet.get(url, { params });
     },
 };

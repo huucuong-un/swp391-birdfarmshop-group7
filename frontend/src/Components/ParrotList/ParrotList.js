@@ -87,7 +87,7 @@ function ParrotList(props) {
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({
         page: 1,
-        limit: 12,
+        limit: 8,
     });
     const [sortWithPagination, setSortWithPagination] = useState({
         page: 1,
@@ -208,10 +208,11 @@ function ParrotList(props) {
                 //     page: 1,
                 //     limit: 12,
                 // };
-                const parrotSpeciesList = await ParrotSpeciesAPI.getAll(pagination);
+                const parrotSpeciesList = await ParrotSpeciesAPI.searchSortParrotSpeciesPublic(pagination);
                 const totalSpeciesNumber = await ParrotSpeciesAPI.count();
                 setTotalSpecies(totalSpeciesNumber);
                 setParrotSpecies(parrotSpeciesList.listResult);
+                console.log(parrotSpeciesList.listResult);
                 setTotalPage(parrotSpeciesList.totalPage);
                 notifyTotalSpecies(totalSpeciesNumber);
             } catch (error) {
@@ -221,41 +222,41 @@ function ParrotList(props) {
         getParrotsSpecies();
     }, [pagination]);
 
-    useEffect(() => {
-        const getSortParrotSpecies = async () => {
-            try {
-                // const params = {
-                //     page: 1,
-                //     limit: 12,
-                //     sortway: 'NDESC',
-                // };
-                const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
-                console.log(sortList.listResult);
-                setParrotSpecies(sortList.listResult);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getSortParrotSpecies();
-    }, [sortWithPagination]);
+    // useEffect(() => {
+    //     const getSortParrotSpecies = async () => {
+    //         try {
+    //             // const params = {
+    //             //     page: 1,
+    //             //     limit: 12,
+    //             //     sortway: 'NDESC',
+    //             // };
+    //             const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
+    //             console.log(sortList.listResult);
+    //             setParrotSpecies(sortList.listResult);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     getSortParrotSpecies();
+    // }, [sortWithPagination]);
 
-    useEffect(() => {
-        const getSearchParrotSpecies = async () => {
-            try {
-                const params = {
-                    page: 1,
-                    limit: 12,
-                    name: 'c',
-                };
-                const searchList = await ParrotSpeciesAPI.search(searchWithPagination);
-                setParrotSpecies(searchList.listResult);
-                console.log(parrotSpecies);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getSearchParrotSpecies();
-    }, [searchWithPagination]);
+    // useEffect(() => {
+    //     const getSearchParrotSpecies = async () => {
+    //         try {
+    //             const params = {
+    //                 page: 1,
+    //                 limit: 12,
+    //                 name: 'c',
+    //             };
+    //             const searchList = await ParrotSpeciesAPI.search(searchWithPagination);
+    //             setParrotSpecies(searchList.listResult);
+    //             console.log(parrotSpecies);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     getSearchParrotSpecies();
+    // }, [searchWithPagination]);
 
     useEffect(() => {
         console.log(parrotSpecies);

@@ -110,6 +110,17 @@ public class PostService implements IGenericService<PostDTO> {
         }
         return results;
     }
+
+    public List<PostDTO> findAllByStatusTrue() {
+        List<PostDTO> results = new ArrayList();
+        List<PostEntity> entities = postRepository.findAllByStatusTrue();
+
+        for(PostEntity item : entities) {
+            PostDTO newDTO = (PostDTO) genericConverter.toDTO(item,PostDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
 //    public List<FeedbackDTO> searchSortForAdmin(Integer rating, Long speciesId, Date searchDate, String username, Boolean status, String sortRating, String sortDate, Pageable pageable) {
 //        List<FeedbackDTO> results = new ArrayList();
 //        List<FeedbackEntity> entities = feedbackRepository.searchSortForAdmin(rating, speciesId, searchDate, username, status, sortRating, sortDate, pageable);

@@ -91,4 +91,15 @@ public class SliderService implements IGenericService<SliderDTO> {
     public int totalItem() {
         return (int)sliderRepository.count();
     }
+
+    public List<SliderDTO> findAllWithTrueStatus() {
+        List<SliderDTO> results = new ArrayList<>();
+        List<SliderEntity> entities = sliderRepository.findAllByStatusTrue();
+        for (SliderEntity sliderEntity : entities
+        ) {
+            SliderDTO newDTO = (SliderDTO) genericConverter.toDTO(sliderEntity, SliderDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+    }
 }

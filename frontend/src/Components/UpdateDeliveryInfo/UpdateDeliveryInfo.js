@@ -24,7 +24,13 @@ const cx = classNames.bind(styles);
 
 function UpdateDeliveryInfo(props) {
     const [newDeliveryInfo, setNewDeliveryInfo] = useState(props.deliveryInfo);
+    console.log(newDeliveryInfo);
     const { user } = ShopState();
+    const [validate, setValidate] = useState({
+        name: '',
+        phone: '',
+        address: '',
+    });
     const updateDeliveryInfo = async () => {
         try {
             setLoading(true);
@@ -33,22 +39,85 @@ function UpdateDeliveryInfo(props) {
                     'Content-Type': 'application/json',
                 },
             };
-            const updatedInfo = await DeliveryInformationAPI.updateDeliveryInfo(
-                {
-                    id: newDeliveryInfo.id,
-                    name: newDeliveryInfo.name,
-                    phoneNumber: newDeliveryInfo.phoneNumber,
-                    address: newDeliveryInfo.address,
-                    status: newDeliveryInfo.status,
-                    userId: user.id,
-                    pickingStatus: newDeliveryInfo.pickingStatus,
-                },
-                config,
-            );
-            setLoading(false);
-            setSubmissionStatus(true);
 
-            props.onUpdate(updatedInfo);
+            if (
+                newDeliveryInfo.name.length !== 0 &&
+                newDeliveryInfo.phoneNumber.length !== 0 &&
+                newDeliveryInfo.address.length !== 0 &&
+                (newDeliveryInfo.name.length < 3 ||
+                    newDeliveryInfo.name.length > 50 ||
+                    newDeliveryInfo.phoneNumber.length < 10 ||
+                    newDeliveryInfo.phoneNumber.length > 11 ||
+                    newDeliveryInfo.address.length < 10 ||
+                    newDeliveryInfo.address.length > 50)
+            ) {
+                if (
+                    (newDeliveryInfo.name.length < 3 || newDeliveryInfo.name.length > 50) &&
+                    (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11) &&
+                    (newDeliveryInfo.address.length < 10 || newDeliveryInfo.address.length > 50)
+                ) {
+                    setValidate({
+                        name: 'Name must be in 3 and 50 characters',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: 'Address must be in 10 and 50 characters',
+                    });
+                } else if (
+                    (newDeliveryInfo.name.length < 3 || newDeliveryInfo.name.length > 50) &&
+                    (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11)
+                ) {
+                    setValidate({
+                        name: 'Name must be in 3 and 50 characters',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: '',
+                    });
+                } else if (
+                    (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11) &&
+                    (newDeliveryInfo.address.length < 10 || newDeliveryInfo.address.length > 50)
+                ) {
+                    setValidate({
+                        name: '',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: 'Address must be in 10 and 50 characters',
+                    });
+                } else if (newDeliveryInfo.name.length < 3 || newDeliveryInfo.name.length > 50) {
+                    setValidate({
+                        name: 'Name must be in 3 and 50 characters',
+                        phone: '',
+                        address: '',
+                    });
+                } else if (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11) {
+                    setValidate({
+                        name: '',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: '',
+                    });
+                } else if (newDeliveryInfo.address.length < 10 || newDeliveryInfo.address.length > 50) {
+                    setValidate({
+                        name: '',
+                        phone: '',
+                        address: 'Address must be in 10 and 50 characters',
+                    });
+                }
+                setSubmissionStatus(false);
+                setLoading(false);
+            } else {
+                const updatedInfo = await DeliveryInformationAPI.updateDeliveryInfo(
+                    {
+                        id: newDeliveryInfo.id,
+                        name: newDeliveryInfo.name,
+                        phoneNumber: newDeliveryInfo.phoneNumber,
+                        address: newDeliveryInfo.address,
+                        status: newDeliveryInfo.status,
+                        userId: user.id,
+                        pickingStatus: newDeliveryInfo.pickingStatus,
+                    },
+                    config,
+                );
+                setLoading(false);
+                setSubmissionStatus(true);
+
+                props.onUpdate(updatedInfo);
+            }
         } catch (error) {
             setSubmissionStatus(false);
             setLoading(false);
@@ -71,7 +140,9 @@ function UpdateDeliveryInfo(props) {
                     (submissionStatus === false && (
                         <Alert status="error" fontSize={12}>
                             <AlertIcon />
-                            <AlertTitle>Failed to update!!- </AlertTitle>
+                            <AlertTitle>
+                                Failed to update!!- {validate.name} - {validate.phone} - {validate.address}{' '}
+                            </AlertTitle>
                             <AlertDescription>Please check again!!!</AlertDescription>
                         </Alert>
                     ))}

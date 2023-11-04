@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.repository;
 
+import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -100,4 +101,7 @@ List<OrderEntity> findAllByUserIdOrderByIdDescANDSearchSort(@Param("userId") Lon
 
     @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 12")
     Double sumTotalPriceForDoneOrdersInDecember();
+
+    @Query("SELECT o.orderId from OrderDetailEntity o where o.nestUsageHistory.id = :usageId")
+    OrderEntity findOneByUsageHistory(@Param("usageId") Long usageId);
 }

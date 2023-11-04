@@ -1,12 +1,20 @@
-import { Box, Button, Container, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, Input, InputGroup, InputRightElement, Text, Toast, useToast } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/ChangePassword/ChangePassword.module.scss';
 import { faEye, faEyeLowVision } from '@fortawesome/free-solid-svg-icons';
+import UserAPI from '~/Api/UserAPI';
+import LoginAPI from '~/Api/LoginAPI';
+import { useEffect } from 'react';
 
 const ResetPassword = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [passwordNew, setPasswordNew] = useState('');
     const [confirmPasswordNew, setConfirmPasswordNew] = useState('');
 
@@ -23,25 +31,42 @@ const ResetPassword = () => {
         setShowConfirmPasswordNew(!showConfirmPasswordNew);
     };
     const handleClick = async () => {
-        if (!passwordNew || !confirmPasswordNew) {
+        try {
+            if (!passwordNew || !confirmPasswordNew) {
+                toast({
+                    title: 'Please fill all the fields',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                return;
+            }
+            if (passwordNew !== confirmPasswordNew) {
+                toast({
+                    title: 'Password does not match',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                return;
+            }
+            const param = {
+                email: location.state.email,
+                newPassword: passwordNew,
+            };
+            LoginAPI.resetPassword(param);
             toast({
-                title: 'Please fill all the fields',
-                status: 'warning',
+                title: 'Reset password successfully!!',
+                status: 'success',
                 duration: 5000,
                 isClosable: true,
                 position: 'bottom',
             });
-            return;
-        }
-        if (passwordNew !== confirmPasswordNew) {
-            toast({
-                title: 'Password does not match',
-                status: 'warning',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            return;
+            navigate('/login-user');
+        } catch (error) {
+            console.error(error);
         }
     };
     return (
@@ -114,7 +139,14 @@ const ResetPassword = () => {
                 </InputGroup>
             </Box>
 
-            <Button colorScheme="blue" width="40%" padding="2%" fontSize="16px" marginTop={10}>
+            <Button
+                onClick={() => handleClick()}
+                colorScheme="blue"
+                width="40%"
+                padding="2%"
+                fontSize="16px"
+                marginTop={10}
+            >
                 Reset
             </Button>
         </Container>

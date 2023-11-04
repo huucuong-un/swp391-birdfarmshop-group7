@@ -41,6 +41,12 @@ public class NestDevelopmentStatusController {
         return nestDevelopmentStatusDTO;
     }
 
+    @GetMapping(value = "find-one-by-sequence/{id}")
+    public NestDevelopmentStatusDTO findOneBySequence(@RequestBody @PathVariable("id") Integer id) {
+        NestDevelopmentStatusDTO nestDevelopmentStatusDTO = nestDevelopmentStatusService.findOneBySequence(id);
+        return nestDevelopmentStatusDTO;
+    }
+
     @PutMapping(value = "/admin/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id) {
         nestDevelopmentStatusService.changeStatus(id);

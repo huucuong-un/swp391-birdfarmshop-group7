@@ -36,6 +36,7 @@ function AdNestPriceManagement() {
     const [faqsList, setFaqsList] = useState([]);
     const [nestPrice, setNestPrice] = useState([]);
     const [show, setShow] = useState(false);
+    const [showForUpdate, setShowForUpdate] = useState(false);
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState(0);
     const [status, setStatus] = useState(false);
@@ -53,6 +54,15 @@ function AdNestPriceManagement() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
+    const [nestPriceForUpdate, setNestPriceForUpdate] = useState({
+        id: null,
+        createdDate: null,
+        speciesId: null,
+        status: null,
+        price: null,
+        speciesName: null,
+    });
+    const [updateStatus, setUpdateStatus] = useState(false);
 
     useEffect(() => {
         const getNestPriceList = async () => {
@@ -86,10 +96,6 @@ function AdNestPriceManagement() {
     }, [faqsList]);
 
     useEffect(() => {
-        console.log(combineData);
-    }, [combineData]);
-
-    useEffect(() => {
         const getNestPriceList = async () => {
             try {
                 const nestPriceList = await NestAPI.getAll();
@@ -115,10 +121,6 @@ function AdNestPriceManagement() {
 
         getSpecies();
     }, [show]);
-
-    useEffect(() => {
-        console.log(title);
-    }, [title]);
 
     useEffect(() => {
         const addFaqs = async () => {
@@ -147,6 +149,46 @@ function AdNestPriceManagement() {
         addFaqs();
     }, [addStatus]);
 
+    useEffect(() => {
+        const updateNestPrice = async () => {
+            try {
+                const data = {
+                    createdDate: nestPriceForUpdate.createdDate,
+                    speciesId: nestPriceForUpdate.speciesId,
+                    price: nestPriceForUpdate.price,
+                    status: nestPriceForUpdate.status,
+                };
+                if (updateStatus === false) {
+                    setAddFail((prev) => prev + 1);
+                    // setSubmitStatus(false);
+                    setTimeout(() => {
+                        setSubmitStatus();
+                    }, 50000);
+                } else {
+                    const update = await NestAPI.updateNestPrice(data, nestPriceForUpdate.id);
+                    setVinh(true);
+                    setAddStatus(false);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        updateNestPrice();
+        setNestPriceForUpdate({
+            id: null,
+            createdDate: null,
+            speciesId: null,
+            status: null,
+            price: null,
+            speciesName: null,
+        });
+    }, [updateStatus]);
+
+    useEffect(() => {
+        console.log(updateStatus);
+    }, [updateStatus]);
+
     function formatDate(date) {
         const day = date.getDate();
         const month = date.getMonth() + 1; // Months are zero-indexed
@@ -162,6 +204,38 @@ function AdNestPriceManagement() {
         setShow(!show);
     };
 
+    const handleShowForUpdate = (id, speciesId, createdDate, status, speciesName) => {
+        if (showForUpdate === true) {
+            setNestPriceForUpdate({
+                id: null,
+                createdDate: null,
+                speciesId: null,
+                status: null,
+                price: null,
+                speciesName: null,
+            });
+            setShowForUpdate(!showForUpdate);
+        } else {
+            setNestPriceForUpdate({
+                ...nestPriceForUpdate,
+                id: id,
+                createdDate: createdDate,
+                speciesId: speciesId,
+                status: status,
+                speciesName: speciesName,
+            });
+            setShowForUpdate(!showForUpdate);
+        }
+    };
+
+    useEffect(() => {
+        console.log(nestPriceForUpdate);
+    }, [nestPriceForUpdate]);
+
+    useEffect(() => {
+        console.log(showForUpdate);
+    }, [showForUpdate]);
+
     const handleSave = () => {
         if (title === '' || title === 'Species' || price === 0 || price < 0) {
             setAddFail((prev) => prev + 1);
@@ -175,6 +249,31 @@ function AdNestPriceManagement() {
             setTimeout(() => {
                 setSubmitStatus();
             }, 50000);
+        }
+    };
+
+    const handleSaveForUpdate = () => {
+        if (
+            nestPriceForUpdate.id === null ||
+            nestPriceForUpdate.createdDate === null ||
+            nestPriceForUpdate.price === '' ||
+            nestPriceForUpdate.price === null ||
+            nestPriceForUpdate.speciesName === null ||
+            nestPriceForUpdate.status === null ||
+            nestPriceForUpdate.speciesId === null
+        ) {
+            setAddFail((prev) => prev + 1);
+            setSubmitStatus(false);
+            setTimeout(() => {
+                setSubmitStatus();
+            }, 50000);
+        } else {
+            setUpdateStatus(true);
+            setSubmitStatus(true);
+            setTimeout(() => {
+                setSubmitStatus();
+            }, 50000);
+            setShowForUpdate(!showForUpdate);
         }
     };
 
@@ -297,6 +396,46 @@ function AdNestPriceManagement() {
             ) : (
                 <></>
             )}
+
+            {showForUpdate ? (
+                <TableContainer paddingTop={10} paddingBottom={10}>
+                    <Table variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th colSpan={2}>Update Nest Price</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            <Tr>
+                                <Td>Species</Td>
+                                <Td>{nestPriceForUpdate.speciesName}</Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Price</Td>
+                                <Td>
+                                    <Input
+                                        type="number"
+                                        borderColor="black"
+                                        placeholder="Price..."
+                                        fontSize={18}
+                                        onChange={(e) =>
+                                            setNestPriceForUpdate({
+                                                ...nestPriceForUpdate,
+                                                price: parseInt(e.target.value),
+                                            })
+                                        }
+                                    />
+                                </Td>
+                            </Tr>
+                        </Tbody>
+                    </Table>
+                    <Button colorScheme="green" onClick={handleSaveForUpdate} className={cx('save-btn')} fontSize={18}>
+                        Save
+                    </Button>
+                </TableContainer>
+            ) : (
+                <></>
+            )}
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input
@@ -337,6 +476,7 @@ function AdNestPriceManagement() {
                             <Th>Price</Th>
                             <Th>Created Date</Th>
                             <Th>Status</Th>
+                            <Th>Action</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -354,6 +494,22 @@ function AdNestPriceManagement() {
                                             colorScheme="green"
                                             onChange={() => changeStatus(faqs.id, index)}
                                         />
+                                    </Td>
+                                    <Td>
+                                        <Button
+                                            colorScheme="green"
+                                            onClick={() =>
+                                                handleShowForUpdate(
+                                                    faqs.id,
+                                                    faqs.speciesId,
+                                                    faqs.createdDate,
+                                                    faqs.status,
+                                                    faqs.species[0].name,
+                                                )
+                                            }
+                                        >
+                                            Update
+                                        </Button>
                                     </Td>
                                 </Tr>
                             ))}

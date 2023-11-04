@@ -15,13 +15,23 @@ import {
     AlertTitle,
     AlertDescription,
     Container,
+    Text,
+    Box,
+    Flex,
 } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrot/AddParrot.module.scss';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Title from '~/Components/Title/Title';
 import Buttons from '~/Components/Button/Button';
@@ -89,6 +99,15 @@ function AddParrot() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log(speciesColorByID);
+            if (species.length === 0 || speciesColorByID === 'a') {
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus(null);
+                }, 5000);
+                return;
+            }
+
             const responseParrots = await axios.post('http://localhost:8086/api/parrot', {
                 // Add other fields you want to send to the first API
                 age: parrots.age,
@@ -121,6 +140,7 @@ function AddParrot() {
         const fetchParrotSpecies = async () => {
             try {
                 const parrotSpecie = await ParrotSpeciesAPI.getAll();
+
                 setSpecies(parrotSpecie.listResult);
             } catch (error) {
                 console.error(error + 'At Add parrot fetch parrot species');
@@ -153,33 +173,7 @@ function AddParrot() {
 
         fetchParrotSpeciesColorbyID();
     }, [speciesColorByID]);
-    // useEffect(() => {
-    //     const fetchParrotSpeciesColorbyID = async () => {
-    //         try {
-    //             if (speciesColorByID === 'a' || speciesColorByID === undefined) {
-    //                 return;
-    //             }
-    //             console.log(speciesColorByID);
-    //             if (
-    //                 speciesColorByID !== undefined ||
-    //                 speciesColorByID !== 'Select a color' ||
-    //                 speciesColorByID !== 'Selected specie' ||
-    //                 speciesColorByID.length !== 0
-    //             ) {
-    //                 const listSpeciesColorById = await ParrotSpeciesAPI.getListBySpeciesId(speciesColorByID);
-    //                 if (listSpeciesColorById != null) {
-    //                     setSpeciesColor(listSpeciesColorById);
-    //                 }
-    //             } else {
-    //                 return;
-    //             }
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
 
-    //     fetchParrotSpeciesColorbyID();
-    // }, [speciesColorByID]);
     // Fetch parrot list
     const [parrotList, setParrotList] = useState([]);
     const [combineData, setCombineData] = useState([]);
@@ -210,15 +204,17 @@ function AddParrot() {
 
             try {
                 for (const parrot of parrotList) {
-                    const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
-                    console.log(colors);
-                    const listParrot = { ...parrot };
-                    const species = await ParrotSpeciesAPI.get(colors[0].speciesID);
-                    const colorName = colors[0].color;
-                    const specieName = species[0].name;
-                    listParrot.colorName = colorName;
-                    listParrot.specieName = specieName;
-                    data.push(listParrot);
+                    if (parrot.colorID !== null) {
+                        const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
+                        console.log(colors);
+                        const listParrot = { ...parrot };
+                        const species = await ParrotSpeciesAPI.get(colors[0].speciesID);
+                        const colorName = colors[0].color;
+                        const specieName = species[0].name;
+                        listParrot.colorName = colorName;
+                        listParrot.specieName = specieName;
+                        data.push(listParrot);
+                    }
                 }
             } catch (error) {
                 console.error(error);
@@ -308,17 +304,17 @@ function AddParrot() {
     return (
         // <div className={cx('wrapper')}>
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title-container')}>
-                <h1>ADD PARROT</h1>
-            </div>
-            <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    PARROT MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add parrot</Text>
+            </Flex>
+
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 {/* Sort 1 */}
@@ -419,7 +415,6 @@ function AddParrot() {
                                             id="age"
                                             name="age"
                                             placeholder="Parrot age"
-                                            value={parrots.age} // Ensure that the input value reflects the state
                                             onChange={(e) =>
                                                 setParrots({ ...parrots, age: parseFloat(e.target.value) })
                                             } // Parse the value as a float

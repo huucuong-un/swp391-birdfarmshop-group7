@@ -18,10 +18,20 @@ import {
     AlertTitle,
     AlertDescription,
     Stack,
+    Box,
+    Text,
+    Flex,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -85,12 +95,16 @@ function AdFAQSManagement() {
                     content.length < 2 ||
                     content.length > 200
                 ) {
-                    if (content.length < 2 || content.length > 200) {
+                    if (title.length < 3 || title.length > 150 || content.length < 2 || content.length > 200) {
+                        setValidate({
+                            title: 'Title must be in 3 to 150 charactes',
+                            content: 'Content must be in 2 to 200 charactes',
+                        });
+                    } else if (content.length < 2 || content.length > 200) {
                         setValidate({ title: '', content: 'Content must be in 2 to 200 charactes' });
                     } else if (title.length < 3 || title.length > 150) {
                         setValidate({ title: 'Title must be in 3 to 150 charactes', content: '' });
                     }
-                    setVinh(false);
                 } else {
                     const data = {
                         title: title,
@@ -133,18 +147,25 @@ function AdFAQSManagement() {
     };
 
     const handleSave = () => {
-        if (title === '' || content === '') {
+        if (
+            title === '' ||
+            content === '' ||
+            title.length < 3 ||
+            title.length > 150 ||
+            content.length < 2 ||
+            content.length > 200
+        ) {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 5000);
         } else {
             setAddStatus((prev) => prev + 1);
             setSubmitStatus(true);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 2000);
         }
     };
 
@@ -203,32 +224,35 @@ function AdFAQSManagement() {
                     </span>
                 </Button>
             </div>
-            {(vinh === true && <></>) ||
-                (vinh === false && (
-                    <Stack spacing={3}>
-                        <Alert status="error">
-                            <AlertIcon />
-                            <AlertTitle>
-                                {validate.content}
-                                <br />
-                                {validate.title}
-                            </AlertTitle>
-                        </Alert>
-                    </Stack>
-                ))}
+
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    FAQs MANAGEMENT
+                </Text>
+            </Box>
+
+            <Flex className={cx('add-button')} onClick={handleShow}>
+                <FontAwesomeIcon icon={faCirclePlus} />
+                <Text className={cx('add-role-text')}>Add new faqs</Text>
+            </Flex>
+
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Success
                     </Alert>
                 </Stack>
             )) ||
                 (submitStatus === false && (
-                    <Stack spacing={3}>
+                    <Stack spacing={4}>
                         <Alert status="error">
                             <AlertIcon />
-                            There was an error processing your request
+                            <AlertTitle>
+                                {validate.title}
+                                <br />
+                                {validate.content}
+                            </AlertTitle>
                         </Alert>
                     </Stack>
                 ))}
@@ -271,11 +295,21 @@ function AdFAQSManagement() {
                                     <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td>
+                                    <Button
+                                        colorScheme="green"
+                                        onClick={handleSave}
+                                        className={cx('save-btn')}
+                                        fontSize={18}
+                                    >
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>

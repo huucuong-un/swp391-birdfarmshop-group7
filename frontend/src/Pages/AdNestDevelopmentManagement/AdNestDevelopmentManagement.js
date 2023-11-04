@@ -190,19 +190,19 @@ function AdNestDevelopmentManagement() {
             description.length < 3
         ) {
             if (description.length > 150 || description.length < 3) {
-                setValidate({ description: 'Descrip must be in 3 to 150 word' });
+                setValidate({ description: 'Description must be in 3 to 150 word' });
             }
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 5000);
         } else {
             setAddStatus(true);
             setSubmitStatus(true);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 5000);
         }
     };
 
@@ -243,8 +243,11 @@ function AdNestDevelopmentManagement() {
                     <Stack spacing={3}>
                         <Alert status="error">
                             <AlertIcon />
-                            There was an error processing your request
-                            <AlertTitle>{validate.description}</AlertTitle>
+
+                            <AlertTitle>
+                                There was an error processing your request - <br />
+                                {validate.description}
+                            </AlertTitle>
                         </Alert>
                     </Stack>
                 ))}

@@ -34,6 +34,8 @@ import ParrotCoupleAPI from '~/Api/ParrotCoupleAPI';
 import { color } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import NestAPI from '~/Api/NestAPI';
+import Breadcrumbs from '~/Components/Breadcrumbs/Breadcrumbs';
+import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 
 const cx = classNames.bind(styles);
 
@@ -274,6 +276,7 @@ function AddParrotNestService() {
 
     return (
         <div className={cx('wrapper')}>
+            <StartPartPage payment>Nest</StartPartPage>
             <div className={cx('inner')}>
                 <Card maxW="md">
                     <CardBody>

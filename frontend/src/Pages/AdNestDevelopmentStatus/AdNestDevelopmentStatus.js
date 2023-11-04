@@ -58,7 +58,10 @@ function AdNestDevelopmentStatus() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
-
+    const [validate, setValidate] = useState({
+        title: '',
+        description: '',
+    });
     useEffect(() => {
         const getNestPriceList = async () => {
             try {
@@ -156,12 +159,29 @@ function AdNestDevelopmentStatus() {
     };
 
     const handleSave = () => {
-        if (title === '' || description === '') {
+        if (
+            title === '' ||
+            description === '' ||
+            title.length < 3 ||
+            title.length > 30 ||
+            description.length < 10 ||
+            description.length > 150
+        ) {
+            if ((title.length < 3 || title.length > 30) && (description.length < 10 || description.length > 150)) {
+                setValidate({
+                    title: 'Name must be in 3 to 150 charactes',
+                    description: 'Description must be in 2 to 200 charactes',
+                });
+            } else if (description.length < 10 || description.length > 150) {
+                setValidate({ title: '', description: 'Description must be in 10 to 200 charactes' });
+            } else if (title.length < 3 || title.length > 30) {
+                setValidate({ title: 'Name must be in 3 to 150 charactes', description: '' });
+            }
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 4000);
         } else {
             setAddStatus(true);
             setSubmitStatus(true);
@@ -259,7 +279,7 @@ function AdNestDevelopmentStatus() {
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Success
                     </Alert>
                 </Stack>
             )) ||
@@ -268,6 +288,10 @@ function AdNestDevelopmentStatus() {
                         <Alert status="error">
                             <AlertIcon />
                             There was an error processing your request
+                            <br />
+                            {validate.description}
+                            <br />
+                            {validate.title}
                         </Alert>
                     </Stack>
                 ))}

@@ -1,3 +1,16 @@
+.add-button {
+    align-items: center;
+}
+
+.add-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.add-role-text {
+    margin: 0 5px;
+}
+
 .alert {
     margin-top: 10px !important;
 }

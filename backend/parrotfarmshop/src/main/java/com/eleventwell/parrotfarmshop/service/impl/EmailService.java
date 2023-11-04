@@ -1,12 +1,15 @@
 package com.eleventwell.parrotfarmshop.service.impl;
 
 import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
+import com.eleventwell.parrotfarmshop.dto.OTPDTO;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
+import com.eleventwell.parrotfarmshop.dto.UserDTO;
 import com.eleventwell.parrotfarmshop.entity.EmailDetailsEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
+import com.eleventwell.parrotfarmshop.repository.UserRepository;
 import com.eleventwell.parrotfarmshop.service.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -23,6 +26,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 
 @Service
@@ -41,7 +45,12 @@ private OrderRepository orderRepository;
     private OrderDetailRepository orderDetailRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private OrderDetailService orderDetailService;
+    @Autowired
+    private OTPService otpService;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -62,15 +71,26 @@ private OrderRepository orderRepository;
         return templateEngine.process("email-template", context);
     }
 
-    private String processThymeleafTemplate(String code,String userName) {
+    private String processThymeleafTemplate(String email) {
         Context context = new Context();
+        Random random = new Random();
+
+        // Generate a random 6-digit number
+        int min = 100000;
+        int max = 999999;
+        int random6DigitNumber = random.nextInt(max - min + 1) + min;
+        String numberAsString = Integer.toString(random6DigitNumber);
+
+        String userName  = userService.getUserNameByEmail(email);
+        OTPDTO otpdto = new OTPDTO(email,numberAsString);
+        otpService.save(otpdto);
         context.setVariable("customerName", userName);
-        context.setVariable("OTP", code);
+        context.setVariable("OTP", numberAsString);
 
 
 
 
-        return templateEngine.process("email-template", context);
+        return templateEngine.process("resetPassword-template", context);
     }
 
     //Method 1
@@ -87,7 +107,8 @@ private OrderRepository orderRepository;
             if(details.getCheck().equals("order")) {
                 emailContent = processThymeleafTemplate(details.getOrderId());
             }else if(details.getCheck().equals("password")){
-//                emailContent = processThymeleafTemplate();
+
+         emailContent = processThymeleafTemplate(details.getRecipient());
 
             }
             mimeMessageHelper.setSubject(details.getSubject());
@@ -97,6 +118,7 @@ private OrderRepository orderRepository;
             javaMailSender.send(mimeMessage);
             return "Mail Sent Successfully...";
         } catch (Exception e) {
+            e.printStackTrace();
             return "Error while Sending Mail";
         }
 
@@ -157,6 +179,16 @@ private OrderRepository orderRepository;
     emailDetailsEntity.setMsgBody("Test send mail Parrot Farm Shop project \n\nThis is a Simple Email \n\nThanks");
 
     sendSimpleMail(emailDetailsEntity);
+
+    }
+    public void createEmailDetailForRestPassword(String email){
+
+        EmailDetailsEntity emailDetailsEntity = new EmailDetailsEntity();
+        emailDetailsEntity.setRecipient(email);
+        emailDetailsEntity.setSubject("[11-Twell Parrot Shop] - Reset Password");
+        emailDetailsEntity.setCheck("password");
+        emailDetailsEntity.setMsgBody("Test send mail Parrot Farm Shop project \n\nThis is a Simple Email \n\nThanks");
+        sendSimpleMail(emailDetailsEntity);
 
     }
 }

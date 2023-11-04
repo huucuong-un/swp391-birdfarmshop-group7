@@ -124,7 +124,7 @@ function UpdateSlider({ slider, reloadData }) {
                         ))}
                     <div className={cx('title-post')}>
                         <div className={cx('title')}>
-                            <h1>Add slider</h1>
+                            <h1>Update slider</h1>
                         </div>
                     </div>
                     <Table size="xs">
@@ -188,7 +188,7 @@ function UpdateSlider({ slider, reloadData }) {
                                         margin="8px"
                                         isLoading={loading}
                                     >
-                                        ADD
+                                        Update
                                     </Button>
                                 </Td>
                             </Tr>

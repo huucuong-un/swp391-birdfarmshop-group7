@@ -187,11 +187,11 @@ public class ParrotSpeciesController {
 
         return result;
     }
-    @GetMapping(value = "admin/top-3-sales")
-    public List<ParrotSpeciesDTO> top3Sales() {
-
-        return parrotSpeciesService.findTop3HighestSalse();
-    }
+//    @GetMapping(value = "admin/top-3-sales")
+//    public List<ParrotSpeciesDTO> top3Sales() {
+//
+//        return parrotSpeciesService.findTop3HighestSalse();
+//    }
 
 
 

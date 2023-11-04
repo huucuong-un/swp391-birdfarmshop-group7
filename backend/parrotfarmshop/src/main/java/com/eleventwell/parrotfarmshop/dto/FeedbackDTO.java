@@ -37,6 +37,6 @@ private  Boolean status;
 
     private Integer colorId;
 
-    private Long orderId;
+    private Long orderDetailId;
 
 }

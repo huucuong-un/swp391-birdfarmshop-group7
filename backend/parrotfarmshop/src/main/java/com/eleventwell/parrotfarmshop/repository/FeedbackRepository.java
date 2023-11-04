@@ -27,7 +27,8 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
     List<FeedbackEntity> findAllByOrderByIdDesc();
 
 
-    Integer countAllByOrderIdId(Long id);
+ Integer countAllByOrderDetailIdId(Long orderDetailId);
+//    Integer countAllByOrderIdId(Long id);
 
 
     Integer countAllByRating(Integer id);

@@ -60,7 +60,7 @@ import {
     DrawerCloseButton,
 } from '@chakra-ui/react';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { ShopState } from '~/context/ShopProvider';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
@@ -69,6 +69,10 @@ import OrderAPI from '~/Api/OrderAPI';
 import Rate from '~/Components/Rate/Rate';
 import UserAPI from '~/Api/UserAPI';
 import { use } from 'i18next';
+
+import ButtonB from 'react-bootstrap/Button';
+import Overlay from 'react-bootstrap/Overlay';
+import Popover from 'react-bootstrap/Popover';
 
 const cx = classNames.bind(styles);
 
@@ -114,6 +118,7 @@ function OrderHistoryNew() {
     const { addToCartStatus } = useCartStatus();
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
+    const [check, setCheck] = useState(true);
 
     const [sort, setSort] = useState({
         page: 1,
@@ -134,7 +139,7 @@ function OrderHistoryNew() {
             belongTo: 'parrot',
             userId: orderId.userId,
             colorId: orderId.colorId,
-            orderId: orderId.orderId,
+            orderDetailId: orderId.orderDetailId,
             status: true,
         };
         FeedbackAPI.create(feedbackParam);
@@ -144,14 +149,25 @@ function OrderHistoryNew() {
         onClose();
     };
 
+    const [show, setShow] = useState(false);
+    const [target, setTarget] = useState(null);
+    const ref = useRef(null);
+
+    const handleClick = (event) => {
+        setShow(!show);
+        setTarget(event.target);
+    };
+
     useEffect(() => {
         const checkFeedbackButton = async () => {
             for (const items of orders) {
-                const check = await FeedbackAPI.checkFeedbacked({ orderId: items.orderDTO.id });
-                if (check > 0) {
-                    document.getElementById('btnf' + items.orderDTO.id).disabled = true;
-                    document.getElementById('btnf' + items.orderDTO.id).style.backgroundColor = 'grey';
-                    document.getElementById('btnf' + items.orderDTO.id).style.cursor = 'Default';
+                for (const itams of items.listOrderDetailHistoryModel) {
+                    const check = await FeedbackAPI.checkFeedbacked({ orderId: itams.orderDetailId });
+                    if (check > 0) {
+                        document.getElementById('btnf' + itams.orderDetailId).disabled = true;
+                        document.getElementById('btnf' + itams.orderDetailId).style.backgroundColor = 'grey';
+                        document.getElementById('btnf' + itams.orderDetailId).style.cursor = 'Default';
+                    }
                 }
             }
         };
@@ -181,6 +197,7 @@ function OrderHistoryNew() {
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
                 setOrders(orderList.listResult);
+                console.log(orderList.listResult);
             } catch (error) {
                 console.error(error);
             }
@@ -230,7 +247,7 @@ function OrderHistoryNew() {
         setPage(newPage);
     };
     return (
-        <Container className={cx('wrapper')} maxW="container.xl">
+        <Container className={cx('wrapper')} minW="90%" minH="800px" marginTop={20}>
             <Box>
                 <Text fontSize="20px" fontWeight="600">
                     Order History
@@ -289,7 +306,6 @@ function OrderHistoryNew() {
                                             <Th>Image</Th>
                                             <Th>Name</Th>
                                             {order.listOrderDetailHistoryModel[0].color != null ? <Th>Color</Th> : null}
-
                                             <Th>Quantity</Th>
                                             <Th>Price</Th>
                                             <Th>Service</Th>
@@ -302,7 +318,7 @@ function OrderHistoryNew() {
                                                     <Image
                                                         borderRadius="full"
                                                         boxSize="60px"
-                                                        src= {parrot.img}
+                                                        src={parrot.img}
                                                         alt="Dan Abramov"
                                                     />
                                                 </Td>
@@ -312,6 +328,137 @@ function OrderHistoryNew() {
                                                 <Td>x{parrot.quantity}</Td>
                                                 <Td>$ {parrot.price}</Td>
                                                 <Td>{parrot.color != null ? 'Parrot' : 'Nest'}</Td>
+                                                <Td>
+                                                    <div ref={ref}>
+                                                        <ButtonB
+                                                            id={
+                                                                'btnf' +
+                                                                order.listOrderDetailHistoryModel[parrotIndex]
+                                                                    .orderDetailId
+                                                            }
+                                                            onClick={(event) => {
+                                                                handleStoreOrderId({
+                                                                    orderDetailId:
+                                                                        order.listOrderDetailHistoryModel[parrotIndex]
+                                                                            .orderDetailId,
+                                                                    userId: order.orderDTO.userID,
+                                                                    colorId:
+                                                                        order.listOrderDetailHistoryModel[parrotIndex]
+                                                                            .colorId,
+                                                                    btnId:
+                                                                        'btnf' +
+                                                                        order.listOrderDetailHistoryModel[parrotIndex]
+                                                                            .orderDetailId,
+                                                                });
+                                                                handleClick(event);
+                                                            }}
+                                                        >
+                                                            Feedback
+                                                        </ButtonB>
+
+                                                        <Overlay
+                                                            show={show}
+                                                            target={target}
+                                                            placement="bottom"
+                                                            container={ref}
+                                                            containerPadding={20}
+                                                        >
+                                                            <Popover id="popover-contained" style={{ width: '400px' }}>
+                                                                <Popover.Header as="h3">Feedback</Popover.Header>
+                                                                <Popover.Body style={{ fontSize: '20px' }}>
+                                                                    <div className={cx('rate-area')}>
+                                                                        <div className={cx('product-container')}>
+                                                                            <div className={cx('product-img')}>
+                                                                                <img
+                                                                                    src={
+                                                                                        order
+                                                                                            .listOrderDetailHistoryModel[0]
+                                                                                            .img
+                                                                                    }
+                                                                                    alt="product-img"
+                                                                                />
+                                                                            </div>
+                                                                            <div className={cx('product-info')}>
+                                                                                <div className={cx('product-title')}>
+                                                                                    <p>
+                                                                                        {
+                                                                                            order
+                                                                                                .listOrderDetailHistoryModel[
+                                                                                                parrotIndex
+                                                                                            ].speciesName
+                                                                                        }
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className={cx('product-type')}>
+                                                                                    <p>
+                                                                                        Category:{' '}
+                                                                                        {
+                                                                                            order
+                                                                                                .listOrderDetailHistoryModel[
+                                                                                                parrotIndex
+                                                                                            ].color
+                                                                                        }
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div className={cx('rating-star-container')}>
+                                                                            <div className={cx('rating-star-title')}>
+                                                                                <p>Rating:</p>
+                                                                            </div>
+                                                                            <div className={cx('rating-star-icon')}>
+                                                                                <div className={cx('row')}>
+                                                                                    <div
+                                                                                        className={cx(
+                                                                                            'col text-center',
+                                                                                        )}
+                                                                                    >
+                                                                                        <Rate
+                                                                                            rating={rating}
+                                                                                            onRating={(rate) =>
+                                                                                                setRating(rate)
+                                                                                            }
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div className={cx('rating-input')}>
+                                                                            <p>Description:</p>
+                                                                            <textarea
+                                                                                maxLength={150}
+                                                                                value={textareaValue}
+                                                                                onChange={handleTextareaChange}
+                                                                            />
+                                                                        </div>
+                                                                        <div className={cx('button-footer')}>
+                                                                            <Button
+                                                                                key={
+                                                                                    order.listOrderDetailHistoryModel[
+                                                                                        parrotIndex
+                                                                                    ].orderDetailId + 1000
+                                                                                }
+                                                                                value={
+                                                                                    order.listOrderDetailHistoryModel[
+                                                                                        parrotIndex
+                                                                                    ].orderDetailId
+                                                                                }
+                                                                                onClick={(event) => {
+                                                                                    handleSaveFeedback();
+                                                                                    handleClick(event);
+                                                                                }}
+                                                                            >
+                                                                                Save
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>{' '}
+                                                                </Popover.Body>
+                                                            </Popover>
+                                                        </Overlay>
+                                                    </div>
+                                                </Td>
                                             </Tr>
                                         ))}
                                     </Tbody>
@@ -337,17 +484,19 @@ function OrderHistoryNew() {
                                             <div className={cx('rating-btn')}>
                                                 <button
                                                     className={cx('feedback-btn')}
-                                                    id={'btnf' + order.orderDTO.id}
                                                     backgroundColorBlue
                                                     colorScheme="blue"
                                                     size="lg"
                                                     fontSize={'15px'}
                                                     onClick={() => {
                                                         handleStoreOrderId({
-                                                            orderId: order.orderDTO.id,
+                                                            orderDetailId:
+                                                                order.listOrderDetailHistoryModel[0].orderDetailId,
                                                             userId: order.orderDTO.userID,
                                                             colorId: order.listOrderDetailHistoryModel[0].colorId,
-                                                            btnId: 'btnf' + order.orderDTO.id,
+                                                            btnId:
+                                                                'btnf' +
+                                                                order.listOrderDetailHistoryModel[0].orderDetailId,
                                                         });
                                                         setOverlay(<OverlayOne />);
                                                         onOpen();
@@ -418,8 +567,13 @@ function OrderHistoryNew() {
                                                         </ModalBody>
                                                         <ModalFooter className={cx('button-footer')}>
                                                             <Button
-                                                                key={order.orderDTO.id + 1000}
-                                                                value={order.orderDTO.id}
+                                                                key={
+                                                                    order.listOrderDetailHistoryModel[0].orderDetailId +
+                                                                    1000
+                                                                }
+                                                                value={
+                                                                    order.listOrderDetailHistoryModel[0].orderDetailId
+                                                                }
                                                                 onClick={() => {
                                                                     handleSaveFeedback();
                                                                 }}

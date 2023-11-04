@@ -38,6 +38,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
                                         @Param("sortTitle") String sortTitle,
                                         @Param("sortDate") String sortDate,
                                         Pageable pageable);
+    List<PostEntity> findAllByStatusTrue();
 }
 
 

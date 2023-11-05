@@ -15,21 +15,28 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/promotion")
+@RequestMapping(value = "/api")
 public class PromotionController {
 
     @Autowired
     PromotionService promotionService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/promotion")
     public List<PromotionDTO> show() {
 
         List<PromotionDTO> list = promotionService.findAll();
         return list;
 
     }
+    @GetMapping(value = "/admin/promotion")
+    public List<PromotionDTO> showForAdmin() {
 
-    @GetMapping(value = "find-one-by-code")
+        List<PromotionDTO> list = promotionService.findAll();
+        return list;
+
+    }
+
+    @GetMapping(value = "/promotion/find-one-by-code")
     public PromotionDTO findOneByCode(@RequestBody @RequestParam("code") String code) {
 
         return promotionService.findOneByCode(code);
@@ -37,12 +44,12 @@ public class PromotionController {
     }
 
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/promotion")
     public PromotionDTO create(@RequestBody PromotionDTO model) {
         return (PromotionDTO) promotionService.save(model);
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "/promotion/{id}")
     public PromotionDTO update(@RequestBody PromotionDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return (PromotionDTO) promotionService.save(model);
@@ -52,12 +59,12 @@ public class PromotionController {
 //    public void delete(@RequestBody long[] ids){
 //        promotionService.delete(ids);
 //    }
-    @PutMapping(value = "change-status/{id}")
+    @PutMapping(value = "/promotion/change-status/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id) {
         promotionService.changeStatus(id);
     }
 
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "admin/promotion/search_sort")
     public PagingModel searchSortForPromotion(@RequestBody @RequestParam(value = "page", required = false) Integer page,
                                               @RequestParam(value = "limit", required = false) Integer limit,
                                               @RequestParam(value = "searchStartDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchStartDate,

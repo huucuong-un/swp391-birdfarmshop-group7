@@ -57,7 +57,6 @@ const publicRoutes = [
     { path: '/parrot-product', component: ParrotProduct },
     { path: '/nest', component: Nest },
     { path: '/payment', component: Payment },
-    // { path: '/parrot-product/parrot-detail/:id', component: ParrotDetail },
     { path: '/parrot-product/parrot-detail', component: ParrotDetail },
     { path: '/order-history', component: OrderHistory },
     { path: '/order-history-new', component: OrderHistoryNew },

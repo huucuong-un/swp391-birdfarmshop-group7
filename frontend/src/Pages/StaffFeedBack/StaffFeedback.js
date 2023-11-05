@@ -18,6 +18,9 @@ import {
     Box,
     Button,
     Textarea,
+    Alert,
+    AlertIcon,
+    AlertTitle,
 } from '@chakra-ui/react';
 import {
     Modal,
@@ -111,7 +114,9 @@ function StaffFeedback() {
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
     const [textareaValue, setTextareaValue] = useState('');
-
+    const [validate, setValidate] = useState({
+        error: '',
+    });
     const handleReply = async () => {
         // Update the state variable with the new value from the textarea
         try {
@@ -124,23 +129,43 @@ function StaffFeedback() {
             const formattedDate = new Date(`${year}/${month}/${day}`);
 
             console.log(formattedDate);
-            const replyParam = {
-                id: feedback.id,
-                content: feedback.content,
-                rating: feedback.rating,
-                belongTo: 'parrot',
-                userId: feedback.userId,
-                replyerId: user.userId,
-                replyContent: textareaValue === '' ? null : textareaValue,
-                replyDate: textareaValue === '' ? null : formattedDate,
-                colorId: feedback.colorId,
-                orderId: feedback.orderId,
-                status: true,
-            };
+            console.log(textareaValue.length);
+            if (textareaValue.length === 0) {
+                setValidate({
+                    error: 'Please input feedback',
+                });
+                setVinh(false);
+                setTimeout(() => {
+                    setVinh();
+                }, 5000);
+                return;
+            }
+            if (textareaValue.length !== 0 && textareaValue.length > 150) {
+                setValidate({
+                    error: 'Feedback must be less than 150 words',
+                });
+                setTimeout(() => {
+                    setVinh();
+                }, 5000);
+            } else {
+                const replyParam = {
+                    id: feedback.id,
+                    content: feedback.content,
+                    rating: feedback.rating,
+                    belongTo: 'parrot',
+                    userId: feedback.userId,
+                    replyerId: user.userId,
+                    replyContent: textareaValue === '' ? null : textareaValue,
+                    replyDate: textareaValue === '' ? null : formattedDate,
+                    colorId: feedback.colorId,
+                    orderId: feedback.orderId,
+                    status: true,
+                };
 
-            await FeedbackAPI.create(replyParam);
-            onClose();
-            setVinh(true);
+                await FeedbackAPI.create(replyParam);
+                onClose();
+                setVinh(true);
+            }
         } catch (error) {}
     };
     const handleTextareaChange = (event) => {
@@ -399,6 +424,17 @@ function StaffFeedback() {
                     <ModalCloseButton />
                     <ModalBody>
                         <div className={cx('rate-area')}>
+                            {vinh === false && (
+                                <Alert status="error">
+                                    <AlertIcon />
+                                    <br />
+                                    <AlertTitle>
+                                        <Text fontSize="sm" lineHeight="1.4">
+                                            {validate.error}
+                                        </Text>
+                                    </AlertTitle>
+                                </Alert>
+                            )}
                             <div className={cx('product-container')}>
                                 <div className={cx('product-img')}>
                                     <img
@@ -415,7 +451,6 @@ function StaffFeedback() {
                                     </div>
                                 </div>
                             </div>
-
                             <div className={cx('rating-star-container')}>
                                 <div className={cx('rating-star-title')}>
                                     <p>
@@ -428,7 +463,6 @@ function StaffFeedback() {
                                     </div>
                                 </div>
                             </div>
-
                             <div className={cx('rating-input')}>
                                 <p>
                                     Content:<Text>{feedback.content}</Text>

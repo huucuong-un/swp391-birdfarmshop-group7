@@ -85,18 +85,36 @@ function AdFAQSManagement() {
             getFaqsList();
         }
     }, [sort, vinh]);
-
+    const [validate, setValidate] = useState({ title: '', content: '' });
     useEffect(() => {
         const addFaqs = async () => {
             try {
-                const data = {
-                    title: title,
-                    content: content,
-                    status: status,
-                };
+                if (
+                    (title.length !== 0 && content.length !== 0 && title.length < 3) ||
+                    title.length > 150 ||
+                    content.length < 2 ||
+                    content.length > 200
+                ) {
+                    if (title.length < 3 || title.length > 150 || content.length < 2 || content.length > 200) {
+                        setValidate({
+                            title: 'Title must be in 3 to 150 charactes',
+                            content: 'Content must be in 2 to 200 charactes',
+                        });
+                    } else if (content.length < 2 || content.length > 200) {
+                        setValidate({ title: '', content: 'Content must be in 2 to 200 charactes' });
+                    } else if (title.length < 3 || title.length > 150) {
+                        setValidate({ title: 'Title must be in 3 to 150 charactes', content: '' });
+                    }
+                } else {
+                    const data = {
+                        title: title,
+                        content: content,
+                        status: status,
+                    };
 
-                const add = await FAQSAPI.add(data);
-                setVinh(true);
+                    const add = await FAQSAPI.add(data);
+                    setVinh(true);
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -129,18 +147,25 @@ function AdFAQSManagement() {
     };
 
     const handleSave = () => {
-        if (title === '' || content === '') {
+        if (
+            title === '' ||
+            content === '' ||
+            title.length < 3 ||
+            title.length > 150 ||
+            content.length < 2 ||
+            content.length > 200
+        ) {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 5000);
         } else {
             setAddStatus((prev) => prev + 1);
             setSubmitStatus(true);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 2000);
         }
     };
 
@@ -188,6 +213,18 @@ function AdFAQSManagement() {
     }, [sort]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
+            {/* <div className={cx('title')}>
+                <h1>FAQS</h1>
+            </div> */}
+            {/* <div className={cx('add-btn')}>
+                <Button onClick={handleShow} colorScheme="green" size="lg">
+                    Add
+                    <span className={cx('span-icon', { 'rotate-icon': show })}>
+                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
+                    </span>
+                </Button>
+            </div> */}
+
             <Box>
                 <Text fontSize="20px" fontWeight="600" marginTop="5%">
                     FAQs MANAGEMENT
@@ -203,15 +240,19 @@ function AdFAQSManagement() {
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Success
                     </Alert>
                 </Stack>
             )) ||
                 (submitStatus === false && (
-                    <Stack spacing={3}>
+                    <Stack spacing={4}>
                         <Alert status="error">
                             <AlertIcon />
-                            There was an error processing your request
+                            <AlertTitle>
+                                {validate.title}
+                                <br />
+                                {validate.content}
+                            </AlertTitle>
                         </Alert>
                     </Stack>
                 ))}

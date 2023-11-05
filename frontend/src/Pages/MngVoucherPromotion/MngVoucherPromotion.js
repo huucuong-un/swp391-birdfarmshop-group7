@@ -205,7 +205,7 @@ function MngVoucherPromotion() {
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Add promotion successful
                     </Alert>
                 </Stack>
             )) ||

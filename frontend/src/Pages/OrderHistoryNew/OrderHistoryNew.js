@@ -7,14 +7,10 @@ import ButtonT from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
+    AlertIcon,
+    AlertTitle,
+    Alert,
     Box,
-    MinusIcon,
-    AddIcon,
     Container,
     Image,
     Card,
@@ -58,6 +54,7 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
+    AlertDescription,
 } from '@chakra-ui/react';
 
 import React, { useState, useEffect } from 'react';
@@ -80,6 +77,9 @@ function OrderHistoryNew() {
     const [orders, setOrders] = useState([]);
     const [loggedUser, setLoggedUser] = useState();
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+
+    const [submissionStatus, setSubmissionStatus] = useState();
+
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [overlay, setOverlay] = React.useState(<OverlayOne />);
@@ -205,23 +205,41 @@ function OrderHistoryNew() {
     const handleStoreOrderId = (e) => {
         setOrderId(e);
     };
+    const [validate, setValidate] = useState({ error: '' });
     const handleSaveFeedback = () => {
         // Update the state variable with the new value from the textarea
         console.log(orders);
-        const feedbackParam = {
-            content: textareaValue,
-            rating: rating,
-            belongTo: 'parrot',
-            userId: orderId.userId,
-            colorId: orderId.colorId,
-            orderId: orderId.orderId,
-            status: true,
-        };
-        FeedbackAPI.create(feedbackParam);
-        document.getElementById(orderId.btnId).disabled = true;
-        document.getElementById(orderId.btnId).style.backgroundColor = 'grey';
-
-        onClose();
+        if (textareaValue.length === 0) {
+            setValidate({ error: 'Please enter feedback' });
+            setSubmissionStatus(false);
+            setTimeout(() => {
+                setSubmissionStatus();
+            }, 5000);
+            return;
+        }
+        if (textareaValue.length !== 0 && textareaValue.length > 150) {
+            if (textareaValue.length > 150) {
+                setValidate({ error: 'Feedback do not moreover than 150 characters' });
+            }
+            setSubmissionStatus(false);
+            setTimeout(() => {
+                setSubmissionStatus();
+            }, 5000);
+        } else {
+            const feedbackParam = {
+                content: textareaValue,
+                rating: rating,
+                belongTo: 'parrot',
+                userId: orderId.userId,
+                colorId: orderId.colorId,
+                orderId: orderId.orderId,
+                status: true,
+            };
+            FeedbackAPI.create(feedbackParam);
+            document.getElementById(orderId.btnId).disabled = true;
+            document.getElementById(orderId.btnId).style.backgroundColor = 'grey';
+            onClose();
+        }
     };
 
     useEffect(() => {
@@ -321,15 +339,7 @@ function OrderHistoryNew() {
             {/* Sorting Space */}
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
-
                 <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
-                {/* <select name="status" id="status" onChange={(e) => setSort({...sort, status:e.target.value})}>
-                    <option value="" disabled selected>
-                        Status
-                    </option>
-                    <option value="false">Active</option>
-                    <option value="true">Inactive</option>
-                </select> */}
                 <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
                     <option value="" disabled selected>
                         Sort Date
@@ -435,6 +445,7 @@ function OrderHistoryNew() {
                                                 >
                                                     Feedback
                                                 </button>
+
                                                 <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
                                                     {overlay}
                                                     <ModalContent>
@@ -442,6 +453,26 @@ function OrderHistoryNew() {
                                                         <ModalCloseButton />
                                                         <ModalBody>
                                                             <div className={cx('rate-area')}>
+                                                                {(submissionStatus === true && (
+                                                                    <Alert status="success">
+                                                                        <AlertIcon />
+                                                                        <AlertTitle>Success!</AlertTitle>
+                                                                        <AlertDescription>
+                                                                            Your form has been submitted successfully.
+                                                                        </AlertDescription>
+                                                                    </Alert>
+                                                                )) ||
+                                                                    (submissionStatus === false && (
+                                                                        <Alert status="error">
+                                                                            <AlertIcon />
+                                                                            <br />
+                                                                            <AlertTitle>
+                                                                                <Text fontSize="sm" lineHeight="1.4">
+                                                                                    {validate.error}
+                                                                                </Text>
+                                                                            </AlertTitle>
+                                                                        </Alert>
+                                                                    ))}
                                                                 <div className={cx('product-container')}>
                                                                     <div className={cx('product-img')}>
                                                                         <img

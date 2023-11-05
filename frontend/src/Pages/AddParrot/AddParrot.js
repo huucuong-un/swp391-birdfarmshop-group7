@@ -99,6 +99,15 @@ function AddParrot() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log(speciesColorByID);
+            if (species.length === 0 || speciesColorByID === 'a') {
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus(null);
+                }, 5000);
+                return;
+            }
+
             const responseParrots = await axios.post('http://localhost:8086/api/parrot', {
                 // Add other fields you want to send to the first API
                 age: parrots.age,
@@ -131,6 +140,7 @@ function AddParrot() {
         const fetchParrotSpecies = async () => {
             try {
                 const parrotSpecie = await ParrotSpeciesAPI.getAll();
+
                 setSpecies(parrotSpecie.listResult);
             } catch (error) {
                 console.error(error + 'At Add parrot fetch parrot species');
@@ -163,33 +173,7 @@ function AddParrot() {
 
         fetchParrotSpeciesColorbyID();
     }, [speciesColorByID]);
-    // useEffect(() => {
-    //     const fetchParrotSpeciesColorbyID = async () => {
-    //         try {
-    //             if (speciesColorByID === 'a' || speciesColorByID === undefined) {
-    //                 return;
-    //             }
-    //             console.log(speciesColorByID);
-    //             if (
-    //                 speciesColorByID !== undefined ||
-    //                 speciesColorByID !== 'Select a color' ||
-    //                 speciesColorByID !== 'Selected specie' ||
-    //                 speciesColorByID.length !== 0
-    //             ) {
-    //                 const listSpeciesColorById = await ParrotSpeciesAPI.getListBySpeciesId(speciesColorByID);
-    //                 if (listSpeciesColorById != null) {
-    //                     setSpeciesColor(listSpeciesColorById);
-    //                 }
-    //             } else {
-    //                 return;
-    //             }
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
 
-    //     fetchParrotSpeciesColorbyID();
-    // }, [speciesColorByID]);
     // Fetch parrot list
     const [parrotList, setParrotList] = useState([]);
     const [combineData, setCombineData] = useState([]);
@@ -220,15 +204,17 @@ function AddParrot() {
 
             try {
                 for (const parrot of parrotList) {
-                    const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
-                    console.log(colors);
-                    const listParrot = { ...parrot };
-                    const species = await ParrotSpeciesAPI.get(colors[0].speciesID);
-                    const colorName = colors[0].color;
-                    const specieName = species[0].name;
-                    listParrot.colorName = colorName;
-                    listParrot.specieName = specieName;
-                    data.push(listParrot);
+                    if (parrot.colorID !== null) {
+                        const colors = await ParrotSpeciesColorAPI.findByParrotSpecieId(parrot.colorID);
+                        console.log(colors);
+                        const listParrot = { ...parrot };
+                        const species = await ParrotSpeciesAPI.get(colors[0].speciesID);
+                        const colorName = colors[0].color;
+                        const specieName = species[0].name;
+                        listParrot.colorName = colorName;
+                        listParrot.specieName = specieName;
+                        data.push(listParrot);
+                    }
                 }
             } catch (error) {
                 console.error(error);
@@ -424,11 +410,14 @@ function AddParrot() {
                                     <Td>
                                         <Input
                                             type="number"
+                                            min={0}
+                                            step={0.01}
                                             id="age"
                                             name="age"
-                                            variant="filled"
                                             placeholder="Parrot age"
-                                            onChange={(e) => setParrots({ ...parrots, age: e.target.value })}
+                                            onChange={(e) =>
+                                                setParrots({ ...parrots, age: parseFloat(e.target.value) })
+                                            } // Parse the value as a float
                                             required
                                         />
                                     </Td>

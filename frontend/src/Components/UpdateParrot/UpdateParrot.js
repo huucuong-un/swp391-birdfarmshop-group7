@@ -149,6 +149,8 @@ function UpdateParrot({ parrot, reloadData }) {
                                         type="number"
                                         id="age"
                                         name="age"
+                                        min={0}
+                                        step={0.01}
                                         variant="filled"
                                         placeholder="Parrot age"
                                         value={newParrot.age}

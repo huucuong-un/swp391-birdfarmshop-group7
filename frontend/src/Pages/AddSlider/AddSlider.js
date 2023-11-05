@@ -84,8 +84,8 @@ function AddSlider() {
         }
     }, [sort, reloadData, slider]);
     const [validate, setValidate] = useState({
-        title: null,
-        description: null,
+        sliderName: '',
+        sliderDescription: '',
     });
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -122,18 +122,19 @@ function AddSlider() {
                 setTimeout(() => {
                     setSubmissionStatus('');
                 }, 5000);
-            }
-            const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
-                sliderName: slider.sliderName,
-                sliderDescription: slider.sliderDescription,
-                sliderImageURL: img,
-                status: slider.status,
-            });
+            } else {
+                const responsePost = await axios.post('http://localhost:8086/api/slider', {
+                    sliderName: slider.sliderName,
+                    sliderDescription: slider.sliderDescription,
+                    sliderImageURL: img,
+                    status: slider.status,
+                });
 
-            console.log('POST request was successful at species!!');
-            // Assuming the response contains the newly created post data
-            setSlider({ ...slider, ...responsePost.data });
-            setSubmissionStatus(true);
+                console.log('POST request was successful at species!!');
+                // Assuming the response contains the newly created post data
+                setSlider({ ...slider, ...responsePost.data });
+                setSubmissionStatus(true);
+            }
         } catch (error) {
             console.error('Error while making POST request:', error);
             setSubmissionStatus(false);

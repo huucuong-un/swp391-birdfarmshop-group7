@@ -14,6 +14,7 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Text,
 } from '@chakra-ui/react';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddRole/AddRole.module.scss';
@@ -37,12 +38,47 @@ function AddRole(props) {
         setStatus(!status);
     };
 
+    const [validate, setValidate] = useState({
+        name: '',
+        description: '',
+    });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             // Make a POST request to the first API endpoint
             if (role.description.length < 10) window.alert('Can not add!! Description must be in range 10..100');
-            else {
+            else if (
+                (role.name.length !== 0 && role.description.length !== 0 && role.name.length < 2) ||
+                role.name.length > 20 ||
+                role.description.length < 10 ||
+                role.description.length > 100
+            ) {
+                if (
+                    (role.name.length < 2 || role.name.length > 20) &&
+                    (role.description.length < 10 || role.description.length > 100)
+                ) {
+                    setValidate({
+                        name: 'Name must be in 2 and 20 character',
+                        description: 'Description must be in 10 and 100 character',
+                    });
+                } else if (role.name.length < 2 || role.name.length > 20) {
+                    setValidate({
+                        name: 'Name must be in 2 and 20 character',
+                        description: '',
+                    });
+                } else if (role.description.length < 10 || role.description.length > 100) {
+                    setValidate({
+                        name: '',
+                        description: 'Description must be in 10 and 100 character',
+                    });
+                }
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus();
+                }, 5000);
+            } else {
+                // Make a POST request to the first API endpoint
                 const responseParrots = await RoleAPI.addRole({
                     // Add other fields you want to send to the first API
                     name: role.name,
@@ -57,6 +93,10 @@ function AddRole(props) {
                 }
 
                 setSubmissionStatus(true);
+
+                setTimeout(() => {
+                    setSubmissionStatus();
+                }, 5000);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -67,6 +107,26 @@ function AddRole(props) {
     return (
         <div className={cx('wrapper')}>
             <form onSubmit={handleSubmit} className={cx('inner')}>
+                {(submissionStatus === true && (
+                    <Alert status="success">
+                        <AlertIcon />
+                        <AlertTitle>Success!</AlertTitle>
+                        <AlertDescription>Your form has been submitted successfully.</AlertDescription>
+                    </Alert>
+                )) ||
+                    (submissionStatus === false && (
+                        <Alert status="error">
+                            <AlertIcon />
+                            <br />
+                            <AlertTitle>
+                                <Text fontSize="sm" lineHeight="1.4">
+                                    {validate.name}
+                                    <br />
+                                    {validate.description}
+                                </Text>
+                            </AlertTitle>
+                        </Alert>
+                    ))}
                 <TableContainer className={cx('table-container')}>
                     <Table size="xs ">
                         <Thead>

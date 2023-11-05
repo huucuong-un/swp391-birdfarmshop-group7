@@ -47,6 +47,7 @@ function MngVoucherPromotion() {
     const [code, setCode] = useState('');
     const [description, setDescription] = useState('');
     const [value, setValue] = useState(0);
+    const [quantity, setQuantity] = useState(0);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [status, setStatus] = useState(false);
@@ -82,8 +83,7 @@ function MngVoucherPromotion() {
         }
         getVoucherList();
     }, [sort, vinh]);
-    console.log(startDate);
-    console.log(endDate);
+
     useEffect(() => {
         const addPromotion = async () => {
             try {
@@ -91,6 +91,7 @@ function MngVoucherPromotion() {
                     code: code,
                     description: description,
                     value: value,
+                    quantity: quantity,
                     startDate: startDate,
                     endDate: endDate,
                     status: status,
@@ -201,7 +202,7 @@ function MngVoucherPromotion() {
                 <Text className={cx('add-role-text')}>Add voucher</Text>
             </Flex>
 
-            {(submitStatus === true && (
+            {/* {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
@@ -216,7 +217,7 @@ function MngVoucherPromotion() {
                             There was an error processing your request
                         </Alert>
                     </Stack>
-                ))}
+                ))} */}
 
             {show ? (
                 <TableContainer paddingTop={10} paddingBottom={10}>
@@ -256,9 +257,21 @@ function MngVoucherPromotion() {
                                     <Input
                                         type="number"
                                         borderColor="black"
-                                        placeholder="Value..."
+                                        placeholder="Value must be > 0 and < 1 (Eg: 0.15, 0.5,...)"
                                         fontSize={18}
                                         onChange={(e) => setValue(e.target.value)}
+                                    />
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Quantity</Td>
+                                <Td>
+                                    <Input
+                                        type="number"
+                                        borderColor="black"
+                                        placeholder="Quantity > 0"
+                                        fontSize={18}
+                                        onChange={(e) => setQuantity(e.target.value)}
                                     />
                                 </Td>
                             </Tr>
@@ -364,6 +377,7 @@ function MngVoucherPromotion() {
                             <Th>Start date</Th>
                             <Th>End date</Th>
                             <Th>Value</Th>
+                            <Th>Quantity</Th>
                             <Th>Status</Th>
                         </Tr>
                     </Thead>
@@ -378,6 +392,7 @@ function MngVoucherPromotion() {
                                     <Td>{formatDate(new Date(voucher.startDate))}</Td>
                                     <Td>{formatDate(new Date(voucher.endDate))}</Td>
                                     <Td>{voucher.value}</Td>
+                                    <Td>{voucher.quantity}</Td>
                                     <Td>
                                         <Switch
                                             size="lg"

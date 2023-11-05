@@ -104,11 +104,15 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
             "case when :sortParrotAverageRating = 'PARASC' then u.parrotAverageRating end asc, " +
             "case when :sortDate = 'DDESC' then u.id end desc, " +
             "case when :sortDate = 'DASC' then u.id end asc, " +
+            "CASE WHEN :sortPrice = 'PASC'  THEN (SELECT MIN(psc.price) FROM u.parrotSpeciesColors psc WHERE u.id = psc.parrotSpecies.id) END ASC, " +
+            "CASE WHEN :sortPrice = 'PDESC' THEN (SELECT MIN(psc.price) FROM u.parrotSpeciesColors psc  WHERE u.id = psc.parrotSpecies.id  ) END DESC, " +
             "u.id desc")
     List<ParrotSpeciesEntity> searchSort(@Param("name") String name,
-                                                 @Param("sortName") String sortName,
-                                                 @Param("sortParrotAverageRating") String sortParrotAverageRating,
-                                                 @Param("sortDate") String sortDate, Pageable pageable);
+                                         @Param("sortName") String sortName,
+                                         @Param("sortParrotAverageRating") String sortParrotAverageRating,
+                                         @Param("sortDate") String sortDate,
+                                         @Param("sortPrice") String sortPrice,
+                                         Pageable pageable);
     @Query("SELECT  o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity o  " +
             "group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by" +
             " SUM(o.parrot.parrotSpeciesColor.price) DESC  ")
@@ -158,4 +162,3 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 //
 //    @OneToMany(mappedBy = "parrotSpecies")
 //    private List<NestEntity> nest = new ArrayList<>();
-

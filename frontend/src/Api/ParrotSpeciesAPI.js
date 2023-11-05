@@ -62,6 +62,11 @@ const ParrotSpeciesAPI = {
         const url = '/parrot-species/search_sort';
         return axiosClinet.get(url, { params });
     },
+
+    getTop3SpeciesWithHighestOrderMoney() {
+        const url = '/admin/parrot-species/find-top3-sale';
+        return axiosClinet.get(url);
+    },
 };
 
 export default ParrotSpeciesAPI;

@@ -24,6 +24,9 @@ function MarketingNavbar({ staff, manager }) {
                     <Link to="/marketer/slider">
                         <p>SLIDER</p>
                     </Link>
+                    <Link to="/marketer/promotion">
+                        <p>PROMOTION</p>
+                    </Link>
                 </div>
 
                 <div className={cx('user-account')}>

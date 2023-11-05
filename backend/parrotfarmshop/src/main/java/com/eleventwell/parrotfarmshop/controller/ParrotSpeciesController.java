@@ -228,13 +228,15 @@ public class ParrotSpeciesController {
                                   @RequestParam(value = "name", required = false) String name,
                                   @RequestParam(value = "sortName", required = false) String sortName,
                                   @RequestParam(value = "sortParrotAverageRating", required = false) String sortParrotAverageRating,
-                                  @RequestParam(value = "sortDate", required = false) String sortDate
+                                  @RequestParam(value = "sortDate", required = false) String sortDate,
+                                  @RequestParam(value = "sortPrice", required = false) String sortPrice
+
     ){
         PagingModel result = new PagingModel();
         result.setPage(page);
         Pageable pageable = PageRequest.of(page - 1, limit);
 
-        result.setListResult(parrotSpeciesService.searchSort(name, sortName, sortParrotAverageRating, sortDate, pageable));
+        result.setListResult(parrotSpeciesService.searchSort(name, sortName, sortParrotAverageRating, sortDate, sortPrice,pageable));
         result.setTotalPage(((int) Math.ceil((double) (parrotSpeciesService.totalItemForAdmin()) / limit)));
         result.setLimit(limit);
 

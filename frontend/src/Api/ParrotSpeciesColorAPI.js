@@ -36,17 +36,17 @@ const ParrotSpeciesColorAPI = {
     },
 
     add(data) {
-        const url = '/parrot-species-color';
+        const url = '/admin/parrot-species-color';
         return axiosClinet.post(url, data);
     },
 
     update(data) {
-        const url = `/parrot-species-color/${data.id}`;
+        const url = `/admin/parrot-species-color/${data.id}`;
         return axiosClinet.put(url, data);
     },
 
     remove(id) {
-        const url = `/parrot-species-color/${id}`;
+        const url = `/admin/parrot-species-color/${id}`;
         return axiosClinet.delete(url);
     },
 

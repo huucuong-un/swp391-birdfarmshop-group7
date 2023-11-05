@@ -601,10 +601,9 @@ function AddParrot() {
                             <Th>Pregnancy status</Th>
                             <Th>Health status</Th>
                             <Th>Children number</Th>
-                            <Th>Color ID</Th>
                             <Th>Color</Th>
-                            <Th>Specie</Th>
-                            <Th>Parrot gender</Th>
+                            <Th>Species</Th>
+                            <Th>Gender</Th>
                             <Th>Status</Th>
                             <Th>Action</Th>
                         </Tr>
@@ -619,7 +618,6 @@ function AddParrot() {
                                     <Td>{parrot.pregnancyStatus.toString()}</Td>
                                     <Td>{parrot.healthStatus.toString()}</Td>
                                     <Td>{parrot.numberOfChildren}</Td>
-                                    <Td>{parrot.colorID}</Td>
                                     <Td>{parrot.colorName}</Td>
                                     <Td>{parrot.specieName}</Td>
                                     <Td>{parrot.gender === true ? 'male' : 'female'}</Td>

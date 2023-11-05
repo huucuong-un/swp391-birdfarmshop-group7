@@ -17,7 +17,7 @@ public class OTPController {
 
         return otpService.save(otpdto);
     }
-    @GetMapping(value = "find-one-by-code-and-email")
+     @GetMapping(value = "find-one-by-code-and-email")
     public OTPDTO findOTP(@RequestParam(value = "email") String email, @RequestParam(value = "code") String code){
 
         return otpService.findOTP(email,code);

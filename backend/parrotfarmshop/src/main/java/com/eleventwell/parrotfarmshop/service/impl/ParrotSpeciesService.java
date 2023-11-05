@@ -256,7 +256,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
                                              String sortParrotAverageRating,
 
-                                             String sortDate, Pageable pageable) {
+                                             String sortDate, String sortPrice,Pageable pageable) {
         List<ParrotSpeciesDTO> results = new ArrayList<>();
         List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.searchSort(name,
 
@@ -265,7 +265,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
                 sortParrotAverageRating,
 
-                sortDate, pageable);
+                sortDate,sortPrice, pageable);
         for (ParrotSpeciesEntity parrotSpeciesEntity : entities
         ) {
             ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesEntity, ParrotSpeciesDTO.class);

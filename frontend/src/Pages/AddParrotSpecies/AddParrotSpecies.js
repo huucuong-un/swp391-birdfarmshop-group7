@@ -195,7 +195,7 @@ function AddParrotSpecies() {
                     setSubmissionStatus('');
                 }, 5000);
             } else {
-                const responseSpecies = await axios.post('http://localhost:8086/api/parrot-species', {
+                const responseSpecies = await axios.post('http://localhost:8086/api/admin/parrot-species/create', {
                     name: parrotSpecies.name,
                     description: parrotSpecies.description,
                     quantity: parrotSpecies.quantity,
@@ -213,7 +213,7 @@ function AddParrotSpecies() {
                 } else {
                     console.error('POST request failed with status code - species: ', responseSpecies.status);
                 }
-                const responseSpeciesColor = await axios.post('http://localhost:8086/api/parrot-species-color', {
+                const responseSpeciesColor = await axios.post('http://localhost:8086/api/admin/parrot-species-color', {
                     // Đoạn này để truyền các data fields về phía database
                     speciesID: responseSpecies.data.id,
                     status: parrotSpeciesColor.status,
@@ -221,7 +221,7 @@ function AddParrotSpecies() {
                     color: parrotSpeciesColor.color,
                     imageUrl: img,
                 });
-                const addImg = await axios.post('http://localhost:8086/api/color-image', {
+                const addImg = await axios.post('http://localhost:8086/api/admin/color-image', {
                     imageUrl: img,
                     parrotSpeciesColorId: responseSpeciesColor.data.id,
                 });

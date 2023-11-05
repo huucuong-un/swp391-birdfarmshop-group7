@@ -9,36 +9,36 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/color-image")
+@RequestMapping(value = "/api")
 public class ParrotColorImageController {
 
     @Autowired
     ParrotColorImageService parrotColorImageService;
 
-    @PostMapping("/find-by-color/{colorId}")
+    @PostMapping("color-image/find-by-color/{colorId}")
     public List<ParrotColorImageDTO> getImagesByColorId(@PathVariable("colorId") Long colorId ) {
         if (colorId == null) return null;
         return parrotColorImageService.findAllByColorId(colorId);
     }
 
-    @PostMapping
+    @PostMapping(value = "admin/color-image")
     public ParrotColorImageDTO addImage(@RequestBody ParrotColorImageDTO image){
         return parrotColorImageService.save(image);
     }
 
-    @PostMapping("/find-by-species/{speciesId}")
+    @PostMapping("color-image/find-by-species/{speciesId}")
     public List<ParrotColorImageDTO> getImagesDTOBySpeciesId(@PathVariable("speciesId") Long speciesId ) {
         if (speciesId == null) return null;
         return parrotColorImageService.findAllBySpeciesId(speciesId);
     }
 
-    @PostMapping("/find-by-species/images/{speciesId}")
+    @PostMapping("color-image/find-by-species/images/{speciesId}")
     public List<String> getImagesBySpeciesId(@PathVariable("speciesId") Long speciesId ) {
         if (speciesId == null) return null;
         return parrotColorImageService.findAllImagesBySpeciesId(speciesId);
     }
 
-    @DeleteMapping("/delete-image/{imageId}")
+    @DeleteMapping("admin/color-image/delete-image/{imageId}")
     public Boolean deleteImageById(@PathVariable("imageId") Long imageId) {
         if (imageId == null) return false;
         parrotColorImageService.deleteImage(imageId);

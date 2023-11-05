@@ -166,7 +166,7 @@ function AddSpeciesColor() {
                     console.log(data.url.toString());
                     setLoading(false);
                     setNewImg(data.url.toString());
-                    const addImageData = axios.post('http://localhost:8086/api/color-image', {
+                    const addImageData = axios.post('http://localhost:8086/api/admin/color-image', {
                         imageUrl: data.url.toString(),
                         parrotSpeciesColorId: colorId,
                     });
@@ -259,14 +259,14 @@ function AddSpeciesColor() {
                 }, 5000);
             } else {
                 // Make a POST request to submit the color data for the specific species
-                const response = await axios.post('http://localhost:8086/api/parrot-species-color', {
+                const response = await axios.post('http://localhost:8086/api/admin/parrot-species-color', {
                     status: parrotSpeciesColor.status,
                     imageUrl: img,
                     color: color, // Use the color from the corresponding input
                     speciesID: speciesID, // Use the species ID from the data
                     price: price,
                 });
-                const addImg = await axios.post('http://localhost:8086/api/color-image', {
+                const addImg = await axios.post('http://localhost:8086/api/admin/color-image', {
                     imageUrl: img,
                     parrotSpeciesColorId: response.data.id,
                 });
@@ -431,7 +431,7 @@ function AddSpeciesColor() {
             if (imageDeleteResponse) {
                 try {
                     // Send a request to update the status on the server
-                    await axios.delete(`http://localhost:8086/api/color-image/delete-image/${imageId}`);
+                    await axios.delete(`http://localhost:8086/api/admin/color-image/delete-image/${imageId}`);
 
                     // If the request is successful, update the state
 

@@ -17,32 +17,32 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api/feedback")
+@RequestMapping(value = "/api")
 public class FeedbackController {
 
     @Autowired
     FeedbackService feedbackService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "feedback")
     public List<FeedbackDTO> showAllFeedback() {
         return feedbackService.findAll();
 
     }
 
-    @GetMapping(value = "calculate-average-rating-by-species-id")
+    @GetMapping(value = "feedback/calculate-average-rating-by-species-id")
     public Double calculateAverageRating(@RequestBody @RequestParam(value = "speciesId") Long  speciesId) {
         return feedbackService.calculateAverageFeedbackRatingBySpeciesId(speciesId);
 
     }
 
-    @GetMapping(value = "count-by-rating")
+    @GetMapping(value = "feedback/count-by-rating")
     public Integer countByRating(@RequestBody @RequestParam(value = "rating") Integer  rating) {
         return feedbackService.countByRating(rating);
 
     }
 
 
-    @GetMapping(value = "count-by-species-id")
+    @GetMapping(value = "feedback/count-by-species-id")
     public Integer countBySpeciesId(@RequestBody @RequestParam(value = "id") Long  id) {
 
         return feedbackService.countBySpeciesId(id);
@@ -51,7 +51,7 @@ public class FeedbackController {
 
     }
 
-    @GetMapping(value = "count-by-species-id-or-species-color-id-and-rating")
+    @GetMapping(value = "feedback/count-by-species-id-or-species-color-id-and-rating")
     public Integer countBySpeciesIdSpeciesColorIdAndRating(@RequestBody  @RequestParam(value = "speciesId",required = false) Long  speciesId, @RequestParam(value = "colorId",required = false) Long  colorId,@RequestParam(value = "rating",required = false) Integer  rating) {
 
         return feedbackService.countBySpeciesIdOrSpeciesColorIdAndRating(speciesId,colorId, rating);
@@ -59,14 +59,14 @@ public class FeedbackController {
 
 
     }
-    @GetMapping(value = "count-by-orderId")
+    @GetMapping(value = "feedback/count-by-orderId")
     public Integer countByOrderId(@RequestBody @RequestParam(value = "orderId") Long  orderId) {
 
         return feedbackService.countByOrderId(orderId);
 
 
     }
-    @GetMapping(value = "find-all-by-species-id-and-belong-to-or-rating-or-color-id")
+    @GetMapping(value = "feedback/find-all-by-species-id-and-belong-to-or-rating-or-color-id")
     public PagingModel findAllBySpeciesIdAndBelongTo(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam("speciesId") Long speciesId, @RequestParam(value = "productType",required = false) String productType,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "colorId",required = false) Long colorId) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -80,7 +80,7 @@ public class FeedbackController {
 
         return result;
     }
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "admin/feedback/search_sort")
     public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "speciesId",required = false) Long speciesId, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam(value = "username",required = false) String username,@RequestParam(value = "status",required = false) Boolean status ,@RequestParam(value = "sortRating",required = false) String sortRating, @RequestParam(value = "sortDate",required = false)String sortDate) {
 
         PagingModel result = new PagingModel();
@@ -96,14 +96,14 @@ public class FeedbackController {
     }
 
 
-    @PostMapping(value = "")
+    @PostMapping(value = "feedback")
     public FeedbackDTO createFeedback(@RequestBody FeedbackDTO dto) {
 
         return feedbackService.save(dto);
     }
     
-        @PutMapping(value = "admin/change-status/{id}")
-    public void createFeedback(@RequestBody @PathVariable("id") Long id ) {
+    @PutMapping(value = "admin/feedback/change-status/{id}")
+    public void changeStatus(@RequestBody @PathVariable("id") Long id ) {
 
        feedbackService.changeStatus(id);
     }

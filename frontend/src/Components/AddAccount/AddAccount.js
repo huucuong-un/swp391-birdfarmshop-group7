@@ -162,11 +162,12 @@ function AddAccount(props) {
         <div className={cx('wrapper')}>
             <form onSubmit={handleSubmit} className={cx('inner')}>
                 <TableContainer className={cx('table-container')}>
-                    <Table size="xs ">
+                    <Table variant="simple" size="lg">
                         <Thead>
                             <Tr>
-                                <Th fontSize={16}>Add Account</Th>
-                                <Th fontSize={16}></Th>
+                                <Th colSpan={2} fontSize={16}>
+                                    Add Account
+                                </Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -225,12 +226,12 @@ function AddAccount(props) {
                                     <RadioGroup onChange={setGender} defaultValue="null" fontSize={16} value={gender}>
                                         <Stack spacing={20} direction="row">
                                             <Radio value="true" size="lg">
-                                                <Text fontSize={16} m={0}>
+                                                <Text fontSize={16} margin={0} overflow="hidden">
                                                     Male
                                                 </Text>
                                             </Radio>
                                             <Radio value="false" fontSize={16} size="lg">
-                                                <Text fontSize={16} m={0}>
+                                                <Text fontSize={16} margin={0} overflow="hidden">
                                                     Female
                                                 </Text>
                                             </Radio>
@@ -245,13 +246,13 @@ function AddAccount(props) {
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
                                         {status ? (
-                                            <p fontSize={16} style={{ margin: '0' }}>
+                                            <Text fontSize={16} margin={0} overflow="hidden" height={6}>
                                                 On Processing
-                                            </p>
+                                            </Text>
                                         ) : (
-                                            <p fontSize={16} style={{ margin: '0' }}>
+                                            <Text fontSize={16} margin={0} overflow="hidden">
                                                 Disabled
-                                            </p>
+                                            </Text>
                                         )}
                                     </div>
                                     <Input
@@ -312,6 +313,8 @@ function AddAccount(props) {
                                         width="100%"
                                         style={{ marginTop: 15 }}
                                         margin="8px"
+                                        paddingTop={8}
+                                        paddingBottom={8}
                                     >
                                         ADD
                                     </Button>

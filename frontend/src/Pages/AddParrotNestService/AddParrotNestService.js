@@ -18,6 +18,7 @@ import {
     AlertDialogOverlay,
     AlertDialogCloseButton,
     useDisclosure,
+    Tooltip,
 } from '@chakra-ui/react';
 
 import classNames from 'classnames/bind';
@@ -394,12 +395,16 @@ function AddParrotNestService() {
                     secondParrot.colorID === null ? (
                         <>
                             <Text>Choose Species</Text>
-                            <FontAwesomeIcon icon={faHeart} className={cx('icon', 'disable')} />
+                            <Tooltip label="Did you forget anything ?" placement="right" fontSize="xl">
+                                <FontAwesomeIcon icon={faHeart} className={cx('icon', 'disable')} />
+                            </Tooltip>
                         </>
                     ) : (
                         <>
                             <Text>Breed Here</Text>
-                            <FontAwesomeIcon icon={faHeart} className={cx('icon')} onClick={handleBreed} />
+                            <Tooltip label="Click me" placement="right" fontSize="xl">
+                                <FontAwesomeIcon icon={faHeart} className={cx('icon')} onClick={handleBreed} />
+                            </Tooltip>
                         </>
                     )}
 

@@ -294,11 +294,21 @@ function AdNestManagement() {
                                     <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td className={cx('submit-btn')}>
+                                    <Button
+                                        colorScheme="green"
+                                        onClick={handleSave}
+                                        className={cx('save-btn')}
+                                        fontSize={18}
+                                    >
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>

@@ -35,7 +35,7 @@
 
 .table-container {
     margin: 20px;
-    width: 50% !important;
+    width: 100% !important;
     gap: 10px;
     display: flex;
     justify-content: center;
@@ -210,4 +210,8 @@
     width: 100%;
     justify-content: center;
     background-color: #f9ede9;
+}
+
+h5 {
+    margin: 0;
 }

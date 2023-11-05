@@ -18,10 +18,20 @@ import {
     AlertTitle,
     AlertDescription,
     Stack,
+    Box,
+    Text,
+    Flex,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faCirclePlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -312,16 +322,22 @@ function AdNestPriceManagement() {
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>NEST PRICE</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    NEST PRICE
+                </Text>
+            </Box>
             <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
+                {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Button>
+                </Button> */}
+                <Flex className={cx('add-button')} onClick={handleShow}>
+                    <FontAwesomeIcon icon={faCirclePlus} />
+                    <Text className={cx('add-role-text')}>Add</Text>
+                </Flex>
             </div>
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
@@ -386,11 +402,21 @@ function AdNestPriceManagement() {
                                         <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                     </Td>
                                 </Tr>
+                                <Tr>
+                                    <Td></Td>
+                                    <Td className={cx('submit-btn')}>
+                                        <Button
+                                            colorScheme="green"
+                                            onClick={handleSave}
+                                            className={cx('save-btn')}
+                                            fontSize={18}
+                                        >
+                                            Save
+                                        </Button>
+                                    </Td>
+                                </Tr>
                             </Tbody>
                         </Table>
-                        <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                            Save
-                        </Button>
                     </TableContainer>
                 </form>
             ) : (

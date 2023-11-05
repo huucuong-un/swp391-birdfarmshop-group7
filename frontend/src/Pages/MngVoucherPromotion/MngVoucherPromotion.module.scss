@@ -70,3 +70,17 @@ th {
         }
     }
 }
+
+.submit-btn {
+    display: flex;
+    justify-content: center;
+    button {
+        width: 50%;
+        background-color: #f9ede9;
+        color: var(--black);
+        &:hover {
+            background-color: #f9ede9;
+            opacity: 0.7;
+        }
+    }
+}

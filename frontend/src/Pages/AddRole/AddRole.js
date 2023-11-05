@@ -128,11 +128,12 @@ function AddRole(props) {
                         </Alert>
                     ))}
                 <TableContainer className={cx('table-container')}>
-                    <Table size="xs ">
+                    <Table variant="simple" size="lg">
                         <Thead>
                             <Tr>
-                                <Th fontSize={16}>Add Role</Th>
-                                <Th fontSize={16}></Th>
+                                <Th fontSize={16} colSpan={2}>
+                                    Add Role
+                                </Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -175,13 +176,13 @@ function AddRole(props) {
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
                                         {status ? (
-                                            <p fontSize={16} style={{ margin: '0' }}>
+                                            <Text fontSize={16} margin={0} overflow="hidden" height={6}>
                                                 On Processing
-                                            </p>
+                                            </Text>
                                         ) : (
-                                            <p fontSize={16} style={{ margin: '0' }}>
+                                            <Text fontSize={16} margin={0} overflow="hidden" height={6}>
                                                 Disabled
-                                            </p>
+                                            </Text>
                                         )}
                                     </div>
                                     <Input
@@ -207,6 +208,8 @@ function AddRole(props) {
                                         width="100%"
                                         style={{ marginTop: 15 }}
                                         margin="8px"
+                                        paddingTop={8}
+                                        paddingBottom={8}
                                     >
                                         ADD
                                     </Button>

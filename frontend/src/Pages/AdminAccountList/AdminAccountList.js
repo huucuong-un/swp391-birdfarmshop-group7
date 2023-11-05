@@ -162,7 +162,6 @@ const AdminAccountList = () => {
 
             <TableContainer width="100%" margin="5% 0">
                 <Table variant="simple" fontSize={16}>
-                    <TableCaption>Account list</TableCaption>
                     <Thead fontSize={16}>
                         <Tr>
                             <Th>User Id</Th>

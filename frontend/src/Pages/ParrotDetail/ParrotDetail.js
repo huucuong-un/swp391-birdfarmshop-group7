@@ -10,19 +10,32 @@ import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 
 // Add the empty star icon to the library
 
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Box, Image } from '@chakra-ui/react';
+import {
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    Box,
+    Image,
+    Tooltip,
+} from '@chakra-ui/react';
 
 import { useState, useEffect } from 'react';
 
 import { Button as Buttons } from '@chakra-ui/react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+<<<<<<< HEAD
 import FeedbackAPI from '~/Api/FeedbackAPI';
 import OrderAPI from '~/Api/OrderAPI';
+=======
+import { ShopState } from '~/context/ShopProvider';
+>>>>>>> ba8ec0be393a05ba71f1653bdddc006c8af85396
 
 const cx = classNames.bind(styles);
 
@@ -57,7 +70,7 @@ function ParrotDetail() {
     //         setSelectedColor(colorSortList[0].id);
     //     }
     // }, [colorSortList]);
-
+    const navigate = useNavigate();
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({
@@ -389,7 +402,7 @@ function ParrotDetail() {
     // }, []);
     return (
         <div className={cx('wrapper')}>
-            <StartPartPage>Parrot Details</StartPartPage>
+            <StartPartPage payment>Parrot Details</StartPartPage>
             {combineData.map((parrot, index) => {
                 const currentParrot = combineData[index];
                 return (
@@ -432,16 +445,23 @@ function ParrotDetail() {
                                 <p className={cx('choose-color-title')}>Color</p>
                                 <div key={index} className={cx('parrot-color')}>
                                     {parrot.colors.map((color, colorIndex) => (
-                                        <button
-                                            key={colorIndex}
-                                            className={cx('parrot-color-item', {
-                                                selected: color.color === selectedColor[parrot.id]?.color,
-                                            })}
-                                            onClick={() =>
-                                                handleColorSelection(parrot.id, color.color, color.price, color.id)
-                                            }
-                                            style={{ backgroundColor: color.color }}
-                                        ></button>
+                                        <Tooltip
+                                            label={color.color}
+                                            aria-label="A tooltip"
+                                            fontSize="lg"
+                                            placement="top"
+                                        >
+                                            <button
+                                                key={colorIndex}
+                                                className={cx('parrot-color-item', {
+                                                    selected: color.color === selectedColor[parrot.id]?.color,
+                                                })}
+                                                onClick={() =>
+                                                    handleColorSelection(parrot.id, color.color, color.price, color.id)
+                                                }
+                                                style={{ backgroundColor: color.color }}
+                                            ></button>
+                                        </Tooltip>
                                     ))}
                                 </div>
                             </div>
@@ -449,19 +469,23 @@ function ParrotDetail() {
                                 <p className={cx('quantity-title')}>Quantity</p>
                                 <div className={cx('quanity-space')}>
                                     <div className={cx('quantity-input-container')}>
-                                        <button
-                                            className={cx('quantity-input-btn')}
-                                            onClick={() => handleQuantityDecrease(parrot.id)}
-                                        >
-                                            -
-                                        </button>
+                                        <Tooltip label="Down" aria-label="A tooltip" fontSize="lg" placement="top">
+                                            <button
+                                                className={cx('quantity-input-btn')}
+                                                onClick={() => handleQuantityDecrease(parrot.id)}
+                                            >
+                                                -
+                                            </button>
+                                        </Tooltip>
                                         <input type="number" value={quantities[parrot.id] || 1} min={1} />
-                                        <button
-                                            className={cx('quantity-input-btn')}
-                                            onClick={() => handleQuantityIncrease(parrot.id)}
-                                        >
-                                            +
-                                        </button>
+                                        <Tooltip label="Up" aria-label="A tooltip" fontSize="lg" placement="top">
+                                            <button
+                                                className={cx('quantity-input-btn')}
+                                                onClick={() => handleQuantityIncrease(parrot.id)}
+                                            >
+                                                +
+                                            </button>
+                                        </Tooltip>
                                     </div>
 
                                     <p>{countParrot} available</p>
@@ -496,47 +520,75 @@ function ParrotDetail() {
                             </Accordion>
                             <div className={cx('active-zone')}>
                                 {countParrot === 0 ? (
-                                    <button>Out of stock</button>
-                                ) : (
-                                    <button
-                                        onClick={() =>
-                                            handleAddToCart({
-                                                id: count,
-                                                name: parrot.name,
-                                                img: parrot.img,
-                                                quantity: quantities[parrot.id],
-                                                price: selectedColor[parrot.id]?.price,
-                                                color: selectedColor[parrot.id]?.color,
-                                                colorID: selectedColor[parrot.id]?.colorId,
-                                            })
-                                        }
+                                    <Tooltip
+                                        label="Product will be fill soon..."
+                                        aria-label="A tooltip"
+                                        fontSize="lg"
+                                        placement="top"
                                     >
-                                        Add to cart
-                                    </button>
+                                        <button>Out of stock</button>
+                                    </Tooltip>
+                                ) : (
+                                    <Tooltip
+                                        label="Check cart to buy!!"
+                                        aria-label="A tooltip"
+                                        fontSize="lg"
+                                        placement="top"
+                                    >
+                                        <button
+                                            onClick={() =>
+                                                handleAddToCart({
+                                                    id: count,
+                                                    name: parrot.name,
+                                                    img: parrot.img,
+                                                    quantity: quantities[parrot.id],
+                                                    price: selectedColor[parrot.id]?.price,
+                                                    color: selectedColor[parrot.id]?.color,
+                                                    colorID: selectedColor[parrot.id]?.colorId,
+                                                })
+                                            }
+                                        >
+                                            Add to cart
+                                        </button>
+                                    </Tooltip>
                                 )}
                                 {countParrot === 0 ? (
-                                    <Link to="/" className={cx('buy-btn')}>
-                                        Contact
-                                    </Link>
+                                    <Tooltip
+                                        label="nguyenthanh311003@gmail.com or 0967709009"
+                                        aria-label="A tooltip"
+                                        fontSize="lg"
+                                        placement="bottom"
+                                    >
+                                        <Link to="/about-us" className={cx('buy-btn')}>
+                                            Contact
+                                        </Link>
+                                    </Tooltip>
                                 ) : countParrot === 'Check the color to see ' ? (
                                     <a className={cx('buy-btn-choose')}>Please choose color</a>
                                 ) : (
-                                    <Link
-                                        to={`/payment`}
-                                        className={cx('buy-btn')}
-                                        state={[
-                                            {
-                                                name: currentParrot.name,
-                                                quantity: parseInt(quantities[currentParrot.id]),
-                                                img: currentParrot.img,
-                                                color: selectedColor[currentParrot.id]?.color,
-                                                colorID: selectedColor[currentParrot.id]?.colorId,
-                                                price: selectedColor[currentParrot.id]?.price,
-                                            },
-                                        ]}
+                                    <Tooltip
+                                        label="Go to payment $$$"
+                                        aria-label="A tooltip"
+                                        fontSize="lg"
+                                        placement="bottom"
                                     >
-                                        Buy
-                                    </Link>
+                                        <Link
+                                            to={`/payment`}
+                                            className={cx('buy-btn')}
+                                            state={[
+                                                {
+                                                    name: currentParrot.name,
+                                                    quantity: parseInt(quantities[currentParrot.id]),
+                                                    img: currentParrot.img,
+                                                    color: selectedColor[currentParrot.id]?.color,
+                                                    colorID: selectedColor[currentParrot.id]?.colorId,
+                                                    price: selectedColor[currentParrot.id]?.price,
+                                                },
+                                            ]}
+                                        >
+                                            Buy
+                                        </Link>
+                                    </Tooltip>
                                 )}
                             </div>
                         </div>

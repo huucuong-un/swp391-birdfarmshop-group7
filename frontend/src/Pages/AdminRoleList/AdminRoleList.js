@@ -132,7 +132,6 @@ const AdminRoleList = () => {
             </div>
             <TableContainer width="100%" margin="5% 0">
                 <Table variant="simple" fontSize={16}>
-                    <TableCaption>Role list</TableCaption>
                     <Thead fontSize={16}>
                         <Tr>
                             <Th>Role Id</Th>

@@ -15,12 +15,13 @@ import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIco
 import { useState, useEffect } from 'react';
 
 import { Button as Buttons } from '@chakra-ui/react';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import ParrotAPI from '~/Api/ParrotAPI';
 import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -53,7 +54,7 @@ function ParrotDetail() {
     //         setSelectedColor(colorSortList[0].id);
     //     }
     // }, [colorSortList]);
-
+    const navigate = useNavigate();
     console.log(selectedColorId);
     const handleColorSelection = async (parrotId, color, price, colorId) => {
         setSelectedColor({

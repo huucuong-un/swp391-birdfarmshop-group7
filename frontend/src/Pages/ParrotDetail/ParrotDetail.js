@@ -21,6 +21,8 @@ import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
+import FeedbackAPI from '~/Api/FeedbackAPI';
+import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
@@ -43,6 +45,8 @@ function ParrotDetail() {
     const [images, setImages] = useState();
     const [firstImg, setFirstImg] = useState();
     const [imagesTag, setImagesTag] = useState([]);
+    const [countReview, setCountReview] = useState(0);
+    const [countSoldProduct, setCountSoldProduct] = useState(0);
     const feedback = {
         id: receivedData.parrotId,
         type: 'parrot',
@@ -351,6 +355,35 @@ function ParrotDetail() {
         chooseFirstImgMini();
     }, [combineData]);
 
+    useEffect(() => {
+        const getCountReview = async () => {
+            try {
+                const params = {
+                    id: parrotSpecies[0].id,
+                };
+                const countR = await FeedbackAPI.countReview2(params);
+                const countP = await OrderAPI.countSoldProduct(params.id);
+                setCountReview(countR);
+                setCountSoldProduct(countP);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getCountReview();
+    }, [combineData]);
+
+    // useEffect(()=>{
+    //     const getCountSold = async () => {
+    //         const params = {
+    //             id: 1,
+    //         };
+    //         const countP = await OrderAPI.countSoldProduct(params.id);
+    //         setCountReview(countR);
+    //         setCountSoldProduct(countP);
+    //     };
+    //     getCountSold();
+    // },[])
+
     // useEffect(() => {
     //     console.log('images: ' + images);
     // }, []);
@@ -380,7 +413,8 @@ function ParrotDetail() {
                         <div className={cx('parrot-detail-container')}>
                             <p className={cx('parrot-detail-title')}>{parrot.name}</p>
                             <div className={cx('parrot-star')}>
-                                <StarRating rating={parrot.parrotAverageRating}></StarRating>
+                                <StarRating rating={parrot.parrotAverageRating}></StarRating>| {countReview} Reviews |{' '}
+                                {countSoldProduct} Sold
                                 {/* <div className={cx('parrot-star-number')}>
                                     {parrot.parrotAverageRating !== null ? (
                                    

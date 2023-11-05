@@ -26,32 +26,32 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/parrot")
+@RequestMapping(value = "/api")
 public class ParrotController {
 
     @Autowired
     private ParrotService parrotService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "parrot")
     public List<ParrotDTO> showParrots() {
         List<ParrotDTO> result = parrotService.findAll();
         return result;
     }
 
-    @GetMapping(value = "/count-available-parrot-quantity-spcies-by-id/{id}")
+    @GetMapping(value = "parrot/count-available-parrot-quantity-spcies-by-id/{id}")
     public Long countAvaiableParrotById(@RequestBody @PathVariable("id") long id) {
 
         return parrotService.countAvaiableParrotById(id);
     }
 
 
-    @PostMapping(value = "")
+    @PostMapping(value = "admin/parrot")
     public ParrotDTO createParrot(@RequestBody ParrotDTO model) {
 
         return (ParrotDTO) parrotService.save(model);
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "admin/parrot/{id}")
     public ParrotDTO updateParrot(@RequestBody ParrotDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return (ParrotDTO) parrotService.save(model);
@@ -62,27 +62,27 @@ public class ParrotController {
 //		parrotService.delete(ids);
 //	}
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/parrot/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id) {
         parrotService.changeStatus(id);
     }
 
-    @DeleteMapping(value = "change-sale-status/{id}")
+    @DeleteMapping(value = "admin/parrot/change-sale-status/{id}")
     public void changeSaleStatus(@RequestBody @PathVariable("id") Long id) {
         parrotService.changeSaleStatus(id);
     }
 
-    @DeleteMapping(value = "change-health-status/{id}")
+    @DeleteMapping(value = "admin/parrot/change-health-status/{id}")
     public void changeHealthStatus(@RequestBody @PathVariable("id") Long id) {
         parrotService.changeHealthStatus(id);
     }
 
-    @DeleteMapping(value = "change-pregnancy-status/{id}")
+    @DeleteMapping(value = "admin/parrot/change-pregnancy-status/{id}")
     public void changePregnancyStatus(@RequestBody @PathVariable("id") Long id) {
         parrotService.changePregnancyStatus(id);
     }
 
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "admin/parrot/search_sort")
     public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page,
                                        @RequestParam(value = "limit", required = false) Integer limit,
                                        @RequestParam(value = "age", required = false) Integer age,

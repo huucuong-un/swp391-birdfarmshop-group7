@@ -17,25 +17,25 @@ const ParrotAPI = {
     },
 
     add(data) {
-        const url = `/parrot`;
+        const url = `/admin/parrot`;
         return axiosClinet.post(url, data);
     },
 
     update(data) {
-        const url = `/parrot-species/${data.id}`;
+        const url = `/admin/parrot-species/${data.id}`;
         return axiosClinet.put(url, data);
     },
     updateParrot(data) {
-        const url = `/parrot/${data.id}`;
+        const url = `/admin/parrot/${data.id}`;
         return axiosClinet.put(url, data);
     },
 
     remove(id) {
-        const url = `/parrot-species/${id}`;
+        const url = `/admin/parrot-species/${id}`;
         return axiosClinet.delete(url);
     },
     searchSortForParrot(params) {
-        const url = '/parrot/admin/search_sort';
+        const url = '/admin/parrot/search_sort';
         return axiosClinet.get(url, { params });
     },
 };

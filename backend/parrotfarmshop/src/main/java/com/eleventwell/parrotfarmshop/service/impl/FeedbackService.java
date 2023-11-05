@@ -122,7 +122,7 @@ feedbackRepository.save(fEntity);
 
 
     public Integer countByRating(Integer rating) {
-        return feedbackRepository.countAllByRating(rating);
+        return feedbackRepository.countAllByRatingAndStatusIsTrue(rating);
     }
 
 

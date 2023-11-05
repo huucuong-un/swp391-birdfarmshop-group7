@@ -20,7 +20,7 @@ const OrderAPI = {
     },
 
     findAllByOrderId(id) {
-        const url = `/orderdetail/findAllByOrderId/${id}`;
+        const url = `/customer/orderdetail/findAllByOrderId/${id}`;
         return axiosClinet.get(url);
     },
 
@@ -111,6 +111,10 @@ const OrderAPI = {
     totalPriceInDecember(params) {
         const url = '/order/total-price-in-December';
         return axiosClinet.get(url, { params });
+    },
+    countSoldProduct(id) {
+        const url = `/customer/orderdetail/count-sold-product/${id}`;
+        return axiosClinet.get(url);
     },
 };
 

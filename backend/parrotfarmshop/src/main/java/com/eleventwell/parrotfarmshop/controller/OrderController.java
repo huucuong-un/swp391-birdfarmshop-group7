@@ -94,7 +94,7 @@ public class OrderController {
         return result;
     }
 
-    @GetMapping(value = "/customer/order/order-history-search-sort")
+    @GetMapping(value = "customer/order/order-history-search-sort")
     public PagingModel findAllByOrderId(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "userId", required = false) Long userId  ,@RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,@RequestParam(value = "status",required = false) String status,@RequestParam(value = "sortPrice", required = false) String sortPrice,@RequestParam(value = "sortDate", required = false) String sortDate) {
 
         PagingModel result = new PagingModel();
@@ -125,7 +125,7 @@ public class OrderController {
 
     }
 
-    @PostMapping(value = "/order/find-all-order-with-user")
+    @PostMapping(value = "order/find-all-order-with-user")
     public List<OrderResponseForManagement> findAllOrderWithUserInfo() {
         List<OrderDTO> orders = orderService.findAll();
         List<OrderResponseForManagement> orderResponses = new ArrayList<>();
@@ -149,7 +149,7 @@ public class OrderController {
 
     }
 
-    @GetMapping(value = "/order/find-all-model-order-detail-by-id/{id}")
+    @GetMapping(value = "order/find-all-model-order-detail-by-id/{id}")
     public List<OrderDetailHistoryModel> findAllModelByOrderId(@RequestBody @PathVariable Long id) {
 
         return orderDetailService.createOrderDetailHistoryModelList(id);
@@ -282,5 +282,7 @@ public class OrderController {
     public OrderDTO findOneByUsageHistory(@RequestBody @PathVariable Long id) {
         return orderService.findOneByUsageHistoryId(id);
     }
+
+
 }
 

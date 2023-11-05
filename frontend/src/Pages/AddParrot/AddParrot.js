@@ -108,7 +108,7 @@ function AddParrot() {
                 return;
             }
 
-            const responseParrots = await axios.post('http://localhost:8086/api/parrot', {
+            const responseParrots = await axios.post('http://localhost:8086/api/admin/parrot', {
                 // Add other fields you want to send to the first API
                 age: parrots.age,
                 status: parrots.status,
@@ -233,7 +233,7 @@ function AddParrot() {
 
         try {
             // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/parrot/${updatedPost[index].id}`);
+            await axios.delete(`http://localhost:8086/api/admin/parrot/${updatedPost[index].id}`);
             // If the request is successful, update the state
             setParrotList(updatedPost);
         } catch (error) {

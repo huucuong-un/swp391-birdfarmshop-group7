@@ -152,4 +152,9 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
     public int totalItem() {
         return (int)orderDetailRepository.count();
     }
+
+    public Integer countSoldProduct(Long id){
+        return orderDetailRepository.countAllByParrotParrotSpeciesColorParrotSpeciesId(id);
+
+    }
 }

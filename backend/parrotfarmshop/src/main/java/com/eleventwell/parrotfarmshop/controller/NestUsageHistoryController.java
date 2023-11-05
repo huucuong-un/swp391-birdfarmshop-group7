@@ -14,12 +14,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/nest-usage-history")
+@RequestMapping(value = "/api")
 public class NestUsageHistoryController {
     @Autowired
     NestUsageHistoryService nestUsageHistoryService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "staff/nest-usage-history")
     public PagingModel findAllOrder(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -32,18 +32,18 @@ public class NestUsageHistoryController {
         return result;
 
     }
-    @GetMapping(value = "find-by-parrot-id/{id}")
+    @GetMapping(value = "customer/nest-usage-history/find-by-parrot-id/{id}")
     public NestUsageHistoryDTO findOneByOrderId(@PathVariable("id") Long id) {
         NestUsageHistoryDTO nestUsageHistoryDTO = nestUsageHistoryService.findOneByOrderId(id);
         return  nestUsageHistoryDTO;
     }
 
-    @PutMapping(value = "/admin/update-status")
+    @PutMapping(value = "admin/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id) {
         nestUsageHistoryService.changeStatus(id);
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "staff/nest-usage-history")
     public NestUsageHistoryDTO createNestUsageHistory(@RequestBody NestUsageHistoryDTO model) {
         return (NestUsageHistoryDTO) nestUsageHistoryService.save(model);
     }

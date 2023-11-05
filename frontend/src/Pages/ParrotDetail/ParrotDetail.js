@@ -30,12 +30,10 @@ import Button from '~/Components/Button/Button';
 import Feedback from '~/Components/Feedback/Feedback';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
-<<<<<<< HEAD
 import FeedbackAPI from '~/Api/FeedbackAPI';
 import OrderAPI from '~/Api/OrderAPI';
-=======
+
 import { ShopState } from '~/context/ShopProvider';
->>>>>>> ba8ec0be393a05ba71f1653bdddc006c8af85396
 
 const cx = classNames.bind(styles);
 

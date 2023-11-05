@@ -139,6 +139,18 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
         return results;
     }
+    public List<ParrotSpeciesDTO> findAllByStatusIsTrue(Pageable pageable) {
+        // TODO Auto-generated method stub
+        List<ParrotSpeciesDTO> results = new ArrayList();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findAllByStatusIsTrueOrderByIdDesc(pageable);
+        for (ParrotSpeciesEntity item : entities) {
+            ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(item, ParrotSpeciesDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
 
     public List<ParrotSpeciesDTO> findAllByPriceAndName(String sortWay, Pageable pageable) {
         List<ParrotSpeciesDTO> results = new ArrayList();
@@ -176,7 +188,7 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
     @Override
     public int totalItem() {
-      	return (int)parrotSpeciesRepository.countAllByStatusIsTrue();
+        return (int)parrotSpeciesRepository.countAllByStatusIsTrue();
     }
 
 
@@ -212,7 +224,6 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
                 origin,
                 averageWeight,
                 parrotAverageRating,
-
                 status,
 
                 searchDate,
@@ -236,11 +247,38 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
         return results;
 
     }
+    public List<ParrotSpeciesDTO> searchSort(String name,
+
+                                             String sortName,
+
+
+
+
+                                             String sortParrotAverageRating,
+
+                                             String sortDate, Pageable pageable) {
+        List<ParrotSpeciesDTO> results = new ArrayList<>();
+        List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.searchSort(name,
+
+
+                sortName,
+
+                sortParrotAverageRating,
+
+                sortDate, pageable);
+        for (ParrotSpeciesEntity parrotSpeciesEntity : entities
+        ) {
+            ParrotSpeciesDTO newDTO = (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesEntity, ParrotSpeciesDTO.class);
+            results.add(newDTO);
+        }
+        return results;
+
+    }
 
 //    public List<ParrotSpeciesDTO> findTop3HighestSalse(){
 //        try {
 //            List<ParrotSpeciesDTO> results = new ArrayList();
-//            List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findTop3Sales();
+//            List<ParrotSpeciesEntity> entities = parrotSpeciesRepository.findTop3Salse();
 //            int count =0;
 //            for (ParrotSpeciesEntity item : entities) {
 //                if(count==3){
@@ -274,7 +312,6 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
     public List<ParrotSpeciesDTO> findTop3Sale() {
         List<ParrotSpeciesDTO> result = new ArrayList<>();
         Pageable pageable = PageRequest.of(0, 3);
-
         List<ParrotSpeciesEntity> listEntity =  parrotSpeciesRepository.findTop3Sales(pageable);
         for (ParrotSpeciesEntity entity: listEntity) {
             ParrotSpeciesDTO dto = (ParrotSpeciesDTO)genericConverter.toDTO(entity, ParrotSpeciesDTO.class);

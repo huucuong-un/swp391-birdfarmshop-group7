@@ -17,31 +17,46 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/post")
+@RequestMapping(value = "/api")
 public class PostController {
 
     @Autowired
     PostService postService;
 
-    @GetMapping(value="")
+    @GetMapping(value="post")
     public ListOutput showPosts() {
         ListOutput result = new ListOutput();
         result.setListResult(postService.findAll());
         return  result;
     }
+
+    @GetMapping(value="marketer/post")
+    public ListOutput showPostsForMarketer() {
+        ListOutput result = new ListOutput();
+        result.setListResult(postService.findAll());
+        return  result;
+    }
+
+    @GetMapping(value="marketer/post/find-one-by-id")
+    public PostDTO showPostsByIdForMarketer(@RequestBody @RequestParam("postId") Long id) {
+
+        return postService.findOneById(id);
+    }
     
-     @GetMapping(value="find-one-by-id")
+     @GetMapping(value="post/find-one-by-id")
     public PostDTO showPosts(@RequestBody @RequestParam("postId") Long id) {
         
        return postService.findOneById(id);
     }
 
-    @PostMapping(value="")
+
+
+    @PostMapping(value="marketer/post")
     public PostDTO createPost(@RequestBody PostDTO model){
         return (PostDTO) postService.save(model);
     }
 
-    @PutMapping(value="{id}")
+    @PutMapping(value="marketer/post/{id}")
     public PostDTO updatePost(@RequestBody PostDTO model,@PathVariable("id") long id){
         model.setId(id);
         return (PostDTO) postService.save(model);
@@ -51,12 +66,12 @@ public class PostController {
 //    public void deletePost(@RequestBody long[] ids){
 //        postService.delete(ids);
 //    }
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "marketer/post/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
         postService.changeStatus(id);
     }
 
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "marketer/post/search_sort")
     public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,
                                        @RequestParam(value = "title", required = false) String title,
                                        @RequestParam(value = "content", required = false) String content,
@@ -76,6 +91,10 @@ public class PostController {
         return  result;
     }
 
+    @GetMapping(value = "post/true-status")
+    public List<PostDTO> findAllByTrueStatus() {
+        return postService.findAllByStatusTrue();
+    }
 //    @GetMapping(value = "admin/search_sort")
 //    public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,
 //                                       @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,

@@ -25,6 +25,11 @@ const cx = classNames.bind(styles);
 function AddMoreDeliveryInfo(props) {
     const [newDeliveryInfo, setNewDeliveryInfo] = useState({ name: '', phoneNumber: '', address: '', status: true });
     const { user } = ShopState();
+    const [validate, setValidate] = useState({
+        name: '',
+        phone: '',
+        address: '',
+    });
     const addNewDeliveryInfo = async () => {
         try {
             setLoading(true);
@@ -35,7 +40,67 @@ function AddMoreDeliveryInfo(props) {
             };
 
             const data = await DeliveryInformationAPI.getAll(user.id, config);
-
+            if (
+                newDeliveryInfo.name.length !== 0 &&
+                newDeliveryInfo.phoneNumber.length !== 0 &&
+                newDeliveryInfo.address.length !== 0 &&
+                (newDeliveryInfo.name.length < 3 ||
+                    newDeliveryInfo.name.length > 50 ||
+                    newDeliveryInfo.phoneNumber.length < 10 ||
+                    newDeliveryInfo.phoneNumber.length > 11 ||
+                    newDeliveryInfo.address.length < 10 ||
+                    newDeliveryInfo.address.length > 50)
+            ) {
+                if (
+                    (newDeliveryInfo.name.length < 3 || newDeliveryInfo.name.length > 50) &&
+                    (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11) &&
+                    (newDeliveryInfo.address.length < 10 || newDeliveryInfo.address.length > 50)
+                ) {
+                    setValidate({
+                        name: 'Name must be in 3 and 50 characters',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: 'Address must be in 10 and 50 characters',
+                    });
+                } else if (
+                    (newDeliveryInfo.name.length < 3 || newDeliveryInfo.name.length > 50) &&
+                    (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11)
+                ) {
+                    setValidate({
+                        name: 'Name must be in 3 and 50 characters',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: '',
+                    });
+                } else if (
+                    (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11) &&
+                    (newDeliveryInfo.address.length < 10 || newDeliveryInfo.address.length > 50)
+                ) {
+                    setValidate({
+                        name: '',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: 'Address must be in 10 and 50 characters',
+                    });
+                } else if (newDeliveryInfo.name.length < 3 || newDeliveryInfo.name.length > 50) {
+                    setValidate({
+                        name: 'Name must be in 3 and 50 characters',
+                        phone: '',
+                        address: '',
+                    });
+                } else if (newDeliveryInfo.phoneNumber.length < 10 || newDeliveryInfo.phoneNumber.length > 11) {
+                    setValidate({
+                        name: '',
+                        phone: 'Phone must be in 10 and 1 characters',
+                        address: '',
+                    });
+                } else if (newDeliveryInfo.address.length < 10 || newDeliveryInfo.address.length > 50) {
+                    setValidate({
+                        name: '',
+                        phone: '',
+                        address: 'Address must be in 10 and 50 characters',
+                    });
+                }
+                setSubmissionStatus(false);
+                setLoading(false);
+            }
             if (data === null || data === '' || data.length === 0) {
                 const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
                     {
@@ -93,7 +158,10 @@ function AddMoreDeliveryInfo(props) {
                     (submissionStatus === false && (
                         <Alert status="error" fontSize={12}>
                             <AlertIcon />
-                            <AlertTitle>Failed to add new delivery!!</AlertTitle>
+                            <AlertTitle>
+                                Failed to add new delivery!! <br /> {validate.name} <br /> {validate.phone} <br />
+                                {validate.address}
+                            </AlertTitle>
                             <AlertDescription>Please check again!!!</AlertDescription>
                         </Alert>
                     ))}
@@ -113,8 +181,8 @@ function AddMoreDeliveryInfo(props) {
                                     onChange={(e) => setNewDeliveryInfo({ ...newDeliveryInfo, name: e.target.value })}
                                     variant="filled"
                                     placeholder="Contact name"
-                                    required
                                     backgroundColor={'white'}
+                                    required
                                 />
                             </Td>
                         </Tr>
@@ -132,8 +200,8 @@ function AddMoreDeliveryInfo(props) {
                                     }
                                     variant="filled"
                                     placeholder="Phone number"
-                                    required
                                     backgroundColor={'white'}
+                                    required
                                 />
                             </Td>
                         </Tr>

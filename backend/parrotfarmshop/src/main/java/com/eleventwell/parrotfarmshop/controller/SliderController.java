@@ -16,7 +16,7 @@ import java.util.Date;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/slider")
+@RequestMapping(value = "/api")
 public class SliderController {
 
     @Autowired
@@ -39,36 +39,41 @@ public class SliderController {
 //        model.setId(id);
 //        return (PostDTO) postService.save(model);
 
-    @GetMapping(value = "")
+    @GetMapping(value = "slider")
     public ListOutput showSlider(){
         ListOutput result = new ListOutput();
         result.setListResult(sliderService.findAll());
         return result;
     }
-    @GetMapping(value = "/admin/find-one-by-id/{id}")
+    @GetMapping(value = "marketer/slider/find-one-by-id/{id}")
     public SliderDTO showSlider(@RequestBody @PathVariable("id") Long id){
 
         return sliderService.findOneById(id);
     }
+    @GetMapping(value = "marketer/slider")
+    public ListOutput showSliderForMarketer(){
+        ListOutput result = new ListOutput();
+        result.setListResult(sliderService.findAll());
+        return result;
+    }
 
-
-    @PostMapping(value = "")
+    @PostMapping(value = "marketer/slider")
     public SliderDTO createSlider(@RequestBody SliderDTO model){
         return (SliderDTO) sliderService.save(model);
     }
 
-    @PutMapping(value= "{id}")  
+    @PutMapping(value= "marketer/slider/{id}")
     public SliderDTO updateSlider(@RequestBody SliderDTO model, @PathVariable("id") long id){
         model.setId(id);
         return (SliderDTO) sliderService.save(model);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "marketer/slider/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
         sliderService.changeStatus(id);
     }
 
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "marketer/slider/search_sort")
     public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,
                                        @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
                                        @RequestParam(value = "status", required = false) Boolean status,
@@ -84,5 +89,10 @@ public class SliderController {
                     result.setLimit(limit);
                     return  result;
     }
-
+    @GetMapping(value = "marketer/slider/true-status")
+    public ListOutput showSliderWithTrueStatus(){
+        ListOutput result = new ListOutput();
+        result.setListResult(sliderService.findAllWithTrueStatus());
+        return result;
+    }
 }

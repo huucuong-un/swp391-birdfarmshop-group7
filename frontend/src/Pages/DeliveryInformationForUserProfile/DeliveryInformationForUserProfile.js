@@ -9,6 +9,7 @@ import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import AddMoreDeliveryInfo from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo';
 import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo';
 import { ShopState } from '~/context/ShopProvider';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -18,8 +19,21 @@ const DeliveryInformationForUserProfile = ({ selectedDelivery, setSelectedDelive
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(Array(deliveryInfo.length).fill(false)); // Initialize with false for each item
     const { user } = ShopState();
+    const { setUser } = ShopState();
     const [reloadStatus, setReloadStatus] = useState(true);
-
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                setUser(userByToken);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token] || []);
     const handleShow = () => {
         setShow(!show);
     };
@@ -84,7 +98,7 @@ const DeliveryInformationForUserProfile = ({ selectedDelivery, setSelectedDelive
             setReloadStatus(false);
         }
         getAllDeliveryInfoByCustomerId();
-    }, [reloadStatus]);
+    }, [user]);
 
     return (
         <Box className={cx('wrapper')}>

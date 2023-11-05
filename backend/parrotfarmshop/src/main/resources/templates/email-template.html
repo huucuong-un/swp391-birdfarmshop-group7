@@ -92,14 +92,14 @@
                 </td>
 
                 <td><span th:text="${orderDetail.quantity}"></span></td>
-                <td><span th:text="${orderDetail.totalPrice}"></span> VND</td>
+                <td><span th:text="${orderDetail.totalPrice}"> $</span></td>
             </tr>
         </th:block>
         </tbody>
 
     </table>
 
-    <h4>Total Price: <span th:text="${totalPrice}"> VND</span></h4>
+    <h4>Total Price: <span th:text="${totalPrice}"> $</span></h4>
 
     <p>Thank you for shopping with us!</p>
     <a th:href="${shopLink}" class="button">Visit Our Shop</a>

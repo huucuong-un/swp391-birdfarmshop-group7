@@ -39,6 +39,17 @@ public class FAQsService implements IGenericService<FAQsDTO> {
         return result;
     }
 
+    public List<FAQsDTO> findAllByStatus(Boolean status){
+        List<FAQsDTO> result = new ArrayList<>();
+        List<FAQEntity> entities = faqsRepository.findAllByStatus(status);
+
+        for(FAQEntity entity : entities){
+            FAQsDTO faQsDTO = (FAQsDTO) converter.toDTO(entity, FAQsDTO.class);
+            result.add(faQsDTO);
+        }
+        return result;
+    }
+
     @Override
     public FAQsDTO save(FAQsDTO faQsDTO) {
         FAQEntity faqEntity = new FAQEntity();
@@ -102,4 +113,6 @@ public class FAQsService implements IGenericService<FAQsDTO> {
 
         return results;
     }
+
+
 }

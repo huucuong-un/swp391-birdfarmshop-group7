@@ -16,9 +16,6 @@ function ChooseProduct() {
             <Title>Parrots</Title>
             <div className="container">
                 <div className={cx('product-hover-effect-container')}>
-                    <Link className={cx('item')} to="/parrot-product">
-                        <img className={cx('parrot-img')} src={parrot1} />
-                    </Link>
                     <Tooltip label="Shopping time!!!" placement="right" fontSize="xl">
                         <Link className={cx('item')} to="/parrot-product">
                             <img className={cx('parrot-img')} src={parrot1} />

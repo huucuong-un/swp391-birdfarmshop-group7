@@ -161,7 +161,8 @@ feedbackRepository.save(fEntity);
 
     public Integer countByOrderId(Long id) {
 
-        return feedbackRepository.countAllByOrderIdId(id);
+   return feedbackRepository.countAllByOrderDetailIdId(id);
+
     }
 
 

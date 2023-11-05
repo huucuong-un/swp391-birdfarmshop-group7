@@ -51,6 +51,7 @@ import ForgotPasswordOTP from '~/Pages/ForgotPasswordOTP/ForgotPasswordOTP';
 import ResetPassword from '~/Pages/ResetPassword/ResetPassword';
 import MarketingLayout from '~/Components/MarketingLayout/MarketingLayout';
 import StaffLayout from '~/Components/StaffLayout/StaffLayout';
+import MarketerPromotion from '~/Pages/MarketerPromotion/MarketerPromotion';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -71,13 +72,14 @@ const publicRoutes = [
     { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/test', component: TestDontDelete, layout: SystemLayout },
     { path: '/marketer/post', component: AddPost, layout: MarketingLayout },
+    { path: '/marketer/promotion', component: MarketerPromotion, layout: MarketingLayout },
     { path: '/staff/feedback', component: StaffFeedback, layout: StaffLayout, role: 'staff' },
     { path: '/staff/order', component: StaffOrderManagement, layout: StaffLayout, role: 'staff' },
     { path: '/admin/order', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
     { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
-    { path: '/profile/change-password', component: ChangePassword, layout: LoginSystemLayout },
+    { path: '/profile/change-password', component: ChangePassword },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faqs', component: FAQs },
     { path: '/admin/parrot-species', component: AdParrotSpecies, layout: SystemLayout },

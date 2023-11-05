@@ -42,7 +42,7 @@ public class PromotionEntity extends BaseEntity {
 
 	@NotBlank
 	@Size(max=30)
-	@Column(name = "code")
+	@Column(name = "code", unique = true)
 	private String code;
 
 	@NotBlank

@@ -37,18 +37,18 @@ public class FAQsController {
         return result;
     }
 
-    @PostMapping(value = "/faqs")
+    @PostMapping(value = "admin/faqs")
     public FAQsDTO createFaqs(@RequestBody FAQsDTO model) {
         return faQsDTOIGenericService.save(model);
     }
 
-    @PutMapping(value = "/faqs/{id}")
+    @PutMapping(value = "admin/faqs/{id}")
     public FAQsDTO updateFAQs(@RequestBody FAQsDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return faQsDTOIGenericService.save(model);
     }
 
-    @DeleteMapping(value = "/faqs/{id}")
+    @DeleteMapping(value = "admin/faqs/{id}")
     public void deleteFAQs(@RequestBody @PathVariable("id") long id) {
 
         faQsDTOIGenericService.changeStatus(id);

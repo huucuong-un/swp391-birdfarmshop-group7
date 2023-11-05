@@ -44,12 +44,12 @@ public class PromotionController {
     }
 
 
-    @PostMapping(value = "/promotion")
+    @PostMapping(value = "admin/promotion")
     public PromotionDTO create(@RequestBody PromotionDTO model) {
         return (PromotionDTO) promotionService.save(model);
     }
 
-    @PutMapping(value = "/promotion/{id}")
+    @PutMapping(value = "admin/promotion/{id}")
     public PromotionDTO update(@RequestBody PromotionDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return (PromotionDTO) promotionService.save(model);
@@ -59,7 +59,7 @@ public class PromotionController {
 //    public void delete(@RequestBody long[] ids){
 //        promotionService.delete(ids);
 //    }
-    @PutMapping(value = "/promotion/change-status/{id}")
+    @PutMapping(value = "admin/promotion/change-status/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id) {
         promotionService.changeStatus(id);
     }
@@ -84,6 +84,18 @@ public class PromotionController {
         return result;
     }
 
+    @GetMapping(value = "/marketer/promotion")
+    public List<PromotionDTO> showForMarketerWithTrueStatus() {
+
+        List<PromotionDTO> list = promotionService.findAllByStatusTrue();
+        return list;
+
+    }
+
+    @PostMapping(value = "admin/promotion/find-one-by-code-new/{code}")
+    public PromotionDTO findOneByCodeNotCheckDate(@PathVariable("code") String code){
+        return promotionService.findOneByCodeNotCheckDate(code);
+    }
 
 
 }

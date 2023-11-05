@@ -22,71 +22,75 @@ const LoginWithGoogle = () => {
     }, []);
 
     const responseGoogle = async (response) => {
-        const data =
-            (await LoginAPI.getUserByEmail(response.profileObj.email)) === ''
-                ? null
-                : await LoginAPI.getUserByEmail(response.profileObj.email);
-        if (data == null) {
-            try {
+        try {
+            const data =
+                (await LoginAPI.getUserByEmail(response.profileObj.email)) === ''
+                    ? null
+                    : await LoginAPI.getUserByEmail(response.profileObj.email);
+            if (data == null) {
+                try {
+                    const config = {
+                        headers: {
+                            'Content-type': 'application/json',
+                        },
+                    };
+                    const email = response.profileObj.email;
+
+                    const dataForUser = {
+                        userName: email.split('@')[0],
+                        email: response.profileObj.email, // email,
+                        password: response.googleId, // password,
+                        fullName: response.profileObj.name, // fullName,
+                        status: true, // status,
+                        roleId: 1, // roleId: 1,
+                        imgUrl: response.profileObj.imageUrl,
+                    };
+                    console.log(dataForUser);
+
+                    const register = await RegisterAPI.register(dataForUser, config);
+
+                    localStorage.setItem('accessToken', JSON.stringify(register));
+                    const userFromToken = await UserAPI.getUserByToken(JSON.parse(localStorage.getItem('accessToken')));
+                    setUser(userFromToken);
+                    console.log(register);
+                    navigate('/');
+                } catch (error) {
+                    toast({
+                        title: 'Error occur!',
+                        // description: error.register.message,
+                        status: 'error',
+                        duration: 5000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                }
+            } else {
                 const config = {
                     headers: {
-                        'Content-type': 'application/json',
+                        'Content-Type': 'application/json',
                     },
                 };
-                const email = response.profileObj.email;
-
-                const dataForUser = {
-                    userName: email.split('@')[0],
-                    email: response.profileObj.email, // email,
-                    password: response.googleId, // password,
-                    fullName: response.profileObj.name, // fullName,
-                    status: true, // status,
-                    roleId: 1, // roleId: 1,
-                    imgUrl: response.profileObj.imageUrl,
-                };
-                console.log(dataForUser);
-
-                const register = await RegisterAPI.register(dataForUser, config);
-
-                localStorage.setItem('accessToken', JSON.stringify(register));
-                const userFromToken = await UserAPI.getUserByToken(JSON.parse(localStorage.getItem('accessToken')));
-                setUser(userFromToken);
-                console.log(register);
-                navigate('/');
-            } catch (error) {
-                toast({
-                    title: 'Error occur!',
-                    // description: error.register.message,
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                    position: 'bottom',
+                const dataLogin = await axios.post(
+                    'http://localhost:8086/api/user/login-with-google/authenticate',
+                    {
+                        email: data.email,
+                        password: null,
+                    },
+                    config,
+                );
+                const userLogin = UserAPI.getUserByToken(dataLogin.data);
+                userLogin.then((result) => {
+                    setUser(result);
+                    console.log(result);
                 });
+
+                localStorage.setItem('accessToken', JSON.stringify(dataLogin.data));
+                console.log(dataLogin.data);
+
+                navigate('/');
             }
-        } else {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            const dataLogin = await axios.post(
-                'http://localhost:8086/api/user/login-with-google/authenticate',
-                {
-                    email: data.email,
-                    password: null,
-                },
-                config,
-            );
-            const userLogin = UserAPI.getUserByToken(dataLogin.data);
-            userLogin.then((result) => {
-                setUser(result);
-                console.log(result);
-            });
-
-            localStorage.setItem('accessToken', JSON.stringify(dataLogin.data));
-            console.log(dataLogin.data);
-
-            navigate('/');
+        } catch (error) {
+            console.error(error);
         }
     };
     return (

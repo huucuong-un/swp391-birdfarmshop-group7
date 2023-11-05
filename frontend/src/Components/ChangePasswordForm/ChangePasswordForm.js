@@ -16,7 +16,7 @@ import { InputGroup } from '@chakra-ui/react';
 
 const cx = classNames.bind(styles);
 
-function ChangePasswordForm() {
+function  ChangePasswordForm() {
     const navigate = useNavigate();
     const toast = useToast();
     const { user } = ShopState();

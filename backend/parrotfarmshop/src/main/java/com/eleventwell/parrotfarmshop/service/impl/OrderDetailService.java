@@ -99,6 +99,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
                 if (count == 0) {
                     OrderDetailHistoryModel model = new OrderDetailHistoryModel();
                     if(entity.getParrot()!=null){
+                        model.setOrderDetailId(entity.getId());
                         model.setImg(entity.getParrot().getParrotSpeciesColor().getImages().get(0).getImageUrl());
                         model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
                         model.setColorId(entity.getParrot().getParrotSpeciesColor().getId());

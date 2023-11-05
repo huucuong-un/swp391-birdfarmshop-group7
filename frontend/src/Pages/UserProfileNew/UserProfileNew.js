@@ -39,6 +39,7 @@ function UserProfileNew() {
     const [loading, setLoading] = useState(false);
     const [imgUrl, setImgUrl] = useState();
     const toast = useToast();
+    const { setUser } = ShopState();
 
     const updateImg = (pic) => {
         setLoading(true);
@@ -86,8 +87,7 @@ function UserProfileNew() {
                 // localStorage.setItem('userInfo', JSON.stringify(updateInfo));
                 // setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
                 console.log(loggedUser);
-                localStorage.setItem('userInfo', JSON.stringify(updateInfo));
-                setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+
                 toast({
                     title: 'Change successfully',
                     status: 'success',
@@ -111,6 +111,7 @@ function UserProfileNew() {
                 const user = await UserAPI.getUserByToken(token);
 
                 setLoggedUser(user);
+                setUser(user);
                 setGender(user.gender);
                 setImgUrl(user.imgUrl);
                 console.log(user);

@@ -1,10 +1,6 @@
 package com.eleventwell.parrotfarmshop.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +43,9 @@ public class OrderDetailEntity extends BaseEntity {
     @JoinColumn(name = "nest_usage_id", unique = true)
     private NestUsageHistoryEntity nestUsageHistory;
 
+	@OneToOne(mappedBy = "orderDetailId")
+	@PrimaryKeyJoinColumn
+	private FeedbackEntity feedback;
 
 
 

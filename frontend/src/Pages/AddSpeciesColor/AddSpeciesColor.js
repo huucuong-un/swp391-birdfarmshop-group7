@@ -504,7 +504,9 @@ function AddSpeciesColor() {
         updatedSpecie[index].status = !updatedSpecie[index].status;
         try {
             // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/parrot-species/${updatedSpecie[index].id}`);
+            await axios.delete(
+                `http://localhost:8086/api/admin/parrot-species/change-status/${updatedSpecie[index].id}`,
+            );
             // If the request is successful, update the state
             setSpecies(updatedSpecie);
         } catch (error) {

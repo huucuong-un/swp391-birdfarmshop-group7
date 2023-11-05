@@ -26,7 +26,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/order")
+@RequestMapping(value = "/api")
 public class OrderController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "admin/order_management/list")
+    @GetMapping(value = "admin/order/order_management/list")
     public PagingModel findAllOrder(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -65,7 +65,7 @@ public class OrderController {
       return  result;
 
     }
-    @GetMapping(value = "admin/order_management/search")
+    @GetMapping(value = "staff/order/order_management/search")
     public PagingModel searchOrderByPhoneAnd(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "email", required = false) String email,@RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,@RequestParam(value = "status",required = false) String status,@RequestParam(value = "sortPrice", required = false) String sortPrice,@RequestParam(value = "sortDate", required = false) String sortDate) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -94,7 +94,7 @@ public class OrderController {
         return result;
     }
 
-    @GetMapping(value = "order-history-search-sort")
+    @GetMapping(value = "/customer/order/order-history-search-sort")
     public PagingModel findAllByOrderId(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "userId", required = false) Long userId  ,@RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,@RequestParam(value = "status",required = false) String status,@RequestParam(value = "sortPrice", required = false) String sortPrice,@RequestParam(value = "sortDate", required = false) String sortDate) {
 
         PagingModel result = new PagingModel();
@@ -125,7 +125,7 @@ public class OrderController {
 
     }
 
-    @PostMapping(value = "find-all-order-with-user")
+    @PostMapping(value = "/order/find-all-order-with-user")
     public List<OrderResponseForManagement> findAllOrderWithUserInfo() {
         List<OrderDTO> orders = orderService.findAll();
         List<OrderResponseForManagement> orderResponses = new ArrayList<>();
@@ -149,7 +149,7 @@ public class OrderController {
 
     }
 
-    @GetMapping(value = "find-all-model-order-detail-by-id/{id}")
+    @GetMapping(value = "/order/find-all-model-order-detail-by-id/{id}")
     public List<OrderDetailHistoryModel> findAllModelByOrderId(@RequestBody @PathVariable Long id) {
 
         return orderDetailService.createOrderDetailHistoryModelList(id);
@@ -171,14 +171,14 @@ public class OrderController {
       return  orderService.createOrderDetail(dto, species, product);
     }
 
-    @PostMapping(value = "cart")
+    @PostMapping(value = "customer/order/cart")
     public OrderDTO createOrderByCart(@RequestBody OrderRequest orderRequest) {
         OrderDTO dto = orderRequest.getOrderDTO();
         List<CartModel> listcart = orderRequest.getCartList();
       return  orderService.createOrderDetailsByCart(dto, listcart);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "customer/{id}")
     public void deleteParrot(@RequestBody @PathVariable("id") Long id) {
         orderService.changeStatus(id);
     }
@@ -278,7 +278,7 @@ public class OrderController {
         return orderService.calculateTotalPriceForDoneOrdersInDecember();
     }
 
-    @GetMapping(value = "find-one-by-usage-history-id/{id}")
+    @GetMapping(value = "staff/order/find-one-by-usage-history-id/{id}")
     public OrderDTO findOneByUsageHistory(@RequestBody @PathVariable Long id) {
         return orderService.findOneByUsageHistoryId(id);
     }

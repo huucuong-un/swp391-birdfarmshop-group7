@@ -123,7 +123,7 @@ function AddSlider() {
                     setSubmissionStatus('');
                 }, 5000);
             } else {
-                const responsePost = await axios.post('http://localhost:8086/api/slider', {
+                const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
                     sliderName: slider.sliderName,
                     sliderDescription: slider.sliderDescription,
                     sliderImageURL: img,

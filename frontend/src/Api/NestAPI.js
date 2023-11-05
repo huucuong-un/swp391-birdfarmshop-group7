@@ -3,109 +3,109 @@ import axiosClinet from './AxiosClient';
 const NestAPI = {
     //Nest
     getAllNest(params) {
-        const url = '/parrot-egg-nest';
+        const url = '/admin/parrot-egg-nest'; //done
         return axiosClinet.get(url, { params });
     },
     getNestById(id) {
-        const url = `/parrot-egg-nest/find-one-by-id?id=${id}`;
+        const url = `/admin/parrot-egg-nest/find-one-by-id?id=${id}`; //done
         return axiosClinet.get(url);
     },
     changeStatusForNest(id) {
-        const url = `/parrot-egg-nest/${id}`;
+        const url = `/admin/parrot-egg-nest/${id}`; //done
         return axiosClinet.delete(url);
     },
 
     addNest(data) {
-        const url = `/parrot-egg-nest`;
-        return axiosClinet.post(url, data);
+        const url = `/admin/parrot-egg-nest`;
+        return axiosClinet.post(url, data); //done
     },
     findOneBySpeciesId(params) {
-        const url = '/parrot-egg-nest/find-one-by-species-id';
+        const url = '/parrot-egg-nest/find-one-by-species-id'; //done
         return axiosClinet.get(url, { params });
     },
     //Nest-usage-history
     getAllNestUsageHistory(params) {
-        const url = '/nest-usage-history';
+        const url = '/staff/nest-usage-history'; //done
         return axiosClinet.get(url, { params });
     },
     getOneByOrderId(id) {
-        const url = `/nest-usage-history/find-by-parrot-id/${id}`;
+        const url = `/customer/nest-usage-history/find-by-parrot-id/${id}`; //done
         return axiosClinet.get(url);
     },
     add(data) {
-        const url = `/nest-usage-history`;
+        const url = `/staff/nest-usage-history`; //done
         return axiosClinet.post(url, data);
     },
     //Nest Price
     getAll(params) {
-        const url = '/nest-price';
+        const url = '/nest-price'; //done
         return axiosClinet.get(url, { params });
     },
     getNestPriceById(id) {
-        const url = `/nest-price/find-one-by-id?id=${id}`;
+        const url = `/admin/nest-price/find-one-by-id?id=${id}`; //done
         return axiosClinet.get(url);
     },
     getNestPriceBySpeciesId(id) {
-        const url = `/nest-price/find-by-species-id?speciesId=${id}`;
+        const url = `nest-price/find-by-species-id?speciesId=${id}`; //done
         return axiosClinet.get(url);
     },
     addNestPrice(data) {
-        const url = `/nest-price`;
+        const url = `/admin/nest-price`; //done
         return axiosClinet.post(url, data);
     },
     changeStatusForNestPrice(id) {
-        const url = `/nest-price/${id}`;
+        const url = `/admin/nest-price/${id}`; //done
         return axiosClinet.delete(url);
     },
     updateNestPrice(data, id) {
-        const url = `/nest-price/${id}`;
+        const url = `/admin/nest-price/${id}`; //done
         return axiosClinet.put(url, data);
     },
     //Nest-development-status
     getAllNestDevelopmentStatus(params) {
-        const url = '/nest-development-status';
+        const url = '/customer/nest-development-status'; //done
         return axiosClinet.get(url, { params });
     },
     getNestDevelopmentStatusById(id) {
-        const url = `/nest-development-status/find-one-status-by-id/${id}`;
+        const url = `/customer/nest-development-status/find-one-status-by-id/${id}`; //done
         return axiosClinet.get(url);
     },
     getNestDevelopmentStatusBySequence(id) {
-        const url = `/nest-development-status/find-one-by-sequence/${id}`;
+        const url = `/admin/nest-development-status/find-one-by-sequence/${id}`; //done
         return axiosClinet.get(url);
     },
     addNestDevelopmentStatus(data) {
-        const url = `/nest-development-status`;
+        const url = `/admin/nest-development-status`; //done
         return axiosClinet.post(url, data);
     },
     changeStatusForNestDevelopmentStatus(id) {
-        const url = `/nest-development-status/${id}`;
+        const url = `/admin/nest-development-status/${id}`; //done
         return axiosClinet.delete(url);
     },
 
     searchSortForNestPrice(params) {
-        const url = '/nest-price/admin/search_sort';
+        const url = '/admin/nest-price/search_sort'; //done
         return axiosClinet.get(url, { params });
     },
     searchSortForNest(params) {
-        const url = '/parrot-egg-nest/admin/search_sort';
+        const url = '/admin/parrot-egg-nest/search_sort'; //done
         return axiosClinet.get(url, { params });
     },
     changeSequenceForNestDevelopmentStatus(data) {
-        const url = `/nest-development-status/admin/update-sequence?id=${data.id}&sequence=${data.sequence}`;
+        const url = `/admin/nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`; //done
         return axiosClinet.put(url, data);
     },
     //Nest-development
     getAllNestDevelopment(params) {
-        const url = '/nest-development';
+        const url = '/admin/nest-development'; //done
         return axiosClinet.get(url, { params });
     },
     getAllNestDevelopmentWithUsageId(id) {
-        const url = `/nest-development/find-all-by-nest-usage-history-id/${id}`;
+        const url = `/customer/nest-development/find-all-by-nest-usage-history-id/${id}`; //done
         return axiosClinet.get(url);
     },
     addNestDevelopment(data) {
-        const url = `/nest-development`;
+        const url = `/staff/nest-development`; //done
         return axiosClinet.post(url, data);
     },
 };

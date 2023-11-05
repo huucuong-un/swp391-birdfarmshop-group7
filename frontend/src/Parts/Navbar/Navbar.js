@@ -48,6 +48,8 @@ function Navbar() {
             user = userFromToken;
 
             setLoggedUser(userFromToken);
+            console.log(user);
+            console.log(userFromToken);
         } catch (error) {}
     }, [token]);
 

@@ -17,12 +17,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/nest-development")
+@RequestMapping(value = "/api")
 public class NestDevelopmentController {
     @Autowired
     NestDevelopmentService nestDevelopmentService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "admin/nest-development")
     public PagingModel findAllOrder(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -39,19 +39,19 @@ public class NestDevelopmentController {
 
     }
 
-    @GetMapping(value = "find-all-by-nest-usage-history-id/{id}")
+    @GetMapping(value = "customer/nest-development/find-all-by-nest-usage-history-id/{id}")
     public List<NestDevelopmentDTO> findAllByNestUsageHistoryId(@RequestBody @PathVariable("id") long id) {
         List<NestDevelopmentDTO> list = new ArrayList<>();
         list = nestDevelopmentService.findAllByNestUsageHistoryId(id);
         return list;
     }
 
-    @PutMapping(value = "/admin/update-status")
+    /*@PutMapping(value = "/admin/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id, @RequestParam(value = "action") Boolean action) {
         nestDevelopmentService.changeStatus(id, action);
-    }
+    }*/
 
-    @PostMapping(value = "")
+    @PostMapping(value = "staff/nest-development")
     public NestDevelopmentDTO createNestDevelopment(@RequestBody NestDevelopmentDTO model) {
         return (NestDevelopmentDTO) nestDevelopmentService.save(model);
     }

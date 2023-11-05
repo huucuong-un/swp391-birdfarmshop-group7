@@ -19,10 +19,12 @@ import {
     AlertDescription,
     Stack,
     Text,
+    Box,
+    Flex,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowRight, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -258,22 +260,32 @@ function AdNestDevelopmentStatus() {
     }, [selectedValues]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>NEST DEVELOPMENT STATUS</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    NEST DEVELOPMENT STATUS
+                </Text>
+            </Box>
             <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
+                {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Button>
-                <Button onClick={handleShowForUpdate} colorScheme="green" size="lg">
+                </Button> */}
+                <Flex className={cx('add-button')} onClick={handleShow}>
+                    <FontAwesomeIcon icon={faCirclePlus} />
+                    <Text className={cx('add-role-text')}>Add</Text>
+                </Flex>
+                {/* <Button onClick={handleShowForUpdate} colorScheme="green" size="lg">
                     Update
                     <span className={cx('span-icon', { 'rotate-icon': showForUpdate })}>
                         {showForUpdate ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Button>
+                </Button> */}
+                <Flex className={cx('add-button')} onClick={handleShowForUpdate}>
+                    <FontAwesomeIcon icon={faCirclePlus} />
+                    <Text className={cx('add-role-text')}>Update</Text>
+                </Flex>
             </div>
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
@@ -395,11 +407,21 @@ function AdNestDevelopmentStatus() {
                                     <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td className={cx('submit-btn')}>
+                                    <Button
+                                        colorScheme="green"
+                                        onClick={handleSave}
+                                        className={cx('save-btn')}
+                                        fontSize={18}
+                                    >
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>

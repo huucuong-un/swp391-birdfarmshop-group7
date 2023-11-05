@@ -33,7 +33,7 @@ const NestAPI = {
         return axiosClinet.get(url);
     },
     add(data) {
-        const url = `/staff/nest-usage-history`; //done
+        const url = `/customer/nest-usage-history`; //done
         return axiosClinet.post(url, data);
     },
     //Nest Price

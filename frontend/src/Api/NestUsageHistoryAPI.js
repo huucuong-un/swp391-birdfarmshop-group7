@@ -2,7 +2,7 @@ import axiosClinet from './AxiosClient';
 
 const NestUsageHistoryAPI = {
     add(data) {
-        const url = `/nest-usage-history`;
+        const url = `/customer/nest-usage-history`;
         return axiosClinet.post(url, data);
     },
 };

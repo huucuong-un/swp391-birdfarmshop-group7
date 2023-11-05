@@ -54,9 +54,6 @@ function SystemNavbar({ staff, manager }) {
                     <Link to="/admin/dashboard">
                         <p>DASHBOARD</p>
                     </Link>
-                    <Link to="/admin/order">
-                        <p>ORDER</p>
-                    </Link>
                     <Link to="/admin/account">
                         <p>ACCOUNT</p>
                     </Link>
@@ -74,6 +71,12 @@ function SystemNavbar({ staff, manager }) {
                     </Link>
                     <Link to="/admin/nest">
                         <p>NEST</p>
+                    </Link>
+                    <Link to="/admin/nest-price">
+                        <p>NEST PRICE</p>
+                    </Link>
+                    <Link to="/admin/nest-development-status">
+                        <p>DEVELOPMENT STATUS</p>
                     </Link>
                     <Link to="/admin/faqs">
                         <p>FAQs</p>

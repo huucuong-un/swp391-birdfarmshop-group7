@@ -15,7 +15,7 @@ function StaffNavbar({ staff, manager }) {
                     <img className={cx('logo')} src={logo} alt="logo" />
                 </Link>
                 <div className={cx('nav-items')}>
-                    <Link to="/staff/order">
+                    <Link to="/admin/order">
                         <p>ORDER</p>
                     </Link>
                     <Link to="/staff/feedback">

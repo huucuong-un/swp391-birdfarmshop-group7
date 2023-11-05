@@ -268,7 +268,7 @@ function MngVoucherPromotion() {
                                     <Input
                                         type="date"
                                         borderColor="black"
-                                        fontSize={18}
+                                        fontSize={15}
                                         value={startDate}
                                         onChange={(e) => setStartDate(e.target.value)}
                                     />
@@ -280,7 +280,7 @@ function MngVoucherPromotion() {
                                     <Input
                                         type="date"
                                         borderColor="black"
-                                        fontSize={18}
+                                        fontSize={15}
                                         value={endDate}
                                         onChange={(e) => setEndDate(e.target.value)}
                                     />
@@ -294,7 +294,7 @@ function MngVoucherPromotion() {
                             </Tr>
                             <Tr>
                                 <Td></Td>
-                                <Td>
+                                <Td className={cx('submit-btn')}>
                                     {' '}
                                     <Button
                                         colorScheme="green"

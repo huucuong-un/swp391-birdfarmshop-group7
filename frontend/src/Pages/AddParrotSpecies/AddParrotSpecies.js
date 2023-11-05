@@ -1,5 +1,3 @@
-import classNames from 'classnames/bind';
-import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
 import {
     Input,
     Table,
@@ -7,6 +5,8 @@ import {
     Tfoot,
     Tr,
     Td,
+    Thead,
+    Th,
     TableContainer,
     Button,
     Alert,
@@ -22,6 +22,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faArrowsRotate, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
+import classNames from 'classnames/bind';
+import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -308,11 +310,13 @@ function AddParrotSpecies() {
                             ))}
                         <div className={cx('title-post')}>
                             <div className={cx('title')}>
-                                <h1>Add species</h1>
+                                <Text margin={0} fontWeight={600}>
+                                    ADD SPECIES
+                                </Text>
                             </div>
                         </div>
 
-                        <Table size="xs">
+                        <Table variant="simple" size="lg">
                             <Tbody>
                                 <Tr>
                                     <Td>Parrot species name</Td>

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Button, ButtonGroup, Tooltip } from '@chakra-ui/react';
 
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import ParrotAPI from '~/Api/ParrotAPI';
@@ -246,25 +246,43 @@ function ShoppingCart() {
                             <div key={index} className={cx('carft-left-item')}>
                                 <div className={cx('carft-left-item-checkbox-container')}>
                                     {cartItem.available === 0 || cartItem.quantity > cartItem.available ? (
-                                        <input type="checkbox" disabled className={cx('carft-left-item-checkbox')} />
+                                        <Tooltip
+                                            label="Out of stock:(("
+                                            aria-label="A tooltip"
+                                            fontSize="lg"
+                                            placement="top"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                disabled
+                                                className={cx('carft-left-item-checkbox')}
+                                            />
+                                        </Tooltip>
                                     ) : (
-                                        <input
-                                            id={`checkbox-${cartItem.id}`}
-                                            className={cx('carft-left-item-checkbox')}
-                                            type="checkbox"
-                                            checked={checkboxState[cartItem.id]}
-                                            onChange={() =>
-                                                handleCheckBoxOnClick({
-                                                    id: index,
-                                                    img: cartItem.img,
-                                                    name: cartItem.name,
-                                                    quantity: cartItem.quantity,
-                                                    price: cartItem.price,
-                                                    color: cartItem.color,
-                                                    colorID: cartItem.colorID,
-                                                })
-                                            }
-                                        />
+                                        <Tooltip
+                                            label="Check to add!!!"
+                                            aria-label="A tooltip"
+                                            fontSize="lg"
+                                            placement="top"
+                                        >
+                                            <input
+                                                id={`checkbox-${cartItem.id}`}
+                                                className={cx('carft-left-item-checkbox')}
+                                                type="checkbox"
+                                                checked={checkboxState[cartItem.id]}
+                                                onChange={() =>
+                                                    handleCheckBoxOnClick({
+                                                        id: index,
+                                                        img: cartItem.img,
+                                                        name: cartItem.name,
+                                                        quantity: cartItem.quantity,
+                                                        price: cartItem.price,
+                                                        color: cartItem.color,
+                                                        colorID: cartItem.colorID,
+                                                    })
+                                                }
+                                            />
+                                        </Tooltip>
                                     )}
                                 </div>
                                 <div className={cx('cart-left-item-image')}>
@@ -286,9 +304,13 @@ function ShoppingCart() {
                                 </div>
                                 <div className={cx('cart-left-item-quantity-btn')}>
                                     <div className={cx('cart-left-item-quantity-btn-input')}>
-                                        <button onClick={() => handleDecreaseQuantity(index)}>-</button>
+                                        <Tooltip label="Down" aria-label="A tooltip" fontSize="lg" placement="top">
+                                            <button onClick={() => handleDecreaseQuantity(index)}>-</button>
+                                        </Tooltip>
                                         <input type="number" value={cartItem.quantity} />
-                                        <button onClick={() => handleIncreaseQuantity(index)}>+</button>
+                                        <Tooltip label="Up" aria-label="A tooltip" fontSize="lg" placement="top">
+                                            <button onClick={() => handleIncreaseQuantity(index)}>+</button>
+                                        </Tooltip>
                                     </div>
                                     <div className={cx('cart-left-item-available')}>
                                         <p>{cartItem.available} Available</p>
@@ -300,7 +322,9 @@ function ShoppingCart() {
                                 </div>
 
                                 <div className={cx('carft-left-item-remove-btn')}>
-                                    <button onClick={() => handleRemoveCart(index, cartItem.id)}>x</button>
+                                    <Tooltip label="Remove item" aria-label="A tooltip" fontSize="lg" placement="top">
+                                        <button onClick={() => handleRemoveCart(index, cartItem.id)}>x</button>
+                                    </Tooltip>
                                 </div>
                             </div>
                         ))}
@@ -343,25 +367,34 @@ function ShoppingCart() {
                     </div>
                     <div className={cx('check-out-btn')}>
                         {choosenCart.length === 0 ? (
-                            <Link to="">
-                                <Button
-                                    className={cx('check-out-disable')}
-                                    colorScheme="yellow"
-                                    size="lg"
-                                    width={300}
-                                    height={20}
-                                    fontSize={16}
-                                    disabled
-                                >
-                                    Check Out
-                                </Button>
-                            </Link>
+                            <Tooltip
+                                label="Choose item to check out!!!"
+                                aria-label="A tooltip"
+                                fontSize="lg"
+                                placement="top"
+                            >
+                                <Link to="">
+                                    <Button
+                                        className={cx('check-out-disable')}
+                                        colorScheme="yellow"
+                                        size="lg"
+                                        width={300}
+                                        height={20}
+                                        fontSize={16}
+                                        disabled
+                                    >
+                                        Check Out
+                                    </Button>
+                                </Link>
+                            </Tooltip>
                         ) : (
-                            <Link to="/payment" state={choosenCart}>
-                                <Button colorScheme="yellow" size="lg" width={300} height={20} fontSize={16}>
-                                    Check Out
-                                </Button>
-                            </Link>
+                            <Tooltip label="Go to payment $$$" aria-label="A tooltip" fontSize="lg" placement="top">
+                                <Link to="/payment" state={choosenCart}>
+                                    <Button colorScheme="yellow" size="lg" width={300} height={20} fontSize={16}>
+                                        Check Out
+                                    </Button>
+                                </Link>
+                            </Tooltip>
                         )}
                     </div>
                 </div>

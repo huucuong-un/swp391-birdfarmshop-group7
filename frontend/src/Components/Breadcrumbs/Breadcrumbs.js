@@ -41,6 +41,10 @@ function Breadcrumbs() {
                         displayName = 'Nest';
                     } else if (name === 'about-us') {
                         displayName = 'About Us';
+                    } else if (name === 'post-detail') {
+                        displayName = 'Post Detail';
+                    } else if (name === 'compare-products') {
+                        displayName = 'Compare Parrot';
                     } else {
                         displayName = name;
                     }

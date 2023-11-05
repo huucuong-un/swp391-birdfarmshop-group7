@@ -32,7 +32,7 @@ function PostDetail() {
 
     return (
         <div className={cx('wrapper')}>
-            <StartPartPage>Post Details</StartPartPage>
+            <StartPartPage payment>Post Details</StartPartPage>
             <div className="inner">
                 <div className={cx('inner-up')} style={{ minHeight: '500px' }}>
                     <div className={cx('post-img')}>

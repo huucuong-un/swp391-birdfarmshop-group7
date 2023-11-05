@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 import styles from '~/Pages/CompareParrot/CompareParrot.module.scss';
 
 const cx = classNames.bind(styles);
@@ -21,6 +22,7 @@ function CompareParrot() {
 
     return (
         <Container style={{ minHeight: '800px' }}>
+            <StartPartPage payment>Compare Parrot</StartPartPage>
             <Row className={cx('row-item')} fontSize={'18px'} style={{ backgroundColor: '#f4f4f4' }}>
                 <Col className={cx('col-item')}></Col>
                 {data.selectedComparisonProduct.map((parrot, index) => {

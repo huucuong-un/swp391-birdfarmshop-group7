@@ -43,7 +43,7 @@ public class NestUsageHistoryController {
         nestUsageHistoryService.changeStatus(id);
     }
 
-    @PostMapping(value = "staff/nest-usage-history")
+    @PostMapping(value = "customer/nest-usage-history")
     public NestUsageHistoryDTO createNestUsageHistory(@RequestBody NestUsageHistoryDTO model) {
         return (NestUsageHistoryDTO) nestUsageHistoryService.save(model);
     }

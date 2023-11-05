@@ -209,6 +209,11 @@
     padding-bottom: 5px;
     // margin-top: 16px;
     // border: 4px solid var(--black);
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.9;
+    }
 }
 
 .parrot-info {

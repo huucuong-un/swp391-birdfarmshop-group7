@@ -67,6 +67,11 @@ const ParrotSpeciesAPI = {
         const url = '/admin/parrot-species/find-top3-sale';
         return axiosClinet.get(url);
     },
+
+    addSpecies(data) {
+        const url = `/admin/parrot-species-color`;
+        return axiosClinet.post(url, data);
+    },
 };
 
 export default ParrotSpeciesAPI;

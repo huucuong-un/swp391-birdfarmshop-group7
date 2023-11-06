@@ -24,6 +24,8 @@ import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
+import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 
 const cx = classNames.bind(styles);
 
@@ -195,7 +197,7 @@ function AddParrotSpecies() {
                     setSubmissionStatus('');
                 }, 5000);
             } else {
-                const responseSpecies = await axios.post('http://localhost:8086/api/admin/parrot-species/create', {
+                const responseSpecies = await ParrotSpeciesAPI.add({
                     name: parrotSpecies.name,
                     description: parrotSpecies.description,
                     quantity: parrotSpecies.quantity,
@@ -213,7 +215,7 @@ function AddParrotSpecies() {
                 } else {
                     console.error('POST request failed with status code - species: ', responseSpecies.status);
                 }
-                const responseSpeciesColor = await axios.post('http://localhost:8086/api/admin/parrot-species-color', {
+                const responseSpeciesColor = await ParrotSpeciesAPI.addSpecies({
                     // Đoạn này để truyền các data fields về phía database
                     speciesID: responseSpecies.data.id,
                     status: parrotSpeciesColor.status,
@@ -221,11 +223,10 @@ function AddParrotSpecies() {
                     color: parrotSpeciesColor.color,
                     imageUrl: img,
                 });
-                const addImg = await axios.post('http://localhost:8086/api/admin/color-image', {
+                const addImg = await ParrotSpeciesColorAPI.addColorImage({
                     imageUrl: img,
                     parrotSpeciesColorId: responseSpeciesColor.data.id,
                 });
-                console.log('pot detail' + postDetails);
                 if (responseSpeciesColor.status === 200) {
                     console.log('POST request was successful at species color');
                 } else {

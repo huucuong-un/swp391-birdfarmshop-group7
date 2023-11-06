@@ -140,10 +140,8 @@ function UpdateParrot({ parrot, reloadData }) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr>
-                                <Td>
-                                    <p>Parrot Age</p>
-                                </Td>
+                            <Tr height={35}>
+                                <Td>Parrot Age</Td>
                                 <Td>
                                     <Input
                                         type="number"
@@ -159,17 +157,16 @@ function UpdateParrot({ parrot, reloadData }) {
                                     />
                                 </Td>
                             </Tr>
-                            <Tr>
-                                <Td>
-                                    <p>Parrot species </p>
-                                </Td>
+                            <Tr height={35}>
+                                <Td>Parrot species</Td>
                                 <Td>
                                     <select
                                         className={cx('select-btn')}
                                         onChange={(e) => setSpeciesColorById(e.target.value)}
+                                        required
                                     >
                                         <option key={'a'} value={'a'}>
-                                            Selected specie
+                                            Selected species
                                         </option>
                                         {species.map((specie, index) => (
                                             <option key={index} value={specie.id}>
@@ -180,13 +177,11 @@ function UpdateParrot({ parrot, reloadData }) {
                                 </Td>
                             </Tr>
 
-                            <Tr>
-                                <Td>
-                                    <p>Parrot species color </p>
-                                </Td>
+                            <Tr height={35}>
+                                <Td>Parrot species color</Td>
                                 <Td>
                                     {speciesColor.length === 0 ? (
-                                        <p>Species have no color</p>
+                                        <>Species have no color</>
                                     ) : (
                                         <select
                                             className={cx('select-btn')}
@@ -196,6 +191,7 @@ function UpdateParrot({ parrot, reloadData }) {
                                                 console.log('Selected color ID:', selectedColorId);
                                                 setNewParrot({ ...newParrot, colorID: selectedColorId });
                                             }}
+                                            required
                                         >
                                             {speciesColor.map((item, index) => (
                                                 <>
@@ -227,7 +223,7 @@ function UpdateParrot({ parrot, reloadData }) {
                                         style={{ marginTop: 15 }}
                                         margin="8px"
                                     >
-                                        ADD
+                                        Save
                                     </Button>
                                 </Td>
                             </Tr>

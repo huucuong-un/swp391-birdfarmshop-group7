@@ -75,7 +75,7 @@ const publicRoutes = [
     { path: '/marketer/post', component: AddPost, layout: MarketingLayout },
     { path: '/marketer/promotion', component: MarketerPromotion, layout: MarketingLayout },
     { path: '/staff/feedback', component: StaffFeedback, layout: StaffLayout, role: 'staff' },
-    { path: '/admin/order', component: StaffOrderManagement, layout: StaffLayout, role: 'staff' },
+    { path: '/staff/order', component: StaffOrderManagement, layout: StaffLayout, role: 'staff' },
     // { path: '/admin/order', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
     { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },

@@ -39,7 +39,7 @@ public class DeliveryInformationEntity extends BaseEntity {
 
 
 	@NotBlank
-	@Size(min = 10, max = 50)
+	@Size(min = 10, max = 200)
 	@Column(name = "address")
 	private String address;
 	

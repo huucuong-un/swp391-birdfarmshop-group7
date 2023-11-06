@@ -68,7 +68,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String email;
 
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = 1, max = 50)
     @Column(name = "full_name")
     private String fullName;
 

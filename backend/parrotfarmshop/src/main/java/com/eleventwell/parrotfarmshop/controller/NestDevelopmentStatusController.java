@@ -16,12 +16,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/nest-development-status")
+@RequestMapping(value = "/api")
 public class NestDevelopmentStatusController {
     @Autowired
     NestDevelopmentStatusService nestDevelopmentStatusService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "customer/nest-development-status")
     public PagingModel findAll(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -35,34 +35,34 @@ public class NestDevelopmentStatusController {
 
     }
 
-    @GetMapping(value = "find-one-status-by-id/{id}")
+    @GetMapping(value = "customer/nest-development-status/find-one-status-by-id/{id}")
     public NestDevelopmentStatusDTO findOneStatusById(@RequestBody @PathVariable("id") long id) {
         NestDevelopmentStatusDTO nestDevelopmentStatusDTO = nestDevelopmentStatusService.findOneById(id);
         return nestDevelopmentStatusDTO;
     }
 
-    @GetMapping(value = "find-one-by-sequence/{id}")
+    @GetMapping(value = "admin/nest-development-status/find-one-by-sequence/{id}")
     public NestDevelopmentStatusDTO findOneBySequence(@RequestBody @PathVariable("id") Integer id) {
         NestDevelopmentStatusDTO nestDevelopmentStatusDTO = nestDevelopmentStatusService.findOneBySequence(id);
         return nestDevelopmentStatusDTO;
     }
 
-    @PutMapping(value = "/admin/update-status")
+    /*@PutMapping(value = "/admin/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id) {
         nestDevelopmentStatusService.changeStatus(id);
-    }
+    }*/
 
-    @PostMapping(value = "")
+    @PostMapping(value = "admin/nest-development-status")
     public NestDevelopmentStatusDTO createNestDevelopment(@RequestBody NestDevelopmentStatusDTO model) {
         return (NestDevelopmentStatusDTO) nestDevelopmentStatusService.save(model);
     }
 
-    @PutMapping(value = "/admin/update-sequence")
+    @PutMapping(value = "admin/nest-development-status/update-sequence")
     public void updateSequence(@RequestBody @RequestParam(value = "id") Long id, @RequestParam(value = "sequence") Integer sequence) {
         nestDevelopmentStatusService.changeSequence(id, sequence);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/nest-development-status/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") long id){
         nestDevelopmentStatusService.changeStatus(id);
     }

@@ -94,13 +94,15 @@ public class NestUsageHistoryService implements IGenericService<NestUsageHistory
     }
 
     public void deleteByOrderDetailid(Long id){
-
-
         OrderDetailEntity orderDetail = orderDetailRepository.findOneById(id);
         orderDetailRepository.deleteById(id);
         nestUsageHistoryRepository.deleteById(orderDetail.getNestUsageHistory().getId());
         nestService.changeStatus(id);
+    }
 
-
+    public NestUsageHistoryDTO findOneByOrderId(Long id) {
+        NestUsageHistoryEntity nestUsageHistoryEntity  =  nestUsageHistoryRepository.findOneByOrderId(id);
+        NestUsageHistoryDTO nestUsageHistoryDTO = (NestUsageHistoryDTO) genericConverter.toDTO(nestUsageHistoryEntity, NestUsageHistoryDTO.class);
+        return nestUsageHistoryDTO;
     }
 }

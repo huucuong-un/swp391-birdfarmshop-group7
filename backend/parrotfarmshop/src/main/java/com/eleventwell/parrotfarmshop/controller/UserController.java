@@ -15,7 +15,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api")
 public class UserController {
     @Autowired
     UserService userService;
@@ -25,47 +25,47 @@ public class UserController {
 
 
 
-    @GetMapping(value = "get-user-by-email/{email}")
+    @GetMapping(value = "user/get-user-by-email/{email}")
     public UserDTO getUserByEmail(@PathVariable("email") String email) {
         if (userService1.findByEmail(email) != null) return userService1.findByEmail(email);
         return null;
     }
-    @GetMapping(value = "get-user-by-id")
+    @GetMapping(value = "user/get-user-by-id")
     public UserDTO getUserByEmail(@RequestParam("id") Long id) {
         if (userService1.findOneById(id) != null) return userService1.findOneById(id);
         return null;
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "admin/user")
     public List<UserDTO> showUsers() {
         List<UserDTO> results = userService.findAll();
 
         return results;
     }
-    @GetMapping(value = "generate-token")
+    @GetMapping(value = "user/generate-token")
     public UserDTO generateToken(@RequestBody @RequestParam("token") String token) {
 
 
         return userService.generateToken(token);
     }
-    @PostMapping(value = "")
+    @PostMapping(value = "admin/user")
     public UserDTO createUser(@RequestBody UserDTO model) {
         return userService.save(model);
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "user/{id}")
     public UserDTO updateUser(@RequestBody UserDTO model, @PathVariable("id") Long id) {
         model.setId(id);
 
         return  userService.save(model);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/user/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
         userService.changeStatus(id);
     }
 
-    @GetMapping(value =  "paging")
+    @GetMapping(value =  "user/paging")
     public PagingModel pagingModel (@RequestBody @RequestParam(value = "page") Integer page, @RequestParam(value = "limit") Integer limit){
 
         PagingModel result = new PagingModel();

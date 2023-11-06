@@ -159,4 +159,20 @@ promotionRepository.save(promotionEntity);
         return results;
     }
 
+    public List<PromotionDTO> findAllByStatusTrue() {
+        List<PromotionDTO> results = new ArrayList();
+        List<PromotionEntity> entities = promotionRepository.findAllByStatusTrueOrderByIdDesc();
+        for (PromotionEntity item : entities) {
+            PromotionDTO newDTO = (PromotionDTO) converter.toDTO(item, PromotionDTO.class);
+            results.add(newDTO);
+
+        }
+
+        return results;
+    }
+
+    public PromotionDTO findOneByCodeNotCheckDate(String code){
+        return (PromotionDTO) converter.toDTO(promotionRepository.findOneByCode(code),PromotionDTO.class);
+    }
+
 }

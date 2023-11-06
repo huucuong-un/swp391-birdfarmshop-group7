@@ -19,10 +19,12 @@ import {
     AlertDescription,
     Stack,
     Text,
+    Box,
+    Flex,
 } from '@chakra-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus, faArrowRight, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
@@ -58,7 +60,10 @@ function AdNestDevelopmentStatus() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
-
+    const [validate, setValidate] = useState({
+        title: '',
+        description: '',
+    });
     useEffect(() => {
         const getNestPriceList = async () => {
             try {
@@ -156,12 +161,29 @@ function AdNestDevelopmentStatus() {
     };
 
     const handleSave = () => {
-        if (title === '' || description === '') {
+        if (
+            title === '' ||
+            description === '' ||
+            title.length < 3 ||
+            title.length > 30 ||
+            description.length < 10 ||
+            description.length > 150
+        ) {
+            if ((title.length < 3 || title.length > 30) && (description.length < 10 || description.length > 150)) {
+                setValidate({
+                    title: 'Name must be in 3 to 150 charactes',
+                    description: 'Description must be in 2 to 200 charactes',
+                });
+            } else if (description.length < 10 || description.length > 150) {
+                setValidate({ title: '', description: 'Description must be in 10 to 200 charactes' });
+            } else if (title.length < 3 || title.length > 30) {
+                setValidate({ title: 'Name must be in 3 to 150 charactes', description: '' });
+            }
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
                 setSubmitStatus();
-            }, 50000);
+            }, 4000);
         } else {
             setAddStatus(true);
             setSubmitStatus(true);
@@ -238,28 +260,38 @@ function AdNestDevelopmentStatus() {
     }, [selectedValues]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>NEST DEVELOPMENT STATUS</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    NEST DEVELOPMENT STATUS
+                </Text>
+            </Box>
             <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
+                {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
                     <span className={cx('span-icon', { 'rotate-icon': show })}>
                         {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Button>
-                <Button onClick={handleShowForUpdate} colorScheme="green" size="lg">
+                </Button> */}
+                <Flex className={cx('add-button')} onClick={handleShow}>
+                    <FontAwesomeIcon icon={faCirclePlus} />
+                    <Text className={cx('add-role-text')}>Add</Text>
+                </Flex>
+                {/* <Button onClick={handleShowForUpdate} colorScheme="green" size="lg">
                     Update
                     <span className={cx('span-icon', { 'rotate-icon': showForUpdate })}>
                         {showForUpdate ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
                     </span>
-                </Button>
+                </Button> */}
+                <Flex className={cx('add-button')} onClick={handleShowForUpdate}>
+                    <FontAwesomeIcon icon={faCirclePlus} />
+                    <Text className={cx('add-role-text')}>Update</Text>
+                </Flex>
             </div>
             {(submitStatus === true && (
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Success
                     </Alert>
                 </Stack>
             )) ||
@@ -268,6 +300,10 @@ function AdNestDevelopmentStatus() {
                         <Alert status="error">
                             <AlertIcon />
                             There was an error processing your request
+                            <br />
+                            {validate.description}
+                            <br />
+                            {validate.title}
                         </Alert>
                     </Stack>
                 ))}
@@ -371,11 +407,21 @@ function AdNestDevelopmentStatus() {
                                     <Switch size="lg" colorScheme="green" onChange={handleSwitch}></Switch>
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td className={cx('submit-btn')}>
+                                    <Button
+                                        colorScheme="green"
+                                        onClick={handleSave}
+                                        className={cx('save-btn')}
+                                        fontSize={18}
+                                    >
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSave} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>

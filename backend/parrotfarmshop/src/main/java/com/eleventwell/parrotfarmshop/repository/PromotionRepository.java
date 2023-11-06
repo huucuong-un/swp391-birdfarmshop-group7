@@ -37,5 +37,8 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     @Query ("SELECT p FROM PromotionEntity p WHERE p.id = :id AND p.quantity > 0")
     PromotionEntity findOneByIdAndCheckValidDate(@Param("id")Long id);
 
+    List<PromotionEntity> findAllByStatusTrueOrderByIdDesc();
 
+    @Query ("SELECT p FROM PromotionEntity p WHERE p.code = :code")
+    PromotionEntity findOneByCode(@Param("code")String code);
 }

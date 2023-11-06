@@ -18,12 +18,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/parrot-egg-nest")
+@RequestMapping(value = "/api")
 public class NestController {
     @Autowired
     private NestService nestService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "admin/parrot-egg-nest")
     public PagingModel findAllOrder(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -36,17 +36,20 @@ public class NestController {
         return result;
     }
 
-    @GetMapping(value = "find-one-by-species-id")
+    @GetMapping(value = "parrot-egg-nest/find-one-by-species-id")
     public NestDTO findAllO(@RequestBody @RequestParam(value = "speciesId", required = false) Long speciesId) {
 
         return nestService.findOneBySpeciesId(speciesId);
     }
 
+    @GetMapping(value = "admin/parrot-egg-nest/find-one-by-id")
+    public NestDTO findOneById(@RequestBody @RequestParam(value = "id") Long id) {
+        return nestService.findOneById(id);
+    }
 
     //add a parrot egg nest by Post method
-    @PostMapping(value = "")
+    @PostMapping(value = "admin/parrot-egg-nest")
     public NestDTO createParrotEggNest(@RequestBody NestDTO model) {
-
         return (NestDTO) nestService.save(model);
     }
 
@@ -57,7 +60,7 @@ public class NestController {
         return (NestDTO) nestService.save(model);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/parrot-egg-nest/{id}")
     public void deleteParrotEggNest(@RequestBody @PathVariable("id") Long id) {
         nestService.changeStatus(id);
     }
@@ -72,7 +75,7 @@ public class NestController {
 //    public void changeBreedStatus(@RequestBody @PathVariable("id") Long id){
 //        parrotEggNestService.changeBreedStatus(id);
 //    }
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "admin/parrot-egg-nest/search_sort")
     public PagingModel searchSortForNest(@RequestBody @RequestParam(value = "page", required = false) Integer page,
                                          @RequestParam(value = "limit", required = false) Integer limit,
                                          @RequestParam(value = "searchDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchDate,

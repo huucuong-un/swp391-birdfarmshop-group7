@@ -16,7 +16,6 @@ const cx = classNames.bind(styles);
 function Register() {
     const [userName, setUserName] = useState('');
     const [name, setName] = useState('');
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -34,16 +33,67 @@ function Register() {
 
     const submitHandler = async () => {
         setLoading(true);
-        if (!userName || !email || !password || !confirmPassword) {
-            toast({
-                title: 'Please fill all the fields',
-                status: 'warning',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            setLoading(false);
-            return;
+        if (
+            userName.length < 3 ||
+            userName.length > 20 ||
+            password.length < 6 ||
+            password.length > 20 ||
+            phoneNumber.length < 10 ||
+            phoneNumber.length > 11 ||
+            address.length < 10 ||
+            address.length > 50
+        ) {
+            if (!userName && !email && !password && !confirmPassword) {
+                toast({
+                    title: 'Please fill all the required fields',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                setLoading(false);
+                return;
+            } else if (userName.length < 3 || userName.length > 150) {
+                toast({
+                    title: 'Name must be between 3 and 150 characters',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                setLoading(false);
+                return;
+            } else if (password.length < 6 || password.length > 20) {
+                toast({
+                    title: 'Password must be between 6 and 20 characters',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                setLoading(false);
+                return;
+            } else if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+                toast({
+                    title: 'Phone number must be 10 or 11 digits',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                setLoading(false);
+                return;
+            } else if (address.length < 10 || address.length > 50) {
+                toast({
+                    title: 'Address must be between 10 and 50 characters',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                setLoading(false);
+                return;
+            }
         }
 
         if (password !== confirmPassword) {

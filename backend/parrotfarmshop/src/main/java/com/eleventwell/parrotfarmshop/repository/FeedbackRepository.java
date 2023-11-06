@@ -18,19 +18,20 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
     @Query("SELECT u FROM FeedbackEntity u WHERE u.parrotSpeciesColor.id = :id  order by u.id DESC ")
     List<FeedbackEntity> findAllByParrotSpeciesColorIdAndBelongToOrderByIdDesc(@Param("id")Long id, Pageable pageable);
 
-    @Query("SELECT u FROM FeedbackEntity u where u.parrotSpeciesColor.parrotSpecies.id = :speciesId AND u.belongTo = :belongTo AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)  order by u.id DESC ")
+    @Query("SELECT u FROM FeedbackEntity u where u.parrotSpeciesColor.parrotSpecies.id = :speciesId AND u.belongTo = :belongTo AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId) AND u.status = true  order by u.id DESC ")
     List<FeedbackEntity> findbyspeciesIdAndType(@Param("speciesId") Long id,@Param("belongTo") String belongTo,@Param("rating") Integer rating,@Param("colorId") Long colorId, Pageable pageable);
 
 
-    @Query("SELECT ROUND(AVG(f.rating), 1) FROM FeedbackEntity f WHERE f.parrotSpeciesColor.parrotSpecies.id = :colorid")
+    @Query("SELECT ROUND(AVG(f.rating), 1) FROM FeedbackEntity f WHERE f.parrotSpeciesColor.parrotSpecies.id = :colorid AND f.status = true")
     Double calculateRoundedAverageRating(@Param("colorid") Long colorid);
     List<FeedbackEntity> findAllByOrderByIdDesc();
 
 
-    Integer countAllByOrderIdId(Long id);
+ Integer countAllByOrderDetailIdId(Long orderDetailId);
+//    Integer countAllByOrderIdId(Long id);
 
 
-    Integer countAllByRating(Integer id);
+    Integer countAllByRatingAndStatusIsTrue(Integer id);
 
     @Query("SELECT COUNT(u) FROM FeedbackEntity u   WHERE u.status =true AND (:speciesId IS NULL OR u.parrotSpeciesColor.parrotSpecies.id = :speciesId) AND (:rating IS NULL OR u.rating = :rating) AND (:colorId IS NULL OR u.parrotSpeciesColor.id = :colorId)")
 

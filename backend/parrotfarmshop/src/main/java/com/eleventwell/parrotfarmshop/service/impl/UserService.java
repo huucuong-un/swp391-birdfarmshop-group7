@@ -97,9 +97,7 @@ public class UserService implements IGenericService<UserDTO> {
         return results;
     }
     public UserDTO findOneById(Long id){
-
         return (UserDTO) genericConverter.toDTO(userRepository.findOneById(id),UserDTO.class);
-
     }
 
     public UserDTO generateToken(String token){

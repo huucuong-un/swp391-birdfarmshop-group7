@@ -2,22 +2,25 @@ import axiosClinet from './AxiosClient';
 
 const OrderAPI = {
     getAll(params) {
-        const url = '/order/admin/order_management/list';
+        const url = '/admin/order/order_management/list'; //done
         return axiosClinet.get(url, { params });
     },
-
+    getOneByUsageHistory(id) {
+        const url = `/staff/order/find-one-by-usage-history-id/${id}`; //done
+        return axiosClinet.get(url);
+    },
     searchByEmailAndPhone(params) {
-        const url = '/order/admin/order_management/search';
+        const url = '/staff/order/order_management/search'; //done
         return axiosClinet.get(url, { params });
     },
 
     findAllByUserIdAndSearchSort(params) {
-        const url = `/order/order-history-search-sort`;
+        const url = `/customer/order/order-history-search-sort`; //done
         return axiosClinet.get(url, { params });
     },
 
     findAllByOrderId(id) {
-        const url = `/orderdetail/findAllByOrderId/${id}`;
+        const url = `/customer/orderdetail/findAllByOrderId/${id}`;
         return axiosClinet.get(url);
     },
 
@@ -27,7 +30,7 @@ const OrderAPI = {
     },
 
     add(data) {
-        const url = `/order/cart`;
+        const url = `/customer/order/cart`;
         return axiosClinet.post(url, data);
     },
 
@@ -108,6 +111,10 @@ const OrderAPI = {
     totalPriceInDecember(params) {
         const url = '/order/total-price-in-December';
         return axiosClinet.get(url, { params });
+    },
+    countSoldProduct(id) {
+        const url = `/customer/orderdetail/count-sold-product/${id}`;
+        return axiosClinet.get(url);
     },
 };
 

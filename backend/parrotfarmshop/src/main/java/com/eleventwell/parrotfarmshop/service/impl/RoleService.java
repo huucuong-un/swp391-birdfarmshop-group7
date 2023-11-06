@@ -5,7 +5,9 @@ import com.eleventwell.parrotfarmshop.dto.RoleDTO;
 import com.eleventwell.parrotfarmshop.dto.SliderDTO;
 import com.eleventwell.parrotfarmshop.entity.RoleEntity;
 import com.eleventwell.parrotfarmshop.entity.SliderEntity;
+import com.eleventwell.parrotfarmshop.entity.UserEntity;
 import com.eleventwell.parrotfarmshop.repository.RoleRepository;
+import com.eleventwell.parrotfarmshop.repository.UserRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,9 @@ public class RoleService implements IGenericService<RoleDTO> {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public List<RoleDTO> findAll() {
@@ -61,6 +66,11 @@ public class RoleService implements IGenericService<RoleDTO> {
         RoleEntity roleEntity = roleRepository.findOneById(ids);
         if(roleEntity.getStatus() == true){
             roleEntity.setStatus(false);
+            for (UserEntity userEntity:
+                 userRepository.findAll()) {
+                if(userEntity.getStatus() == true) userEntity.setStatus(false);
+                userRepository.save(userEntity);
+            }
         }else{
             roleEntity.setStatus(true);
         }
@@ -88,4 +98,18 @@ public class RoleService implements IGenericService<RoleDTO> {
     public RoleDTO findOneById(long id) {
         return (RoleDTO) roleConverter.toDTO(roleRepository.findOneById(id), RoleDTO.class);
     }
+    public List<RoleDTO> findAllByTrueStatus() {
+        List<RoleDTO> results = new ArrayList<>();
+
+        List<RoleEntity> entities = roleRepository.findAllByStatusTrue();
+        for (RoleEntity entity :
+                entities) {
+            RoleDTO roleDTO = (RoleDTO) roleConverter.toDTO(entity, RoleDTO.class);
+            results.add(roleDTO);
+        }
+
+
+        return results;
+    }
+
 }

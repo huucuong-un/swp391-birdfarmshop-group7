@@ -1,5 +1,3 @@
-import classNames from 'classnames/bind';
-import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
 import {
     Input,
     Table,
@@ -7,6 +5,8 @@ import {
     Tfoot,
     Tr,
     Td,
+    Thead,
+    Th,
     TableContainer,
     Button,
     Alert,
@@ -22,6 +22,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faArrowsRotate, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddSpeciesColor from '~/Pages/AddSpeciesColor/AddSpeciesColor';
+import classNames from 'classnames/bind';
+import styles from '~/Pages/AddParrotSpecies/AddParrotSpecies.module.scss';
+import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 
 const cx = classNames.bind(styles);
 
@@ -134,78 +138,132 @@ function AddParrotSpecies() {
             return;
         }
     };
-
+    const [validate, setValidate] = useState({ title: '', description: '', color: '' });
     // This function to handle the data to submit through the post method
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const formData = new FormData();
-            formData.append('image', parrotSpeciesColor.imageUrl); // Append the image file
-            // Make a POST request to the first API endpoint
-            const responseSpecies = await axios.post('http://localhost:8086/api/parrot-species', {
-                name: parrotSpecies.name,
-                description: parrotSpecies.description,
-                quantity: parrotSpecies.quantity,
-                nestQuantity: parrotSpecies.nestQuantity,
-                parrotAverageRating: parrotSpecies.parrotAverageRating,
-                nestAverageRating: parrotSpecies.nestAverageRating,
-                origin: parrotSpecies.origin,
-                status: parrotSpecies.status,
-                averageWeight: parrotSpecies.averageWeight,
-                img: img,
-                // Add other fields you want to send to the first API
-            });
-            if (responseSpecies.status === 200) {
-                console.log('POST request was successful at species!!');
+            if (
+                parrotSpecies.name.length !== 0 &&
+                parrotSpecies.description.length !== 0 &&
+                (parrotSpecies.name.length > 20 ||
+                    parrotSpecies.name.length < 3 ||
+                    parrotSpecies.description.length < 5 ||
+                    parrotSpecies.description.length > 150 ||
+                    parrotSpeciesColor.color.length > 10 ||
+                    parrotSpeciesColor.color.length < 1)
+            ) {
+                if (
+                    (parrotSpecies.name.length > 20 || parrotSpecies.name.length < 3) &&
+                    (parrotSpecies.description.length > 150 || parrotSpecies.description.length) < 5 &&
+                    parrotSpeciesColor.color.length > 10
+                ) {
+                    setValidate({
+                        title: 'Name must be between 3 and 20 characters',
+                        description: 'Content must be between 5 and 150 character',
+                        color: 'Color must be between 1 and 20 character',
+                    });
+                } else if (
+                    (parrotSpecies.name.length > 20 || parrotSpecies.name.length < 3) &&
+                    (parrotSpecies.description.length > 150 || parrotSpecies.description.length) < 5
+                ) {
+                    setValidate({
+                        title: 'Name must be between 3 and 20 characters',
+                        description: 'Content must be between 5 and 150 character',
+                        color: '',
+                    });
+                } else if (parrotSpecies.name.length > 20 || parrotSpecies.name.length < 3) {
+                    setValidate({
+                        title: 'Title must be between 3 and 20 characters',
+                        description: '',
+                        color: '',
+                    });
+                } else if (parrotSpecies.description.length > 150 || parrotSpecies.description.length < 5) {
+                    setValidate({
+                        title: '',
+                        description: 'Content must be between 5 and 150 character',
+                        color: '',
+                    });
+                } else if (parrotSpeciesColor.color.length > 10 || parrotSpeciesColor.color.length < 1) {
+                    setValidate({
+                        title: '',
+                        description: '',
+                        color: 'Color must be between 1 and 20 character',
+                    });
+                }
+                console.log(parrotSpeciesColor.color.length);
+                setSubmissionStatus(false);
+                setTimeout(() => {
+                    setSubmissionStatus('');
+                }, 5000);
             } else {
-                console.error('POST request failed with status code - species: ', responseSpecies.status);
+                const responseSpecies = await ParrotSpeciesAPI.add({
+                    name: parrotSpecies.name,
+                    description: parrotSpecies.description,
+                    quantity: parrotSpecies.quantity,
+                    nestQuantity: parrotSpecies.nestQuantity,
+                    parrotAverageRating: parrotSpecies.parrotAverageRating,
+                    nestAverageRating: parrotSpecies.nestAverageRating,
+                    origin: parrotSpecies.origin,
+                    status: parrotSpecies.status,
+                    averageWeight: parrotSpecies.averageWeight,
+                    img: img,
+                    // Add other fields you want to send to the first API
+                });
+                if (responseSpecies.status === 200) {
+                    console.log('POST request was successful at species!!');
+                } else {
+                    console.error('POST request failed with status code - species: ', responseSpecies.status);
+                }
+                const responseSpeciesColor = await ParrotSpeciesAPI.addSpecies({
+                    // Đoạn này để truyền các data fields về phía database
+                    speciesID: responseSpecies.data.id,
+                    status: parrotSpeciesColor.status,
+                    price: parrotSpeciesColor.price,
+                    color: parrotSpeciesColor.color,
+                    imageUrl: img,
+                });
+                const addImg = await ParrotSpeciesColorAPI.addColorImage({
+                    imageUrl: img,
+                    parrotSpeciesColorId: responseSpeciesColor.data.id,
+                });
+                if (responseSpeciesColor.status === 200) {
+                    console.log('POST request was successful at species color');
+                } else {
+                    console.error(
+                        'POST request failed with status code - species color: ',
+                        responseSpeciesColor.status,
+                    );
+                }
+                setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
+                reloadAddSpeciesColor();
+
+                setParrotSpecies({
+                    name: '',
+                    quantity: 3,
+                    nestQuantity: 13,
+                    description: '',
+                    availabilityStatus: true,
+                    origin: '',
+                    averageWeight: 0,
+                    parrotAverageRating: 4.5,
+                    nestAverageRating: 4.0,
+                });
+
+                setParrotSpeciesColor({
+                    status: true,
+                    imageUrl: null,
+                    color: '',
+                    price: 0,
+                    speciesID: 0,
+                });
+                // setSpecies([...species, responseSpecies.data]);
+
+                setSubmissionStatus(true);
             }
+            // Make a POST request to the first API endpoint
 
             // Make a POST request to the second API endpoint
-            const responseSpeciesColor = await axios.post('http://localhost:8086/api/parrot-species-color', {
-                // Đoạn này để truyền các data fields về phía database
-                speciesID: responseSpecies.data.id,
-                status: parrotSpeciesColor.status,
-                price: parrotSpeciesColor.price,
-                color: parrotSpeciesColor.color,
-                imageUrl: img,
-            });
-
-            const addImg = await axios.post('http://localhost:8086/api/color-image', {
-                imageUrl: img,
-                parrotSpeciesColorId: responseSpeciesColor.data.id,
-            });
-            console.log('pot detail' + postDetails);
-            if (responseSpeciesColor.status === 200) {
-                console.log('POST request was successful at species color');
-            } else {
-                console.error('POST request failed with status code - species color: ', responseSpeciesColor.status);
-            }
-            setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
-            reloadAddSpeciesColor();
-
-            setParrotSpecies({
-                name: '',
-                quantity: 3,
-                nestQuantity: 13,
-                description: '',
-                availabilityStatus: true,
-                origin: '',
-                averageWeight: 0,
-                parrotAverageRating: 4.5,
-                nestAverageRating: 4.0,
-            });
-
-            setParrotSpeciesColor({
-                status: true,
-                imageUrl: null,
-                color: '',
-                price: 0,
-                speciesID: 0,
-            });
-            // setSpecies([...species, responseSpecies.data]);
-
-            setSubmissionStatus(true);
         } catch (error) {
             console.error('Error:', error);
             setSubmissionStatus(false);
@@ -239,17 +297,27 @@ function AddParrotSpecies() {
                             (submissionStatus === false && (
                                 <Alert status="error">
                                     <AlertIcon />
-                                    <AlertTitle>Failed to add parrot species - </AlertTitle>
-                                    <AlertDescription>Please check your input!!!</AlertDescription>
+                                    <br />
+                                    <AlertTitle>
+                                        <Text fontSize="sm" lineHeight="1.4">
+                                            {validate.title}
+                                            <br />
+                                            {validate.description}
+                                            <br />
+                                            {validate.color}
+                                        </Text>
+                                    </AlertTitle>
                                 </Alert>
                             ))}
                         <div className={cx('title-post')}>
                             <div className={cx('title')}>
-                                <h1>Add species</h1>
+                                <Text margin={0} fontWeight={600}>
+                                    ADD SPECIES
+                                </Text>
                             </div>
                         </div>
 
-                        <Table size="xs">
+                        <Table variant="simple" size="lg">
                             <Tbody>
                                 <Tr>
                                     <Td>Parrot species name</Td>

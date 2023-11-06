@@ -32,6 +32,7 @@ import {
     MenuList,
     Text,
     Tooltip,
+    useToast,
 } from '@chakra-ui/react';
 
 import styles from '~/Components/ParrotList/ParrotList.module.scss';
@@ -75,6 +76,7 @@ const datas = () => {
 console.log(datas);
 
 function ParrotList(props) {
+    const toast = useToast();
     const [parrotSpecies, setParrotSpecies] = useState([]);
     const [totalSpecies, setTotalSpecies] = useState(0);
     const [combineData, setCombineData] = useState([]);
@@ -87,7 +89,7 @@ function ParrotList(props) {
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({
         page: 1,
-        limit: 12,
+        limit: 8,
     });
     const [sortWithPagination, setSortWithPagination] = useState({
         page: 1,
@@ -208,10 +210,11 @@ function ParrotList(props) {
                 //     page: 1,
                 //     limit: 12,
                 // };
-                const parrotSpeciesList = await ParrotSpeciesAPI.getAll(pagination);
+                const parrotSpeciesList = await ParrotSpeciesAPI.searchSortParrotSpeciesPublic(pagination);
                 const totalSpeciesNumber = await ParrotSpeciesAPI.count();
                 setTotalSpecies(totalSpeciesNumber);
                 setParrotSpecies(parrotSpeciesList.listResult);
+                console.log(parrotSpeciesList.listResult);
                 setTotalPage(parrotSpeciesList.totalPage);
                 notifyTotalSpecies(totalSpeciesNumber);
             } catch (error) {
@@ -221,41 +224,41 @@ function ParrotList(props) {
         getParrotsSpecies();
     }, [pagination]);
 
-    useEffect(() => {
-        const getSortParrotSpecies = async () => {
-            try {
-                // const params = {
-                //     page: 1,
-                //     limit: 12,
-                //     sortway: 'NDESC',
-                // };
-                const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
-                console.log(sortList.listResult);
-                setParrotSpecies(sortList.listResult);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getSortParrotSpecies();
-    }, [sortWithPagination]);
+    // useEffect(() => {
+    //     const getSortParrotSpecies = async () => {
+    //         try {
+    //             // const params = {
+    //             //     page: 1,
+    //             //     limit: 12,
+    //             //     sortway: 'NDESC',
+    //             // };
+    //             const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
+    //             console.log(sortList.listResult);
+    //             setParrotSpecies(sortList.listResult);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     getSortParrotSpecies();
+    // }, [sortWithPagination]);
 
-    useEffect(() => {
-        const getSearchParrotSpecies = async () => {
-            try {
-                const params = {
-                    page: 1,
-                    limit: 12,
-                    name: 'c',
-                };
-                const searchList = await ParrotSpeciesAPI.search(searchWithPagination);
-                setParrotSpecies(searchList.listResult);
-                console.log(parrotSpecies);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getSearchParrotSpecies();
-    }, [searchWithPagination]);
+    // useEffect(() => {
+    //     const getSearchParrotSpecies = async () => {
+    //         try {
+    //             const params = {
+    //                 page: 1,
+    //                 limit: 12,
+    //                 name: 'c',
+    //             };
+    //             const searchList = await ParrotSpeciesAPI.search(searchWithPagination);
+    //             setParrotSpecies(searchList.listResult);
+    //             console.log(parrotSpecies);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     getSearchParrotSpecies();
+    // }, [searchWithPagination]);
 
     useEffect(() => {
         console.log(parrotSpecies);
@@ -364,6 +367,12 @@ function ParrotList(props) {
         setTimeout(() => {
             localStorage.removeItem('parrot'); // Xóa dữ liệu sau khoảng thời gian đã đặt
         }, deleteAfterMilliseconds);
+        toast({
+            title: 'Check your cart !!!.',
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+        });
     };
 
     const handlePageChange = (newPage) => {
@@ -417,15 +426,22 @@ function ParrotList(props) {
                     return (
                         <div className={cx('parrot-card', 'col-lg-3')} key={index}>
                             <div className={cx('parrot-img')}>
-                                <div
-                                    // to={`/parrot-product/parrot-detail/${parrot.id}`}
-                                    // state={dataToPass}
-                                    // to={`/parrot-product/parrot-detail`}
-                                    // state={dataToPass}
-                                    onClick={() => handleSaveParrotId(parrot.id)}
+                                <Tooltip
+                                    label="Hit me to see my detail <3"
+                                    aria-label="A tooltip"
+                                    fontSize="lg"
+                                    placement="left"
                                 >
-                                    <img className={cx('img')} src={parrot.img} alt="parrot" />
-                                </div>
+                                    <div
+                                        // to={`/parrot-product/parrot-detail/${parrot.id}`}
+                                        // state={dataToPass}
+                                        // to={`/parrot-product/parrot-detail`}
+                                        // state={dataToPass}
+                                        onClick={() => handleSaveParrotId(parrot.id)}
+                                    >
+                                        <img className={cx('img')} src={parrot.img} alt="parrot" />
+                                    </div>
+                                </Tooltip>
                                 <Link to="">
                                     <Tooltip
                                         label="Check to compare"
@@ -497,16 +513,23 @@ function ParrotList(props) {
                                 <div className={cx('parrot-color')}>
                                     {parrot.colors.map((color, colorIndex) => (
                                         <div className={cx('cuong')}>
-                                            <button
-                                                key={colorIndex}
-                                                className={cx('parrot-color-item', {
-                                                    selected: color.color === selectedColor[parrot.id]?.color,
-                                                })}
-                                                onClick={() =>
-                                                    handleColorSelection(parrot.id, color.color, color.price, color.id)
-                                                }
-                                                style={{ backgroundColor: color.color }}
-                                            ></button>
+                                            <Tooltip label={color.color} placement="bottom" fontSize="xl">
+                                                <button
+                                                    key={colorIndex}
+                                                    className={cx('parrot-color-item', {
+                                                        selected: color.color === selectedColor[parrot.id]?.color,
+                                                    })}
+                                                    onClick={() =>
+                                                        handleColorSelection(
+                                                            parrot.id,
+                                                            color.color,
+                                                            color.price,
+                                                            color.id,
+                                                        )
+                                                    }
+                                                    style={{ backgroundColor: color.color }}
+                                                ></button>
+                                            </Tooltip>
                                         </div>
                                     ))}
                                 </div>

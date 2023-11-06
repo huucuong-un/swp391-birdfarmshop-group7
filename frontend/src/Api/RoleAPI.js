@@ -6,14 +6,24 @@ const RoleAPI = {
         return axiosClient.get(url);
     },
 
+    getRolesForAdmin() {
+        const url = '/admin/role';
+        return axiosClient.get(url);
+    },
+
     addRole(data) {
-        const url = '/role';
+        const url = '/admin/role';
         return axiosClient.post(url, data);
     },
 
     updateRole(data, roleId) {
-        const url = `/role/${roleId}`;
+        const url = `/admin/role/${roleId}`;
         return axiosClient.put(url, data);
+    },
+
+    changeRoleStatus(roleId) {
+        const url = `/admin/role/${roleId}`;
+        return axiosClient.delete(url);
     },
 };
 

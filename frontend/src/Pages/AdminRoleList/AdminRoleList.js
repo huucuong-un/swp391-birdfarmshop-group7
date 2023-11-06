@@ -34,10 +34,7 @@ const AdminRoleList = () => {
     const [show, setShow] = useState(false);
     const [reloadStatus, setReloadStatus] = useState(true);
     const [showUpdate, setShowUpdate] = useState(Array(roles.length).fill(false)); // Initialize with false for each item
-    useEffect(() => {
-        console.log(roles);
-        console.log(reloadStatus);
-    }, [roles]);
+
     const handleAdd = (newInfo) => {
         const updatedRole = [...roles];
 
@@ -50,7 +47,7 @@ const AdminRoleList = () => {
         var userResponse = window.confirm('Are you sure to change status ?');
         if (userResponse) {
             try {
-                await axios.delete(`http://localhost:8086/api/role/${id}`);
+                await RoleAPI.changeRoleStatus(id);
                 setReloadStatus(true);
 
                 // Send a request to update the status on the server
@@ -73,10 +70,6 @@ const AdminRoleList = () => {
     const handleShow = () => {
         setShow(!show);
     };
-
-    useEffect(() => {
-        console.log(reloadStatus);
-    }, [reloadStatus]);
 
     const handleShowUpdate = (index) => {
         const updatedShowUpdate = [...showUpdate]; // Create a copy of showUpdate array
@@ -139,7 +132,6 @@ const AdminRoleList = () => {
             </div>
             <TableContainer width="100%" margin="5% 0">
                 <Table variant="simple" fontSize={16}>
-                    <TableCaption>Role list</TableCaption>
                     <Thead fontSize={16}>
                         <Tr>
                             <Th>Role Id</Th>

@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api/delivery-information")
+@RequestMapping(value = "/api/customer/delivery-information")
 public class DeliveryInformationController {
    @Autowired
     private DeliveryInformationService deliveryInformationService;

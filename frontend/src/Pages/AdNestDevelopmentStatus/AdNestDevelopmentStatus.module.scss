@@ -5,6 +5,8 @@
 .save-btn {
     width: 100% !important;
     min-height: 40px;
+    background-color: #f9ede9;
+    color: var(--black);
 }
 
 td {
@@ -39,6 +41,17 @@ th {
     justify-content: start;
     align-items: center;
     gap: 10px;
+
+    p {
+        margin: 0;
+    }
+}
+
+.add-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
 .change-sequence-container {
@@ -104,4 +117,30 @@ th {
     margin-top: 20px;
     padding: 5px 0;
     font-size: 1.8rem;
+}
+
+td {
+    font-size: 18px;
+    padding: 0;
+}
+th {
+    background-color: #f9ede9;
+    font-size: 18px;
+    padding: 0;
+    text-align: center;
+    color: var(--black);
+}
+
+.submit-btn {
+    display: flex;
+    justify-content: center;
+    button {
+        width: 50%;
+        background-color: #f9ede9;
+        color: var(--black);
+        &:hover {
+            background-color: #f9ede9;
+            opacity: 0.7;
+        }
+    }
 }

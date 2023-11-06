@@ -20,4 +20,5 @@ public interface SliderRepository extends JpaRepository<SliderEntity, Long> {
     "u.id DESC")
     List<SliderEntity> searchSortForAdmin(@Param("searchDate") Date searchDate, @Param("status") Boolean status, @Param("slidername") String slidername, @Param("sortDate") String sortDate, Pageable pageable );
 
+    List<SliderEntity> findAllByStatusTrue();
 }

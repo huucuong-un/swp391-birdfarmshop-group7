@@ -122,7 +122,7 @@ feedbackRepository.save(fEntity);
 
 
     public Integer countByRating(Integer rating) {
-        return feedbackRepository.countAllByRating(rating);
+        return feedbackRepository.countAllByRatingAndStatusIsTrue(rating);
     }
 
 
@@ -161,7 +161,8 @@ feedbackRepository.save(fEntity);
 
     public Integer countByOrderId(Long id) {
 
-        return feedbackRepository.countAllByOrderIdId(id);
+   return feedbackRepository.countAllByOrderDetailIdId(id);
+
     }
 
 

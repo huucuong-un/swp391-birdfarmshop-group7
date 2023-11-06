@@ -14,12 +14,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/parrot-couple")
+@RequestMapping(value = "/api")
 public class ParrotCoupleController {
     @Autowired
     ParrotCoupleService parrotCoupleService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "parrot-couple")
     public PagingModel findAll(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit) {
         PagingModel result = new PagingModel();
         result.setPage(page);
@@ -33,12 +33,12 @@ public class ParrotCoupleController {
 
     }
 
-    @PutMapping(value = "/admin/update-status")
+    @PutMapping(value = "admin/parrot-couple/update-status")
     public void updateStatus(@RequestBody @RequestParam(value = "id") Long id) {
         parrotCoupleService.changeStatus(id);
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "parrot-couple")
     public ParrotCoupleDTO createNestDevelopment(@RequestBody ParrotCoupleDTO model) {
         return (ParrotCoupleDTO) parrotCoupleService.save(model);
     }

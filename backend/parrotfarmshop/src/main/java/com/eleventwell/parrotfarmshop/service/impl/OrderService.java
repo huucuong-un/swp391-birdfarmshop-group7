@@ -347,4 +347,10 @@ private Long getNestUsageHistoryId(OrderDetailEntity orderDetail){
     public Double calculateTotalPriceForDoneOrdersInDecember() {
         return orderRepository.sumTotalPriceForDoneOrdersInDecember();
     }
+
+    public OrderDTO findOneByUsageHistoryId(Long id) {
+        OrderEntity entity = orderRepository.findOneByUsageHistory(id);
+        OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity,OrderDTO.class);
+        return orderDTO;
+    }
 }

@@ -20,6 +20,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import styles from './AdminDashboard.module.scss';
 import classNames from 'classnames/bind';
 import OrderAPI from '~/Api/OrderAPI';
+import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 
 const cx = classNames.bind(styles);
 
@@ -45,6 +46,7 @@ function AdminDashboard() {
     const [totalPriceInNovember, setTotalPriceInNovember] = useState(0);
     const [totalPriceInDecember, setTotalPriceInDecember] = useState(0);
 
+    const [top3, setTop3] = useState([]);
     const data = [
         { month: 'Jan', earnings: totalPriceInJanuary },
         { month: 'Feb', earnings: totalPriceInFebruary },
@@ -110,8 +112,14 @@ function AdminDashboard() {
     }, []);
 
     useEffect(() => {
-        console.log(totalPriceInCurrentYear);
-    }, [totalPriceInCurrentYear]);
+        const getTop3 = async () => {
+            const top3 = await ParrotSpeciesAPI.getTop3SpeciesWithHighestOrderMoney();
+            console.log(top3);
+            setTop3(top3);
+        };
+
+        getTop3();
+    }, []);
 
     return (
         <Container maxW="container.xl">
@@ -190,23 +198,7 @@ function AdminDashboard() {
                                     <Th>Total Price</Th>
                                 </Tr>
                             </Thead>
-                            <Tbody>
-                                <Tr>
-                                    <Td>Ronaldo</Td>
-                                    <Td>Red</Td>
-                                    <Td>$40,000</Td>
-                                </Tr>
-                                <Tr>
-                                    <Td>Messi</Td>
-                                    <Td>Red</Td>
-                                    <Td>$40,000</Td>
-                                </Tr>
-                                <Tr>
-                                    <Td>Neymar</Td>
-                                    <Td>Red</Td>
-                                    <Td>$40,000</Td>
-                                </Tr>
-                            </Tbody>
+                            <Tbody></Tbody>
                         </Table>
                     </TableContainer>
                 </Col>

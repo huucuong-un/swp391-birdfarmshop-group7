@@ -7,7 +7,7 @@ const FeedbackAPI = {
         return axiosClinet.get(url, { params });
     },
     getAllFeedbackSystem(params) {
-        const url = '/feedback/admin/search_sort';
+        const url = '/admin/feedback/search_sort';
         return axiosClinet.get(url, { params });
     },
 
@@ -28,7 +28,7 @@ const FeedbackAPI = {
         return axiosClinet.get(url, { params });
     },
     changeStatus(id) {
-        const url = `/feedback/admin/change-status/${id}`;
+        const url = `/admin/feedback/change-status/${id}`;
         return axiosClinet.put(url);
     },
 };

@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/role")
+@RequestMapping(value = "/api")
 public class RoleController {
     @Autowired
     private IGenericService roleService;
@@ -18,29 +18,35 @@ public class RoleController {
     @Autowired
     RoleService roleServiceConcrete;
 
-    @GetMapping
+    @GetMapping(value ="role")
     public List<RoleDTO> showRoles() {
+        List<RoleDTO> list = roleService.findAll();
+        return list;
+    }
+
+    @GetMapping(value ="admin/role")
+    public List<RoleDTO> showRolesForAdmin() {
       List<RoleDTO> list = roleService.findAll();
         return list;
     }
 
-    @PostMapping
+    @PostMapping(value ="admin/role")
     public RoleDTO createRole(@RequestBody RoleDTO model) {
         return (RoleDTO) roleService.save(model);
     }
 
     //accept editing description and status only
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "admin/role/{id}")
     public RoleDTO updateRole(@RequestBody RoleDTO model, @PathVariable("id") Long id) {
         model.setId(id);
         return (RoleDTO) roleService.save(model);
     }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/role/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id){
         roleService.changeStatus(id);
     }
 
-    @PostMapping(value = "{id}")
+    @PostMapping(value = "admin/role/{id}")
     public void findRoleById(@PathVariable("id") Long id) { roleServiceConcrete.findOneById(id);}
 }

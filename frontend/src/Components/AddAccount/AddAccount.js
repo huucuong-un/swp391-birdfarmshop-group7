@@ -81,37 +81,32 @@ function AddAccount(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Make a POST request to the first API endpoint
-            const responseAccount = await AccountAPI.addAccount({
-                userName: account.email.split('@')[0],
-                email: account.email,
-                password: account.password,
-                fullName: account.fullName,
-                status: status,
-                roleId: account.roleId,
-                imgUrl: img,
-                gender: gender,
-            });
-            props.onAdd({
-                id: responseAccount.userId,
-                userName: responseAccount.userName,
-                fullName: responseAccount.fullName,
-                email: responseAccount.email,
-                status: responseAccount.status,
-                roleId: responseAccount.roleId,
-                token: responseAccount.token,
-                imgUrl: responseAccount.imgUrl,
-                gender: responseAccount.gender,
-                dob: responseAccount.dob,
-            });
-            console.log(responseAccount);
-            if (responseAccount.status === 200) {
-                console.log('POST request was successful at ACCOUNT!!');
-            } else {
-                console.error('POST request failed with status code - ACCOUNT: ', responseAccount.status);
-            }
+            if (account.roleId === null) window.alert('Please choose role!!');
+            else if (account.password.length < 8) window.alert('Password length must be >= 8!!');
+            else if (account.fullName.length < 3) window.alert('Name length must be >= 3!!');
+            else {
+                const responseAccount = await AccountAPI.addAccount({
+                    userName: account.email.split('@')[0],
+                    email: account.email,
+                    password: account.password,
+                    fullName: account.fullName,
+                    status: status,
+                    roleId: account.roleId,
+                    imgUrl: img,
+                    gender: gender,
+                });
+                props.onAdd(responseAccount);
+                setReloadStatus(true);
+                console.log(responseAccount);
+                if (responseAccount.status === 200) {
+                    console.log('POST request was successful at ACCOUNT!!');
+                } else {
+                    console.error('POST request failed with status code - ACCOUNT: ', responseAccount.status);
+                }
 
-            setSubmissionStatus(true);
+                setSubmissionStatus(true);
+            }
+            // Make a POST request to the first API endpoint
         } catch (error) {
             console.error('Error:', error);
             setSubmissionStatus(false);
@@ -167,15 +162,16 @@ function AddAccount(props) {
         <div className={cx('wrapper')}>
             <form onSubmit={handleSubmit} className={cx('inner')}>
                 <TableContainer className={cx('table-container')}>
-                    <Table size="xs ">
+                    <Table variant="simple" size="lg">
                         <Thead>
                             <Tr>
-                                <Th fontSize={16}>Add Account</Th>
-                                <Th fontSize={16}></Th>
+                                <Th colSpan={2} fontSize={16}>
+                                    Add Account
+                                </Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Full Name</Td>
                                 <Td>
                                     <Input
@@ -192,7 +188,7 @@ function AddAccount(props) {
                                 </Td>
                             </Tr>
 
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Email</Td>
                                 <Td>
                                     <Input
@@ -208,7 +204,7 @@ function AddAccount(props) {
                                     />
                                 </Td>
                             </Tr>
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Password</Td>
                                 <Td>
                                     <Input
@@ -224,18 +220,18 @@ function AddAccount(props) {
                                     />
                                 </Td>
                             </Tr>
-                            <Tr>
+                            <Tr height="40px">
                                 <Td>Gender</Td>
                                 <Td>
                                     <RadioGroup onChange={setGender} defaultValue="null" fontSize={16} value={gender}>
                                         <Stack spacing={20} direction="row">
                                             <Radio value="true" size="lg">
-                                                <Text fontSize={16} m={0}>
+                                                <Text fontSize={16} margin={0} overflow="hidden">
                                                     Male
                                                 </Text>
                                             </Radio>
                                             <Radio value="false" fontSize={16} size="lg">
-                                                <Text fontSize={16} m={0}>
+                                                <Text fontSize={16} margin={0} overflow="hidden">
                                                     Female
                                                 </Text>
                                             </Radio>
@@ -244,12 +240,20 @@ function AddAccount(props) {
                                 </Td>
                             </Tr>
 
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Status</Td>
                                 <Td>
                                     <div className={cx('haha')}>
                                         <Switch onChange={handleStatus} size="lg" isChecked={status} />
-                                        {status ? <p fontSize={16}>On Processing</p> : <p fontSize={16}>Disabled</p>}
+                                        {status ? (
+                                            <Text fontSize={16} margin={0} overflow="hidden" height={6}>
+                                                On Processing
+                                            </Text>
+                                        ) : (
+                                            <Text fontSize={16} margin={0} overflow="hidden">
+                                                Disabled
+                                            </Text>
+                                        )}
                                     </div>
                                     <Input
                                         type="hidden"
@@ -261,7 +265,7 @@ function AddAccount(props) {
                                     />
                                 </Td>
                             </Tr>
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Image</Td>{' '}
                                 <Td>
                                     <Input
@@ -276,7 +280,7 @@ function AddAccount(props) {
                                 </Td>
                             </Tr>
 
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Role</Td>{' '}
                                 <Td>
                                     <Select
@@ -309,6 +313,8 @@ function AddAccount(props) {
                                         width="100%"
                                         style={{ marginTop: 15 }}
                                         margin="8px"
+                                        paddingTop={8}
+                                        paddingBottom={8}
                                     >
                                         ADD
                                     </Button>

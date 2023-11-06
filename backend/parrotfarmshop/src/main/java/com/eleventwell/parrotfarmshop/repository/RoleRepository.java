@@ -8,4 +8,8 @@ import java.util.List;
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
     RoleEntity findOneById(Long id);
     List<RoleEntity> findAllByOrderByIdDesc();
+
+    List<RoleEntity> findAllByStatusTrue();
+
+
 }

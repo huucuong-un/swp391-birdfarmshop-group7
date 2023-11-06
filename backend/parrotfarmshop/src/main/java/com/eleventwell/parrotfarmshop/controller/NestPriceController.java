@@ -18,12 +18,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/nest-price")
+@RequestMapping(value = "/api")
 public class NestPriceController {
     @Autowired
     private NestPriceService nestPriceService;
 
-    @GetMapping
+    @GetMapping(value = "nest-price")
     public List<NestPriceDTO> showSpeciesEggPrie() {
         List<NestPriceDTO> results = new ArrayList<>();
 
@@ -31,13 +31,13 @@ public class NestPriceController {
         return results;
     }
 
-    @GetMapping(value = "find-by-species-id")
+    @GetMapping(value = "nest-price/find-by-species-id")
     public NestPriceDTO findBySpeciesId(@RequestBody @RequestParam(value = "speciesId") Long speciesId) {
 
         return nestPriceService.findOneBySpeciesId(speciesId);
     }
 
-    @GetMapping(value = "find-one-by-id")
+    @GetMapping(value = "admin/nest-price/find-one-by-id")
     public NestPriceDTO findOneById(@RequestBody @RequestParam(value = "id") Long id) {
         return nestPriceService.findOneNestPriceById(id);
     }
@@ -50,7 +50,7 @@ public class NestPriceController {
 //    }
 
 
-    @PostMapping
+    @PostMapping(value = "admin/nest-price")
     public NestPriceDTO createRole(@RequestBody NestPriceDTO model) {
         return nestPriceService.save(model);
     }
@@ -62,12 +62,12 @@ public class NestPriceController {
 //        return nestPriceService.save(model);
 //    }
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/nest-price/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") long id) {
         nestPriceService.changeStatus(id);
     }
 
-    @GetMapping(value = "admin/search_sort")
+    @GetMapping(value = "admin/nest-price/search_sort")
     public PagingModel searchSortforNestPrice(@RequestBody @RequestParam(value = "page", required = false) Integer page,
                                        @RequestParam(value = "limit", required = false) Integer limit,
                                        @RequestParam(value = "searchDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchDate,
@@ -83,7 +83,7 @@ public class NestPriceController {
         return result;
     }
 
-    @PutMapping(value="{id}")
+    @PutMapping(value="admin/nest-price/{id}")
     public NestPriceDTO updateNestPrice(@RequestBody NestPriceDTO model, @PathVariable("id") long id){
         model.setId(id);
         return (NestPriceDTO) nestPriceService.save(model);

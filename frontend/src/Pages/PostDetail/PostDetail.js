@@ -32,19 +32,16 @@ function PostDetail() {
 
     return (
         <div className={cx('wrapper')}>
-            <StartPartPage>Post Details</StartPartPage>
+            <StartPartPage payment>Post Details</StartPartPage>
             <div className="inner">
-                <div className={cx('inner-up')}>
+                <div className={cx('inner-up')} style={{ minHeight: '500px' }}>
                     <div className={cx('post-img')}>
-                        <img
-                            src="https://images.unsplash.com/photo-1588336142586-36aff13141fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            alt="post-img"
-                        />
+                        <img src={post.imageUrl} alt="post-img" />
                     </div>
 
                     <div className={cx('post-info')}>
                         <div className={cx('post-info-title')}>
-                            <h1>{post.title}</h1>
+                            <div style={{ fontSize: '32px', fontWeight: '500' }}>{post.title}</div>
                         </div>
                         <div className={cx('post-info-content')}>
                             <p>{post.content}</p>
@@ -52,7 +49,7 @@ function PostDetail() {
                     </div>
                 </div>
 
-                <div className={cx('inner-down')}>
+                {/* <div className={cx('inner-down')}>
                     <div className={cx('inner-down-title')}>
                         <h1>Latests Events</h1>
                     </div>
@@ -103,7 +100,7 @@ function PostDetail() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

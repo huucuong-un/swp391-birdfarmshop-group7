@@ -133,10 +133,6 @@ function AddSpeciesColor() {
         [species, addImageStatus] /*check species if species change then load the list*/,
     );
 
-    useEffect(() => {
-        console.log('New Combine Data');
-        console.log(combineData);
-    }, [combineData]);
     //======================== USEEFFECT ================================
     // Handle posting image
     const [img, setImg] = useState('');
@@ -170,7 +166,7 @@ function AddSpeciesColor() {
                     console.log(data.url.toString());
                     setLoading(false);
                     setNewImg(data.url.toString());
-                    const addImageData = axios.post('http://localhost:8086/api/color-image', {
+                    const addImageData = ParrotSpeciesColorAPI.addColorImage({
                         imageUrl: data.url.toString(),
                         parrotSpeciesColorId: colorId,
                     });
@@ -240,53 +236,66 @@ function AddSpeciesColor() {
     }; //End Handle posting image
     // Function to handle refresh when updating
 
+    const [validate, setValidate] = useState({
+        specieColor: '',
+    });
     // This function to handle the data to submit through the post method
     const HandleSubmitSpeciesColor = async (e, index) => {
         e.preventDefault();
-        if (colorExist) {
-            console.log('Color already exists, cannot submit the form');
-            return;
-        }
         const speciesID = species[index].id;
         const { color, price } = colorInputs[index];
         try {
-            // Make a POST request to submit the color data for the specific species
-            const response = await axios.post('http://localhost:8086/api/parrot-species-color', {
-                status: parrotSpeciesColor.status,
-                imageUrl: img,
-                color: color, // Use the color from the corresponding input
-                speciesID: speciesID, // Use the species ID from the data
-                price: price,
-            });
-            const addImg = await axios.post('http://localhost:8086/api/color-image', {
-                imageUrl: img,
-                parrotSpeciesColorId: response.data.id,
-            });
-            if (response.status === 200) {
-                console.log(`POST request was successful for species ID ${speciesID}!!`);
-                // Assuming the response contains the newly created post data
-                // You can update your data or reset the color input here
+            if (colorExist) {
+                return;
+            }
 
-                setColorExist(null);
-                setSubmissionStatus(true);
-                // Automatically reset colorExist to null after 2 seconds
-                var newData = response.data;
-                setParrotSpeciesColor({ ...parrotSpeciesColor, newData });
-
+            if (color.length !== 0 && (color.length < 1 || color.length > 20)) {
+                if (color.length < 1 || color.length > 20) {
+                    setValidate({ specieColor: 'Color must be between 1 and 20 character' });
+                }
+                setSubmissionStatus(false);
                 setTimeout(() => {
                     setSubmissionStatus(null);
                 }, 5000);
-                setColorInputs([...colorInputs]);
-                setSpecies([...species]);
             } else {
-                console.error(
-                    `POST request failed (const HandleSubmitSpeciesColor) with status code - species: ${response.status}`,
-                );
-                setSubmissionStatus(false);
+                // Make a POST request to submit the color data for the specific species
+                const response = await ParrotSpeciesColorAPI.add({
+                    status: parrotSpeciesColor.status,
+                    imageUrl: img,
+                    color: color, // Use the color from the corresponding input
+                    speciesID: speciesID, // Use the species ID from the data
+                    price: price,
+                });
+                const addImg = await ParrotSpeciesColorAPI.addColorImage({
+                    imageUrl: img,
+                    parrotSpeciesColorId: response.data.id,
+                });
+                if (response.status === 200) {
+                    console.log(`POST request was successful for species ID ${speciesID}!!`);
+                    // Assuming the response contains the newly created post data
+                    // You can update your data or reset the color input here
+
+                    setColorExist(null);
+                    setSubmissionStatus(true);
+                    // Automatically reset colorExist to null after 2 seconds
+                    var newData = response.data;
+                    setParrotSpeciesColor({ ...parrotSpeciesColor, newData });
+
+                    setTimeout(() => {
+                        setSubmissionStatus(null);
+                    }, 5000);
+                    setColorInputs([...colorInputs]);
+                    setSpecies([...species]);
+                } else {
+                    console.error(
+                        `POST request failed (const HandleSubmitSpeciesColor) with status code - species: ${response.status}`,
+                    );
+                    setSubmissionStatus(false);
+                }
+                setColorInputs([]);
             }
-            setColorInputs([]);
         } catch (error) {
-            console.error(`Error at species ID ${speciesID}: ${error}`);
+            console.error(`Error at species ID: ${error}`);
         }
     }; // End this function to handle the data to submit through the post method
 
@@ -370,33 +379,46 @@ function AddSpeciesColor() {
     const handleUpdateSpeciesColor = async (e) => {
         e.preventDefault();
         try {
-            const data = {
-                id: parrotSpeciesColor.id,
-                createdDate: parrotSpeciesColor.createdDate,
-                color: parrotSpeciesColor.color,
-                speciesID: parrotSpeciesColor.speciesID,
-                status: parrotSpeciesColor.status,
-                imageUrl: img,
-                price: parrotSpeciesColor.price,
-            };
-            const responseSpeciesColor = await ParrotSpeciesColorAPI.update(data);
-            if (responseSpeciesColor.status === true) {
-                console.log('PUT request was successful at UpdateSpecies.js!!');
-
-                // Assuming responseSpeciesColor contains the updated data,
-                // find the index of the item in combineData that matches the updated item
+            if (
+                parrotSpeciesColor.color.length !== 0 &&
+                (parrotSpeciesColor.color.length < 1 || parrotSpeciesColor.color.length > 20)
+            ) {
+                if (parrotSpeciesColor.color.length < 1 || parrotSpeciesColor.color.length > 20) {
+                    setValidate({ specieColor: 'Color must be between 1 and 20 character' });
+                }
+                setStatusForSpecieColor(false);
+                setTimeout(() => {
+                    setStatusForSpecieColor();
+                }, 5000);
             } else {
-                console.error(
-                    'PUT request failed at UpdateSpecies.js with status code:',
-                    responseSpeciesColor.statusText,
-                );
-                console.error('Response data:', responseSpeciesColor);
+                const data = {
+                    id: parrotSpeciesColor.id,
+                    createdDate: parrotSpeciesColor.createdDate,
+                    color: parrotSpeciesColor.color,
+                    speciesID: parrotSpeciesColor.speciesID,
+                    status: parrotSpeciesColor.status,
+                    imageUrl: img,
+                    price: parrotSpeciesColor.price,
+                };
+                const responseSpeciesColor = await ParrotSpeciesColorAPI.update(data);
+                if (responseSpeciesColor.status === true) {
+                    console.log('PUT request was successful at UpdateSpecies.js!!');
+
+                    // Assuming responseSpeciesColor contains the updated data,
+                    // find the index of the item in combineData that matches the updated item
+                } else {
+                    console.error(
+                        'PUT request failed at UpdateSpecies.js with status code:',
+                        responseSpeciesColor.statusText,
+                    );
+                    console.error('Response data:', responseSpeciesColor);
+                }
+                // Set submission status to true to allow pop up notification after successfully update
+                setStatusForSpecieColor(true);
+                setTimeout(() => {
+                    setStatusForSpecieColor();
+                }, 2000);
             }
-            // Set submission status to true to allow pop up notification after successfully update
-            setStatusForSpecieColor(true);
-            setTimeout(() => {
-                setStatusForSpecieColor();
-            }, 2000);
         } catch (error) {
             console.error('Error:', error);
             setStatusForSpecieColor(false);
@@ -409,7 +431,7 @@ function AddSpeciesColor() {
             if (imageDeleteResponse) {
                 try {
                     // Send a request to update the status on the server
-                    await axios.delete(`http://localhost:8086/api/color-image/delete-image/${imageId}`);
+                    await ParrotSpeciesColorAPI.deleteImage(imageId);
 
                     // If the request is successful, update the state
 
@@ -482,7 +504,7 @@ function AddSpeciesColor() {
         updatedSpecie[index].status = !updatedSpecie[index].status;
         try {
             // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/parrot-species/${updatedSpecie[index].id}`);
+            await ParrotSpeciesColorAPI.changeStatus(updatedSpecie[index].id);
             // If the request is successful, update the state
             setSpecies(updatedSpecie);
         } catch (error) {
@@ -698,7 +720,7 @@ function AddSpeciesColor() {
                                                                     isLoading={loading}
                                                                     className={cx('add-new-image-btn')}
                                                                 >
-                                                                    Add a new image
+                                                                    New image
                                                                 </Text>
                                                             </label>
                                                         </Td>
@@ -788,11 +810,12 @@ function AddSpeciesColor() {
                                                             <Alert status="error">
                                                                 <AlertIcon />
                                                                 <AlertTitle className={cx('overflow-hidden')}>
-                                                                    Failed to update parrot species -{' '}
+                                                                    Failed to update parrot species -<br />
+                                                                    {validate.specieColor}
                                                                 </AlertTitle>
-                                                                <AlertDescription className={cx('overflow-hidden')}>
-                                                                    Please check your input!!!
-                                                                </AlertDescription>
+                                                                <AlertDescription
+                                                                    className={cx('overflow-hidden')}
+                                                                ></AlertDescription>
                                                             </Alert>
                                                         ))}
                                                     {(colorExist === true && (
@@ -853,7 +876,9 @@ function AddSpeciesColor() {
                                                                 <Td>Price</Td>
                                                                 <Td>
                                                                     <Input
-                                                                        type="text"
+                                                                        type="number"
+                                                                        min={0}
+                                                                        step={0.01}
                                                                         id="price"
                                                                         name="price"
                                                                         placeholder="Enter price"
@@ -881,7 +906,7 @@ function AddSpeciesColor() {
                                                                         margin="8px"
                                                                         isLoading={loading}
                                                                     >
-                                                                        ADD
+                                                                        Save
                                                                     </Button>
                                                                 </Td>
                                                             </Tr>
@@ -923,23 +948,6 @@ function AddSpeciesColor() {
                                         onSubmit={(e) => HandleSubmitSpeciesColor(e, dataIndex)}
                                     >
                                         <TableContainer className={cx('table-container')}>
-                                            {(colorExist === true && (
-                                                <Alert status="error">
-                                                    <AlertIcon />
-                                                    <AlertTitle>
-                                                        Color specie existed - Please input another specie color
-                                                    </AlertTitle>
-                                                    <AlertDescription></AlertDescription>
-                                                </Alert>
-                                            )) ||
-                                                (colorExist === false && (
-                                                    <Alert status="success">
-                                                        <AlertIcon />
-                                                        <AlertTitle> This specie color can be added!!!</AlertTitle>
-                                                        <AlertDescription></AlertDescription>
-                                                    </Alert>
-                                                ))}
-
                                             {(submissionStatus === true && (
                                                 <Alert status="success">
                                                     <AlertIcon />
@@ -952,8 +960,23 @@ function AddSpeciesColor() {
                                                 (submissionStatus === false && (
                                                     <Alert status="error">
                                                         <AlertIcon />
-                                                        <AlertTitle>Failed to add parrot species - </AlertTitle>
-                                                        <AlertDescription>Please check your input!!!</AlertDescription>
+                                                        <AlertTitle>{validate.specieColor}</AlertTitle>
+                                                    </Alert>
+                                                ))}
+                                            {(colorExist === true && (
+                                                <Alert status="error">
+                                                    <AlertIcon />
+                                                    <AlertTitle>
+                                                        Color specie existed - Please input another specie color
+                                                    </AlertTitle>
+                                                    <AlertDescription></AlertDescription>
+                                                </Alert>
+                                            )) ||
+                                                (colorExist === false && (
+                                                    <Alert status="success">
+                                                        <AlertIcon />
+                                                        <AlertTitle>Color species can be added </AlertTitle>
+                                                        <AlertDescription></AlertDescription>
                                                     </Alert>
                                                 ))}
 
@@ -1052,7 +1075,7 @@ function AddSpeciesColor() {
                                                                 margin="8px"
                                                                 isLoading={loading}
                                                             >
-                                                                ADD
+                                                                Add
                                                             </Button>
                                                         </Td>
                                                     </Tr>

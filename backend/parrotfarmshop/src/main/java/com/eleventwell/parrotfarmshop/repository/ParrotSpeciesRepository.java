@@ -30,7 +30,7 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
     List<ParrotSpeciesEntity> findAllByNameLike(String name);
 
-    @Query("SELECT ps FROM ParrotSpeciesEntity ps " +
+    @Query("SELECT ps FROM ParrotSpeciesEntity ps where ps.status=true " +
             "ORDER BY " +
             "CASE WHEN :sortWay = 'PASC'  THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc WHERE ps.id = psc.parrotSpecies.id) END ASC, " +
             "CASE WHEN :sortWay = 'PDESC' THEN (SELECT MIN(psc.price) FROM ps.parrotSpeciesColors psc  WHERE ps.id = psc.parrotSpecies.id  ) END DESC, " +
@@ -40,11 +40,13 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
     List<ParrotSpeciesEntity> findAllByPriceAndName(@Param("sortWay") String sortWay, Pageable pageable);
 
 
-    @Query("SELECT ps FROM ParrotSpeciesEntity ps WHERE ps.name LIKE CONCAT('%', :name, '%') ORDER BY ps.name")
+    @Query("SELECT ps FROM ParrotSpeciesEntity ps WHERE ps.name   LIKE CONCAT('%', :name, '%') AND ps.status=true ORDER BY ps.name")
     List<ParrotSpeciesEntity> findAllByName(@Param("name") String name, Pageable pageable);
 
 
     List<ParrotSpeciesEntity> findAllByOrderByIdDesc(Pageable pageable);
+    List<ParrotSpeciesEntity> findAllByStatusIsTrueOrderByIdDesc(Pageable pageable);
+
 
     Integer countAllByStatusIsTrue();
 
@@ -94,11 +96,29 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 
                                                  @Param("sortDate") String sortDate, Pageable pageable);
 
-
-    @Query("SELECT  o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity o  group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by AVG(o.parrot.parrotSpeciesColor.price) ")
-    List<ParrotSpeciesEntity> findTop3Salse();
-
+    @Query("select u from ParrotSpeciesEntity u where u.status = true AND (:name is null or u.name like concat('%', :name, '%')) " +
+            "ORDER BY " +
+            "case when :sortName = 'NDESC' then u.name end desc, " +
+            "case when :sortName = 'NASC' then u.name end asc, " +
+            "case when :sortParrotAverageRating = 'PARDESC' then u.parrotAverageRating end desc, " +
+            "case when :sortParrotAverageRating = 'PARASC' then u.parrotAverageRating end asc, " +
+            "case when :sortDate = 'DDESC' then u.id end desc, " +
+            "case when :sortDate = 'DASC' then u.id end asc, " +
+            "CASE WHEN :sortPrice = 'PASC'  THEN (SELECT MIN(psc.price) FROM u.parrotSpeciesColors psc WHERE u.id = psc.parrotSpecies.id) END ASC, " +
+            "CASE WHEN :sortPrice = 'PDESC' THEN (SELECT MIN(psc.price) FROM u.parrotSpeciesColors psc  WHERE u.id = psc.parrotSpecies.id  ) END DESC, " +
+            "u.id desc")
+    List<ParrotSpeciesEntity> searchSort(@Param("name") String name,
+                                         @Param("sortName") String sortName,
+                                         @Param("sortParrotAverageRating") String sortParrotAverageRating,
+                                         @Param("sortDate") String sortDate,
+                                         @Param("sortPrice") String sortPrice,
+                                         Pageable pageable);
+    @Query("SELECT  o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity o  " +
+            "group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by" +
+            " SUM(o.parrot.parrotSpeciesColor.price) DESC  ")
+    List<ParrotSpeciesEntity> findTop3Sales(Pageable pageable);
 }
+
 
 //    @NotBlank
 //    @Size(max = 30)
@@ -142,4 +162,3 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
 //
 //    @OneToMany(mappedBy = "parrotSpecies")
 //    private List<NestEntity> nest = new ArrayList<>();
-

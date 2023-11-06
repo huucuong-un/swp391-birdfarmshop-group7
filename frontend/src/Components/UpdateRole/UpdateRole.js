@@ -60,9 +60,9 @@ function UpdateRole(props) {
         <div className={cx('wrapper')}>
             <form onSubmit={handleSubmit} className={cx('inner')}>
                 <TableContainer className={cx('table-container')}>
-                    <Table size="xs ">
+                    <Table size="xs">
                         <Tbody>
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Role name</Td>
                                 <Td>
                                     <Input
@@ -79,7 +79,7 @@ function UpdateRole(props) {
                                 </Td>
                             </Tr>
 
-                            <Tr>
+                            <Tr height="40px">
                                 <Td fontSize={16}>Description</Td>
                                 <Td>
                                     <Input

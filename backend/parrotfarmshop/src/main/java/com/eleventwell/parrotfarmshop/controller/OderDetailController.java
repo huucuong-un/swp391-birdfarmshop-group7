@@ -11,11 +11,11 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/orderdetail")
+@RequestMapping(value = "/api")
 public class OderDetailController {
     @Autowired
     private OrderDetailService orderDetailService;
-    @GetMapping(value="findAllByOrderId/{id}")
+    @GetMapping(value="customer/orderdetail/findAllByOrderId/{id}")
     public List<OrderDetailDTO> findAllByOrderId(@RequestBody @PathVariable Long id){
 
 
@@ -23,11 +23,15 @@ public class OderDetailController {
 
     }
 
-    @GetMapping(value="find-all-model-order-detail-by-id/{id}")
+    @GetMapping(value="customer/orderdetail/find-all-model-order-detail-by-id/{id}")
     public List<OrderDetailHistoryModel> findAllModelByOrderId(@RequestBody @PathVariable Long id){
 
         return orderDetailService.createOrderDetailHistoryModelList(id);
 
+    }
+    @GetMapping(value = "customer/orderdetail/count-sold-product/{id}")
+    public Integer countSoldProduct(@RequestBody @PathVariable Long id) {
+        return orderDetailService.countSoldProduct(id);
     }
 
 }

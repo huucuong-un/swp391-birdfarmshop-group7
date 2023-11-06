@@ -50,12 +50,13 @@ public class SecurityConfiguration {
 //                .anyRequest()
 //                .authenticated()
 //                .and()
-                .authorizeHttpRequests(customizer -> customizer
+       //         .authorizeHttpRequests(customizer -> customizer
 //                        .requestMatchers(adminUrlMatcher()).authenticated()
-                                .requestMatchers("api/user/register","api/user/login-with-google/authenticate","api/user/authenticate","api/role").permitAll()
 //                        .anyRequest().authenticated()
-                                .anyRequest().permitAll()
-                )
+//                                .anyRequest().hasRole("customer","admin")
+//                )
+//                .authorizeHttpRequests().requestMatchers("api/order/admin/**").hasAnyRole("customer","admin")
+            //    .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

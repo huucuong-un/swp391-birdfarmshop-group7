@@ -13,19 +13,19 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/parrot-species-color")
+@RequestMapping(value = "/api")
 public class ParrotSpeciesColorController {
     @Autowired
     private ParrotSpeciesColorService parrotSpeciesColorService;
     
-    @GetMapping(value = "") 
+    @GetMapping(value = "parrot-species-color")
     public List<ParrotSpeciesColorDTO> showParrotSpeciesColors() {
         ListOutput result = new ListOutput();
         
         result.setListResult(parrotSpeciesColorService.findAll());
         return result.getListResult();
     }
-    @GetMapping(value = "find-one-by-id/{colorid}")
+    @GetMapping(value = "parrot-species-color/find-one-by-id/{colorid}")
     public List<ParrotSpeciesColorDTO> getParrotSpeciesColorById(@PathVariable("colorid") Long colorid) {
         List<ParrotSpeciesColorDTO> list =  new ArrayList<>();
         list.add(parrotSpeciesColorService.findOneById(colorid));
@@ -33,14 +33,14 @@ public class ParrotSpeciesColorController {
         return list;
     }
 
-    @GetMapping(value = "find-by-parrot-species-id/{id}")
+    @GetMapping(value = "parrot-species-color/find-by-parrot-species-id/{id}")
     public List<ParrotSpeciesColorDTO> getParrotSpeciesColorsBySpeciesId(@PathVariable("id") Long id) {
         ListOutput result = new ListOutput();
 
         result.setListResult(parrotSpeciesColorService.findAllBySpeciesId(id));
         return result.getListResult();
     }
-    @GetMapping(value = "find-by-parrot-id/{id}")
+    @GetMapping(value = "parrot-species-color/find-by-parrot-id/{id}")
     public List<ParrotSpeciesColorDTO> getParrotSpeciesColorByParrotId(@PathVariable("id") Long id) {
 
         List<ParrotSpeciesColorDTO> list = new ArrayList<>();
@@ -51,18 +51,18 @@ public class ParrotSpeciesColorController {
     }
 
 
-    @PostMapping(value = "")
+    @PostMapping(value = "admin/parrot-species-color")
     public ParrotSpeciesColorDTO createaPrrotSpeciesColor(@RequestBody ParrotSpeciesColorDTO model) {
         return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);
     }
     
-    @PutMapping(value = "{id}")
+    @PutMapping(value = "admin/parrot-species-color/{id}")
     public ParrotSpeciesColorDTO updateaPrrotSpeciesColor(@RequestBody ParrotSpeciesColorDTO model, @PathVariable("id") long id) {
         model.setId(id);
         return (ParrotSpeciesColorDTO) parrotSpeciesColorService.save(model);
     }
     
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "admin/parrot-species-color/{id}")
     public void deleteaParrotSpeciesColor(@RequestBody @PathVariable("id") Long id) {
         parrotSpeciesColorService.changeStatus(id);
     }

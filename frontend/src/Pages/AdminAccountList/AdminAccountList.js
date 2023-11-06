@@ -89,7 +89,7 @@ const AdminAccountList = () => {
         if (userResponse) {
             try {
                 // Send a request to update the status on the server
-                await axios.delete(`http://localhost:8086/api/user/${id}`);
+                await AccountAPI.changeAccountStatus(id);
 
                 // If the request is successful, update the state
 
@@ -162,7 +162,6 @@ const AdminAccountList = () => {
 
             <TableContainer width="100%" margin="5% 0">
                 <Table variant="simple" fontSize={16}>
-                    <TableCaption>Account list</TableCaption>
                     <Thead fontSize={16}>
                         <Tr>
                             <Th>User Id</Th>
@@ -171,7 +170,6 @@ const AdminAccountList = () => {
                             <Th>Full Name</Th>
                             <Th>Email</Th>
                             <Th>Gender</Th>
-
                             <Th>Role</Th>
                             <Th>Status</Th>
                         </Tr>

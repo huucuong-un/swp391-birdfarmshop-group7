@@ -1,34 +1,61 @@
 import axiosClient from './AxiosClient';
 
 const PostAPI = {
-    getAll(params) {
-        const url = '/marketer/post';
-        return axiosClient.get(url, { params });
-    },
-    searchSortForPost(params) {
-        const url = '/marketer/post/search_sort';
-        return axiosClient.get(url, { params });
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
     },
 
-    get(params) {
+    getAll(params, includeAuthorization = true) {
+        const url = '/marketer/post';
+        const config = { params };
+        const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    searchSortForPost(params, includeAuthorization = true) {
+        const url = '/marketer/post/search_sort';
+        const config = { params };
+        const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    get(params, includeAuthorization = true) {
         const url = `/marketer/post/find-one-by-id`;
-        return axiosClient.get(url, { params });
+        const config = { params };
+        const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    update(data) {
+
+    update(data, includeAuthorization = true) {
         const url = `/marketer/post/${data.id}`;
-        return axiosClient.put(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.put(url, authorizedConfig.data);
     },
-    getAllByTrueStatus() {
+
+    getAllByTrueStatus(includeAuthorization = true) {
         const url = `/post/true-status`;
-        return axiosClient.get(url);
+        const config = {};
+        const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    addPost(data) {
+
+    addPost(data, includeAuthorization = true) {
         const url = `/marketer/post`;
-        return axiosClient.post(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data);
     },
-    changePostStatus(id) {
+
+    changePostStatus(id, includeAuthorization = true) {
         const url = `/marketer/post/${id}`;
-        return axiosClient.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
 };
 

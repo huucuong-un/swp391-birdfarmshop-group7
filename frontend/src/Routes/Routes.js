@@ -52,6 +52,7 @@ import ResetPassword from '~/Pages/ResetPassword/ResetPassword';
 import MarketingLayout from '~/Components/MarketingLayout/MarketingLayout';
 import StaffLayout from '~/Components/StaffLayout/StaffLayout';
 import MarketerPromotion from '~/Pages/MarketerPromotion/MarketerPromotion';
+import ErrorPage from '~/Components/HandleError/Error';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -102,6 +103,7 @@ const publicRoutes = [
     { path: '/forgot-password', component: ForgotPassword },
     { path: '/forgot-password/otp', component: ForgotPasswordOTP },
     { path: '/forgot-password/otp/reset-password', component: ResetPassword },
+    { path: '/error', component: ErrorPage },
 ];
 
 //Dành cho những người đăng nhập mới coi được

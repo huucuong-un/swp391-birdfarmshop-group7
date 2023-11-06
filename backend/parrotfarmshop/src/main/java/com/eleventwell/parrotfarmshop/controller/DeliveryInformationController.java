@@ -22,6 +22,7 @@ public class DeliveryInformationController {
 
     @GetMapping(value = "/picking-status/{customerid}")
     public DeliveryInformationDTO findDeliveryInfoWithTruePickStatus(@PathVariable("customerid") Long customerId) {
+
         return deliveryInformationService.getDeliveryInformationByCustomerIdWithTruePickingStatus(customerId);
     }
     

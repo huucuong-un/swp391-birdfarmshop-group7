@@ -46,9 +46,14 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
         } else {
             deliveryInformationEntity = (DeliveryInformationEntity) converter.toEntity(deliveryInformationDTO , deliveryInformationEntity.getClass());
         }
-
+        try {
         deliveryInformationRepository.save(deliveryInformationEntity);
-        return (DeliveryInformationDTO) converter.toDTO(deliveryInformationEntity, DeliveryInformationDTO.class);
+
+            return (DeliveryInformationDTO) converter.toDTO(deliveryInformationEntity, DeliveryInformationDTO.class);
+
+        }catch (Exception e){
+            return  null;
+        }
 
 
     }
@@ -81,7 +86,12 @@ public class DeliveryInformationService implements IGenericService<DeliveryInfor
 
 
     public DeliveryInformationDTO getDeliveryInformationByCustomerIdWithTruePickingStatus(Long customerId) {
-        return (DeliveryInformationDTO)converter.toDTO(deliveryInformationRepository.findOneByIdWithTruePickStatus(customerId), DeliveryInformationDTO.class) ; //Find delivery info with picking status true/ just one true/time/user
+        try {
+            return (DeliveryInformationDTO)converter.toDTO(deliveryInformationRepository.findOneByIdWithTruePickStatus(customerId), DeliveryInformationDTO.class) ; //Find delivery info with picking status true/ just one true/time/user
+
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public DeliveryInformationDTO updatePickingStatus(Long deliveryInfoId, Long customerId) {

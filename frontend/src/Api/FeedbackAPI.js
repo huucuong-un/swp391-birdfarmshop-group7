@@ -1,44 +1,69 @@
 import axios from 'axios';
 import axiosClinet from './AxiosClient';
-
 const FeedbackAPI = {
-    addAuthorizationHeader(config) {
-        const token = JSON.parse(localStorage.getItem('accessToken'));
-        config.headers = {
-            Authorization: `Bearer ${token}`,
-            ...config.headers,
-        };
+
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
         return config;
     },
 
-    getAll(params) {
-        return axiosClinet.get('/feedback/find-all-by-species-id-and-belong-to-or-rating-or-color-id', { params });
-    },
 
-    getAllFeedbackSystem(params) {
+    getAll(params, includeAuthorization = false) {
         const config = { params };
-        return axiosClinet.get('/admin/feedback/search_sort', this.addAuthorizationHeader(config));
+        return axiosClinet.get(
+            '/feedback/find-all-by-species-id-and-belong-to-or-rating-or-color-id',
+            this.addAuthorizationHeader(config, includeAuthorization),
+        );
     },
 
-    create(data) {
-        return axiosClinet.post('/feedback', data);
+    getAllFeedbackSystem(params, includeAuthorization = true) {
+        const config = { params };
+        return axiosClinet.get(
+            '/admin/feedback/search_sort',
+            this.addAuthorizationHeader(config, includeAuthorization),
+        );
     },
 
-    checkFeedbacked(params) {
-        return axiosClinet.get('/feedback/count-by-orderId', { params });
+    create(data, includeAuthorization = false) {
+        return axiosClinet.post('/feedback', data, this.addAuthorizationHeader({}, includeAuthorization));
     },
 
-    countReview(params) {
-        return axiosClinet.get('/feedback/count-by-species-id-or-species-color-id-and-rating', { params });
+    checkFeedbacked(params, includeAuthorization = false) {
+        return axiosClinet.get(
+            '/feedback/count-by-orderId',
+            { params },
+            this.addAuthorizationHeader({}, includeAuthorization),
+        );
     },
 
-    countReview2(params) {
-        return axiosClinet.get('/feedback/count-by-species-id', { params });
+    countReview(params, includeAuthorization = false) {
+        return axiosClinet.get(
+            '/feedback/count-by-species-id-or-species-color-id-and-rating',
+            { params },
+            this.addAuthorizationHeader({}, includeAuthorization),
+        );
     },
 
-    changeStatus(id) {
-        const config = {};
-        return axiosClinet.put(`/admin/feedback/change-status/${id}`, null, this.addAuthorizationHeader(config));
+    countReview2(params, includeAuthorization = false) {
+        return axiosClinet.get(
+            '/feedback/count-by-species-id',
+            { params },
+            this.addAuthorizationHeader({}, includeAuthorization),
+        );
+    },
+
+    changeStatus(id, includeAuthorization = true) {
+        return axiosClinet.put(
+            `/admin/feedback/change-status/${id}`,
+            null,
+            this.addAuthorizationHeader({}, includeAuthorization),
+        );
     },
 };
 

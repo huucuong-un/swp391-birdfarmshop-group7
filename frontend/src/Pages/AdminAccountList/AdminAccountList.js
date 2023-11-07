@@ -97,7 +97,6 @@ const AdminAccountList = () => {
             } catch (error) {
                 toast({
                     title: 'Error occur!',
-                    description: error.response.data.message,
                     status: 'error',
                     duration: 5000,
                     isClosable: true,
@@ -121,7 +120,6 @@ const AdminAccountList = () => {
             } catch (error) {
                 toast({
                     title: 'Error occur!',
-                    description: error.response.data.message,
                     status: 'error',
                     duration: 5000,
                     isClosable: true,

@@ -53,6 +53,7 @@ import MarketingLayout from '~/Components/MarketingLayout/MarketingLayout';
 import StaffLayout from '~/Components/StaffLayout/StaffLayout';
 import MarketerPromotion from '~/Pages/MarketerPromotion/MarketerPromotion';
 import ErrorPage from '~/Components/HandleError/Error';
+import NoneLayout from '~/Components/MarketingLayout/MarketingLayout';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -76,7 +77,7 @@ const publicRoutes = [
     { path: '/marketer/promotion', component: MarketerPromotion, layout: MarketingLayout },
     { path: '/staff/feedback', component: StaffFeedback, layout: StaffLayout, role: 'staff' },
     { path: '/staff/order', component: StaffOrderManagement, layout: StaffLayout, role: 'staff' },
-    // { path: '/admin/order', component: MngOrder, layout: SystemLayout },
+    { path: '/admin/order', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
     { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
@@ -103,10 +104,26 @@ const publicRoutes = [
     { path: '/forgot-password', component: ForgotPassword },
     { path: '/forgot-password/otp', component: ForgotPasswordOTP },
     { path: '/forgot-password/otp/reset-password', component: ResetPassword },
-    { path: '/error', component: ErrorPage },
+    { path: '/error', component: ErrorPage, layout: NoneLayout },
 ];
 
+const AdminRoutes = [
+    //     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
+    //     { path: '/admin/faqs', component: AdFAQSManagement, layout: SystemLayout },
+    //     { path: '/admin/parrot-species', component: AdParrotSpecies, layout: SystemLayout },
+    //     { path: '/admin/parrot', component: AddParrot, layout: SystemLayout },
+    //     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
+    //     { path: '/admin/nest', component: AdNestManagement, layout: SystemLayout },
+    //     { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
+    //     { path: '/admin/nest-development', component: AdNestDevelopmentManagement, layout: SystemLayout },
+    //     { path: '/admin/nest-development-status', component: AdNestDevelopmentStatus, layout: SystemLayout },
+    //     { path: '/admin/nest-usage-history', component: AdNestUsageHistoryManagement, layout: SystemLayout },
+    //     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
+    //     { path: '/admin/promotion', component: MngVoucherPromotion, layout: SystemLayout },
+    //     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },
+];
+const systemRoutes = [];
 //Dành cho những người đăng nhập mới coi được
 const privateRoutes = [];
 
-export { publicRoutes, privateRoutes };
+export { publicRoutes, privateRoutes, AdminRoutes, systemRoutes };

@@ -8,12 +8,13 @@ const handleAxiosError = (error) => {
         if (error.response.status === 401) {
             // Unauthorized error (e.g., token expired), redirect to the login page.
             window.location.href = '/login';
-        } else if (error.response.status === 403 || error.response.status === 500) {
+        } else if (error.response.status === 403 || error.response.status === 403) {
             // Handle other error cases and redirect to an error page.
-            window.location.href = '/error';
+            // window.location.href = '/error';
         }
     }
 };
+
 const axiosClient = axios.create({
     baseURL: 'http://localhost:8086/api/',
     headers: {

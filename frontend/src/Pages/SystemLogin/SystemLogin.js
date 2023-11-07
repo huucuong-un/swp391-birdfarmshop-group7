@@ -8,6 +8,8 @@ import classNames from 'classnames/bind';
 import axios from 'axios';
 
 import styles from './SystemLogin.module.scss';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -55,11 +57,18 @@ function SystemLogin() {
                 isClosable: true,
                 position: 'bottom',
             });
-            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            localStorage.setItem('accessToken', JSON.stringify(data.data));
             console.log(data.data);
+            const user = await UserAPI.getUserByToken(data.data);
+            const userRole = await RoleAPI.getRoleName(user.roleId);
+            console.log(user);
             setLoading(false);
             // // setLoading(false);
-            navigate('/admin/role');
+            if (userRole === 'admin') {
+                navigate('/admin/account');
+            } else {
+                navigate('/system/login');
+            }
         } catch (error) {
             toast({
                 title: 'Error occur, check your account and password again!',

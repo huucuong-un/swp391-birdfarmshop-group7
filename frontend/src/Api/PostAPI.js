@@ -26,8 +26,8 @@ const PostAPI = {
         return axiosClient.get(url, authorizedConfig);
     },
 
-    get(params, includeAuthorization = true) {
-        const url = `/marketer/post/find-one-by-id`;
+    get(params, includeAuthorization = false) {
+        const url = '/post/find-one-by-id';
         const config = { params };
         const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
         return axiosClient.get(url, authorizedConfig);
@@ -36,20 +36,18 @@ const PostAPI = {
     update(data, includeAuthorization = true) {
         const url = `/marketer/post/${data.id}`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
-        return axiosClient.put(url, authorizedConfig.data);
+        return axiosClient.put(url, authorizedConfig.data, authorizedConfig);
     },
 
-    getAllByTrueStatus(includeAuthorization = true) {
-        const url = `/post/true-status`;
-        const config = {};
-        const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
-        return axiosClient.get(url, authorizedConfig);
+    getAllByTrueStatus() {
+        const url = '/post/true-status';
+        return axiosClient.get(url);
     },
 
     addPost(data, includeAuthorization = true) {
-        const url = `/marketer/post`;
+        const url = '/marketer/post';
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
-        return axiosClient.post(url, authorizedConfig.data);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },
 
     changePostStatus(id, includeAuthorization = true) {

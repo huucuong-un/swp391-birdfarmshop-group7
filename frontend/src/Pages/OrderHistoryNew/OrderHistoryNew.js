@@ -70,6 +70,7 @@ import NestAPI from '~/Api/NestAPI';
 import ButtonB from 'react-bootstrap/Button';
 import Overlay from 'react-bootstrap/Overlay';
 import Popover from 'react-bootstrap/Popover';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -81,8 +82,6 @@ function OrderHistoryNew() {
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
     const [submissionStatus, setSubmissionStatus] = useState();
     const [delayCheckFeedback, setDelayCheckFeedback] = useState(1);
-
-
 
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -98,6 +97,7 @@ function OrderHistoryNew() {
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
     const [check, setCheck] = useState(true);
+    const navigate = useNavigate();
 
     const [sort, setSort] = useState({
         page: 1,
@@ -284,6 +284,14 @@ function OrderHistoryNew() {
             try {
                 console.log(token);
                 const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/login-user');
+                }
                 setLoggedUser(userByToken);
             } catch (error) {
                 console.log(error);

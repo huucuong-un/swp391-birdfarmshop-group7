@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './UserProfile.module.scss';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import Collapse from 'react-bootstrap/Collapse';
@@ -35,11 +35,15 @@ import {
 } from '@chakra-ui/react';
 import { ShopState } from '~/context/ShopProvider';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
 function UserProfile() {
     const fileInputRef = useRef(null);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const [loggedUser, setLoggedUser] = useState();
+    const navigate = useNavigate();
 
     // Function to trigger the file input when the button is clicked
     const handleButtonClick = () => {
@@ -62,6 +66,26 @@ function UserProfile() {
     const toggleShow = () => setShowShow(!showShow);
     const [open, setOpen] = useState(true);
     const btnRef = React.useRef();
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/login-user');
+                }
+                setLoggedUser(userByToken);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     return (
         <>
             {/* wrapper */}

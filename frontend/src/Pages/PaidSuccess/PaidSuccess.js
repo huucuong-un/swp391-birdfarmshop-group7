@@ -22,7 +22,7 @@ function PaidSuccess() {
                             Home
                         </Button>
                     </Link>
-                    <Link to="/order-history-new">
+                    <Link to="/order-history">
                         <Button size="lg" colorScheme="blue">
                             Order History
                         </Button>

@@ -49,14 +49,6 @@ function SystemLogin() {
                 },
                 config,
             );
-
-            toast({
-                title: 'Login successful',
-                status: 'success',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
             localStorage.setItem('accessToken', JSON.stringify(data.data));
             console.log(data.data);
             const user = await UserAPI.getUserByToken(data.data);
@@ -65,9 +57,43 @@ function SystemLogin() {
             setLoading(false);
             // // setLoading(false);
             if (userRole === 'admin') {
-                navigate('/admin/account');
+                navigate('/admin/dashboard');
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            } else if (userRole === 'staff') {
+                navigate('/staff/order');
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            } else if (userRole === 'marketer') {
+                navigate('/marketer/post');
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            } else if (userRole === 'customer') {
+                navigate('/login-user');
             } else {
                 navigate('/system/login');
+                toast({
+                    title: 'Login Fail',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
             }
         } catch (error) {
             toast({

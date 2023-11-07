@@ -4,7 +4,7 @@ import styles from '~/Pages/Payment/Payment.module.scss';
 import StartPartPage from '~/Components/StartPartPage/StartPartPage';
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Link, useLocation } from 'react-router-dom';
 import OrderAPI from '~/Api/OrderAPI';
@@ -67,7 +67,16 @@ function Payment() {
             try {
                 console.log(token);
                 const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/login-user');
+                }
                 setLoggedUser(userByToken);
+                console.log(userByToken);
             } catch (error) {
                 console.log(error);
             }

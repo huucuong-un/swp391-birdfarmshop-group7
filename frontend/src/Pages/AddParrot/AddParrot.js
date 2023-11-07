@@ -119,12 +119,9 @@ function AddParrot() {
                 gender: parrots.gender,
                 colorID: parrots.colorID,
             });
-            if (responseParrots.status === 200) {
-                console.log('POST request was successful at species!!');
-                setShouldFetchData(true); // Set to true to reload data
-            } else {
-                console.error('POST request failed with status code - species: ', responseParrots.status);
-            }
+
+            setShouldFetchData(true); // Set to true to reload data
+
             setSubmissionStatus(true);
             setTimeout(() => {
                 setSubmissionStatus(null);

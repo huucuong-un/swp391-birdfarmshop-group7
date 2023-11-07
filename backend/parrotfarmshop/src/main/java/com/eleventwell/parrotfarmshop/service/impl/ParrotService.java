@@ -83,8 +83,13 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         parrotRepository.save(parrotEntity);
     }
 
+<<<<<<< HEAD
     public Long countAvaiableParrotById(Long id) {
         return parrotRepository.countAllBySaleStatusAndStatusAndHealthStatusAndParrotSpeciesColorId(false, true,true, id);
+=======
+    public Long countAvailableParrotById(Long id) {
+        return parrotRepository.countAllBySaleStatusAndStatusAndParrotSpeciesColorId(false, true, id);
+>>>>>>> c30c304e28f86187603b268260726600de2751fc
     }
 
     public void changeSaleStatus(Long id) {

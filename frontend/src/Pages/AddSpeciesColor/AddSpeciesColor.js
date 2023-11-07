@@ -268,30 +268,22 @@ function AddSpeciesColor() {
                 });
                 const addImg = await ParrotSpeciesColorAPI.addColorImage({
                     imageUrl: img,
-                    parrotSpeciesColorId: response.data.id,
+                    parrotSpeciesColorId: response.id,
                 });
-                if (response.status === 200) {
-                    console.log(`POST request was successful for species ID ${speciesID}!!`);
-                    // Assuming the response contains the newly created post data
-                    // You can update your data or reset the color input here
 
-                    setColorExist(null);
-                    setSubmissionStatus(true);
-                    // Automatically reset colorExist to null after 2 seconds
-                    var newData = response.data;
-                    setParrotSpeciesColor({ ...parrotSpeciesColor, newData });
+                setColorExist(null);
+                setSubmissionStatus(true);
+                // Automatically reset colorExist to null after 2 seconds
+                var newData = response;
+                console.log('new data: ' + newData);
+                setParrotSpeciesColor({ ...parrotSpeciesColor, newData });
 
-                    setTimeout(() => {
-                        setSubmissionStatus(null);
-                    }, 5000);
-                    setColorInputs([...colorInputs]);
-                    setSpecies([...species]);
-                } else {
-                    console.error(
-                        `POST request failed (const HandleSubmitSpeciesColor) with status code - species: ${response.status}`,
-                    );
-                    setSubmissionStatus(false);
-                }
+                setTimeout(() => {
+                    setSubmissionStatus(null);
+                }, 5000);
+                setColorInputs([...colorInputs]);
+                setSpecies([...species]);
+
                 setColorInputs([]);
             }
         } catch (error) {

@@ -1,4 +1,4 @@
-import axiosClinet from './AxiosClient';
+import axiosClient from './AxiosClient';
 
 const ParrotCoupleAPI = {
     // getAll(params) {
@@ -8,7 +8,7 @@ const ParrotCoupleAPI = {
 
     add(data) {
         const url = `/parrot-couple`;
-        return axiosClinet.post(url, data);
+        return axiosClient.post(url, data);
     },
 };
 

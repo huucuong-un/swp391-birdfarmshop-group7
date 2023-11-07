@@ -39,9 +39,9 @@ public class ParrotController {
     }
 
     @GetMapping(value = "parrot/count-available-parrot-quantity-spcies-by-id/{id}")
-    public Long countAvaiableParrotById(@RequestBody @PathVariable("id") long id) {
+    public Long countAvailableParrotById(@RequestBody @PathVariable("id") long id) {
 
-        return parrotService.countAvaiableParrotById(id);
+        return parrotService.countAvailableParrotById(id);
     }
 
 

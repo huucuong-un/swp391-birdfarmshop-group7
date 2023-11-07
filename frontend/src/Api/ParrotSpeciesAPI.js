@@ -99,12 +99,15 @@ const ParrotSpeciesAPI = {
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClinet.get(url, authorizedConfig);
     },
+<<<<<<< HEAD
 
     addSpecies(data, includeAuthorization = true) {
         const url = `/admin/parrot-species-color`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
         return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
+=======
+>>>>>>> c30c304e28f86187603b268260726600de2751fc
 };
 
 export default ParrotSpeciesAPI;

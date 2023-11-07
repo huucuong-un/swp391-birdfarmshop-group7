@@ -53,7 +53,7 @@ import MarketingLayout from '~/Components/MarketingLayout/MarketingLayout';
 import StaffLayout from '~/Components/StaffLayout/StaffLayout';
 import MarketerPromotion from '~/Pages/MarketerPromotion/MarketerPromotion';
 import ErrorPage from '~/Components/HandleError/Error';
-import NoneLayout from '~/Components/MarketingLayout/MarketingLayout';
+import NoneLayout from '~/Components/NoneLayout/NoneLayout';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },

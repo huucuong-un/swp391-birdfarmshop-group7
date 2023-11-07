@@ -49,7 +49,7 @@ const OrderAPI = {
     add(data, includeAuthorization = true) {
         const url = `/customer/order/cart`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
-        return axiosClient.post(url, authorizedConfig.data);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },
 
     // Count

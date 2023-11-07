@@ -29,8 +29,8 @@ const ParrotAPI = {
         return axiosClient.get(url, authorizedConfig);
     },
 
-    add(data, includeAuthorization = true) {
-        const url = `/admin/parrot`;
+    add(data, includeAuthorization = false) {
+        const url = `/parrot`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
         return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },

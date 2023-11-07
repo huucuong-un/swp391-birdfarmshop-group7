@@ -230,13 +230,12 @@ function AddParrot() {
 
         try {
             // Send a request to update the status on the server
-            await ParrotAPI.changeStatus(updatedPost[index]);
+            await ParrotAPI.changeStatus(updatedPost[index].id);
             // If the request is successful, update the state
             setParrotList(updatedPost);
         } catch (error) {
             toast({
                 title: 'Error occur!',
-                description: error.response.data.message,
                 status: 'error',
                 duration: 5000,
                 isClosable: true,

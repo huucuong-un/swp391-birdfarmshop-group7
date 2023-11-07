@@ -45,7 +45,7 @@ public class ParrotController {
     }
 
 
-    @PostMapping(value = "admin/parrot")
+    @PostMapping(value = "parrot")
     public ParrotDTO createParrot(@RequestBody ParrotDTO model) {
 
         return (ParrotDTO) parrotService.save(model);

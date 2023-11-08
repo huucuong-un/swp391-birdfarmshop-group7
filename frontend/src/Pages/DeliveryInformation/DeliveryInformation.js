@@ -24,6 +24,11 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
         setShow(!show);
     };
 
+    const handleChangePickingStatus = async (delivery) => {
+        const updateDeli = await DeliveryInformationAPI.updatePickingStatus(delivery);
+        setReloadStatus(true);
+    };
+
     const handleShowUpdate = (index) => {
         const updatedShowUpdate = [...showUpdate]; // Create a copy of showUpdate array
         updatedShowUpdate[index] = !updatedShowUpdate[index]; // Toggle the value
@@ -126,10 +131,12 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                             size="lg"
                             colorScheme="gray"
                             value={item.id}
-                            isChecked={selectedDeliveryId === item.id}
+                            // isChecked={selectedDeliveryId === item.id}
+                            isChecked={item.pickingStatus}
                             onChange={() => {
                                 setSelectedDeliveryId(item.id);
                                 setSelectedDelivery(item);
+                                handleChangePickingStatus(item);
                                 // handleRedirectToPayment(); // Redirect to Payment
                             }}
                             display="flex"
@@ -157,7 +164,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                 </Text>
             </div>
             <div className={cx('fade-container', { show: show })}>
-                {show && <AddMoreDeliveryInfo iveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
+                {show && <AddMoreDeliveryInfo onAdd={handleAdd} w={100}></AddMoreDeliveryInfo>}
             </div>
         </Box>
     );

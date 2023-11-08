@@ -95,6 +95,12 @@ const ParrotSpeciesAPI = {
     },
 
     getTop3SpeciesWithHighestOrderMoney(includeAuthorization = true) {
+        const url = '/marketer/parrot-species/find-top3-sale';
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    getTop3SpeciesWithHighestOrderMoneyForAdmin(includeAuthorization = true) {
         const url = '/admin/parrot-species/find-top3-sale';
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClinet.get(url, authorizedConfig);

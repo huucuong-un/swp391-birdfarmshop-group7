@@ -107,10 +107,9 @@ function Payment() {
         const codeValue = await PromotionAPI.getCode(code);
         if (codeValue.value > 0) {
             setDiscount(originTotalPrice * codeValue.value);
-            console.log(codeValue.value);
             setPromotion(codeValue.id);
         } else {
-            console.log('code not exist');
+            window.alert('Code does not exist!!');
         }
     };
 

@@ -235,7 +235,7 @@ return orderDTO;
             List<OrderDetailEntity> orderDetails = orderDetailRepository.findAllByOrderIdId(id);
             OrderEntity orderEntity = orderRepository.findOneById(id);
                 for (OrderDetailEntity orderDetail: orderDetails ) {
-if(checkParrotOrNest(orderDetail)){
+                    if(checkParrotOrNest(orderDetail)){
     parrotService.changeSaleStatus(getParrotId(orderDetail));
     orderDetailRepository.deleteById(orderDetail.getId());
 }else{

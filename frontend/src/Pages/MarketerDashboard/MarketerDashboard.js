@@ -23,6 +23,9 @@ import styles from '~/Pages/AdminDashboard/AdminDashboard.module.scss';
 import classNames from 'classnames/bind';
 import OrderAPI from '~/Api/OrderAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import { useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -31,12 +34,38 @@ function MarketerDashboard() {
     const [top3, setTop3] = useState([]);
     const [combineData, setCombineData] = useState([]);
     const [combineDataForTop3, setCombineDataForTop3] = useState([]);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                const userByToken = await UserAPI.getUserByToken(token);
+
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
 
     useEffect(() => {
         const getSpeciesList = async () => {
             try {
                 const speciesList = await ParrotSpeciesAPI.getAll();
-                console.log(speciesList.listResult);
                 setSpecies(speciesList.listResult);
             } catch (error) {
                 console.error(error);
@@ -61,10 +90,6 @@ function MarketerDashboard() {
         };
         getTotalBySpecies();
     }, [species]);
-
-    useEffect(() => {
-        console.log(combineData);
-    }, [combineData]);
 
     useEffect(() => {
         const getTop3 = async () => {

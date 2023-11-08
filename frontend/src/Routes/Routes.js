@@ -75,8 +75,6 @@ const publicRoutes = [
     // { path: '/test', component: TestDontDelete, layout: SystemLayout },
     // { path: '/admin/order', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
-    { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
-    { path: '/marketer/dashboard', component: MarketerDashboard, layout: MarketingLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/profile/change-password', component: ChangePassword },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
@@ -103,6 +101,7 @@ const publicRoutes = [
     { path: '/marketer/post', component: AddPost, layout: MarketingLayout },
     { path: '/marketer/promotion', component: MarketerPromotion, layout: MarketingLayout },
     { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
+    { path: '/marketer/dashboard', component: MarketerDashboard, layout: MarketingLayout },
 
     //Staff
     { path: '/staff/feedback', component: StaffFeedback, layout: StaffLayout, role: 'staff' },

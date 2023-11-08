@@ -230,7 +230,6 @@ function AddPost() {
     useEffect(() => {
         const getUserByToken = async () => {
             try {
-                console.log(token);
                 const userByToken = await UserAPI.getUserByToken(token);
                 if (
                     userByToken === null ||

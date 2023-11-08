@@ -1,0 +1,43 @@
+.not-found-container {
+    background: #1c1c1c;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    position: relative;
+}
+
+.glitch {
+    font-size: 8em;
+    margin: 0;
+    color: #00ff00;
+    text-shadow: -5px 0px 10px #00ff00, 5px 0px 10px #00ff00;
+    animation: glitch 1s linear infinite;
+}
+
+@keyframes glitch {
+    2% {
+        transform: skew(-10deg);
+        opacity: 0.7;
+    }
+    4% {
+        transform: skew(10deg);
+        opacity: 0.7;
+    }
+    6% {
+        transform: skew(-10deg);
+        opacity: 0.7;
+    }
+    8% {
+        transform: skew(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: skew(0deg);
+        opacity: 1;
+    }
+}

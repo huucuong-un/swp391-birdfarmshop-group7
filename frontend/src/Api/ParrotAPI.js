@@ -1,47 +1,68 @@
 import axiosClient from './AxiosClient';
-
 const ParrotAPI = {
-    getAll(params) {
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
+    },
+
+    getAll(params, includeAuthorization = false) {
         const url = '/parrot';
-        return axiosClient.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    get(id) {
+    get(id, includeAuthorization = false) {
         const url = `/parrot-species/find-one-species-by-id/${id}`;
-        return axiosClient.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    countAvailableParrotId(id) {
+    countAvailableParrotId(id, includeAuthorization = false) {
         const url = `/parrot/count-available-parrot-quantity-spcies-by-id/${id}`;
-        return axiosClient.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    add(data) {
-        const url = `/admin/parrot`;
-        return axiosClient.post(url, data);
+    add(data, includeAuthorization = false) {
+        const url = `/parrot`;
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },
 
-    update(data) {
+    update(data, includeAuthorization = true) {
         const url = `/admin/parrot-species/${data.id}`;
-        return axiosClient.put(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.put(url, authorizedConfig.data, authorizedConfig);
     },
-    updateParrot(data) {
+
+    updateParrot(data, includeAuthorization = true) {
         const url = `/admin/parrot/${data.id}`;
-        return axiosClient.put(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.put(url, authorizedConfig.data, authorizedConfig);
     },
 
-    remove(id) {
+    remove(id, includeAuthorization = true) {
         const url = `/admin/parrot-species/${id}`;
-        return axiosClient.delete(url);
-    },
-    searchSortForParrot(params) {
-        const url = '/admin/parrot/search_sort';
-        return axiosClient.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
 
-    changeStatus(id) {
+    searchSortForParrot(params, includeAuthorization = true) {
+        const url = '/admin/parrot/search_sort';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    changeStatus(id, includeAuthorization = true) {
         const url = `/admin/parrot/${id}`;
-        return axiosClient.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
 };
 

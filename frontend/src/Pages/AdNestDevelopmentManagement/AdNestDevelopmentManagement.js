@@ -29,6 +29,9 @@ import styles from '~/Pages/AdNestDevelopmentManagement/AdNestDevelopmentManagem
 import FAQSAPI from '~/Api/FAQSAPI';
 import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
+import UserAPI from '~/Api/UserAPI';
+import { useNavigate } from 'react-router-dom';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -48,6 +51,7 @@ function AdNestDevelopmentManagement() {
     const [vinh, setVinh] = useState(true);
     const [combineData, setCombineData] = useState([]);
     const [species, setSpecies] = useState([]);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
 
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
@@ -56,25 +60,32 @@ function AdNestDevelopmentManagement() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
-
+    const navigate = useNavigate();
     useEffect(() => {
-        const getNestPriceList = async () => {
+        const getUserByToken = async () => {
             try {
-                const params = {
-                    page: 1,
-                    limit: 12,
-                };
-                const nestList = await NestAPI.getAllNestDevelopment(params);
-                setFaqsList(nestList.listResult);
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin') {
+                        navigate('/error');
+                    }
+                }
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
         };
-        if (vinh) {
-            getNestPriceList();
-            setVinh(false);
-        }
-    }, [vinh]);
+        getUserByToken();
+    }, [token]);
 
     useEffect(() => {
         const getNestDevelopmentStatusWithID = async () => {

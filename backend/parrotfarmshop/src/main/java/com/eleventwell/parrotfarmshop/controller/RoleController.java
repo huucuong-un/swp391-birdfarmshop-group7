@@ -49,4 +49,8 @@ public class RoleController {
 
     @PostMapping(value = "admin/role/{id}")
     public void findRoleById(@PathVariable("id") Long id) { roleServiceConcrete.findOneById(id);}
+
+    @GetMapping(value = "role/find-one-by-id/{id}")
+    public String findRoleByIdPublic(@PathVariable("id") Long id) { return roleServiceConcrete.findOneById(id).getName();}
+
 }

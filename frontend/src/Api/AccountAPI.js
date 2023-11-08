@@ -1,19 +1,34 @@
 import axiosClient from './AxiosClient';
 
 const AccountAPI = {
-    getAccounts() {
-        const url = '/admin/user';
-        return axiosClient.get(url);
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
     },
 
-    addAccount(data) {
+    getAccounts(includeAuthorization = true) {
         const url = '/admin/user';
-        return axiosClient.post(url, data);
+        const config = {};
+        const authorizedConfig = this.addAuthorizationHeader(config, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    changeAccountStatus(id) {
+    addAccount(data, includeAuthorization = true) {
+        const url = '/admin/user';
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
+    },
+
+    changeAccountStatus(id, includeAuthorization = true) {
         const url = `/admin/user/${id}`;
-        return axiosClient.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
 };
 

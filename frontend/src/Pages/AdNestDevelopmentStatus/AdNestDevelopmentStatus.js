@@ -32,7 +32,9 @@ import styles from '~/Pages/AdNestDevelopmentStatus/AdNestDevelopmentStatus.modu
 import FAQSAPI from '~/Api/FAQSAPI';
 import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
-import { json } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -52,6 +54,7 @@ function AdNestDevelopmentStatus() {
     const [species, setSpecies] = useState([]);
     const [devStatus, setDevStatus] = useState([]);
     const [selectedValues, setSelectedValues] = useState(Array(faqsList.length).fill(''));
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
 
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
@@ -64,6 +67,33 @@ function AdNestDevelopmentStatus() {
         title: '',
         description: '',
     });
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const getNestPriceList = async () => {
             try {
@@ -354,12 +384,7 @@ function AdNestDevelopmentStatus() {
                             </div>
                         ))}
                     </div>
-                    <Button
-                        colorScheme="green"
-                        onClick={() => handleUpdateSequence()}
-                        className={cx('save-btn')}
-                        fontSize={18}
-                    >
+                    <Button onClick={() => handleUpdateSequence()} className={cx('save-btn')} fontSize={18}>
                         Save
                     </Button>
                 </div>

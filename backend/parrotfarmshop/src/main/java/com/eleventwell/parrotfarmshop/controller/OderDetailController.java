@@ -29,7 +29,7 @@ public class OderDetailController {
         return orderDetailService.createOrderDetailHistoryModelList(id);
 
     }
-    @GetMapping(value = "customer/orderdetail/count-sold-product/{id}")
+    @GetMapping(value = "orderdetail/count-sold-product/{id}")
     public Integer countSoldProduct(@RequestBody @PathVariable Long id) {
         return orderDetailService.countSoldProduct(id);
     }

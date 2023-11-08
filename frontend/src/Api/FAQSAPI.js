@@ -1,24 +1,42 @@
 import axios from 'axios';
 import axiosClient from './AxiosClient';
-
 const FAQSAPI = {
-    getAll(params) {
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
+    },
+    getAll(params, includeAuthorization = false) {
         const url = '/faqs';
-        return axiosClient.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    add(data) {
+    add(data, includeAuthorization = true) {
         const url = `/admin/faqs`;
-        return axiosClient.post(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data);
     },
 
-    changeStatus(id) {
+    changeStatus(id, includeAuthorization = true) {
         const url = `/admin/faqs/${id}`;
-        return axiosClient.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
-    sortSearchForFaqs(params) {
+
+    sortSearchForFaqs(params, includeAuthorization = true) {
         const url = '/admin/faqs/search_sort';
-        return axiosClient.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+    updateFaqs(data, id) {
+        const url = `/admin/faqs/${id}`; //done
+        return axiosClient.put(url, data);
     },
 };
 

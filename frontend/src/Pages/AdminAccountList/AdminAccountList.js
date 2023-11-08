@@ -31,6 +31,8 @@ import AccountAPI from '~/Api/AccountAPI';
 import AddAccount from '~/Components/AddAccount/AddAccount';
 import RoleAPI from '~/Api/RoleAPI';
 import DeliveryInformationWithNoRadio from '../DeliveryInformationWithNoRadio/DeliveryInformationWithNoRadio';
+import UserAPI from '~/Api/UserAPI';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -42,11 +44,38 @@ const AdminAccountList = () => {
     const [roles, setRoles] = useState([]);
     const [showDelivery, setShowDelivery] = useState(false);
     const [selectDeliveryId, setSelectDeliveryId] = useState();
-
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
     // useEffect(() => {
     //     console.log(accounts);
     //     console.log(reloadStatus);
     // }, [accounts]);
+
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     const handleShowDelivery = (id) => {
         setSelectDeliveryId(id);
         setShowDelivery(!showDelivery); // Update the state
@@ -97,7 +126,6 @@ const AdminAccountList = () => {
             } catch (error) {
                 toast({
                     title: 'Error occur!',
-                    description: error.response.data.message,
                     status: 'error',
                     duration: 5000,
                     isClosable: true,
@@ -121,7 +149,6 @@ const AdminAccountList = () => {
             } catch (error) {
                 toast({
                     title: 'Error occur!',
-                    description: error.response.data.message,
                     status: 'error',
                     duration: 5000,
                     isClosable: true,

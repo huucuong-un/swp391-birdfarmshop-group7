@@ -96,7 +96,12 @@ public class RoleService implements IGenericService<RoleDTO> {
     }
 
     public RoleDTO findOneById(long id) {
-        return (RoleDTO) roleConverter.toDTO(roleRepository.findOneById(id), RoleDTO.class);
+        try {
+            return (RoleDTO) roleConverter.toDTO(roleRepository.findOneById(id), RoleDTO.class);
+
+        }catch (Exception e){
+            return null;
+        }
     }
     public List<RoleDTO> findAllByTrueStatus() {
         List<RoleDTO> results = new ArrayList<>();

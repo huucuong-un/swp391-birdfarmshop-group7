@@ -20,10 +20,10 @@ import java.util.List;
 public interface ParrotRepository extends JpaRepository<ParrotEntity, Long>{
     ParrotEntity findOneById(Long id);
     List<ParrotEntity> findAllByOrderByIdDesc();
-    @Query("SELECT u FROM ParrotEntity u WHERE u.status = true AND u.healthStatus = true AND u.saleStatus = true AND u.parrotSpeciesColor.id = :colorid")
+    @Query("SELECT u FROM ParrotEntity u WHERE u.status = true AND u.healthStatus = true AND u.saleStatus = false AND u.parrotSpeciesColor.id = :colorid")
     List<ParrotEntity> findTopNByStatusIsTrue(@Param("colorid") Long colorid, Pageable pageable);
 
-    Long countAllBySaleStatusAndStatusAndParrotSpeciesColorId(Boolean saleStatus, Boolean status, Long id);
+    Long countAllBySaleStatusAndStatusAndHealthStatusAndParrotSpeciesColorId(Boolean saleStatus, Boolean status,Boolean healhStatus ,Long id);
 
     @Query("select u from ParrotEntity  u where(:age is null or u.age = :age ) " +
             "and (:status is null or u.status = :status) " +

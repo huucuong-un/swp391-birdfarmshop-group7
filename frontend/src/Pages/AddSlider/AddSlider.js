@@ -36,6 +36,9 @@ import {
 import UpdateSlider from '~/Components/UpdateSlider/UpdateSlider';
 import axios from 'axios';
 import SliderAPI from '~/Api/SliderAPI';
+import { useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -67,9 +70,36 @@ function AddSlider() {
     });
     const [sliderList, setSliderList] = useState([]);
     const [reloadData, setReloadData] = useState(false);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
     const handleUpdateSuccess = () => {
         setReloadData(true); // Set reloadData to true when the update is successful
     };
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin' && userRole !== 'marketer') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const fetchData = async () => {
             const sliderList = await SliderAPI.searchSortForSlider(sort);
@@ -123,12 +153,13 @@ function AddSlider() {
                     setSubmissionStatus('');
                 }, 5000);
             } else {
-                const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
+                const data = {
                     sliderName: slider.sliderName,
                     sliderDescription: slider.sliderDescription,
                     sliderImageURL: img,
                     status: slider.status,
-                });
+                };
+                const responsePost = await SliderAPI.addSlider(data);
 
                 console.log('POST request was successful at species!!');
                 // Assuming the response contains the newly created post data
@@ -190,7 +221,8 @@ function AddSlider() {
             try {
                 const updatedSlider = [...sliderList];
                 updatedSlider[index].status = !updatedSlider[index].status;
-                await axios.delete(`http://localhost:8086/api/marketer/slider/${updatedSlider[index].id}`);
+                //  await axios.delete(`http://localhost:8086/api/marketer/slider/${updatedSlider[index].id}`);
+                const changestatus = await SliderAPI.changeSliderStatus(updatedSlider[index].id);
                 console.log('slider list in change status');
                 console.log(updatedSlider);
                 setSliderList(updatedSlider);

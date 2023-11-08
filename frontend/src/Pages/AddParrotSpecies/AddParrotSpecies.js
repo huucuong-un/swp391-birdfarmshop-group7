@@ -210,31 +210,35 @@ function AddParrotSpecies() {
                     img: img,
                     // Add other fields you want to send to the first API
                 });
-                if (responseSpecies.status === 200) {
-                    console.log('POST request was successful at species!!');
-                } else {
-                    console.error('POST request failed with status code - species: ', responseSpecies.status);
-                }
-                const responseSpeciesColor = await ParrotSpeciesAPI.addSpecies({
+                // if (responseSpecies.status === 200) {
+                //     console.log('POST request was successful at species!!');
+                // } else {
+                //     console.error('POST request failed with status code - species: ', responseSpecies.status);
+                // }
+                const responseSpeciesColor = await ParrotSpeciesColorAPI.add({
                     // Đoạn này để truyền các data fields về phía database
-                    speciesID: responseSpecies.data.id,
+                    speciesID: responseSpecies.id,
                     status: parrotSpeciesColor.status,
                     price: parrotSpeciesColor.price,
                     color: parrotSpeciesColor.color,
                     imageUrl: img,
                 });
+
+                console.log(responseSpeciesColor);
                 const addImg = await ParrotSpeciesColorAPI.addColorImage({
                     imageUrl: img,
-                    parrotSpeciesColorId: responseSpeciesColor.data.id,
+                    parrotSpeciesColorId: responseSpeciesColor.id,
                 });
-                if (responseSpeciesColor.status === 200) {
-                    console.log('POST request was successful at species color');
-                } else {
-                    console.error(
-                        'POST request failed with status code - species color: ',
-                        responseSpeciesColor.status,
-                    );
-                }
+
+                console.log(addImg);
+                // if (responseSpeciesColor.status === 200) {
+                //     console.log('POST request was successful at species color');
+                // } else {
+                //     console.error(
+                //         'POST request failed with status code - species color: ',
+                //         responseSpeciesColor.status,
+                //     );
+                // }
                 setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
                 reloadAddSpeciesColor();
 

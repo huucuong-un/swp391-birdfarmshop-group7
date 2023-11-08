@@ -44,10 +44,15 @@ import Title from '~/Components/Title/Title';
 import axios from 'axios';
 import PostAPI from '~/Api/PostAPI';
 import UpdatePost from '~/Components/UpdatePost/UpdatePost';
+import { useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
 function AddPost() {
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
     const [submissionStatus, setSubmissionStatus] = useState();
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState('');
@@ -222,6 +227,31 @@ function AddPost() {
         }
     };
     const [postList, setPostList] = useState([]);
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin' && userRole !== 'marketer') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const fetchData = async () => {
             const postList = await PostAPI.searchSortForPost(sort);

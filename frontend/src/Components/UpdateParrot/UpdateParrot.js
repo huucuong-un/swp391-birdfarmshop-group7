@@ -193,10 +193,10 @@ function UpdateParrot({ parrot, reloadData }) {
                                             }}
                                             required
                                         >
+                                            <option key={'color'}>Select a color</option>
+
                                             {speciesColor.map((item, index) => (
                                                 <>
-                                                    <option key={'color'}>Select a color</option>
-
                                                     <option
                                                         key={index}
                                                         value={item.id}

@@ -1,120 +1,177 @@
-import axiosClinet from './AxiosClient';
-
+import axiosClient from './AxiosClient';
 const OrderAPI = {
-    getAll(params) {
-        const url = '/admin/order/order_management/list'; //done
-        return axiosClinet.get(url, { params });
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
     },
-    getOneByUsageHistory(id) {
-        const url = `/staff/order/find-one-by-usage-history-id/${id}`; //done
-        return axiosClinet.get(url);
-    },
-    searchByEmailAndPhone(params) {
-        const url = '/staff/order/order_management/search'; //done
-        return axiosClinet.get(url, { params });
-    },
-
-    findAllByUserIdAndSearchSort(params) {
-        const url = `/customer/order/order-history-search-sort`; //done
-        return axiosClinet.get(url, { params });
+    getAll(params, includeAuthorization = true) {
+        const url = '/admin/order/order_management/list';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    findAllByOrderId(id) {
+    getOneByUsageHistory(id, includeAuthorization = true) {
+        const url = `/staff/order/find-one-by-usage-history-id/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    searchByEmailAndPhone(params, includeAuthorization = true) {
+        const url = '/staff/order/order_management/search';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    findAllByUserIdAndSearchSort(params, includeAuthorization = true) {
+        const url = `/customer/order/order-history-search-sort`;
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    findAllByOrderId(id, includeAuthorization = true) {
         const url = `/customer/orderdetail/findAllByOrderId/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    findAllOrderWithUser() {
+    findAllOrderWithUser(includeAuthorization = false) {
         const url = '/order/find-all-order-with-user';
-        return axiosClinet.post(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig);
     },
 
-    add(data) {
+    add(data, includeAuthorization = true) {
         const url = `/customer/order/cart`;
-        return axiosClinet.post(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },
 
-    //count
-    totalItem(params) {
+    // Count
+    totalItem(params, includeAuthorization = false) {
         const url = '/order/total-item';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalItemInCurrentDay(params) {
+
+    totalItemInCurrentDay(params, includeAuthorization = false) {
         const url = '/order/total-item-in-current-day';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalItemInCurrentMonth(params) {
+
+    totalItemInCurrentMonth(params, includeAuthorization = false) {
         const url = '/order/total-item-in-current-month';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalItemInCurrentYear(params) {
+
+    totalItemInCurrentYear(params, includeAuthorization = false) {
         const url = '/order/total-item-in-current-year';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    //total-price
-    totalPriceInCurrentDay(params) {
+
+    // Total Price
+    totalPriceInCurrentDay(params, includeAuthorization = false) {
         const url = '/order/total-price-in-current-day';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInCurrentMonth(params) {
+
+    totalPriceInCurrentMonth(params, includeAuthorization = false) {
         const url = '/order/total-price-in-current-month';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInCurrentYear(params) {
+
+    totalPriceInCurrentYear(params, includeAuthorization = false) {
         const url = '/order/total-price-in-current-year';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInJanuary(params) {
+
+    totalPriceInJanuary(params, includeAuthorization = false) {
         const url = '/order/total-price-in-january';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInFebruary(params) {
+
+    totalPriceInFebruary(params, includeAuthorization = false) {
         const url = '/order/total-price-in-February';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInMarch(params) {
+
+    totalPriceInMarch(params, includeAuthorization = false) {
         const url = '/order/total-price-in-March';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInApril(params) {
+
+    totalPriceInApril(params, includeAuthorization = false) {
         const url = '/order/total-price-in-April';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInMay(params) {
+
+    totalPriceInMay(params, includeAuthorization = false) {
         const url = '/order/total-price-in-May';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInJune(params) {
+
+    totalPriceInJune(params, includeAuthorization = false) {
         const url = '/order/total-price-in-June';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInJuly(params) {
+
+    totalPriceInJuly(params, includeAuthorization = false) {
         const url = '/order/total-price-in-July';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInAugust(params) {
+
+    totalPriceInAugust(params, includeAuthorization = false) {
         const url = '/order/total-price-in-August';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInSeptember(params) {
+
+    totalPriceInSeptember(params, includeAuthorization = false) {
         const url = '/order/total-price-in-September';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInOctober(params) {
+
+    totalPriceInOctober(params, includeAuthorization = false) {
         const url = '/order/total-price-in-October';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInNovember(params) {
+
+    totalPriceInNovember(params, includeAuthorization = false) {
         const url = '/order/total-price-in-November';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    totalPriceInDecember(params) {
+
+    totalPriceInDecember(params, includeAuthorization = false) {
         const url = '/order/total-price-in-December';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    countSoldProduct(id) {
-        const url = `/customer/orderdetail/count-sold-product/${id}`;
-        return axiosClinet.get(url);
+
+    countSoldProduct(id, includeAuthorization = false) {
+        const url = `/orderdetail/count-sold-product/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 };
 

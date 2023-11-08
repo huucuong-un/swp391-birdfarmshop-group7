@@ -37,7 +37,7 @@ public class VnPayController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("customer/vnpay/payment_infor")
+    @GetMapping("vnpay/payment_infor")
     public RedirectView transaction(
             @RequestParam(value = "vnp_Amount") Double amount,
             @RequestParam(value = "vnp_BankCode") String bankCode,

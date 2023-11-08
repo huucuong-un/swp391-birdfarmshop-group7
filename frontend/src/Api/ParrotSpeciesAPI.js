@@ -1,76 +1,109 @@
 import axiosClinet from './AxiosClient';
-
 const ParrotSpeciesAPI = {
-    getAll(params) {
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
+    },
+    getAll(params, includeAuthorization = false) {
         const url = '/parrot-species';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    getAllTrue(params) {
+
+    getAllTrue(params, includeAuthorization = false) {
         const url = '/parrot-species-true';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    getListBySpeciesId(speciesId) {
+
+    getListBySpeciesId(speciesId, includeAuthorization = false) {
         const url = `/parrot-species-color/find-by-parrot-species-id/${speciesId}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    get(id) {
+
+    get(id, includeAuthorization = false) {
         const url = `/parrot-species/find-one-species-by-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    getSpeciesBySpeciesIdObject(id) {
+
+    getSpeciesBySpeciesIdObject(id, includeAuthorization = false) {
         const url = `/parrot-species/find-one-species-by-id-object/${id}`;
-        return axiosClinet.get(url);
-    },
-    getListBySpeciesId(speciesId) {
-        const url = `/parrot-species-color/find-by-parrot-species-id/${speciesId}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
 
-    getSpeciesByColorId(id) {
+    // getListBySpeciesId(speciesId, includeAuthorization = false) {
+    //     const url = `/parrot-species-color/find-by-parrot-species-id/${speciesId}`;
+    //     const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+    //     return axiosClinet.get(url, authorizedConfig);
+    // },
+
+    getSpeciesByColorId(id, includeAuthorization = false) {
         const url = `/parrot-species/find-one-species-by-color-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
 
-    count() {
+    count(includeAuthorization = false) {
         const url = '/parrot-species/total-item';
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
 
-    add(data) {
-        const url = `/admin/parrot-species/create`;
-        return axiosClinet.post(url, data);
+    add(data, includeAuthorization = true) {
+        const url = '/admin/parrot-species/create';
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
 
-    update(data) {
+    update(data, includeAuthorization = true) {
         const url = `/admin/parrot-species/update/${data.id}`;
-        return axiosClinet.put(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.put(url, authorizedConfig.data, authorizedConfig);
     },
 
-    remove(id) {
+    remove(id, includeAuthorization = true) {
         const url = `/admin/parrot-species/change-status/${id}`;
-        return axiosClinet.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.delete(url, authorizedConfig);
     },
-    sort(params) {
+
+    sort(params, includeAuthorization = false) {
         const url = `/parrot-species/sort`;
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    search(params) {
+
+    search(params, includeAuthorization = false) {
         const url = `/parrot-species/search`;
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    searchSortParrotSpeciesPublic(params) {
+
+    searchSortParrotSpeciesPublic(params, includeAuthorization = false) {
         const url = '/parrot-species/search_sort';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
 
-    getTop3SpeciesWithHighestOrderMoney() {
+    getTop3SpeciesWithHighestOrderMoney(includeAuthorization = true) {
         const url = '/admin/parrot-species/find-top3-sale';
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
 
-    addSpecies(data) {
+    addSpecies(data, includeAuthorization = true) {
         const url = `/admin/parrot-species-color`;
-        return axiosClinet.post(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
 };
 

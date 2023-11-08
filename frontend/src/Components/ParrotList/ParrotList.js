@@ -10,7 +10,8 @@ import {
     faAngleLeft,
     faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
-
+import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
@@ -44,6 +45,7 @@ import Col from 'react-bootstrap/Col';
 import number1 from '~/Assets/image/NumberComparison/number-v4-1.png';
 import number2 from '~/Assets/image/NumberComparison/number-2.png';
 import number3 from '~/Assets/image/NumberComparison/number-3.png';
+import OrderAPI from '~/Api/OrderAPI';
 
 const cx = classNames.bind(styles);
 
@@ -86,6 +88,8 @@ function ParrotList(props) {
     const [countParrot, setCountParrot] = useState(null);
     const [selectedColorId, setSelectedColorId] = useState({});
     const [count, setCount] = useState(0);
+    const [countSoldProduct, setCountSoldProduct] = useState(0);
+
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({
         page: 1,
@@ -290,6 +294,8 @@ function ParrotList(props) {
                     console.log(params);
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
                     parrot.countReview = await FeedbackAPI.countReview2(params);
+                    const countP = await OrderAPI.countSoldProduct(params.id);
+                    setCountSoldProduct(countP);
                     data.push(parrot);
                 }
 
@@ -419,6 +425,45 @@ function ParrotList(props) {
         console.log(totalSpecies);
     }, [totalSpecies]);
 
+    const StarRating = ({ rating }) => {
+        const stars = [];
+        if (rating === null) {
+            return <div>There are no reviews yet</div>;
+        }
+        const number = rating;
+        const integerPart = Math.floor(number);
+        const decimalPart = (number - integerPart).toFixed(1);
+        var count = 0;
+        for (let i = 0; i < integerPart; i++) {
+            stars.push(<FontAwesomeIcon icon={solidStar} key={count} />);
+            count = count + 1;
+        }
+        if (decimalPart > 0) {
+            stars.push(<FontAwesomeIcon icon={faStarHalfAlt} key={count} />);
+            count = count + 1;
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart - 1; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={count} />);
+                    count = count + 1;
+                }
+            }
+        }
+
+        if (decimalPart == 0) {
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart; i++) {
+                    stars.push(<FontAwesomeIcon icon={regularStar} key={count} />);
+                    count = count + 1;
+                }
+            }
+        }
+
+        if (rating !== null) {
+            stars.push(<div key={count}> ( {rating} / 5 )</div>);
+        }
+        return stars;
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner', 'row')}>
@@ -538,8 +583,16 @@ function ParrotList(props) {
                                     <p>$ {selectedColor[parrot.id]?.price}</p>
                                 </div>
                                 <div className={cx('parrot-like')}>
-                                    <FontAwesomeIcon className={cx('parrot-like-icon')} icon={faHeart} />
-                                    <p className={cx('parrot-like-quantity')}>{parrot.countReview} reviews</p>
+                                    <StarRating rating={parrot.parrotAverageRating}> </StarRating>
+                                </div>
+                                <div
+                                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                                    className={cx('parrot-review-orders')}
+                                >
+                                    <div>
+                                        {parrot.countReview === 0 ? '0 review' : parrot.countReview + ' reviews'}{' '}
+                                    </div>
+                                    <div>{countSoldProduct} sold</div>
                                 </div>
                             </div>
                         </div>

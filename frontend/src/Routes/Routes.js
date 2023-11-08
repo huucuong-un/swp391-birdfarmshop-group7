@@ -57,40 +57,52 @@ import NoneLayout from '~/Components/NoneLayout/NoneLayout';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
-    { path: '/parrot-product', component: ParrotProduct },
+    { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
+    { path: '/register', component: Register, layout: LoginSystemLayout },
     { path: '/nest', component: Nest },
     { path: '/payment', component: Payment },
+    { path: '/parrot-product', component: ParrotProduct },
     { path: '/parrot-product/parrot-detail', component: ParrotDetail },
     //  { path: '/order-history', component: OrderHistory },
     { path: '/order-history', component: OrderHistoryNew },
-    { path: '/paid-success', component: PaidSuccess },
     { path: '/shopping-cart', component: ShoppingCart },
     { path: '/post-detail', component: PostDetail },
     { path: '/about-us', component: AboutUs },
     //{ path: '/userprofile', component: UserProfile },
     { path: '/species-selection', component: SpeciesSelection },
-    { path: '/admin/faqs', component: AdFAQSManagement, layout: SystemLayout },
     { path: '/add-parrot-nest-service', component: AddParrotNestService },
-    { path: '/register', component: Register, layout: LoginSystemLayout },
-    { path: '/test', component: TestDontDelete, layout: SystemLayout },
+    // { path: '/test', component: TestDontDelete, layout: SystemLayout },
+    // { path: '/admin/order', component: MngOrder, layout: SystemLayout },
+    { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
+    { path: '/faqs', component: FAQs },
+    // { path: '/compare-products', component: CompareParrot },
+    { path: '/user-profile', component: UserProfileNew },
+    { path: '/profile/change-password', component: ChangePassword },
+
+    { path: '/contact', component: Contact },
+    // { path: '/add-role', component: AddRole },
+    { path: '/forgot-password', component: ForgotPassword },
+    { path: '/forgot-password/otp', component: ForgotPasswordOTP },
+    { path: '/forgot-password/otp/reset-password', component: ResetPassword },
+
+    { path: '/paid-fail', component: PaidFail },
+    { path: '/paid-success', component: PaidSuccess },
+
+    { path: '/error', component: ErrorPage, layout: NoneLayout },
+
+    { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
+
+    // Marketer
     { path: '/marketer/post', component: AddPost, layout: MarketingLayout },
     { path: '/marketer/promotion', component: MarketerPromotion, layout: MarketingLayout },
+    { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
+
+    //Staff
     { path: '/staff/feedback', component: StaffFeedback, layout: StaffLayout, role: 'staff' },
     { path: '/staff/order', component: StaffOrderManagement, layout: StaffLayout, role: 'staff' },
-   // { path: '/admin/order', component: MngOrder, layout: SystemLayout },
-    { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
-    { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
-    { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
-    { path: '/profile/change-password', component: ChangePassword },
-    { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
-    { path: '/faqs', component: FAQs },
+
     { path: '/admin/parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/admin/parrot', component: AddParrot, layout: SystemLayout },
-    { path: '/compare-products', component: CompareParrot },
-    { path: '/profile', component: MyAccount },
-    { path: '/user-profile', component: UserProfileNew },
-    { path: '/contact', component: Contact },
-    { path: '/add-role', component: AddRole },
     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
     { path: '/admin/nest', component: AdNestManagement, layout: SystemLayout },
     { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
@@ -100,11 +112,7 @@ const publicRoutes = [
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
     { path: '/admin/promotion', component: MngVoucherPromotion, layout: SystemLayout },
     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },
-    { path: '/paid-fail', component: PaidFail },
-    { path: '/forgot-password', component: ForgotPassword },
-    { path: '/forgot-password/otp', component: ForgotPasswordOTP },
-    { path: '/forgot-password/otp/reset-password', component: ResetPassword },
-    { path: '/error', component: ErrorPage, layout: NoneLayout },
+    { path: '/admin/faqs', component: AdFAQSManagement, layout: SystemLayout },
 ];
 
 const AdminRoutes = [

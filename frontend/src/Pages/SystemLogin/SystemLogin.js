@@ -10,6 +10,7 @@ import axios from 'axios';
 import styles from './SystemLogin.module.scss';
 import UserAPI from '~/Api/UserAPI';
 import RoleAPI from '~/Api/RoleAPI';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ function SystemLogin() {
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
     const toast = useToast();
+    const { setUser } = ShopState();
 
     const navigate = useNavigate();
     const logins = async () => {
@@ -50,8 +52,9 @@ function SystemLogin() {
                 config,
             );
             localStorage.setItem('accessToken', JSON.stringify(data.data));
-            console.log(data.data);
             const user = await UserAPI.getUserByToken(data.data);
+            setUser(user);
+
             const userRole = await RoleAPI.getRoleName(user.roleId);
             console.log(user);
             setLoading(false);

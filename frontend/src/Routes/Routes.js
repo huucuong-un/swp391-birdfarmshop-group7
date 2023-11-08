@@ -76,6 +76,7 @@ const publicRoutes = [
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
     { path: '/faqs', component: FAQs },
     // { path: '/compare-products', component: CompareParrot },
+    { path: '/profile', component: MyAccount },
     { path: '/user-profile', component: UserProfileNew },
     { path: '/profile/change-password', component: ChangePassword },
 

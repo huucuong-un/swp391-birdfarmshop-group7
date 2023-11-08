@@ -80,7 +80,7 @@ public class FeedbackController {
 
         return result;
     }
-    @GetMapping(value = "admin/feedback/search_sort")
+    @GetMapping(value = "staff/feedback/search_sort")
     public PagingModel adminSearchSort(@RequestBody @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit,@RequestParam(value = "rating",required = false) Integer rating, @RequestParam(value = "speciesId",required = false) Long speciesId, @RequestParam(value = "date", required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam(value = "username",required = false) String username,@RequestParam(value = "status",required = false) Boolean status ,@RequestParam(value = "sortRating",required = false) String sortRating, @RequestParam(value = "sortDate",required = false)String sortDate) {
 
         PagingModel result = new PagingModel();
@@ -102,7 +102,7 @@ public class FeedbackController {
         return feedbackService.save(dto);
     }
     
-    @PutMapping(value = "admin/feedback/change-status/{id}")
+    @PutMapping(value = "staff/feedback/change-status/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id ) {
 
        feedbackService.changeStatus(id);

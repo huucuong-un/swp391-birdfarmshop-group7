@@ -1,7 +1,6 @@
 import axios from 'axios';
 import axiosClinet from './AxiosClient';
 const FeedbackAPI = {
-
     addAuthorizationHeader(config, includeAuthorization) {
         if (includeAuthorization) {
             const token = JSON.parse(localStorage.getItem('accessToken'));
@@ -12,7 +11,6 @@ const FeedbackAPI = {
         }
         return config;
     },
-
 
     getAll(params, includeAuthorization = false) {
         const config = { params };
@@ -25,7 +23,7 @@ const FeedbackAPI = {
     getAllFeedbackSystem(params, includeAuthorization = true) {
         const config = { params };
         return axiosClinet.get(
-            '/admin/feedback/search_sort',
+            '/staff/feedback/search_sort',
             this.addAuthorizationHeader(config, includeAuthorization),
         );
     },
@@ -60,7 +58,7 @@ const FeedbackAPI = {
 
     changeStatus(id, includeAuthorization = true) {
         return axiosClinet.put(
-            `/admin/feedback/change-status/${id}`,
+            `/staff/feedback/change-status/${id}`,
             null,
             this.addAuthorizationHeader({}, includeAuthorization),
         );

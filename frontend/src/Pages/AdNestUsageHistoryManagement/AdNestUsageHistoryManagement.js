@@ -43,6 +43,8 @@ import NestAPI from '~/Api/NestAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import OrderAPI from '~/Api/OrderAPI';
 import UserAPI from '~/Api/UserAPI';
+import { useNavigate } from 'react-router-dom';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -73,7 +75,33 @@ function AdNestUsageHistoryManagement() {
     const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
     const [disabled, setDisabled] = useState(false);
     const [combineData, setCombineData] = useState([]);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
 
+                    if (userRole !== 'admin' && userRole !== 'staff') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const getNestPriceList = async () => {
             try {

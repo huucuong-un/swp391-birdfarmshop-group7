@@ -25,6 +25,8 @@ import RoleAPI from '~/Api/RoleAPI';
 import AddRole from '../AddRole/AddRole';
 import UpdateRole from '~/Components/UpdateRole/UpdateRole';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -34,7 +36,8 @@ const AdminRoleList = () => {
     const [show, setShow] = useState(false);
     const [reloadStatus, setReloadStatus] = useState(true);
     const [showUpdate, setShowUpdate] = useState(Array(roles.length).fill(false)); // Initialize with false for each item
-
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
     const handleAdd = (newInfo) => {
         const updatedRole = [...roles];
 
@@ -91,6 +94,31 @@ const AdminRoleList = () => {
         setRoles(updatedDeliveryInfo);
     };
 
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const loadRoles = async () => {
             try {

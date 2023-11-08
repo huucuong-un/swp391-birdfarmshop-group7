@@ -234,7 +234,7 @@
 
 .parrot-like {
     display: flex;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     align-items: center;
 }
 
@@ -348,5 +348,11 @@
     color: #2b2c30;
     &:hover {
         cursor: pointer;
+    }
+
+    .parrot-review-orders {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: nowrap;
     }
 }

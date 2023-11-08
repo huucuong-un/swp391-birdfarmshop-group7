@@ -25,7 +25,10 @@ import {
 
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PromotionAPI from '~/Api/PromotionAPI';
+import RoleAPI from '~/Api/RoleAPI';
+import UserAPI from '~/Api/UserAPI';
 import styles from '~/Pages/MarketerPromotion/MarketerPromotion.module.scss';
 
 const cx = classNames.bind(styles);
@@ -33,7 +36,33 @@ const cx = classNames.bind(styles);
 function MarketerPromotion() {
     const [voucherList, setVoucherList] = useState([]);
     const [vinh, setVinh] = useState(true);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
 
+                    if (userRole !== 'admin' && userRole !== 'marketer') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const getVoucherList = async () => {
             try {

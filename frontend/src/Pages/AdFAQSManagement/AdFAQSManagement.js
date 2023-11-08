@@ -37,6 +37,9 @@ import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from '~/Pages/AdFAQSManagement/AdFAQSManagement.module.scss';
 import FAQSAPI from '~/Api/FAQSAPI';
+import { useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
@@ -50,6 +53,9 @@ function AdFAQSManagement() {
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
     const [vinh, setVinh] = useState(true);
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
+
     const [showForUpdate, setShowForUpdate] = useState(false);
 
     const [sort, setSort] = useState({
@@ -76,7 +82,58 @@ function AdFAQSManagement() {
         setFaqsList(updatedFaqs);
         setVinh(true);
     };
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
 
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/login-user');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/login-user');
+                } else {
+                    if (userByToken.roleId === 1) {
+                        navigate('/login-user');
+                    }
+                    if (userByToken.roleId !== 4) {
+                        navigate('/system/login');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const getFaqsList = async () => {
             try {

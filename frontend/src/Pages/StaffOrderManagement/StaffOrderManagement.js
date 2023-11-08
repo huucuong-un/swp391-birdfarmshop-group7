@@ -31,10 +31,15 @@ import OrderAPI from '~/Api/OrderAPI';
 
 import classNames from 'classnames/bind';
 import styles from '~/Pages/StaffOrderManagement/StaffOrderManagement.module.scss';
+import { useNavigate } from 'react-router-dom';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
 
 const cx = classNames.bind(styles);
 
 function StaffOrderManagement() {
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
     const [orders, setOrders] = useState();
     const [sort, setSort] = useState({
         page: 1,
@@ -78,6 +83,31 @@ function StaffOrderManagement() {
         setPage(newPage);
     };
 
+    useEffect(() => {
+        const getUserByToken = async () => {
+            try {
+                console.log(token);
+                const userByToken = await UserAPI.getUserByToken(token);
+                if (
+                    userByToken === null ||
+                    userByToken === '' ||
+                    userByToken === undefined ||
+                    userByToken.length === 0
+                ) {
+                    navigate('/error');
+                } else {
+                    const userRole = await RoleAPI.getRoleName(userByToken.roleId);
+
+                    if (userRole !== 'admin' && userRole !== 'staff') {
+                        navigate('/error');
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserByToken();
+    }, [token]);
     useEffect(() => {
         const getOrderWithUser = async () => {
             try {

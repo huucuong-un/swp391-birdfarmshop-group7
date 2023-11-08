@@ -19,6 +19,7 @@ import classNames from 'classnames/bind';
 import styles from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo.module.scss';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import { ShopState } from '~/context/ShopProvider';
+import { Toast } from 'react-bootstrap';
 
 const cx = classNames.bind(styles);
 
@@ -101,40 +102,42 @@ function AddMoreDeliveryInfo(props) {
                 setSubmissionStatus(false);
                 setLoading(false);
             }
-            if (data === null || data === '' || data.length === 0) {
-                const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
-                    {
-                        name: newDeliveryInfo.name,
-                        phoneNumber: newDeliveryInfo.phoneNumber,
-                        address: newDeliveryInfo.address,
-                        status: newDeliveryInfo.status,
-                        userId: user.id,
-                        pickingStatus: true,
-                    },
-                    config,
-                );
-                setLoading(false);
-                setSubmissionStatus(true);
-                setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
+            if (validate.name === '' && validate.phone === '' && validate.address === '') {
+                if (data === null || data === '' || data.length === 0) {
+                    const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
+                        {
+                            name: newDeliveryInfo.name,
+                            phoneNumber: newDeliveryInfo.phoneNumber,
+                            address: newDeliveryInfo.address,
+                            status: newDeliveryInfo.status,
+                            userId: user.id,
+                            pickingStatus: true,
+                        },
+                        config,
+                    );
+                    setLoading(false);
+                    setSubmissionStatus(true);
+                    setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
 
-                props.onAdd(deliveryInformation);
-            } else {
-                const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
-                    {
-                        name: newDeliveryInfo.name,
-                        phoneNumber: newDeliveryInfo.phoneNumber,
-                        address: newDeliveryInfo.address,
-                        status: newDeliveryInfo.status,
-                        userId: user.id,
-                        pickingStatus: false,
-                    },
-                    config,
-                );
-                setLoading(false);
-                setSubmissionStatus(true);
-                setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
+                    props.onAdd(deliveryInformation);
+                } else {
+                    const deliveryInformation = await DeliveryInformationAPI.addNewDeliveryInfo(
+                        {
+                            name: newDeliveryInfo.name,
+                            phoneNumber: newDeliveryInfo.phoneNumber,
+                            address: newDeliveryInfo.address,
+                            status: newDeliveryInfo.status,
+                            userId: user.id,
+                            pickingStatus: false,
+                        },
+                        config,
+                    );
+                    setLoading(false);
+                    setSubmissionStatus(true);
+                    setNewDeliveryInfo({ name: '', phoneNumber: '', address: '', status: true });
 
-                props.onAdd(deliveryInformation);
+                    props.onAdd(deliveryInformation);
+                }
             }
         } catch (error) {
             setSubmissionStatus(false);

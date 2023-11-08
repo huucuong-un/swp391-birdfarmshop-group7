@@ -1,9 +1,19 @@
 import axiosClinet from './AxiosClient';
-
 const NestUsageHistoryAPI = {
-    add(data) {
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
+    },
+    add(data, includeAuthorization = true) {
         const url = `/customer/nest-usage-history`;
-        return axiosClinet.post(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data);
     },
 };
 

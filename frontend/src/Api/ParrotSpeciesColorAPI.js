@@ -1,72 +1,116 @@
-import axiosClinet from './AxiosClient';
-
+import axiosClient from './AxiosClient';
 const ParrotSpeciesColorAPI = {
-    getAll(params) {
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
+    },
+
+    getAll(params, includeAuthorization = false) {
         const url = '/parrot-species-color';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    get(id) {
+    get(id, includeAuthorization = false) {
         const url = `/parrot-species-color/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    findByParrotId(id) {
+    findByParrotId(id, includeAuthorization = false) {
         const url = `/parrot-species-color/find-by-parrot-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    findByParrotSpecieId(id) {
+    findByParrotSpecieId(id, includeAuthorization = false) {
         const url = `/parrot-species-color/find-one-by-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
-    findOneSpeciesByParrotID(id) {
+
+    findOneSpeciesByParrotID(id, includeAuthorization = false) {
         const url = `/parrot-species-color/find-by-parrot-species-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    findOneSpeciesColorById(id) {
+    findOneSpeciesColorById(id, includeAuthorization = false) {
         const url = `/parrot-species-color/find-one-by-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    findOneSpeciesByColorId(id) {
+    findOneSpeciesByColorId(id, includeAuthorization = false) {
         const url = `/parrot-species/find-one-species-by-color-id/${id}`;
-        return axiosClinet.get(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
     },
 
-    add(data) {
+    add(data, includeAuthorization = true) {
         const url = '/admin/parrot-species-color';
-        return axiosClinet.post(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },
 
-    update(data) {
+    update(data, includeAuthorization = true) {
         const url = `/admin/parrot-species-color/${data.id}`;
-        return axiosClinet.put(url, data);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.put(url, authorizedConfig.data, authorizedConfig);
     },
 
-    remove(id) {
+    remove(id, includeAuthorization = true) {
         const url = `/admin/parrot-species-color/${id}`;
-        return axiosClinet.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
 
-    getImagesByColorId(id) {
+    getImagesByColorId(id, includeAuthorization = false) {
         const url = `/color-image/find-by-color/${id}`;
-        return axiosClinet.post(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig);
     },
 
-    getImagesBySpeciesId(id) {
+    getImagesBySpeciesId(id, includeAuthorization = false) {
         const url = `/color-image/find-by-species/${id}`;
-        return axiosClinet.post(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig);
     },
 
-    getImageURLsBySpeciesId(id) {
+    getImageURLsBySpeciesId(id, includeAuthorization = false) {
         const url = `/color-image/find-by-species/images/${id}`;
-        return axiosClinet.post(url);
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig);
     },
-    searchSortParrotSpecies(params) {
+
+    searchSortParrotSpecies(params, includeAuthorization = true) {
         const url = '/admin/parrot-species/search_sort';
-        return axiosClinet.get(url, { params });
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    addColorImage(data, includeAuthorization = true) {
+        const url = '/admin/color-image';
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
+    },
+
+    deleteImage(id, includeAuthorization = true) {
+        const url = `/admin/color-image/delete-image/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
+    },
+
+    changeStatus(id, includeAuthorization = true) {
+        const url = `/admin/parrot-species/change-status/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
     },
 };
 

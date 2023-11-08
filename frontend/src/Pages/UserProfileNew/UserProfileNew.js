@@ -28,13 +28,14 @@ import {
 } from '@chakra-ui/react';
 import { Col, Row } from 'react-bootstrap';
 import UserAPI from '~/Api/UserAPI';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function UserProfileNew() {
     const [loggedUser, setLoggedUser] = useState({});
     const [accessToken, setAccessToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const navigate = useNavigate();
     const [gender, setGender] = useState();
     const [loading, setLoading] = useState(false);
     const [imgUrl, setImgUrl] = useState();
@@ -109,7 +110,9 @@ function UserProfileNew() {
                 console.log(accessToken);
                 const token = accessToken;
                 const user = await UserAPI.getUserByToken(token);
-
+                if (user === null || user === '' || user === undefined || user.length === 0) {
+                    navigate('/login-user');
+                }
                 setLoggedUser(user);
                 setUser(user);
                 setGender(user.gender);

@@ -1,112 +1,169 @@
 import axiosClinet from './AxiosClient';
-
 const NestAPI = {
     //Nest
-    getAllNest(params) {
-        const url = '/admin/parrot-egg-nest'; //done
-        return axiosClinet.get(url, { params });
-    },
-    getNestById(id) {
-        const url = `/admin/parrot-egg-nest/find-one-by-id?id=${id}`; //done
-        return axiosClinet.get(url);
-    },
-    changeStatusForNest(id) {
-        const url = `/admin/parrot-egg-nest/${id}`; //done
-        return axiosClinet.delete(url);
+    addAuthorizationHeader(config, includeAuthorization) {
+        if (includeAuthorization) {
+            const token = JSON.parse(localStorage.getItem('accessToken'));
+            config.headers = {
+                Authorization: `Bearer ${token}`,
+                ...config.headers,
+            };
+        }
+        return config;
     },
 
-    addNest(data) {
+    getAllNest(params, includeAuthorization = true) {
+        const url = '/admin/parrot-egg-nest';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    getNestById(id, includeAuthorization = true) {
+        const url = `/admin/parrot-egg-nest/find-one-by-id?id=${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    changeStatusForNest(id, includeAuthorization = true) {
+        const url = `/admin/parrot-egg-nest/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.delete(url, authorizedConfig);
+    },
+
+    addNest(data, includeAuthorization = true) {
         const url = `/admin/parrot-egg-nest`;
-        return axiosClinet.post(url, data); //done
-    },
-    findOneBySpeciesId(params) {
-        const url = '/parrot-egg-nest/find-one-by-species-id'; //done
-        return axiosClinet.get(url, { params });
-    },
-    //Nest-usage-history
-    getAllNestUsageHistory(params) {
-        const url = '/staff/nest-usage-history'; //done
-        return axiosClinet.get(url, { params });
-    },
-    getOneByOrderId(id) {
-        const url = `/customer/nest-usage-history/find-by-parrot-id/${id}`; //done
-        return axiosClinet.get(url);
-    },
-    add(data) {
-        const url = `/customer/nest-usage-history`; //done
-        return axiosClinet.post(url, data);
-    },
-    //Nest Price
-    getAll(params) {
-        const url = '/nest-price'; //done
-        return axiosClinet.get(url, { params });
-    },
-    getNestPriceById(id) {
-        const url = `/admin/nest-price/find-one-by-id?id=${id}`; //done
-        return axiosClinet.get(url);
-    },
-    getNestPriceBySpeciesId(id) {
-        const url = `nest-price/find-by-species-id?speciesId=${id}`; //done
-        return axiosClinet.get(url);
-    },
-    addNestPrice(data) {
-        const url = `/admin/nest-price`; //done
-        return axiosClinet.post(url, data);
-    },
-    changeStatusForNestPrice(id) {
-        const url = `/admin/nest-price/${id}`; //done
-        return axiosClinet.delete(url);
-    },
-    updateNestPrice(data, id) {
-        const url = `/admin/nest-price/${id}`; //done
-        return axiosClinet.put(url, data);
-    },
-    //Nest-development-status
-    getAllNestDevelopmentStatus(params) {
-        const url = '/customer/nest-development-status'; //done
-        return axiosClinet.get(url, { params });
-    },
-    getNestDevelopmentStatusById(id) {
-        const url = `/customer/nest-development-status/find-one-status-by-id/${id}`; //done
-        return axiosClinet.get(url);
-    },
-    getNestDevelopmentStatusBySequence(id) {
-        const url = `/admin/nest-development-status/find-one-by-sequence/${id}`; //done
-        return axiosClinet.get(url);
-    },
-    addNestDevelopmentStatus(data) {
-        const url = `/admin/nest-development-status`; //done
-        return axiosClinet.post(url, data);
-    },
-    changeStatusForNestDevelopmentStatus(id) {
-        const url = `/admin/nest-development-status/${id}`; //done
-        return axiosClinet.delete(url);
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
 
-    searchSortForNestPrice(params) {
-        const url = '/admin/nest-price/search_sort'; //done
-        return axiosClinet.get(url, { params });
+    findOneBySpeciesId(params, includeAuthorization = false) {
+        const url = '/parrot-egg-nest/find-one-by-species-id';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    searchSortForNest(params) {
-        const url = '/admin/parrot-egg-nest/search_sort'; //done
-        return axiosClinet.get(url, { params });
+
+    // Nest-usage-history
+    getAllNestUsageHistory(params, includeAuthorization = true) {
+        const url = '/staff/nest-usage-history';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    changeSequenceForNestDevelopmentStatus(data) {
-        const url = `/admin/nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`; //done
-        return axiosClinet.put(url, data);
+
+    getOneByOrderId(id, includeAuthorization = true) {
+        const url = `/customer/nest-usage-history/find-by-parrot-id/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    //Nest-development
-    getAllNestDevelopment(params) {
-        const url = '/admin/nest-development'; //done
-        return axiosClinet.get(url, { params });
+
+    add(data, includeAuthorization = true) {
+        const url = `/customer/nest-usage-history`;
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
-    getAllNestDevelopmentWithUsageId(id) {
-        const url = `/customer/nest-development/find-all-by-nest-usage-history-id/${id}`; //done
-        return axiosClinet.get(url);
+
+    // Nest Price
+    getAll(params, includeAuthorization = false) {
+        const url = '/nest-price';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
-    addNestDevelopment(data) {
-        const url = `/staff/nest-development`; //done
-        return axiosClinet.post(url, data);
+
+    getNestPriceById(id, includeAuthorization = true) {
+        const url = `/admin/nest-price/find-one-by-id?id=${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    getNestPriceBySpeciesId(id, includeAuthorization = false) {
+        const url = `nest-price/find-by-species-id?speciesId=${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    addNestPrice(data, includeAuthorization = true) {
+        const url = `/admin/nest-price`;
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
+    },
+
+    changeStatusForNestPrice(id, includeAuthorization = true) {
+        const url = `/admin/nest-price/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.delete(url, authorizedConfig);
+    },
+
+    updateNestPrice(data, id, includeAuthorization = true) {
+        const url = `/admin/nest-price/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.put(url, authorizedConfig.data, authorizedConfig);
+    },
+
+    // Nest-development-status
+    getAllNestDevelopmentStatus(params, includeAuthorization = true) {
+        const url = '/customer/nest-development-status';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    getNestDevelopmentStatusById(id, includeAuthorization = true) {
+        const url = `/customer/nest-development-status/find-one-status-by-id/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    getNestDevelopmentStatusBySequence(id, includeAuthorization = true) {
+        const url = `/admin/nest-development-status/find-one-by-sequence/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    addNestDevelopmentStatus(data, includeAuthorization = true) {
+        const url = `/admin/nest-development-status`;
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
+    },
+
+    changeStatusForNestDevelopmentStatus(id, includeAuthorization = true) {
+        const url = `/admin/nest-development-status/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.delete(url, authorizedConfig);
+    },
+
+    searchSortForNestPrice(params, includeAuthorization = true) {
+        const url = '/admin/nest-price/search_sort';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    searchSortForNest(params, includeAuthorization = true) {
+        const url = '/admin/parrot-egg-nest/search_sort';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    changeSequenceForNestDevelopmentStatus(data, includeAuthorization = true) {
+        const url = `/admin/nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.put(url, authorizedConfig);
+    },
+
+    // Nest-development
+    getAllNestDevelopment(params, includeAuthorization = true) {
+        const url = '/admin/nest-development';
+        const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    getAllNestDevelopmentWithUsageId(id, includeAuthorization = true) {
+        const url = `/customer/nest-development/find-all-by-nest-usage-history-id/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
+
+    addNestDevelopment(data, includeAuthorization = true) {
+        const url = `/staff/nest-development`;
+        const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
 };
 

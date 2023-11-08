@@ -42,11 +42,24 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
 
-                .authorizeHttpRequests()
-                //check bằng đường dẫn này trở về sau
-                .requestMatchers("api/**").permitAll()
+                .authorizeHttpRequests().requestMatchers("api/admin/role/**").permitAll()
                 .and()
-//                .authorizeHttpRequests().requestMatchers("api/order/admin/**").authenticated()
+                .authorizeHttpRequests().requestMatchers("api/admin/**").hasAuthority("admin")
+                .and()
+                .authorizeHttpRequests().requestMatchers("api/staff/**").hasAnyAuthority("staff","admin")
+                .and()
+                .authorizeHttpRequests().requestMatchers("api/marketer/**").hasAnyAuthority("marketer","admin")
+                .and()
+                .authorizeHttpRequests().requestMatchers("api/customer/**").hasAnyAuthority("customer","staff","marketer","admin")
+                .and()
+//                .authorizeHttpRequests().requestMatchers("api/marketer/post/**").hasAnyAuthority("marketer","admin")
+//                .and()
+                .authorizeHttpRequests().anyRequest().permitAll()
+                .and()
+
+
+//                .authorizeHttpRequests().anyRequest().permitAll()
+//                .and()
 //                .anyRequest()
 //                .authenticated()
 //                .and()

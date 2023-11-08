@@ -123,12 +123,13 @@ function AddSlider() {
                     setSubmissionStatus('');
                 }, 5000);
             } else {
-                const responsePost = await axios.post('http://localhost:8086/api/marketer/slider', {
+                const data = {
                     sliderName: slider.sliderName,
                     sliderDescription: slider.sliderDescription,
                     sliderImageURL: img,
                     status: slider.status,
-                });
+                };
+                const responsePost = await SliderAPI.addSlider(data);
 
                 console.log('POST request was successful at species!!');
                 // Assuming the response contains the newly created post data
@@ -190,7 +191,8 @@ function AddSlider() {
             try {
                 const updatedSlider = [...sliderList];
                 updatedSlider[index].status = !updatedSlider[index].status;
-                await axios.delete(`http://localhost:8086/api/marketer/slider/${updatedSlider[index].id}`);
+                //  await axios.delete(`http://localhost:8086/api/marketer/slider/${updatedSlider[index].id}`);
+                const changestatus = await SliderAPI.changeSliderStatus(updatedSlider[index].id);
                 console.log('slider list in change status');
                 console.log(updatedSlider);
                 setSliderList(updatedSlider);

@@ -8,6 +8,9 @@ import classNames from 'classnames/bind';
 import axios from 'axios';
 
 import styles from './SystemLogin.module.scss';
+import UserAPI from '~/Api/UserAPI';
+import RoleAPI from '~/Api/RoleAPI';
+import { ShopState } from '~/context/ShopProvider';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +21,7 @@ function SystemLogin() {
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
     const toast = useToast();
+    const { setUser } = ShopState();
 
     const navigate = useNavigate();
     const logins = async () => {
@@ -47,19 +51,53 @@ function SystemLogin() {
                 },
                 config,
             );
+            localStorage.setItem('accessToken', JSON.stringify(data.data));
+            const user = await UserAPI.getUserByToken(data.data);
+            setUser(user);
 
-            toast({
-                title: 'Login successful',
-                status: 'success',
-                duration: 5000,
-                isClosable: true,
-                position: 'bottom',
-            });
-            localStorage.setItem('userInfo', JSON.stringify(data.data));
-            console.log(data.data);
+            const userRole = await RoleAPI.getRoleName(user.roleId);
+            console.log(user);
             setLoading(false);
             // // setLoading(false);
-            navigate('/admin/role');
+            if (userRole === 'admin') {
+                navigate('/admin/dashboard');
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            } else if (userRole === 'staff') {
+                navigate('/staff/order');
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            } else if (userRole === 'marketer') {
+                navigate('/marketer/post');
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            } else if (userRole === 'customer') {
+                navigate('/login-user');
+            } else {
+                navigate('/system/login');
+                toast({
+                    title: 'Login Fail',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+            }
         } catch (error) {
             toast({
                 title: 'Error occur, check your account and password again!',

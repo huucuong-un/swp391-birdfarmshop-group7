@@ -1,9 +1,13 @@
 import styles from '~/Parts/SystemNavbar/SystemNavbar.module.scss';
 import classNames from 'classnames/bind';
-import Button from '~/Components/Button/Button';
 
 import logo from '~/Assets/image/Logo/2(5).png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShopState } from '~/context/ShopProvider';
+import { useState } from 'react';
+import UserAPI from '~/Api/UserAPI';
+import { useEffect } from 'react';
+import { Button } from '@chakra-ui/react';
 
 const cx = classNames.bind(styles);
 
@@ -83,14 +87,9 @@ function SystemNavbar({ staff, manager }) {
                     </Link>
                 </div>
 
-                <div className={cx('user-account')}>
-                    <p>Nguyen Thanh</p>
-                </div>
-                <div className={cx('out-btn')}>
-                    <Button className={cx('out-btn-icon')} to="">
-                        Out
-                    </Button>
-                </div>
+                <div className={cx('user-account')}></div>
+
+                <Button className={cx('out-btn-icon')}>Out</Button>
             </div>
         </div>
     );

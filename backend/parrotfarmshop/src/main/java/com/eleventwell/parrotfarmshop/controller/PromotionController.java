@@ -59,7 +59,7 @@ public class PromotionController {
 //    public void delete(@RequestBody long[] ids){
 //        promotionService.delete(ids);
 //    }
-    @PutMapping(value = "admin/promotion/change-status/{id}")
+    @DeleteMapping(value = "admin/promotion/change-status/{id}")
     public void changeStatus(@RequestBody @PathVariable("id") Long id) {
         promotionService.changeStatus(id);
     }

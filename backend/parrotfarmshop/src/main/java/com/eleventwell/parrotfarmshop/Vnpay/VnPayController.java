@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@RequestMapping(value = "/api/vnpay")
+@RequestMapping(value = "/api")
 public class VnPayController {
     PayService payService;
 
@@ -29,7 +29,7 @@ public class VnPayController {
         this.payService = payService;
     }
 
-    @PostMapping("/payment")
+    @PostMapping("customer/vnpay/payment")
     public String pay(@RequestBody OrderDTO orderDTO, HttpServletRequest request){
         try {
             return payService.payWithVNPAY(orderDTO, request);
@@ -37,7 +37,7 @@ public class VnPayController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping("/payment_infor")
+    @GetMapping("vnpay/payment_infor")
     public RedirectView transaction(
             @RequestParam(value = "vnp_Amount") Double amount,
             @RequestParam(value = "vnp_BankCode") String bankCode,

@@ -89,7 +89,7 @@ public class SliderController {
                     result.setLimit(limit);
                     return  result;
     }
-    @GetMapping(value = "marketer/slider/true-status")
+    @GetMapping(value = "slider/true-status")
     public ListOutput showSliderWithTrueStatus(){
         ListOutput result = new ListOutput();
         result.setListResult(sliderService.findAllWithTrueStatus());

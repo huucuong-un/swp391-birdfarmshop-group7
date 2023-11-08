@@ -3,7 +3,10 @@ import classNames from 'classnames/bind';
 import Button from '~/Components/Button/Button';
 
 import logo from '~/Assets/image/Logo/2(5).png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ShopState } from '~/context/ShopProvider';
+import UserAPI from '~/Api/UserAPI';
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +18,7 @@ function StaffNavbar({ staff, manager }) {
                     <img className={cx('logo')} src={logo} alt="logo" />
                 </Link>
                 <div className={cx('nav-items')}>
-                    <Link to="/admin/order">
+                    <Link to="/staff/order">
                         <p>ORDER</p>
                     </Link>
                     <Link to="/staff/feedback">
@@ -26,9 +29,7 @@ function StaffNavbar({ staff, manager }) {
                     </Link>
                 </div>
 
-                <div className={cx('user-account')}>
-                    <p>Nguyen Thanh</p>
-                </div>
+                <div className={cx('user-account')}></div>
                 <div className={cx('out-btn')}>
                     <Button className={cx('out-btn-icon')} to="">
                         Out

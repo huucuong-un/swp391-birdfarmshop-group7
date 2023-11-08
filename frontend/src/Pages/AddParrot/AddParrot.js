@@ -108,7 +108,7 @@ function AddParrot() {
                 return;
             }
 
-            const responseParrots = await axios.post('http://localhost:8086/api/admin/parrot', {
+            const responseParrots = await ParrotAPI.add({
                 // Add other fields you want to send to the first API
                 age: parrots.age,
                 status: parrots.status,
@@ -119,12 +119,9 @@ function AddParrot() {
                 gender: parrots.gender,
                 colorID: parrots.colorID,
             });
-            if (responseParrots.status === 200) {
-                console.log('POST request was successful at species!!');
-                setShouldFetchData(true); // Set to true to reload data
-            } else {
-                console.error('POST request failed with status code - species: ', responseParrots.status);
-            }
+
+            setShouldFetchData(true); // Set to true to reload data
+
             setSubmissionStatus(true);
             setTimeout(() => {
                 setSubmissionStatus(null);
@@ -233,13 +230,12 @@ function AddParrot() {
 
         try {
             // Send a request to update the status on the server
-            await axios.delete(`http://localhost:8086/api/admin/parrot/${updatedPost[index].id}`);
+            await ParrotAPI.changeStatus(updatedPost[index].id);
             // If the request is successful, update the state
             setParrotList(updatedPost);
         } catch (error) {
             toast({
                 title: 'Error occur!',
-                description: error.response.data.message,
                 status: 'error',
                 duration: 5000,
                 isClosable: true,
@@ -414,7 +410,7 @@ function AddParrot() {
                                             step={0.01}
                                             id="age"
                                             name="age"
-                                            placeholder="Parrot age"
+                                            placeholder="Count by year"
                                             onChange={(e) =>
                                                 setParrots({ ...parrots, age: parseFloat(e.target.value) })
                                             } // Parse the value as a float
@@ -423,13 +419,13 @@ function AddParrot() {
                                     </Td>
                                 </Tr>
 
-                                <Tr>
+                                {/* <Tr>
                                     <Td>
                                         <p>Sale status</p>
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
-                                        {saleStatus ? <p>Sold</p> : <p> Not sold yet</p>}
+                                        {saleStatus ? <p>Can sale</p> : <p>Can not sale</p>}
                                         <Input
                                             type="hidden"
                                             id="sale"
@@ -441,9 +437,9 @@ function AddParrot() {
                                             }
                                         />
                                     </Td>
-                                </Tr>
+                                </Tr> */}
 
-                                <Tr>
+                                {/* <Tr>
                                     <Td>
                                         <p>Pregnancy status</p>
                                     </Td>
@@ -465,11 +461,11 @@ function AddParrot() {
                                             }
                                         />
                                     </Td>
-                                </Tr>
+                                </Tr> */}
 
                                 <Tr>
                                     <Td>
-                                        <p>Health status</p>{' '}
+                                        <p>Health status</p>
                                     </Td>
                                     <Td>
                                         <Switch onChange={handleHealthStatus} size="lg" isChecked={healthStatus} />
@@ -484,7 +480,7 @@ function AddParrot() {
                                         />
                                     </Td>
                                 </Tr>
-                                {/* Parrot gender */}
+
                                 <Tr>
                                     <Td>
                                         <p>Parrot gender</p>
@@ -523,7 +519,7 @@ function AddParrot() {
                                             }}
                                         >
                                             <option key={'a'} value={'a'}>
-                                                Selected specie
+                                                Selected species
                                             </option>
 
                                             {species.map((specie, index) => (
@@ -567,9 +563,6 @@ function AddParrot() {
                                         )}
                                     </Td>
                                 </Tr>
-                            </Tbody>
-
-                            <Tfoot>
                                 <Tr>
                                     <Td></Td>
                                     <Td className={cx('submit-btn')}>
@@ -584,7 +577,9 @@ function AddParrot() {
                                         </Button>
                                     </Td>
                                 </Tr>
-                            </Tfoot>
+                            </Tbody>
+
+                            <Tfoot></Tfoot>
                         </Table>
                     </TableContainer>
                 </form>
@@ -598,9 +593,9 @@ function AddParrot() {
                             <Th>Parrot ID</Th>
                             <Th>Age</Th>
                             <Th>Sale status</Th>
-                            <Th>Pregnancy status</Th>
+                            {/* <Th>Pregnancy status</Th> */}
                             <Th>Health status</Th>
-                            <Th>Children number</Th>
+                            {/* <Th>Children number</Th> */}
                             <Th>Color</Th>
                             <Th>Species</Th>
                             <Th>Gender</Th>
@@ -613,31 +608,39 @@ function AddParrot() {
                             <>
                                 <Tr key={index + 'a'}>
                                     <Td>{parrot.id}</Td>
-                                    <Td>{parrot.age}</Td>
-                                    <Td>{parrot.saleStatus.toString()}</Td>
-                                    <Td>{parrot.pregnancyStatus.toString()}</Td>
-                                    <Td>{parrot.healthStatus.toString()}</Td>
-                                    <Td>{parrot.numberOfChildren}</Td>
+                                    <Td>{parrot.age} year</Td>
+                                    <Td>{parrot.saleStatus ? <>Sold</> : <>Available</>}</Td>
+                                    {/* <Td>{parrot.pregnancyStatus.toString()}</Td> */}
+                                    <Td>{parrot.healthStatus ? <>Good</> : <>Not good</>}</Td>
+                                    {/* <Td>{parrot.numberOfChildren}</Td> */}
                                     <Td>{parrot.colorName}</Td>
                                     <Td>{parrot.specieName}</Td>
                                     <Td>{parrot.gender === true ? 'male' : 'female'}</Td>
                                     <Td>
-                                        <Switch
-                                            onChange={() => handleStatus(index)}
-                                            size="lg"
-                                            isChecked={parrot.status}
-                                            colorScheme="green"
-                                        />
+                                        {parrot.saleStatus ? (
+                                            <></>
+                                        ) : (
+                                            <Switch
+                                                onChange={() => handleStatus(index)}
+                                                size="lg"
+                                                isChecked={parrot.status}
+                                                colorScheme="green"
+                                            />
+                                        )}
                                     </Td>
                                     <Td>
-                                        <Button
-                                            key={parrot.id}
-                                            onClick={() => toggleEditForm(parrot.id)}
-                                            colorScheme={'green'}
-                                            size={'lg'}
-                                        >
-                                            {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
-                                        </Button>
+                                        {parrot.saleStatus ? (
+                                            <></>
+                                        ) : (
+                                            <Button
+                                                key={parrot.id}
+                                                onClick={() => toggleEditForm(parrot.id)}
+                                                colorScheme={'green'}
+                                                size={'lg'}
+                                            >
+                                                {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
+                                            </Button>
+                                        )}
                                     </Td>
                                     <Td key={index + 'l'}></Td>
                                 </Tr>

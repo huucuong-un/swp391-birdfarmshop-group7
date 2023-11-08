@@ -61,7 +61,7 @@ public class ParrotSpeciesController {
     @GetMapping(value = "parrot-species/find-one-species-by-color-id/{id}")
     public ParrotSpeciesDTO findOneSpeciesByColorId(@RequestBody @PathVariable("id") long id) {
 
-        return (ParrotSpeciesDTO) parrotSpeciesService.findOneSpeciesById(id);
+        return (ParrotSpeciesDTO) parrotSpeciesService.findOneByColorId(id);
 
     }
 

@@ -50,10 +50,10 @@
 }
 
 .out-btn-icon {
-    background-color: transparent;
     color: var(--text-color-nav);
     font-weight: 700;
-
+    font-size: 20px;
+    margin-bottom: 150px;
     &:hover {
         opacity: 0.9;
     }

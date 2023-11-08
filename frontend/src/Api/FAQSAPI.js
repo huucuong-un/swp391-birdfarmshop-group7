@@ -20,6 +20,10 @@ const FAQSAPI = {
         const url = '/admin/faqs/search_sort';
         return axiosClient.get(url, { params });
     },
+    updateFaqs(data, id) {
+        const url = `/admin/faqs/${id}`; //done
+        return axiosClient.put(url, data);
+    },
 };
 
 export default FAQSAPI;

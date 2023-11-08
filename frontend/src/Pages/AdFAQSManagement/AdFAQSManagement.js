@@ -50,6 +50,7 @@ function AdFAQSManagement() {
     const [addFail, setAddFail] = useState(1);
     const [submitStatus, setSubmitStatus] = useState();
     const [vinh, setVinh] = useState(true);
+    const [showForUpdate, setShowForUpdate] = useState(false);
 
     const [sort, setSort] = useState({
         page: 1,
@@ -59,6 +60,14 @@ function AdFAQSManagement() {
         status: null,
         sortTitle: null,
     });
+
+    const [faqForUpdate, setFaqForUpdate] = useState({
+        id: null,
+        title: null,
+        content: null,
+        status: null,
+    });
+    const [updateStatus, setUpdateStatus] = useState(false);
 
     const changeStatus = async (id, index) => {
         const updatedFaqs = [...faqsList];
@@ -209,8 +218,84 @@ function AdFAQSManagement() {
     };
 
     useEffect(() => {
-        console.log(sort);
-    }, [sort]);
+        const updateNestPrice = async () => {
+            try {
+                const data = {
+                    title: faqForUpdate.title,
+                    content: faqForUpdate.content,
+                    status: faqForUpdate.status,
+                };
+                if (updateStatus === false) {
+                    setAddFail((prev) => prev + 1);
+                    // setSubmitStatus(false);
+                    setTimeout(() => {
+                        setSubmitStatus();
+                    }, 50000);
+                } else {
+                    const update = await FAQSAPI.updateFaqs(data, faqForUpdate.id);
+                    setVinh(true);
+                    setAddStatus(false);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        updateNestPrice();
+        setFaqForUpdate({
+            id: null,
+            title: null,
+            content: null,
+            status: null,
+        });
+    }, [updateStatus]);
+
+    const handleShowForUpdate = (id, title, content, status) => {
+        if (showForUpdate === true) {
+            setFaqForUpdate({
+                id: null,
+                title: null,
+                content: null,
+                status: null,
+            });
+            setShowForUpdate(!showForUpdate);
+        } else {
+            setFaqForUpdate({
+                ...faqForUpdate,
+                id: id,
+                title: title,
+                content: content,
+                status: status,
+            });
+            setShowForUpdate(!showForUpdate);
+        }
+    };
+
+    const handleSaveForUpdate = () => {
+        if (
+            faqForUpdate.id === null ||
+            faqForUpdate.title === null ||
+            faqForUpdate.content === '' ||
+            faqForUpdate.status === null
+        ) {
+            setAddFail((prev) => prev + 1);
+            setSubmitStatus(false);
+            setTimeout(() => {
+                setSubmitStatus();
+            }, 50000);
+        } else {
+            setUpdateStatus(true);
+            setSubmitStatus(true);
+            setTimeout(() => {
+                setSubmitStatus();
+            }, 50000);
+            setShowForUpdate(!showForUpdate);
+        }
+    };
+
+    useEffect(() => {
+        console.log(faqForUpdate);
+    }, [faqForUpdate]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             {/* <div className={cx('title')}>
@@ -256,6 +341,73 @@ function AdFAQSManagement() {
                         </Alert>
                     </Stack>
                 ))}
+
+            {showForUpdate ? (
+                <TableContainer paddingTop={10} paddingBottom={10}>
+                    <Table variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th colSpan={2}>New FAQS</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            <Tr>
+                                <Td>ID</Td>
+                                <Td>{faqForUpdate.id}</Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Title</Td>
+                                <Td>
+                                    <Input
+                                        type="text"
+                                        borderColor="black"
+                                        placeholder="Title..."
+                                        fontSize={18}
+                                        onChange={(e) =>
+                                            setFaqForUpdate({
+                                                ...faqForUpdate,
+                                                title: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Content</Td>
+                                <Td>
+                                    <Textarea
+                                        borderColor="black"
+                                        placeholder="Content..."
+                                        fontSize={18}
+                                        onChange={(e) =>
+                                            setFaqForUpdate({
+                                                ...faqForUpdate,
+                                                content: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </Td>
+                            </Tr>
+
+                            <Tr>
+                                <Td></Td>
+                                <Td>
+                                    <Button
+                                        colorScheme="green"
+                                        onClick={handleSaveForUpdate}
+                                        className={cx('save-btn')}
+                                        fontSize={18}
+                                    >
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <></>
+            )}
 
             {show ? (
                 <TableContainer paddingTop={10} paddingBottom={10}>
@@ -359,6 +511,7 @@ function AdFAQSManagement() {
                             <Th>Content</Th>
                             <Th>Create At</Th>
                             <Th>Status</Th>
+                            <Th>Action</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -376,6 +529,16 @@ function AdFAQSManagement() {
                                             colorScheme="green"
                                             onChange={() => changeStatus(faqs.id, index)}
                                         />
+                                    </Td>
+                                    <Td>
+                                        <Button
+                                            colorScheme="green"
+                                            onClick={() =>
+                                                handleShowForUpdate(faqs.id, faqs.title, faqs.content, faqs.status)
+                                            }
+                                        >
+                                            Update
+                                        </Button>
                                     </Td>
                                 </Tr>
                             ))}

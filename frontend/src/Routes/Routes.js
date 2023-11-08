@@ -52,6 +52,7 @@ import ResetPassword from '~/Pages/ResetPassword/ResetPassword';
 import MarketingLayout from '~/Components/MarketingLayout/MarketingLayout';
 import StaffLayout from '~/Components/StaffLayout/StaffLayout';
 import MarketerPromotion from '~/Pages/MarketerPromotion/MarketerPromotion';
+import MarketerDashboard from '~/Pages/MarketerDashboard/MarketerDashboard';
 //Dành cho những người kể cả đăng nhập hay không đăng nhập cũng coi được
 const publicRoutes = [
     { path: '/', component: HomePage },
@@ -78,6 +79,7 @@ const publicRoutes = [
     // { path: '/admin/order', component: MngOrder, layout: SystemLayout },
     { path: '/addspeciescolor', component: AddSpeciesColor, layout: SystemLayout },
     { path: '/marketer/slider', component: AddSlider, layout: MarketingLayout },
+    { path: '/marketer/dashboard', component: MarketerDashboard, layout: MarketingLayout },
     { path: '/login-user', component: UserLogin, layout: LoginSystemLayout },
     { path: '/profile/change-password', component: ChangePassword },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
@@ -94,7 +96,7 @@ const publicRoutes = [
     { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
     { path: '/admin/nest-development', component: AdNestDevelopmentManagement, layout: SystemLayout },
     { path: '/admin/nest-development-status', component: AdNestDevelopmentStatus, layout: SystemLayout },
-    { path: '/admin/nest-usage-history', component: AdNestUsageHistoryManagement, layout: SystemLayout },
+    { path: '/admin/nest-usage-history', component: AdNestUsageHistoryManagement, layout: StaffLayout, role: 'staff' },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
     { path: '/admin/promotion', component: MngVoucherPromotion, layout: SystemLayout },
     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },

@@ -34,6 +34,10 @@ const FAQSAPI = {
         const authorizedConfig = this.addAuthorizationHeader({ params }, includeAuthorization);
         return axiosClient.get(url, authorizedConfig);
     },
+    updateFaqs(data, id) {
+        const url = `/admin/faqs/${id}`; //done
+        return axiosClient.put(url, data);
+    },
 };
 
 export default FAQSAPI;

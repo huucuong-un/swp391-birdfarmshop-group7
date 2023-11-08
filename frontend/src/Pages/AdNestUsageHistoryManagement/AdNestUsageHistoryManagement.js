@@ -302,7 +302,7 @@ function AdNestUsageHistoryManagement() {
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <div className={cx('title')}>
-                <h1>NEST USAGE HISTORY</h1>
+                <h1>Nest Usage History</h1>
             </div>
             <div className={cx('add-btn')}>
                 {/* <Button onClick={handleShow} colorScheme="green" size="lg">

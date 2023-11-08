@@ -10,7 +10,7 @@ const handleAxiosError = (error) => {
             window.location.href = '/login';
         } else if (error.response.status === 403 || error.response.status === 500) {
             // Handle other error cases and redirect to an error page.
-            window.location.href = '/error';
+            // window.location.href = '/error';
         }
     }
 };

@@ -384,12 +384,7 @@ function AdNestDevelopmentStatus() {
                             </div>
                         ))}
                     </div>
-                    <Button
-                        colorScheme="green"
-                        onClick={() => handleUpdateSequence()}
-                        className={cx('save-btn')}
-                        fontSize={18}
-                    >
+                    <Button onClick={() => handleUpdateSequence()} className={cx('save-btn')} fontSize={18}>
                         Save
                     </Button>
                 </div>

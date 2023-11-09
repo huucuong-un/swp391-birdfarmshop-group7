@@ -636,34 +636,43 @@ function AddSpeciesColor() {
                         <AccordionItem key={dataIndex} className={cx('accord-item')}>
                             <h2 className={cx('data-container')}>
                                 <AccordionButton>
-                                    <Box as="span" flex="1" textAlign="left">
-                                        <TableContainer>
-                                            <Table size="lg">
-                                                <Tbody>
-                                                    <Tr>
-                                                        <Td>{data.id}</Td>
-                                                        <Td>{data.name}</Td>
-                                                        <Td>{data.quantity}</Td>
-                                                        <Td>{data.nestQuantity}</Td>
-                                                        <Td>{data.origin}</Td>
-                                                        <Td>{data.averageWeight}</Td>
-                                                        <Td>
-                                                            <Switch
-                                                                onChange={() => handleStatus(dataIndex)}
-                                                                size="lg"
-                                                                isChecked={data.status}
-                                                                colorScheme="green"
-                                                            />
-                                                        </Td>
-                                                        <Td></Td>
-                                                    </Tr>
-                                                </Tbody>
-                                            </Table>
-                                        </TableContainer>
-                                    </Box>
+                                    <table className={cx('table-crud')}>
+                                        <tbody>
+                                            <tr>
+                                                <td className={cx('td-crud-id')}>{data.id}</td>
+                                                <td className={cx('td-crud-name')}>
+                                                    <div className={cx('p-name')}>{data.name}</div>
+                                                </td>
+                                                <td className={cx('td-crud-quantity')}>
+                                                    <div className={cx('p-quantity')}>{data.quantity}</div>
+                                                </td>
+                                                <td className={cx('td-crud-nestQuantity')}>
+                                                    <div className={cx('p-nestQuantity')}>{data.nestQuantity}</div>
+                                                </td>
+                                                <td className={cx('td-crud-origin')}>
+                                                    <div className={cx('p-origin')}>{data.origin}</div>
+                                                </td>
+                                                <td className={cx('td-crud-avrWeight')}>
+                                                    <div className={cx('p-avrWeight')}>{data.averageWeight}</div>
+                                                </td>
+                                                <td className={cx('td-crud-status')}>
+                                                    <div className={cx('p-status')}>
+                                                        <Switch
+                                                            onChange={() => handleStatus(dataIndex)}
+                                                            size="lg"
+                                                            isChecked={data.status}
+                                                            colorScheme="green"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
                                     <AccordionIcon />
                                 </AccordionButton>
-                                <div>
+                                <div className={cx('edit-btn')}>
                                     <Button
                                         key={data.id}
                                         onClick={() => toggleEditForm(data.id)}

@@ -141,8 +141,8 @@ const NestAPI = {
         return axiosClinet.get(url, authorizedConfig);
     },
 
-    changeSequenceForNestDevelopmentStatus(data, includeAuthorization = true) {
-        const url = `/admin/nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`;
+    changeSequenceForNestDevelopmentStatus(data, includeAuthorization = false) {
+        const url = `nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`;
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClinet.put(url, authorizedConfig);
     },

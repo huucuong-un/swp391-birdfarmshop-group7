@@ -57,7 +57,7 @@ public class NestDevelopmentStatusController {
         return (NestDevelopmentStatusDTO) nestDevelopmentStatusService.save(model);
     }
 
-    @PutMapping(value = "admin/nest-development-status/update-sequence")
+    @PutMapping(value = "nest-development-status/update-sequence")
     public void updateSequence(@RequestBody @RequestParam(value = "id") Long id, @RequestParam(value = "sequence") Integer sequence) {
         nestDevelopmentStatusService.changeSequence(id, sequence);
     }

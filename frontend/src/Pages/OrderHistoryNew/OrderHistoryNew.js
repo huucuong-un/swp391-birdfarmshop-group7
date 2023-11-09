@@ -592,7 +592,7 @@ function OrderHistoryNew() {
                                         <Heading size="lg" minHeight={10}>
                                             Order Summary
                                         </Heading>
-                                        <Text>2 items</Text>
+                                        <Text>{order.listOrderDetailHistoryModel.length} items</Text>
                                         <Text color="blue.600" fontSize="2xl">
                                             Total: $ {order.orderDTO.totalPrice}
                                         </Text>

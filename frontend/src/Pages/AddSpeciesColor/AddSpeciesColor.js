@@ -708,6 +708,7 @@ function AddSpeciesColor() {
                                                                         color: 'white',
                                                                         borderRadius: '5px',
                                                                         cursor: 'pointer',
+                                                                        margin: '10px 0',
                                                                     }}
                                                                     isLoading={loading}
                                                                     className={cx('add-new-image-btn')}
@@ -727,6 +728,7 @@ function AddSpeciesColor() {
                                                                             alt="Parrot Color Img"
                                                                             className={cx('new-image')}
                                                                             onClick={() => deleteImage(imgItem.id)}
+                                                                            key={imgItemIndex}
                                                                         />
                                                                     ) : (
                                                                         <></>

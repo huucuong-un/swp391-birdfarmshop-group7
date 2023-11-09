@@ -165,6 +165,11 @@ const NestAPI = {
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
         return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
+    countAvailableNestById(id, includeAuthorization = false) {
+        const url = `/parrot-egg-nest/count-available-nest/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
 };
 
 export default NestAPI;

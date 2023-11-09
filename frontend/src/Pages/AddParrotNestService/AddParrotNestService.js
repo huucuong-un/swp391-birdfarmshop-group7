@@ -19,6 +19,7 @@ import {
     AlertDialogCloseButton,
     useDisclosure,
     Tooltip,
+    Toast,
 } from '@chakra-ui/react';
 
 import classNames from 'classnames/bind';
@@ -27,6 +28,7 @@ import styles from '~/Pages/AddParrotNestService/AddParrotNestService.module.scs
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faL } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
+import { useToast } from '@chakra-ui/react';
 import ParrotAPI from '~/Api/ParrotAPI';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
@@ -76,7 +78,6 @@ function AddParrotNestService() {
     const [combineSpecies, setcombineSpecies] = useState([]);
 
     const navigate = useNavigate();
-
     useEffect(() => {
         const getParrotSpecies = async () => {
             try {
@@ -206,7 +207,7 @@ function AddParrotNestService() {
     // useEffect(() => {
     //     if(firstParrot.age || )
     // }, [firstParrot, secondParrot])
-
+    const toast = useToast();
     const handleBreed = async () => {
         // const addFirstParrot = await ParrotAPI.add(firstParrot);
         // const addSecondParrot = await ParrotAPI.add(secondParrot);
@@ -215,9 +216,26 @@ function AddParrotNestService() {
         //     parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
         //     status: true,
         // });
-        navigate('/payment', {
-            state: [combineSpecies],
-        });
+
+        try {
+            const check = await NestAPI.countAvailableNestById(choosenFirstParrotSpecies);
+            console.log(check);
+            if (check === 0) {
+                toast({
+                    title: 'Nest run out of stock!',
+                    // description: error.register.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                });
+                return;
+            } else {
+                navigate('/payment', {
+                    state: [combineSpecies],
+                });
+            }
+        } catch (error) {}
     };
 
     const handleGenderSelect = ({ e, type }) => {

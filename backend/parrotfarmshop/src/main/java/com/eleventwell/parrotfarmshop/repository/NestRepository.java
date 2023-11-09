@@ -32,5 +32,8 @@ public interface NestRepository extends JpaRepository<NestEntity, Long> {
 List<NestEntity> searchSortForNest(@Param("searchDate") Date searchDate, @Param("status") Boolean status, @Param("sortNestPriceID") String sortNestPriceID, Pageable pageable);
 
 
+@Query("SELECT count(u) FROM NestEntity u WHERE u.nestPrice.parrotSpecies.id = :speciesId AND u.status = true")
+Integer countAllBySpeciesId(@Param("speciesId") Long speciesId);
+
 
 }

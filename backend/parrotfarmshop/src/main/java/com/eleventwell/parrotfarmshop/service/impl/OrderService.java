@@ -350,7 +350,7 @@ private Long getNestUsageHistoryId(OrderDetailEntity orderDetail){
 
     public OrderDTO findOneByUsageHistoryId(Long id) {
         OrderEntity entity = orderRepository.findOneByUsageHistory(id);
-        OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity,OrderDTO.class);
+        OrderDTO orderDTO = (OrderDTO) genericConverter.toDTO(entity, OrderDTO.class);
         return orderDTO;
     }
 }

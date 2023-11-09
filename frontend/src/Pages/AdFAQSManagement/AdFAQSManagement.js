@@ -85,7 +85,8 @@ function AdFAQSManagement() {
     useEffect(() => {
         const getUserByToken = async () => {
             try {
-                console.log(token);
+                if (token == null) navigate('/error');
+
                 const userByToken = await UserAPI.getUserByToken(token);
 
                 if (
@@ -94,7 +95,7 @@ function AdFAQSManagement() {
                     userByToken === undefined ||
                     userByToken.length === 0
                 ) {
-                    navigate('/login-user');
+                    navigate('/error');
                 } else {
                     const userRole = await RoleAPI.getRoleName(userByToken.roleId);
 
@@ -108,32 +109,32 @@ function AdFAQSManagement() {
         };
         getUserByToken();
     }, [token]);
-    useEffect(() => {
-        const getUserByToken = async () => {
-            try {
-                console.log(token);
-                const userByToken = await UserAPI.getUserByToken(token);
-                if (
-                    userByToken === null ||
-                    userByToken === '' ||
-                    userByToken === undefined ||
-                    userByToken.length === 0
-                ) {
-                    navigate('/login-user');
-                } else {
-                    if (userByToken.roleId === 1) {
-                        navigate('/login-user');
-                    }
-                    if (userByToken.roleId !== 4) {
-                        navigate('/system/login');
-                    }
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getUserByToken();
-    }, [token]);
+    // useEffect(() => {
+    //     const getUserByToken = async () => {
+    //         try {
+    //             console.log(token);
+    //             const userByToken = await UserAPI.getUserByToken(token);
+    //             if (
+    //                 userByToken === null ||
+    //                 userByToken === '' ||
+    //                 userByToken === undefined ||
+    //                 userByToken.length === 0
+    //             ) {
+    //                 navigate('/login-user');
+    //             } else {
+    //                 if (userByToken.roleId === 1) {
+    //                     navigate('/login-user');
+    //                 }
+    //                 if (userByToken.roleId !== 4) {
+    //                     navigate('/system/login');
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+    //     getUserByToken();
+    // }, [token]);
     useEffect(() => {
         const getFaqsList = async () => {
             try {

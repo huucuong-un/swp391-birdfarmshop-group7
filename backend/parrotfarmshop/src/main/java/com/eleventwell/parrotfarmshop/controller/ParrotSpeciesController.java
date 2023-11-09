@@ -246,4 +246,9 @@ public class ParrotSpeciesController {
     public List<ParrotSpeciesDTO> findTop3Sale() {
         return  parrotSpeciesService.findTop3Sale();
     }
+
+    @GetMapping(value = "marketer/parrot-species/find-top3-sale")
+    public List<ParrotSpeciesDTO> findTop3SaleForMarketing() {
+        return  parrotSpeciesService.findTop3Sale();
+    }
 }

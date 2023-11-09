@@ -4,9 +4,11 @@ import com.eleventwell.parrotfarmshop.Model.OrderDetailHistoryModel;
 import com.eleventwell.parrotfarmshop.dto.OTPDTO;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.dto.UserDTO;
+import com.eleventwell.parrotfarmshop.entity.DeliveryInformationEntity;
 import com.eleventwell.parrotfarmshop.entity.EmailDetailsEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
+import com.eleventwell.parrotfarmshop.repository.DeliveryInformationRepository;
 import com.eleventwell.parrotfarmshop.repository.OrderDetailRepository;
 import com.eleventwell.parrotfarmshop.repository.OrderRepository;
 import com.eleventwell.parrotfarmshop.repository.UserRepository;
@@ -49,6 +51,9 @@ private OrderRepository orderRepository;
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private DeliveryInformationRepository deliveryInformationRepository;
     @Autowired
     private OTPService otpService;
 
@@ -61,8 +66,10 @@ private OrderRepository orderRepository;
         List<OrderDetailHistoryModel>  orderDetailHistoryModel = orderDetailService.createOrderDetailHistoryModelList(id);
         Context context = new Context();
         context.setVariable("customerName", orderEntity.getUser().getFullName());
+        context.setVariable("consignee",orderEntity.getDeliveryInformation().getName());
+        context.setVariable("phone",orderEntity.getDeliveryInformation().getPhoneNumber());
+        context.setVariable("address",orderEntity.getDeliveryInformation().getAddress());
         context.setVariable("orderDetailHistoryModelList", orderDetailHistoryModel);
-
 
 
         context.setVariable("totalPrice", orderEntity.getTotalPrice());

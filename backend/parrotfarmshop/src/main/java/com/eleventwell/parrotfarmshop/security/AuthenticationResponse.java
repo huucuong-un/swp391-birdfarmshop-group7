@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class AuthenticationResponse {
+public class    AuthenticationResponse {
     private Long userId;
     private String userName;
     private String fullName;

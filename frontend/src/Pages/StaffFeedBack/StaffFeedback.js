@@ -65,7 +65,6 @@ function StaffFeedback() {
     useEffect(() => {
         const getUserByToken = async () => {
             try {
-                console.log(token);
                 const userByToken = await UserAPI.getUserByToken(token);
                 if (
                     userByToken === null ||
@@ -92,7 +91,6 @@ function StaffFeedback() {
             try {
                 const colorName = await ParrotSpeciesColorAPI.findOneSpeciesByParrotID(feedback.colorId);
                 const speciesName = await ParrotSpeciesAPI.getSpeciesByColorId(feedback.colorId);
-                console.log(colorName);
                 const param = {
                     colorName: colorName[0].color,
                     speciesName: speciesName.name,
@@ -156,51 +154,29 @@ function StaffFeedback() {
             // Định dạng thành "yyyy/mm/dd"
             const formattedDate = new Date(`${year}/${month}/${day}`);
 
-            console.log(formattedDate);
-            console.log(textareaValue.length);
-            if (textareaValue.length === 0) {
-                setValidate({
-                    error: 'Please input feedback',
-                });
-                setVinh(false);
-                setTimeout(() => {
-                    setVinh();
-                }, 5000);
-                return;
-            }
-            if (textareaValue.length !== 0 && textareaValue.length > 150) {
-                setValidate({
-                    error: 'Feedback must be less than 150 words',
-                });
-                setTimeout(() => {
-                    setVinh();
-                }, 5000);
-            } else {
-                const replyParam = {
-                    id: feedback.id,
-                    content: feedback.content,
-                    rating: feedback.rating,
-                    belongTo: 'parrot',
-                    userId: feedback.userId,
-                    replyerId: user.userId,
-                    replyContent: textareaValue === '' ? null : textareaValue,
-                    replyDate: textareaValue === '' ? null : formattedDate,
-                    colorId: feedback.colorId,
-                    orderId: feedback.orderId,
-                    status: true,
-                };
+            const replyParam = {
+                id: feedback.id,
+                content: feedback.content,
+                rating: feedback.rating,
+                belongTo: 'parrot',
+                userId: feedback.userId,
+                replyerId: user.userId,
+                replyContent: textareaValue === '' ? null : textareaValue,
+                replyDate: textareaValue === '' ? null : formattedDate,
+                colorId: feedback.colorId,
+                orderDetailId: feedback.orderDetailId,
+                status: true,
+            };
 
-                await FeedbackAPI.create(replyParam);
-                onClose();
-                setVinh(true);
-            }
+            await FeedbackAPI.create(replyParam);
+            onClose();
+            setVinh(true);
         } catch (error) {}
     };
     const handleTextareaChange = (event) => {
         // Update the state variable with the new value from the textarea
         try {
             setTextareaValue(event.target.value);
-            console.log(textareaValue);
         } catch (error) {}
     };
 
@@ -277,14 +253,6 @@ function StaffFeedback() {
         getUserbyId();
     }, [feedbackList]);
 
-    useEffect(() => {
-        console.log(combineData);
-    }, [combineData]);
-
-    useEffect(() => {
-        console.log(feedbackList);
-    }, [feedbackList]);
-
     function formatDate(date) {
         const day = date.getDate();
         const month = date.getMonth() + 1; // Months are zero-indexed
@@ -298,16 +266,7 @@ function StaffFeedback() {
 
     const handleSortChange = (event) => {
         const newSortValue = event.target.value;
-        console.log(newSortValue);
     };
-
-    useEffect(() => {
-        console.log(sort);
-    }, [sort]);
-
-    useEffect(() => {
-        console.log(totalPage);
-    }, [totalPage]);
 
     const handleClear = () => {
         setSort({
@@ -452,17 +411,6 @@ function StaffFeedback() {
                     <ModalCloseButton />
                     <ModalBody>
                         <div className={cx('rate-area')}>
-                            {vinh === false && (
-                                <Alert status="error">
-                                    <AlertIcon />
-                                    <br />
-                                    <AlertTitle>
-                                        <Text fontSize="sm" lineHeight="1.4">
-                                            {validate.error}
-                                        </Text>
-                                    </AlertTitle>
-                                </Alert>
-                            )}
                             <div className={cx('product-container')}>
                                 <div className={cx('product-img')}>
                                     <img

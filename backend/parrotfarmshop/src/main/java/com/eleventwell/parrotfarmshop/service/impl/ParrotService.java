@@ -93,6 +93,7 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         ParrotEntity entity = parrotRepository.findOneById(id);
         if (entity.getSaleStatus() == true) {
             entity.setSaleStatus(false);
+            entity.setStatus(true);
 
         } else {
             entity.setSaleStatus(true);

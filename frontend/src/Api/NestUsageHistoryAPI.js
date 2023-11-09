@@ -13,7 +13,7 @@ const NestUsageHistoryAPI = {
     add(data, includeAuthorization = true) {
         const url = `/customer/nest-usage-history`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
-        return axiosClinet.post(url, authorizedConfig.data);
+        return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
 };
 

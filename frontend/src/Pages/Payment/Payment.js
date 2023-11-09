@@ -107,10 +107,9 @@ function Payment() {
         const codeValue = await PromotionAPI.getCode(code);
         if (codeValue.value > 0) {
             setDiscount(originTotalPrice * codeValue.value);
-            console.log(codeValue.value);
             setPromotion(codeValue.id);
         } else {
-            console.log('code not exist');
+            window.alert('Code does not exist!!');
         }
     };
 
@@ -200,8 +199,8 @@ function Payment() {
                     };
 
                     // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-
                     await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+
                     const addOrder = await OrderAPI.add(data);
                     if (addOrder !== null) {
                         const response = await VnpayAPI.add(addOrder);

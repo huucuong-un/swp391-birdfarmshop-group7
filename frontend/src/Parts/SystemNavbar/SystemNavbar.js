@@ -7,11 +7,20 @@ import { ShopState } from '~/context/ShopProvider';
 import { useState } from 'react';
 import UserAPI from '~/Api/UserAPI';
 import { useEffect } from 'react';
-import { Button } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
 
 const cx = classNames.bind(styles);
 
 function SystemNavbar({ staff, manager }) {
+    const { setUser } = ShopState();
+    const navigate = useNavigate();
+
+    const logoutHandler = () => {
+        localStorage.removeItem('accessToken');
+        setUser(null);
+        navigate('/system/login');
+    };
+
     const staffItem = [
         {
             title: 'ORDERS',
@@ -89,7 +98,11 @@ function SystemNavbar({ staff, manager }) {
 
                 <div className={cx('user-account')}></div>
 
-                <Button className={cx('out-btn-icon')}>Out</Button>
+                <Button className={cx('out-btn-icon')} onClick={logoutHandler} colorScheme="green">
+                    <Text fontSize={16} margin="0px 0px">
+                        Out
+                    </Text>
+                </Button>
             </div>
         </div>
     );

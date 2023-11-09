@@ -26,6 +26,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
 
     const handleChangePickingStatus = async (delivery) => {
         const updateDeli = await DeliveryInformationAPI.updatePickingStatus(delivery);
+        setSelectedDelivery(delivery);
         setReloadStatus(true);
     };
 

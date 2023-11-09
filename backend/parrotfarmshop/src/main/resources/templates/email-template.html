@@ -27,6 +27,13 @@
             color: #333333;
             font-size: 16px;
         }
+        .delivery{
+            font-weight: bold;
+        }
+        .delivery-item{
+            font-size: 15px;
+            font-weight: bold;
+        }
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -67,7 +74,10 @@
     <h1>Order Confirmation</h1>
     <p>Dear <span th:text="${customerName}"></span>,</p>
     <p>Thank you for placing your order with 11-twell Parrot Shop. Below are the details of your order:</p>
-
+    <p class="delivery">Delivery Information: </p>
+    <p class="delivery-item">Receiver: </span></p><span th:text="${consignee}">
+    <p class="delivery-item">Phone: </p><span th:text="${phone}"></span>
+    <p class="delivery-item">Address: </span></p><span th:text="${address}">
     <table>
         <thead>
         <tr>

@@ -199,8 +199,8 @@ function Payment() {
                     };
 
                     // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-
                     await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+
                     const addOrder = await OrderAPI.add(data);
                     if (addOrder !== null) {
                         const response = await VnpayAPI.add(addOrder);

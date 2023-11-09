@@ -824,7 +824,7 @@ function AddSpeciesColor() {
                                                     {(colorExist === true && (
                                                         <Alert status="error">
                                                             <AlertIcon />
-                                                            <AlertTitle>
+                                                            <AlertTitle className={cx('padding-alert')}>
                                                                 Color specie existed - Please input another specie color
                                                             </AlertTitle>
                                                             <AlertDescription></AlertDescription>
@@ -833,8 +833,7 @@ function AddSpeciesColor() {
                                                         (colorExist === false && (
                                                             <Alert status="success">
                                                                 <AlertIcon />
-                                                                <AlertTitle>
-                                                                    {' '}
+                                                                <AlertTitle className={cx('padding-alert')}>
                                                                     This specie color can be added!!!
                                                                 </AlertTitle>
                                                                 <AlertDescription></AlertDescription>
@@ -954,8 +953,8 @@ function AddSpeciesColor() {
                                             {(submissionStatus === true && (
                                                 <Alert status="success">
                                                     <AlertIcon />
-                                                    <AlertTitle>Success!</AlertTitle>
-                                                    <AlertDescription>
+                                                    <AlertTitle className={cx('padding-alert')}>Success!</AlertTitle>
+                                                    <AlertDescription className={cx('padding-alert')}>
                                                         Your form has been submitted successfully.
                                                     </AlertDescription>
                                                 </Alert>
@@ -963,14 +962,16 @@ function AddSpeciesColor() {
                                                 (submissionStatus === false && (
                                                     <Alert status="error">
                                                         <AlertIcon />
-                                                        <AlertTitle>{validate.specieColor}</AlertTitle>
+                                                        <AlertTitle className={cx('padding-alert')}>
+                                                            {validate.specieColor}
+                                                        </AlertTitle>
                                                     </Alert>
                                                 ))}
                                             {(colorExist === true && (
                                                 <Alert status="error">
                                                     <AlertIcon />
-                                                    <AlertTitle>
-                                                        Color specie existed - Please input another specie color
+                                                    <AlertTitle className={cx('padding-alert')}>
+                                                        Color specie existed <br /> Please input another specie color
                                                     </AlertTitle>
                                                     <AlertDescription></AlertDescription>
                                                 </Alert>
@@ -978,7 +979,9 @@ function AddSpeciesColor() {
                                                 (colorExist === false && (
                                                     <Alert status="success">
                                                         <AlertIcon />
-                                                        <AlertTitle>Color species can be added </AlertTitle>
+                                                        <AlertTitle className={cx('padding-alert')}>
+                                                            Color species can be added{' '}
+                                                        </AlertTitle>
                                                         <AlertDescription></AlertDescription>
                                                     </Alert>
                                                 ))}

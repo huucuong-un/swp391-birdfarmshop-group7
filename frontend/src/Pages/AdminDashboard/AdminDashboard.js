@@ -14,6 +14,7 @@ import {
     TableContainer,
     Heading,
     Center,
+    Image,
 } from '@chakra-ui/react';
 import { Col, Row } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -50,6 +51,8 @@ function AdminDashboard() {
     const [totalPriceInDecember, setTotalPriceInDecember] = useState(0);
 
     const [top3, setTop3] = useState([]);
+    const [combineDataForTop3, setCombineDataForTop3] = useState([]);
+
     const data = [
         { month: 'Jan', earnings: totalPriceInJanuary },
         { month: 'Feb', earnings: totalPriceInFebruary },
@@ -66,6 +69,7 @@ function AdminDashboard() {
     ];
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
     const navigate = useNavigate();
+
     useEffect(() => {
         const getUserByToken = async () => {
             try {
@@ -150,6 +154,22 @@ function AdminDashboard() {
         getTop3();
     }, []);
 
+    useEffect(() => {
+        const getTotalBySpecies = async () => {
+            const data = [];
+            for (const item of top3) {
+                try {
+                    const speciesItem = { ...item };
+                    speciesItem.earnings = await OrderAPI.countSoldProduct(item.id);
+                    data.push(speciesItem);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            setCombineDataForTop3(data);
+        };
+        getTotalBySpecies();
+    }, [top3]);
     return (
         <Container maxW="container.xl">
             <Text fontSize={20} fontWeight={500} paddingTop={10}>
@@ -221,13 +241,31 @@ function AdminDashboard() {
                     <TableContainer>
                         <Table variant="simple">
                             <Thead>
-                                <Tr>
+                                {/* <Tr>
                                     <Th>Species</Th>
                                     <Th>Color</Th>
                                     <Th>Total Price</Th>
+                                </Tr> */}
+                                <Tr>
+                                    <Th>Species</Th>
+                                    <Th>Image</Th>
+                                    <Th>Total earnings</Th>
                                 </Tr>
                             </Thead>
-                            <Tbody></Tbody>
+                            <Tbody>
+                                {combineDataForTop3 &&
+                                    combineDataForTop3.map((top3, index) => (
+                                        <Tr key={index} textAlign="center">
+                                            <Td>{top3.name}</Td>
+                                            <Td>
+                                                <div className="img-for-top-3">
+                                                    <Image src={top3.img} maxHeight={100}></Image>
+                                                </div>
+                                            </Td>
+                                            <Td>{top3.earnings}</Td>
+                                        </Tr>
+                                    ))}
+                            </Tbody>
                         </Table>
                     </TableContainer>
                 </Col>

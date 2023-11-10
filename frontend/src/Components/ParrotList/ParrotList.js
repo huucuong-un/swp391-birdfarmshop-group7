@@ -294,8 +294,8 @@ function ParrotList(props) {
                     console.log(params);
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
                     parrot.countReview = await FeedbackAPI.countReview2(params);
-                    const countP = await OrderAPI.countSoldProduct(params.id);
-                    setCountSoldProduct(countP);
+                    parrot.countSoldProduct = await OrderAPI.countSoldProduct(params.id);
+
                     data.push(parrot);
                 }
 
@@ -427,7 +427,7 @@ function ParrotList(props) {
 
     const StarRating = ({ rating }) => {
         const stars = [];
-        if (rating === null) {
+        if (rating === null || rating === 0) {
             return <div>There are no reviews yet</div>;
         }
         const number = rating;
@@ -461,6 +461,7 @@ function ParrotList(props) {
         if (rating !== null) {
             stars.push(<div key={count}> ( {rating} / 5 )</div>);
         }
+
         return stars;
     };
 
@@ -592,7 +593,7 @@ function ParrotList(props) {
                                     <div>
                                         {parrot.countReview === 0 ? '0 review' : parrot.countReview + ' reviews'}{' '}
                                     </div>
-                                    <div>{countSoldProduct} sold</div>
+                                    <div>{parrot.countSoldProduct} sold</div>
                                 </div>
                             </div>
                         </div>

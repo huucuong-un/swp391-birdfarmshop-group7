@@ -187,10 +187,19 @@ function Payment() {
                         quantity: item.quantity,
                         type: 'parrot',
                     }));
+                    const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    };
+                    const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                        user.id,
+                        config,
+                    );
                     const data = {
                         orderDTO: {
                             // userID: 1,
-                            deliveryInformationId: selectedDelivery.id,
+                            deliveryInformationId: nowDeliInfo.id,
                             promotionID: promotion,
                             userID: user.id,
                             status: 'pending',
@@ -198,8 +207,8 @@ function Payment() {
                         cartList: cartList,
                     };
 
-                    // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-                    // await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+                    //await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+                    //await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
 
                     const addOrder = await OrderAPI.add(data);
                     if (addOrder !== null) {
@@ -244,10 +253,19 @@ function Payment() {
                         quantity: 1,
                         type: 'nest',
                     }));
+                    const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    };
+                    const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                        user.id,
+                        config,
+                    );
                     const data = {
                         orderDTO: {
                             // userID: 1,
-                            deliveryInformationId: selectedDelivery.id,
+                            deliveryInformationId: nowDeliInfo.id,
                             promotionID: promotion,
                             userID: user.id,
                             status: 'pending',
@@ -255,6 +273,7 @@ function Payment() {
                         cartList: cartList,
                     };
 
+                    console.log(selectedDelivery);
                     // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
 
                     //   await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
@@ -320,7 +339,9 @@ function Payment() {
             // setPaymentStatus(false);
         }
     };
-
+    useEffect(() => {
+        console.log(selectedDelivery);
+    }, [selectedDelivery]);
     return (
         <div className={cx('wrapper')}>
             <StartPartPage payment>Payment</StartPartPage>
@@ -361,6 +382,11 @@ function Payment() {
                                         <div className={cx('payment-detail-items-img')}>
                                             <img src={item.img} alt="product" />
                                         </div>
+                                        <div className={cx('payment-detail-items-name-color')}>
+                                            <p className={cx('payment-detail-items-quantity')}>{item.name}</p>
+                                            <p className={cx('payment-detail-items-quantity')}>{item.color}</p>
+                                        </div>
+
                                         <p className={cx('payment-detail-items-quantity')}>
                                             x{checkNest ? 1 : item.quantity}
                                         </p>

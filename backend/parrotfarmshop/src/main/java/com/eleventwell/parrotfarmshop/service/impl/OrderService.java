@@ -4,10 +4,7 @@ import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
-import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
-import com.eleventwell.parrotfarmshop.entity.OrderEntity;
-import com.eleventwell.parrotfarmshop.entity.NestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
+import com.eleventwell.parrotfarmshop.entity.*;
 import com.eleventwell.parrotfarmshop.repository.*;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +53,9 @@ public class OrderService implements IGenericService<OrderDTO> {
     @Autowired
     OrderDetailService orderDetailService;
 
+    @Autowired
+    DeliveryInformationRepository deliveryInformationRepository;
+
     @Override
     public List<OrderDTO> findAll() {
         List<OrderDTO> result = new ArrayList<>();
@@ -86,6 +86,8 @@ public class OrderService implements IGenericService<OrderDTO> {
 return  null;
         }
 
+        DeliveryInformationEntity deliveryInformationEntity = deliveryInformationRepository.findOneById(DTO.getId());
+        orderEntity.setDeliveryInformation(deliveryInformationEntity);
         orderRepository.save(orderEntity);
 
         return (OrderDTO) genericConverter.toDTO(orderEntity, OrderDTO.class);

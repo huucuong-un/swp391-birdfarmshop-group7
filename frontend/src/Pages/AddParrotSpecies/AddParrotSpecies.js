@@ -68,7 +68,7 @@ function AddParrotSpecies() {
         availabilityStatus: true,
         origin: '',
         averageWeight: '',
-        parrotAverageRating: 4.5,
+        parrotAverageRating: 0,
         nestAverageRating: 4.0,
         status: true,
         img: '',

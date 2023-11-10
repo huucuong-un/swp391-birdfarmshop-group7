@@ -5,55 +5,76 @@ import { Input, Stack, InputGroup, InputLeftAddon, InputRightAddon } from '@chak
 //fontawesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
 function SortSpace(props) {
-    const [search, setSearch] = useState('');
-    const [sortWay, setSortWay] = useState('');
-    // console.log(search);
+    const [sort, setSort] = useState({
+        searchName: null,
+        sortDate: null,
+        sortName: null,
+        sortRating: null,
+        sortPrice: null,
+    });
 
-    const handleSearchChange = (event) => {
-        const newSearchValue = event.target.value;
-        setSearch(newSearchValue);
-        props.onSearchChange(newSearchValue); // Gọi callback để truyền giá trị `search` lên component cha
+    const handleSortAndSearchChange = (event) => {
+        const { name, value } = event.target;
+        setSort((prevSort) => ({
+            ...prevSort,
+            [name]: value,
+        }));
+
+        props.onSortAndSearchChange({
+            ...sort,
+            [name]: value,
+        });
     };
-
-    const handleSortChange = (event) => {
-        const newSortValue = event.target.value;
-        setSortWay(newSortValue);
-        props.onSortChange(newSortValue);
-    };
-
-    // const handleSelectSort = (event) => {
-    //     setSortWay(event);
-    // };
 
     return (
         <div className={cx('wrapper')}>
             <div>
                 <div className={cx('sort-space')}>
-                    <select className={cx('select')} name="Features" id="dsa" onChange={handleSortChange}>
-                        <option defaultValue selected>
-                            Features
-                        </option>
-                        <option value="NASC">A to Z</option>
-                        <option value="NDESC">Z to A</option>
-                        <option value="PASC">Low to High</option>
-                        <option value="PDESC">High to Low</option>
-                    </select>
                     <div className={cx('search')}>
                         <input
                             className={cx('search-input')}
                             type="text"
+                            name="searchName"
                             placeholder="Search..."
-                            onChange={handleSearchChange}
+                            onChange={handleSortAndSearchChange}
                         />
                         <button className={cx('search-btn')}>
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </button>
                     </div>
+                    <select className={cx('select')} name="sortName" id="dsa" onChange={handleSortAndSearchChange}>
+                        <option defaultValue selected>
+                            Species
+                        </option>
+                        <option value="NASC">A to Z</option>
+                        <option value="NDESC">Z to A</option>
+                    </select>
+                    <select className={cx('select')} name="sortRating" id="dsa" onChange={handleSortAndSearchChange}>
+                        <option defaultValue selected>
+                            Rating
+                        </option>
+                        <option value="PARASC">Ascending</option>
+                        <option value="PARDESC">Descending</option>
+                    </select>
+                    <select className={cx('select')} name="sortPrice" id="dsa" onChange={handleSortAndSearchChange}>
+                        <option defaultValue selected>
+                            Price
+                        </option>
+                        <option value="PASC">Low to High</option>
+                        <option value="PDESC">High to Low</option>
+                    </select>
+                    <select className={cx('select')} name="sortDate" id="dsa" onChange={handleSortAndSearchChange}>
+                        <option defaultValue selected>
+                            Date
+                        </option>
+                        <option value="DASC">Low to High</option>
+                        <option value="DDESC">High to Low</option>
+                    </select>
                 </div>
             </div>
         </div>

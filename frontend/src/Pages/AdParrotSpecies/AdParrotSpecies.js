@@ -1,5 +1,4 @@
-import Title from '~/Components/Title/Title';
-import { Box, Container, Text } from '@chakra-ui/react';
+import { Box, Button, Container, Text } from '@chakra-ui/react';
 import { Switch, Stack } from '@chakra-ui/react';
 import styles from '~/Pages/AdParrotSpecies/AdParrotSpecies.module.scss';
 import classNames from 'classnames/bind';
@@ -26,6 +25,11 @@ function AdParrotSpecies() {
             console.error(error);
         }
     };
+
+    const redirectToParrotList = () => {
+        navigate('/admin/parrot');
+    };
+
     useEffect(() => {
         const getUserByToken = async () => {
             try {
@@ -63,6 +67,11 @@ function AdParrotSpecies() {
                     PARROT SPECIES MANAGEMENT
                 </Text>
             </Box>
+            <Button colorScheme="green" onClick={redirectToParrotList} marginBottom={10}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    View parrots list
+                </Text>
+            </Button>
             <AddParrotSpecies></AddParrotSpecies>
         </Container>
     );

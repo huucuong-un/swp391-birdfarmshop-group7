@@ -327,6 +327,10 @@ function AddParrot() {
             sortAge: null,
         });
     };
+
+    const redirectBackToParrotSpecies = () => {
+        navigate('/admin/parrot-species');
+    };
     return (
         // <div className={cx('wrapper')}>
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -335,6 +339,11 @@ function AddParrot() {
                     PARROT MANAGEMENT
                 </Text>
             </Box>
+            <Button colorScheme="gray" onClick={redirectBackToParrotSpecies} marginBottom={5} width="250px">
+                <Text fontSize={16} margin={0} padding={4}>
+                    Back to parrot species
+                </Text>
+            </Button>
 
             <Flex className={cx('add-button')} onClick={handleShow}>
                 <FontAwesomeIcon icon={faCirclePlus} />

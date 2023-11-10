@@ -69,24 +69,26 @@ function SystemNavbar({ staff, manager }) {
                     <Link to="/admin/dashboard">
                         <p>DASHBOARD</p>
                     </Link>
-                    <Link to="/admin/account">
-                        <p>ACCOUNT</p>
+                    <Link to="/admin/parrot-species">
+                        <p>SPECIES</p>
+                    </Link>
+                    <Link to="/admin/nest">
+                        <p>NEST</p>
                     </Link>
                     <Link to="/admin/role">
                         <p>ROLE</p>
                     </Link>
-                    <Link to="/admin/parrot-species">
-                        <p>SPECIES</p>
+                    <Link to="/admin/account">
+                        <p>ACCOUNT</p>
                     </Link>
+
                     {/* <Link to="/admin/parrot">
                         <p>PARROT</p>
                     </Link> */}
                     <Link to="/admin/promotion">
                         <p>PROMOTION</p>
                     </Link>
-                    <Link to="/admin/nest">
-                        <p>NEST</p>
-                    </Link>
+
                     {/* <Link to="/admin/nest-price">
                         <p>NEST PRICE</p>
                     </Link>
@@ -97,7 +99,7 @@ function SystemNavbar({ staff, manager }) {
                         <p>FAQs</p>
                     </Link>
                     <Link to="/staff/order">
-                        <p>STAFF</p>
+                        <p style={{ borderTop: '3px solid #555' }}>STAFF</p>
                     </Link>
                     <Link to="/marketer/dashboard">
                         <p>MARKETER</p>

@@ -97,6 +97,16 @@ function Payment() {
 
     const handlePayStatus = async () => {
         setPayStatus(true);
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+            user.id,
+            config,
+        );
+        console.log('selected deli:' + nowDeliInfo.id);
         console.log('click');
     };
     const handlePromotionCode = async () => {
@@ -187,10 +197,21 @@ function Payment() {
                         quantity: item.quantity,
                         type: 'parrot',
                     }));
+
+                    const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    };
+                    const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                        user.id,
+                        config,
+                    );
+                    console.log('selected deli:' + nowDeliInfo.id);
                     const data = {
                         orderDTO: {
                             // userID: 1,
-                            deliveryInformationId: selectedDelivery.id,
+                            deliveryInformationId: nowDeliInfo.id,
                             promotionID: promotion,
                             userID: user.id,
                             status: 'pending',
@@ -199,7 +220,7 @@ function Payment() {
                     };
 
                     // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-                    await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+                    // await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
 
                     const addOrder = await OrderAPI.add(data);
                     if (addOrder !== null) {
@@ -257,7 +278,7 @@ function Payment() {
 
                     // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
 
-                    await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+                    // await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                     const addOrder = await OrderAPI.add(data);
 
                     const response = await VnpayAPI.add(addOrder);

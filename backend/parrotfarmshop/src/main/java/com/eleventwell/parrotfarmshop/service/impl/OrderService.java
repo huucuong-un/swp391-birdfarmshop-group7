@@ -79,14 +79,15 @@ public class OrderService implements IGenericService<OrderDTO> {
     @Override
     public OrderDTO save(OrderDTO DTO) {
         OrderEntity orderEntity = new OrderEntity();
-        orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
 
 
         if(promotionService.findOneByIdForOrder(DTO.getPromotionID()) !=null){
-return  null;
-        }
 
-        DeliveryInformationEntity deliveryInformationEntity = deliveryInformationRepository.findOneById(DTO.getId());
+    DTO.setPromotionID(promotionService.findOneByIdForOrder(DTO.getPromotionID()).getId());
+        }
+        orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
+
+        DeliveryInformationEntity deliveryInformationEntity = deliveryInformationRepository.findOneById(DTO.getDeliveryInformationId());
         orderEntity.setDeliveryInformation(deliveryInformationEntity);
         orderRepository.save(orderEntity);
 

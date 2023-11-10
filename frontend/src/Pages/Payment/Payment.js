@@ -206,6 +206,7 @@ function Payment() {
                         },
                         cartList: cartList,
                     };
+                    
 
                     //await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
                     //await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);

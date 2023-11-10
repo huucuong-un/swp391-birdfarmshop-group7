@@ -124,9 +124,9 @@ function StaffFeedback() {
         return stars;
     };
 
-    useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+    // useEffect(() => {
+    //     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    // }, []);
     const [vinh, setVinh] = useState(true);
     const [thanh, setThanh] = useState(0);
     const [sort, setSort] = useState({
@@ -157,17 +157,18 @@ function StaffFeedback() {
             // Định dạng thành "yyyy/mm/dd"
             const formattedDate = new Date(`${year}/${month}/${day}`);
             console.log(feedback);
+
             const replyParam = {
                 id: feedback.id,
                 content: feedback.content,
                 rating: feedback.rating,
                 belongTo: 'parrot',
                 userId: feedback.userId,
-                replyerId: user.userId,
+                replyerId: user.id,
                 replyContent: textareaValue === '' ? null : textareaValue,
                 replyDate: textareaValue === '' ? null : formattedDate,
-                colorId: feedback.colorId,
                 orderDetailId: feedback.orderDetailId,
+                colorId: feedback.colorId,
                 status: true,
             };
 

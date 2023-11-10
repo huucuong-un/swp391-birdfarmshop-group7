@@ -329,11 +329,21 @@ function AdNestUsageHistoryManagement() {
         return description;
     };
 
+    const redirectBackToOrder = () => {
+        navigate('/staff/order');
+    };
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>Nest Usage History</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    UPDATE PROCESS FOR NEST ORDERS
+                </Text>
+            </Box>
+            <Button colorScheme="gray" onClick={redirectBackToOrder} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    Back to orders list
+                </Text>
+            </Button>
             <div className={cx('add-btn')}>
                 {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add Development

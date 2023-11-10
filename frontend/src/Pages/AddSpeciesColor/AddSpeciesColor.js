@@ -2,7 +2,14 @@ import classNames from 'classnames/bind';
 import styles from '~/Pages/AddSpeciesColor/AddSpeciesColor.module.scss';
 import Buttons from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus, faArrowsRotate, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMinus,
+    faPlus,
+    faArrowsRotate,
+    faAngleLeft,
+    faAngleRight,
+    faImages,
+} from '@fortawesome/free-solid-svg-icons';
 import {
     Input,
     Table,
@@ -26,6 +33,7 @@ import {
     Text,
     Thead,
     Th,
+    Tooltip,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/toast';
@@ -616,8 +624,8 @@ function AddSpeciesColor() {
                     <Table size="lg">
                         <Thead>
                             <Tr>
-                                <Th>Specie ID</Th>
-                                <Th>Specie name</Th>
+                                <Th>Species ID</Th>
+                                <Th>Species name</Th>
                                 <Th>Quantity</Th>
                                 <Th>Nest quantity</Th>
                                 <Th>Origin</Th>
@@ -697,48 +705,50 @@ function AddSpeciesColor() {
                                                 <Tbody>
                                                     <Tr className={cx('color-row')}>
                                                         <Td className={cx('item-container-td')}>
-                                                            <label class="label">
-                                                                <input
-                                                                    type="file"
-                                                                    style={{ display: 'none' }}
-                                                                    id="img"
-                                                                    name="img"
-                                                                    accept="image/*"
-                                                                    onChange={(e) =>
-                                                                        addNewImage(e.target.files[0], childObj.id)
-                                                                    } // Pass the index of the species
-                                                                    required
-                                                                />
-                                                                <Text
-                                                                    style={{
-                                                                        height: '100%',
-                                                                        padding: '10px 10px',
-                                                                        backgroundColor: '#444  ',
-                                                                        color: 'white',
-                                                                        borderRadius: '5px',
-                                                                        cursor: 'pointer',
-                                                                        margin: '10px 0',
-                                                                    }}
-                                                                    isLoading={loading}
-                                                                    className={cx('add-new-image-btn')}
-                                                                >
-                                                                    New image
-                                                                </Text>
-                                                            </label>
+                                                            <Tooltip
+                                                                label="Click here to add more images"
+                                                                placement="left"
+                                                                fontSize="lg"
+                                                            >
+                                                                <label class="label">
+                                                                    <input
+                                                                        type="file"
+                                                                        style={{ display: 'none' }}
+                                                                        id="img"
+                                                                        name="img"
+                                                                        accept="image/*"
+                                                                        onChange={(e) =>
+                                                                            addNewImage(e.target.files[0], childObj.id)
+                                                                        } // Pass the index of the species
+                                                                        required
+                                                                    />
+                                                                    <FontAwesomeIcon
+                                                                        icon={faImages}
+                                                                        size="xl"
+                                                                        className={cx('image-icon')}
+                                                                    />
+                                                                </label>
+                                                            </Tooltip>
                                                         </Td>
                                                         <Td className={cx('item-container-td')}>
                                                             <div style={{ maxHeight: '110px', maxWidth: '130px' }}>
                                                                 {data.images.map((imgItem, imgItemIndex) =>
                                                                     childObj.id === imgItem.parrotSpeciesColorId ? (
-                                                                        <Image
-                                                                            boxSize="110px"
-                                                                            objectFit="cover"
-                                                                            src={imgItem.imageUrl}
-                                                                            alt="Parrot Color Img"
-                                                                            className={cx('new-image')}
-                                                                            onClick={() => deleteImage(imgItem.id)}
-                                                                            key={imgItemIndex}
-                                                                        />
+                                                                        <Tooltip
+                                                                            label="Click to delete image"
+                                                                            placement="right"
+                                                                            fontSize="lg"
+                                                                        >
+                                                                            <Image
+                                                                                boxSize="110px"
+                                                                                objectFit="cover"
+                                                                                src={imgItem.imageUrl}
+                                                                                alt="Parrot Color Img"
+                                                                                className={cx('new-image')}
+                                                                                onClick={() => deleteImage(imgItem.id)}
+                                                                                key={imgItemIndex}
+                                                                            />
+                                                                        </Tooltip>
                                                                     ) : (
                                                                         <></>
                                                                     ),
@@ -825,7 +835,8 @@ function AddSpeciesColor() {
                                                         <Alert status="error">
                                                             <AlertIcon />
                                                             <AlertTitle className={cx('padding-alert')}>
-                                                                Color specie existed - Please input another specie color
+                                                                Color species existed - Please input another species
+                                                                color
                                                             </AlertTitle>
                                                             <AlertDescription></AlertDescription>
                                                         </Alert>
@@ -834,7 +845,7 @@ function AddSpeciesColor() {
                                                             <Alert status="success">
                                                                 <AlertIcon />
                                                                 <AlertTitle className={cx('padding-alert')}>
-                                                                    This specie color can be added!!!
+                                                                    This species color can be added!!!
                                                                 </AlertTitle>
                                                                 <AlertDescription></AlertDescription>
                                                             </Alert>

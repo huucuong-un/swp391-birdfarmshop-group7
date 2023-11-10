@@ -91,7 +91,11 @@ public class NestController {
         result.setLimit(limit);
         return result;
     }
+    @GetMapping(value = "parrot-egg-nest/count-available-nest/{id}")
+    public Integer countAvailableNest(@PathVariable("id") Long id){
 
+        return nestService.countAvailableNest(id);
+    }
 
 }
 

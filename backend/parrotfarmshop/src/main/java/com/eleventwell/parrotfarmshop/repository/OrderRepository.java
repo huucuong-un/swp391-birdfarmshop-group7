@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.repository;
 
+import com.eleventwell.parrotfarmshop.entity.DeliveryInformationEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
@@ -104,4 +105,8 @@ List<OrderEntity> findAllByUserIdOrderByIdDescANDSearchSort(@Param("userId") Lon
 
     @Query("SELECT o.orderId from OrderDetailEntity o where o.nestUsageHistory.id = :usageId")
     OrderEntity findOneByUsageHistory(@Param("usageId") Long usageId);
+
+
+    @Query("SELECT o.deliveryInformation from OrderEntity o where o.id = :orderId")
+    DeliveryInformationEntity findOneByOrderId(@Param("orderId")Long orderId);
 }

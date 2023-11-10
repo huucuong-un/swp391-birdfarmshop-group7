@@ -35,6 +35,7 @@ function StaffNavbar({ staff, manager }) {
                     <Link to="/admin/nest-usage-history">
                         <p>NEST USAGE HISTORY</p>
                     </Link>
+               
                 </div>
 
                 <div className={cx('user-account')}></div>

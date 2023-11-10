@@ -58,6 +58,7 @@ function StaffFeedback() {
     const [show, setShow] = useState(false);
     const [loggedUser, setLoggedUser] = useState();
     const { user } = ShopState();
+    const { setUser } = ShopState();
     const [feedback, setFeedback] = useState({ content: null });
     const [replyData, setReplyData] = useState({});
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
@@ -80,6 +81,8 @@ function StaffFeedback() {
                         navigate('/error');
                     }
                 }
+                setUser(userByToken);
+                user = userByToken;
             } catch (error) {
                 console.log(error);
             }
@@ -153,7 +156,7 @@ function StaffFeedback() {
 
             // Định dạng thành "yyyy/mm/dd"
             const formattedDate = new Date(`${year}/${month}/${day}`);
-
+            console.log(feedback);
             const replyParam = {
                 id: feedback.id,
                 content: feedback.content,

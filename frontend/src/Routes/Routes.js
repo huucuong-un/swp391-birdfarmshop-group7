@@ -79,7 +79,7 @@ const publicRoutes = [
     { path: '/profile/change-password', component: ChangePassword },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faqs', component: FAQs },
-    // { path: '/compare-products', component: CompareParrot },
+    { path: '/compare-products', component: CompareParrot },
     { path: '/profile', component: MyAccount },
     { path: '/user-profile', component: UserProfileNew },
     { path: '/profile/change-password', component: ChangePassword },

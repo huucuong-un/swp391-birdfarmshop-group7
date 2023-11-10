@@ -344,7 +344,7 @@ function AdNestManagement() {
                             </Tr>
                             <Tr>
                                 <Td></Td>
-                                <Td className={cx('submit-btn')}>
+                                <Td>
                                     <Button
                                         colorScheme="green"
                                         onClick={handleSave}

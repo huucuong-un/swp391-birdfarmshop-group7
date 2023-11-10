@@ -278,12 +278,21 @@ function AdNestDevelopmentStatus() {
                 };
                 const updateSequence = NestAPI.changeSequenceForNestDevelopmentStatus(params);
             }
+            setVinh(true);
             setSubmitStatus(true);
             setTimeout(() => {
                 setSubmitStatus();
             }, 50000);
         }
     };
+
+    useEffect(() => {
+        console.log(vinh);
+    }, [vinh]);
+
+    useEffect(() => {
+        console.log(faqsList);
+    }, [faqsList]);
 
     useEffect(() => {
         console.log(selectedValues);
@@ -364,11 +373,15 @@ function AdNestDevelopmentStatus() {
                         <p>End</p>
                     </div>
                     <div className={cx('update-zone')}>
+                        <p>Start</p>
+                        <FontAwesomeIcon icon={faArrowRight} />
+
                         {Array.from({ length: faqsList.length }, (_, index) => (
                             <div className={cx('update-zone-item')}>
                                 <p key={index} className={cx('number-page')}>
                                     {index + 1}:
                                 </p>
+
                                 <select
                                     value={JSON.stringify(selectedValues[index])}
                                     onChange={(e) => handleSelectChange(index, e)}
@@ -389,8 +402,10 @@ function AdNestDevelopmentStatus() {
                                             </option>
                                         ))}
                                 </select>
+                                <FontAwesomeIcon icon={faArrowRight} />
                             </div>
                         ))}
+                        <p>End</p>
                     </div>
                     <Button onClick={() => handleUpdateSequence()} className={cx('save-btn')} fontSize={18}>
                         Save

@@ -82,6 +82,7 @@ th {
 .submit-btn {
     display: flex;
     justify-content: center;
+
     button {
         width: 50%;
         background-color: #f9ede9;
@@ -91,4 +92,10 @@ th {
             opacity: 0.7;
         }
     }
+}
+
+.save-btn {
+    background-color: #f9ede9 !important;
+    color: var(--black) !important;
+    width: 50% !important;
 }

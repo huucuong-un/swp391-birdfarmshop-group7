@@ -278,7 +278,7 @@ function ParrotDetail() {
 
     const StarRating = ({ rating }) => {
         const stars = [];
-        if (rating === null) {
+        if (rating === null || rating === 0) {
             return <div>There are no reviews yet</div>;
         }
         const number = rating;

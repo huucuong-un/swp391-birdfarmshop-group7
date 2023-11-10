@@ -267,8 +267,28 @@
         }
     }
 }
+.td-description,
 .td-content {
-    width: 200px;
-    text-align: center;
-    margin: auto auto;
+    max-width: 200px;
+    .div-description,
+    .div-content {
+        padding: 10px;
+        width: 200px;
+    }
+}
+.td-image {
+    max-width: 200px;
+    .div-image {
+        padding: 10px;
+        width: 150px;
+    }
+}
+.crud-container {
+    thead,
+    th {
+        padding: 10px;
+    }
+    tr {
+        margin: 10px 0;
+    }
 }

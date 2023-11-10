@@ -489,11 +489,16 @@ function AdNestPriceManagement() {
                                     />
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td>
+                                    <Button onClick={handleSaveForUpdate} className={cx('save-btn')} fontSize={18}>
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSaveForUpdate} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>

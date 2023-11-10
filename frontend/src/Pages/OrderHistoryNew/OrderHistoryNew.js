@@ -110,7 +110,7 @@ function OrderHistoryNew() {
     const [nestDevStatus, setNestDevStatus] = useState([]);
     const [usageHistoryByOrderId, setUsageHistoryByOrderId] = useState([]);
     const [nestDevWithUsageHistoryId, setNestDevWithUsageHistoryId] = useState([]);
-    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
+    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(0);
     const [show, setShow] = useState(false);
     const [showF, setShowF] = useState(false);
     const [target, setTarget] = useState(null);
@@ -398,7 +398,7 @@ function OrderHistoryNew() {
                                     Order #{order.orderDTO.id}
                                 </Text>
                                 <Text fontSize="16px" fontWeight="600" color="green">
-                                    Complete
+                                    Paid
                                 </Text>
                             </div>
                             <p className={cx('order-item-header-date')}>{order.orderDTO.createdDate}</p>
@@ -444,6 +444,17 @@ function OrderHistoryNew() {
                                                                 }
                                                                 onClick={(event) => {
                                                                     handleStoreOrderId({
+                                                                        img: order.listOrderDetailHistoryModel[
+                                                                            parrotIndex
+                                                                        ].img,
+                                                                        speciesName:
+                                                                            order.listOrderDetailHistoryModel[
+                                                                                parrotIndex
+                                                                            ].speciesName,
+
+                                                                        color: order.listOrderDetailHistoryModel[
+                                                                            parrotIndex
+                                                                        ].color,
                                                                         orderDetailId:
                                                                             order.listOrderDetailHistoryModel[
                                                                                 parrotIndex
@@ -482,11 +493,7 @@ function OrderHistoryNew() {
                                                                             <div className={cx('product-container')}>
                                                                                 <div className={cx('product-img')}>
                                                                                     <img
-                                                                                        src={
-                                                                                            order
-                                                                                                .listOrderDetailHistoryModel[0]
-                                                                                                .img
-                                                                                        }
+                                                                                        src={orderId.img}
                                                                                         alt="product-img"
                                                                                     />
                                                                                 </div>
@@ -494,25 +501,10 @@ function OrderHistoryNew() {
                                                                                     <div
                                                                                         className={cx('product-title')}
                                                                                     >
-                                                                                        <p>
-                                                                                            {
-                                                                                                order
-                                                                                                    .listOrderDetailHistoryModel[
-                                                                                                    parrotIndex
-                                                                                                ].speciesName
-                                                                                            }
-                                                                                        </p>
+                                                                                        <p>{orderId.speciesName}</p>
                                                                                     </div>
                                                                                     <div className={cx('product-type')}>
-                                                                                        <p>
-                                                                                            Category:{' '}
-                                                                                            {
-                                                                                                order
-                                                                                                    .listOrderDetailHistoryModel[
-                                                                                                    parrotIndex
-                                                                                                ].color
-                                                                                            }
-                                                                                        </p>
+                                                                                        <p>Category: {orderId.color}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -592,27 +584,29 @@ function OrderHistoryNew() {
                                         <Heading size="lg" minHeight={10}>
                                             Order Summary
                                         </Heading>
-                                        <Text>2 items</Text>
+                                        <Text>{order.listOrderDetailHistoryModel.length} items</Text>
                                         <Text color="blue.600" fontSize="2xl">
                                             Total: $ {order.orderDTO.totalPrice}
                                         </Text>
                                     </Stack>
                                 </CardBody>
                                 <Divider />
-                                <CardFooter>
-                                    <ButtonGroup spacing="2" className={cx('btn-container')}>
-                                        <Button
-                                            ref={btnRef}
-                                            colorScheme="teal"
-                                            onClick={() => {
-                                                onOpen();
-                                                handleShow(order.orderDTO.id);
-                                            }}
-                                        >
-                                            Track Process
-                                        </Button>
-                                    </ButtonGroup>
-                                </CardFooter>
+                                {order.listOrderDetailHistoryModel[0].color === null ? (
+                                    <CardFooter>
+                                        <ButtonGroup spacing="2" className={cx('btn-container')}>
+                                            <Button
+                                                ref={btnRef}
+                                                colorScheme="teal"
+                                                onClick={() => {
+                                                    onOpen();
+                                                    handleShow(order.orderDTO.id);
+                                                }}
+                                            >
+                                                Track Process
+                                            </Button>
+                                        </ButtonGroup>
+                                    </CardFooter>
+                                ) : null}
                             </Card>
                         </div>
                     </div>

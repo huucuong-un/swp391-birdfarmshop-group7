@@ -75,9 +75,9 @@
     <p>Dear <span th:text="${customerName}"></span>,</p>
     <p>Thank you for placing your order with 11-twell Parrot Shop. Below are the details of your order:</p>
     <p class="delivery">Delivery Information: </p>
-    <p class="delivery-item">Receiver: </span></p><span th:text="${consignee}">
-    <p class="delivery-item">Phone: </p><span th:text="${phone}"></span>
-    <p class="delivery-item">Address: </span></p><span th:text="${address}">
+    <p class="delivery-item">Receiver: </p><span th:text="${delivery.getName()}"></span>
+    <p class="delivery-item">Phone: </p><span th:text="${delivery.getPhoneNumber()}"></span>
+    <p class="delivery-item">Address: </p><span th:text="${delivery.getAddress()}"></span>
     <table>
         <thead>
         <tr>
@@ -102,14 +102,14 @@
                 </td>
 
                 <td><span th:text="${orderDetail.quantity}"></span></td>
-                <td><span th:text="${orderDetail.totalPrice}"> $</span></td>
+                <td><span th:text="${orderDetail.totalPrice+ ' $'}"> </span></td>
             </tr>
         </th:block>
         </tbody>
 
     </table>
 
-    <h4>Total Price: <span th:text="${totalPrice}"> $</span></h4>
+    <h4>Total Price: <span th:text="${totalPrice+ ' $'}"> $</span></h4>
 
     <p>Thank you for shopping with us!</p>
     <a th:href="${shopLink}" class="button">Visit Our Shop</a>

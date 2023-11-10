@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 500px;
 }
 
 .order-item {
@@ -19,7 +20,7 @@
 .order-item-content-container {
     display: flex;
     align-items: start;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -41,6 +42,7 @@
 .order-item-header-date {
     margin: 0;
     min-width: 22%;
+    text-align: right;
 }
 
 .order-item-info {

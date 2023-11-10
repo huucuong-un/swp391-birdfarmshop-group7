@@ -470,7 +470,7 @@ function AddParrotSpecies() {
                                             isLoading={loading}
                                             onClick={reloadAddSpeciesColor}
                                         >
-                                            ADD
+                                            Add
                                         </Button>
                                     </Td>
                                 </Tr>

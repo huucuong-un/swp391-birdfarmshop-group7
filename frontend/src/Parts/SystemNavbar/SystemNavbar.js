@@ -14,6 +14,8 @@ const cx = classNames.bind(styles);
 function SystemNavbar({ staff, manager }) {
     const { setUser } = ShopState();
     const navigate = useNavigate();
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const { user } = ShopState();
 
     const logoutHandler = () => {
         localStorage.removeItem('accessToken');
@@ -76,21 +78,21 @@ function SystemNavbar({ staff, manager }) {
                     <Link to="/admin/parrot-species">
                         <p>SPECIES</p>
                     </Link>
-                    <Link to="/admin/parrot">
+                    {/* <Link to="/admin/parrot">
                         <p>PARROT</p>
-                    </Link>
+                    </Link> */}
                     <Link to="/admin/promotion">
                         <p>PROMOTION</p>
                     </Link>
                     <Link to="/admin/nest">
                         <p>NEST</p>
                     </Link>
-                    <Link to="/admin/nest-price">
+                    {/* <Link to="/admin/nest-price">
                         <p>NEST PRICE</p>
                     </Link>
                     <Link to="/admin/nest-development-status">
                         <p>DEVELOPMENT STATUS</p>
-                    </Link>
+                    </Link> */}
                     <Link to="/admin/faqs">
                         <p>FAQs</p>
                     </Link>

@@ -97,6 +97,16 @@ function Payment() {
 
     const handlePayStatus = async () => {
         setPayStatus(true);
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+            user.id,
+            config,
+        );
+        console.log('selected deli:' + nowDeliInfo.id);
         console.log('click');
     };
     const handlePromotionCode = async () => {
@@ -187,6 +197,7 @@ function Payment() {
                         quantity: item.quantity,
                         type: 'parrot',
                     }));
+
                     const config = {
                         headers: {
                             'Content-Type': 'application/json',
@@ -196,6 +207,7 @@ function Payment() {
                         user.id,
                         config,
                     );
+
                     const data = {
                         orderDTO: {
                             // userID: 1,
@@ -207,9 +219,6 @@ function Payment() {
                         cartList: cartList,
                     };
                     
-
-                    //await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-                    //await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
 
                     const addOrder = await OrderAPI.add(data);
                     if (addOrder !== null) {
@@ -276,8 +285,6 @@ function Payment() {
 
                     console.log(selectedDelivery);
                     // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-
-                    //   await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
                     const addOrder = await OrderAPI.add(data);
 
                     const response = await VnpayAPI.add(addOrder);

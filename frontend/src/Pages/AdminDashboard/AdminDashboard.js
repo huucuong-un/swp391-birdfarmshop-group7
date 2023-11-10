@@ -235,7 +235,7 @@ function AdminDashboard() {
                     </ResponsiveContainer>
                 </Col>
                 <Col>
-                    <Text fontSize={18} textAlign="center" fontWeight={500}>
+                    <Text fontSize={28} textAlign="center" fontWeight={500}>
                         Top 3 Species
                     </Text>
                     <TableContainer>

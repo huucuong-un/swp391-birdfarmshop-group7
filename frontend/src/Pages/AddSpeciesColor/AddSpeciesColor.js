@@ -636,34 +636,43 @@ function AddSpeciesColor() {
                         <AccordionItem key={dataIndex} className={cx('accord-item')}>
                             <h2 className={cx('data-container')}>
                                 <AccordionButton>
-                                    <Box as="span" flex="1" textAlign="left">
-                                        <TableContainer>
-                                            <Table size="lg">
-                                                <Tbody>
-                                                    <Tr>
-                                                        <Td>{data.id}</Td>
-                                                        <Td>{data.name}</Td>
-                                                        <Td>{data.quantity}</Td>
-                                                        <Td>{data.nestQuantity}</Td>
-                                                        <Td>{data.origin}</Td>
-                                                        <Td>{data.averageWeight}</Td>
-                                                        <Td>
-                                                            <Switch
-                                                                onChange={() => handleStatus(dataIndex)}
-                                                                size="lg"
-                                                                isChecked={data.status}
-                                                                colorScheme="green"
-                                                            />
-                                                        </Td>
-                                                        <Td></Td>
-                                                    </Tr>
-                                                </Tbody>
-                                            </Table>
-                                        </TableContainer>
-                                    </Box>
+                                    <table className={cx('table-crud')}>
+                                        <tbody>
+                                            <tr>
+                                                <td className={cx('td-crud-id')}>{data.id}</td>
+                                                <td className={cx('td-crud-name')}>
+                                                    <div className={cx('p-name')}>{data.name}</div>
+                                                </td>
+                                                <td className={cx('td-crud-quantity')}>
+                                                    <div className={cx('p-quantity')}>{data.quantity}</div>
+                                                </td>
+                                                <td className={cx('td-crud-nestQuantity')}>
+                                                    <div className={cx('p-nestQuantity')}>{data.nestQuantity}</div>
+                                                </td>
+                                                <td className={cx('td-crud-origin')}>
+                                                    <div className={cx('p-origin')}>{data.origin}</div>
+                                                </td>
+                                                <td className={cx('td-crud-avrWeight')}>
+                                                    <div className={cx('p-avrWeight')}>{data.averageWeight}</div>
+                                                </td>
+                                                <td className={cx('td-crud-status')}>
+                                                    <div className={cx('p-status')}>
+                                                        <Switch
+                                                            onChange={() => handleStatus(dataIndex)}
+                                                            size="lg"
+                                                            isChecked={data.status}
+                                                            colorScheme="green"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
                                     <AccordionIcon />
                                 </AccordionButton>
-                                <div>
+                                <div className={cx('edit-btn')}>
                                     <Button
                                         key={data.id}
                                         onClick={() => toggleEditForm(data.id)}
@@ -815,7 +824,7 @@ function AddSpeciesColor() {
                                                     {(colorExist === true && (
                                                         <Alert status="error">
                                                             <AlertIcon />
-                                                            <AlertTitle>
+                                                            <AlertTitle className={cx('padding-alert')}>
                                                                 Color specie existed - Please input another specie color
                                                             </AlertTitle>
                                                             <AlertDescription></AlertDescription>
@@ -824,8 +833,7 @@ function AddSpeciesColor() {
                                                         (colorExist === false && (
                                                             <Alert status="success">
                                                                 <AlertIcon />
-                                                                <AlertTitle>
-                                                                    {' '}
+                                                                <AlertTitle className={cx('padding-alert')}>
                                                                     This specie color can be added!!!
                                                                 </AlertTitle>
                                                                 <AlertDescription></AlertDescription>
@@ -945,8 +953,8 @@ function AddSpeciesColor() {
                                             {(submissionStatus === true && (
                                                 <Alert status="success">
                                                     <AlertIcon />
-                                                    <AlertTitle>Success!</AlertTitle>
-                                                    <AlertDescription>
+                                                    <AlertTitle className={cx('padding-alert')}>Success!</AlertTitle>
+                                                    <AlertDescription className={cx('padding-alert')}>
                                                         Your form has been submitted successfully.
                                                     </AlertDescription>
                                                 </Alert>
@@ -954,14 +962,16 @@ function AddSpeciesColor() {
                                                 (submissionStatus === false && (
                                                     <Alert status="error">
                                                         <AlertIcon />
-                                                        <AlertTitle>{validate.specieColor}</AlertTitle>
+                                                        <AlertTitle className={cx('padding-alert')}>
+                                                            {validate.specieColor}
+                                                        </AlertTitle>
                                                     </Alert>
                                                 ))}
                                             {(colorExist === true && (
                                                 <Alert status="error">
                                                     <AlertIcon />
-                                                    <AlertTitle>
-                                                        Color specie existed - Please input another specie color
+                                                    <AlertTitle className={cx('padding-alert')}>
+                                                        Color specie existed <br /> Please input another specie color
                                                     </AlertTitle>
                                                     <AlertDescription></AlertDescription>
                                                 </Alert>
@@ -969,7 +979,9 @@ function AddSpeciesColor() {
                                                 (colorExist === false && (
                                                     <Alert status="success">
                                                         <AlertIcon />
-                                                        <AlertTitle>Color species can be added </AlertTitle>
+                                                        <AlertTitle className={cx('padding-alert')}>
+                                                            Color species can be added{' '}
+                                                        </AlertTitle>
                                                         <AlertDescription></AlertDescription>
                                                     </Alert>
                                                 ))}

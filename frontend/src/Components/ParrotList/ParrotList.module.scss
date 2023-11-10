@@ -12,6 +12,7 @@
     background-color: #ccc;
     color: #2b2c30;
 }
+
 .compare-section {
     display: none;
     position: fixed;
@@ -142,7 +143,7 @@
     position: relative;
     cursor: pointer;
     &:hover {
-        // opacity: 0.9;
+        opacity: 0.9;
     }
 }
 
@@ -234,7 +235,7 @@
 
 .parrot-like {
     display: flex;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     align-items: center;
 }
 
@@ -344,15 +345,14 @@
 }
 
 .number-page {
-    margin: 0;
-    color: #2b2c30;
-    &:hover {
-        cursor: pointer;
-    }
+    font-size: 1.6rem;
+    font-weight: 500;
+    transition: font-size 0.3s, font-weight 0.3s, transform 0.3s;
+    cursor: pointer;
 
-    .parrot-review-orders {
-        display: flex;
-        justify-content: space-evenly;
-        flex-wrap: nowrap;
+    &:hover {
+        font-size: 2.2rem !important;
+        font-weight: 600 !important;
+        transform: scale(1.2); // Add a scale transform for the pop-up effect
     }
 }

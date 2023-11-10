@@ -94,6 +94,12 @@ function SystemNavbar({ staff, manager }) {
                     <Link to="/admin/faqs">
                         <p>FAQs</p>
                     </Link>
+                    <Link to="/staff/order">
+                        <p>STAFF</p>
+                    </Link>
+                    <Link to="/marketer/dashboard">
+                        <p>MARKETER</p>
+                    </Link>
                 </div>
 
                 <div className={cx('user-account')}></div>

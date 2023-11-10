@@ -312,3 +312,51 @@
         }
     }
 }
+.td-crud-id {
+    padding: 10px 37px;
+}
+.td-crud-name {
+    max-width: 225px;
+    .p-name {
+        width: 225px;
+    }
+}
+.td-crud-quantity {
+    max-width: 100px;
+    .p-quantity {
+        width: 100px;
+    }
+}
+.td-crud-nestQuantity {
+    max-width: 230px;
+    .p-nestQuantity {
+        width: 230px;
+    }
+}
+.td-crud-origin {
+    max-width: 150px;
+    .p-origin {
+        width: 100px;
+        padding: 5px 5px;
+    }
+}
+
+.td-crud-avrWeight {
+    max-width: 200px;
+
+    .p-avrWeight {
+        width: 200px;
+    }
+}
+.td-crud-status {
+    max-width: 150px;
+    .p-status {
+        width: 150px;
+    }
+}
+.edit-btn {
+    padding: 0 5px;
+}
+.padding-alert {
+    padding: 10px !important;
+}

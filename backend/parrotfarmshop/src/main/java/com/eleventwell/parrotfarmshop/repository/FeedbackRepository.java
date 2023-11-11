@@ -26,6 +26,11 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
     Double calculateRoundedAverageRating(@Param("colorid") Long colorid);
     List<FeedbackEntity> findAllByOrderByIdDesc();
 
+    @Query("select count(u) From FeedbackEntity u ")
+    Integer countAll();
+
+
+
 
  Integer countAllByOrderDetailIdId(Long orderDetailId);
 //    Integer countAllByOrderIdId(Long id);

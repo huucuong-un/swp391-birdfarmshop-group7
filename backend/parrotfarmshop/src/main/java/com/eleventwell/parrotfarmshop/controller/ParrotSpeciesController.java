@@ -252,6 +252,11 @@ public class ParrotSpeciesController {
         return  parrotSpeciesService.findTop3Sale();
     }
 
+    @GetMapping(value = "marketer/parrot-species/find-top-sale-price-by-species-id/{id}")
+    public Double findTopsalePriceBySpeciesId(@RequestBody @PathVariable("id") Long id) {
+        return  parrotSpeciesService.findTopSalePrice(id);
+    }
+
     @GetMapping(value = "parrot-species/find-one-species-by-name/{name}")
     public ParrotSpeciesDTO findOneSpeciesById(@RequestBody @PathVariable("name") String name) {
         ParrotSpeciesDTO parrotSpeciesDTO =  parrotSpeciesService.findOneByName(name);

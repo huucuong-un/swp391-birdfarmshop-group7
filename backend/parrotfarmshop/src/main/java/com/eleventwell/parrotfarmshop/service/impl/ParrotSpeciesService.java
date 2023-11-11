@@ -320,6 +320,9 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
 
         return result;
     }
+    public Double findTopSalePrice(Long speciesId){
+        return parrotSpeciesRepository.findTop3SalesPrice(speciesId);
+    }
 
     public ParrotSpeciesDTO findOneByName(String name) {
         if(parrotSpeciesRepository.findOneByName(name) == null) return null;

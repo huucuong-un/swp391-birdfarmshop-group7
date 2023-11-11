@@ -112,8 +112,12 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
                                          Pageable pageable);
     @Query("SELECT  o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity o  " +
             "group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by" +
-            " SUM(o.parrot.parrotSpeciesColor.price) DESC  ")
+            " SUM(o.price) DESC  ")
     List<ParrotSpeciesEntity> findTop3Sales(Pageable pageable);
+
+    @Query("SELECT SUM(o.price)  FROM OrderDetailEntity o  " +
+            "group by o.parrot.parrotSpeciesColor.parrotSpecies.id having o.parrot.parrotSpeciesColor.parrotSpecies.id = :speciesId ")
+    Double findTop3SalesPrice(@Param("speciesId") Long speciesId);
 
     ParrotSpeciesEntity findOneByName(String name);
 }

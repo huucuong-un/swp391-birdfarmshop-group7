@@ -296,7 +296,7 @@ function Navbar() {
                     </div>
                     <div className={cx('subnav')}>
                         <Tooltip label="Love zone!!!" fontSize="xl" placement="bottom">
-                            <Link to="/add-parrot-nest-service" className={cx('subnavbtn')}>
+                            <Link to="/nest" className={cx('subnavbtn')}>
                                 NEST
                             </Link>
                         </Tooltip>

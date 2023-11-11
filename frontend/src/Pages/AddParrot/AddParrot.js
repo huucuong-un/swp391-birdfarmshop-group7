@@ -375,20 +375,11 @@ function AddParrot() {
                     onChange={(e) => setSort({ ...sort, healthStatus: e.target.value })}
                 >
                     <option value="b">Health status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+                    <option value="true">Good</option>
+                    <option value="false">Not good</option>
                 </select>
                 {/* Sort 6 */}
 
-                <select
-                    name="pregnancyStatus"
-                    id="pregnancyStatus"
-                    onChange={(e) => setSort({ ...sort, pregnancyStatus: e.target.value })}
-                >
-                    <option value="b">Pregnancy status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                </select>
                 {/* Sort 7 */}
                 <select
                     name="saleStatus"
@@ -396,8 +387,8 @@ function AddParrot() {
                     onChange={(e) => setSort({ ...sort, saleStatus: e.target.value })}
                 >
                     <option value="b">Sale status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+                    <option value="true">Sold</option>
+                    <option value="false">Available</option>
                 </select>
                 {/* Sort 8 */}
                 <select name="sortAge" id="sortAge" onChange={(e) => setSort({ ...sort, sortAge: e.target.value })}>
@@ -407,7 +398,7 @@ function AddParrot() {
                 </select>
                 {/* Sort 9 */}
                 <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="b">Date</option>
+                    <option value="b">Created Date</option>
                     <option value="DDESC">Descending</option>
                     <option value="DASC">Ascending</option>
                 </select>

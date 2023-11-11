@@ -10,7 +10,8 @@ import styles from '~/Components/Contact/Contact.module.scss';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
-export default function Contact() {
+
+function Contact() {
     return (
         <div className={cx('wapper')}>
             <div className={cx('inner')}>
@@ -27,17 +28,20 @@ export default function Contact() {
                             </a>
                         </AccordionPanel>
                         <AccordionPanel pb={4}>
-                            <a href="https://m.me/j/AbbbNC86oDEKEb1Y/" target="_blank">
+                            <a href="https://m.me/101641589473267" target="_blank">
                                 <img className={cx('contact_img')} src={MessengerLogo} />
                             </a>
                         </AccordionPanel>
                         <AccordionPanel pb={4}>
-                            <a href="https://zalo.me/g/rrovpr452" target="_blank">
+                            <a
+                                href="https://zalo.me/0943488056?fbclid=IwAR26XVdwkJwH79YYE2tO28o50AbLRuMdeYiQLi-SkqQ03U75MWwkd3bsZD0"
+                                target="_blank"
+                            >
                                 <img className={cx('contact_img')} src={ZaloLogo} />
                             </a>
                         </AccordionPanel>
                         <AccordionPanel pb={4}>
-                            <a href="https://t.me/+ZkuBXHe6lVFhZGJl" target="_blank">
+                            <a href="https://t.me/doanhkhoa031103" target="_blank">
                                 <img className={cx('contact_img')} src={telegramLogo} />
                             </a>
                         </AccordionPanel>
@@ -47,3 +51,5 @@ export default function Contact() {
         </div>
     );
 }
+
+export default Contact;

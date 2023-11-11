@@ -364,30 +364,27 @@ function MngVoucherPromotion() {
             )}
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                Start Date{' '}
                 <input
                     type="date"
                     id="searchStartDate"
                     name="searchStartDate"
                     onChange={(e) => setSort({ ...sort, searchStartDate: e.target.value })}
-                />
+                />{' '}
+                End Date
                 <input
                     type="date"
                     id="searchEndDate"
                     name="searchEndDate"
                     onChange={(e) => setSort({ ...sort, searchEndDate: e.target.value })}
                 />
-
                 <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
-                    <option value="" disabled>
-                        Status
-                    </option>
+                    <option>Status</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
                 <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="" disabled>
-                        Date
-                    </option>
+                    <option>Date</option>
                     <option value="DDESC">Newest</option>
                     <option value="DASC">Oldest</option>
                 </select>
@@ -396,9 +393,7 @@ function MngVoucherPromotion() {
                     id="sortPrice"
                     onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}
                 >
-                    <option value="" disabled selected>
-                        Date
-                    </option>
+                    <option>Date</option>
                     <option value="PDESC">Descending</option>
                     <option value="PASC">Ascending</option>
                 </select>

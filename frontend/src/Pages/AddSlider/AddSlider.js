@@ -132,18 +132,18 @@ function AddSlider() {
                     (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20)
                 ) {
                     setValidate({
-                        sliderName: 'SliderName must be between 3 and 50 characters',
-                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                        sliderName: 'Slider name must be between 3 and 50 characters',
+                        sliderDescription: 'Slider description must be between 20 and 150 characters',
                     });
                 } else if (slider.sliderName.length > 50 || slider.sliderName.length < 3) {
                     setValidate({
-                        sliderName: 'SliderName must be between 3 and 50 characters',
+                        sliderName: 'Slider name must be between 3 and 50 characters',
                         sliderDescription: '',
                     });
                 } else if (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20) {
                     setValidate({
                         sliderName: '',
-                        sliderDescription: 'SliderDescription must be between 20 and 150 characters',
+                        sliderDescription: 'Slider description must be between 20 and 150 characters',
                     });
                 }
 
@@ -304,13 +304,15 @@ function AddSlider() {
                                     <AlertIcon />
                                     <AlertTitle>
                                         <Text fontSize="sm" lineHeight="1.4">
+                                            Failed to add slider
+                                            <br />
                                             {validate.sliderName}
                                             <br />
                                             {validate.sliderDescription}
+                                            <br />
+                                            Please check your input!!!
                                         </Text>
                                     </AlertTitle>
-                                    <AlertTitle>Failed to add parrot species - </AlertTitle>
-                                    <AlertDescription>Please check your input!!!</AlertDescription>
                                 </Alert>
                             ))}
                         <div className={cx('title-post')}>
@@ -418,29 +420,33 @@ function AddSlider() {
                     <option value="DASC">Oldest</option>
                 </select>
             </div>
-            <TableContainer className={cx('table-container')}>
-                <Table size="xs ">
-                    <Thead>
-                        <Tr>
-                            <Th className={cx('text-center')}>Slider ID</Th>
-                            <Th className={cx('text-center')}>Slider name</Th>
-                            <Th className={cx('text-center')}>Description</Th>
-                            <Th className={cx('text-center')}>Slider image</Th>
-                            <Th className={cx('text-center')}>Status</Th>
-                            <Th className={cx('text-center')}>Action</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
+            <div className={cx('table-container')}>
+                <table size="xs ">
+                    <thead>
+                        <tr>
+                            <th className={cx('text-center')}>Slider ID</th>
+                            <th className={cx('text-center')}>Slider name</th>
+                            <th className={cx('text-center')}>Description</th>
+                            <th className={cx('text-center')}>Slider image</th>
+                            <th className={cx('text-center')}>Status</th>
+                            <th className={cx('text-center')}>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className={cx('crud-tbody')}>
                         {sliderList.map((slider, index) => (
                             <>
-                                <Tr key={slider.id}>
-                                    <Td>{slider.id}</Td>
-                                    <Td>{slider.sliderName}</Td>
-                                    <Td>{slider.sliderDescription}</Td>
-                                    <Td className={cx('image-container')}>
-                                        <img src={slider.sliderImageURL} />
-                                    </Td>
-                                    <Td>
+                                <tr key={slider.id}>
+                                    <td>{slider.id}</td>
+                                    <td>{slider.sliderName}</td>
+                                    <td className={cx('td-crud-description')}>
+                                        <div className={cx('div-crud-description')}>{slider.sliderDescription}</div>
+                                    </td>
+                                    <td className={cx('td-image')}>
+                                        <div className={cx('div-image')}>
+                                            <img src={slider.sliderImageURL} />
+                                        </div>
+                                    </td>
+                                    <td>
                                         <Switch
                                             onChange={() => handleStatus(index)}
                                             size="lg"
@@ -465,8 +471,8 @@ function AddSlider() {
                                             value={slider.status}
                                             onChange={(e) => setSlider({ ...slider, status: e.target.value })}
                                         />
-                                    </Td>
-                                    <Td>
+                                    </td>
+                                    <td>
                                         <Button
                                             key={slider.id}
                                             size="lg"
@@ -475,20 +481,20 @@ function AddSlider() {
                                         >
                                             {openSliderID === slider.id ? 'Close edit' : 'Edit'}
                                         </Button>
-                                    </Td>
-                                </Tr>
-                                <Tr key={index + 'slider'}>
+                                    </td>
+                                </tr>
+                                <tr key={index + 'slider'}>
                                     {openSliderID === slider.id && (
-                                        <Td colSpan={8}>
+                                        <td colSpan={8}>
                                             <UpdateSlider slider={slider} reloadData={handleUpdateSuccess} />
-                                        </Td>
+                                        </td>
                                     )}
-                                </Tr>
+                                </tr>
                             </>
                         ))}
-                    </Tbody>
-                </Table>
-            </TableContainer>
+                    </tbody>
+                </table>
+            </div>
             <div className={cx('button-pagination')}>
                 <button disabled={page <= 1} onClick={() => handlePageChange(page - 1)} colorScheme="pink">
                     <FontAwesomeIcon icon={faAngleLeft} />

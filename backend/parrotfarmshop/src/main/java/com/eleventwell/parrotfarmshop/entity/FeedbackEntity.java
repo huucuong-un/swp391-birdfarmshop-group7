@@ -73,7 +73,7 @@ public class FeedbackEntity extends BaseEntity {
 	private ParrotSpeciesColorEntity parrotSpeciesColor;
 
 	@OneToOne
-	@JoinColumn(name = "order_detail_id", unique = true)
+	@JoinColumn(name = "order_detail_id", unique = true,updatable = false)
 	private OrderDetailEntity orderDetailId;
 
 

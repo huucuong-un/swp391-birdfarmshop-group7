@@ -14,10 +14,6 @@ function ParrotProduct() {
     const [sortWay, setSortWay] = useState('');
     const [totalSpecies, setTotalSpecies] = useState(0);
 
-    const handleSearchChange = (newSearchValue) => {
-        setSearch(newSearchValue);
-    };
-
     const handleSortChange = (newSortValue) => {
         setSortWay(newSortValue);
     };
@@ -26,17 +22,12 @@ function ParrotProduct() {
         setTotalSpecies(newTotalSpecies);
     };
 
-    console.log(totalSpecies);
+    // console.log(totalSpecies);
 
     return (
         <div className={cx('wrapper')}>
             <StartPartPage totalSpecies={totalSpecies}>Parrots</StartPartPage>
-            <SortSpace
-                search={search}
-                onSearchChange={handleSearchChange}
-                onSortChange={handleSortChange}
-                sortWay={sortWay}
-            ></SortSpace>
+            <SortSpace search={search} onSortAndSearchChange={handleSortChange} sortWay={sortWay}></SortSpace>
             <ParrotList search={search} sortWay={sortWay} onTotalSpeciesChange={handleTotalSpeciesChange}></ParrotList>
         </div>
     );

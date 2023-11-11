@@ -149,3 +149,22 @@
         }
     }
 }
+.td-crud-description {
+    max-width: 150px;
+    padding: 10px;
+}
+.crud-tbody {
+    tr {
+        padding: 20px !important;
+    }
+}
+
+.td-image {
+    max-width: 300px;
+    display: flex;
+    justify-content: center;
+    .div-image {
+        padding: 10px;
+        width: 200px;
+    }
+}

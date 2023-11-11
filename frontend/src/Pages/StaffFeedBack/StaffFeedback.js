@@ -58,6 +58,7 @@ function StaffFeedback() {
     const [show, setShow] = useState(false);
     const [loggedUser, setLoggedUser] = useState();
     const { user } = ShopState();
+    const { setUser } = ShopState();
     const [feedback, setFeedback] = useState({ content: null });
     const [replyData, setReplyData] = useState({});
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
@@ -80,6 +81,8 @@ function StaffFeedback() {
                         navigate('/error');
                     }
                 }
+                setUser(userByToken);
+                user = userByToken;
             } catch (error) {
                 console.log(error);
             }
@@ -121,9 +124,9 @@ function StaffFeedback() {
         return stars;
     };
 
-    useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+    // useEffect(() => {
+    //     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    // }, []);
     const [vinh, setVinh] = useState(true);
     const [thanh, setThanh] = useState(0);
     const [sort, setSort] = useState({
@@ -153,6 +156,7 @@ function StaffFeedback() {
 
             // Định dạng thành "yyyy/mm/dd"
             const formattedDate = new Date(`${year}/${month}/${day}`);
+            console.log(feedback);
 
             const replyParam = {
                 id: feedback.id,
@@ -160,11 +164,11 @@ function StaffFeedback() {
                 rating: feedback.rating,
                 belongTo: 'parrot',
                 userId: feedback.userId,
-                replyerId: user.userId,
+                replyerId: user.id,
                 replyContent: textareaValue === '' ? null : textareaValue,
                 replyDate: textareaValue === '' ? null : formattedDate,
-                colorId: feedback.colorId,
                 orderDetailId: feedback.orderDetailId,
+                colorId: feedback.colorId,
                 status: true,
             };
 
@@ -282,9 +286,11 @@ function StaffFeedback() {
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>Feedback</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    FEEDBACK
+                </Text>
+            </Box>
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <select

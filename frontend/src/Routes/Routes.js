@@ -79,7 +79,7 @@ const publicRoutes = [
     { path: '/profile/change-password', component: ChangePassword },
     { path: '/system/login', component: SystemLogin, layout: LoginSystemLayout },
     { path: '/faqs', component: FAQs },
-    // { path: '/compare-products', component: CompareParrot },
+    { path: '/compare-products', component: CompareParrot },
     { path: '/profile', component: MyAccount },
     { path: '/user-profile', component: UserProfileNew },
     { path: '/profile/change-password', component: ChangePassword },
@@ -106,7 +106,9 @@ const publicRoutes = [
     //Staff
     { path: '/staff/feedback', component: StaffFeedback, layout: StaffLayout, role: 'staff' },
     { path: '/staff/order', component: StaffOrderManagement, layout: StaffLayout, role: 'staff' },
+    { path: '/staff/nest-usage-history', component: AdNestUsageHistoryManagement, layout: StaffLayout, role: 'staff' },
 
+    //Admin
     { path: '/admin/parrot-species', component: AdParrotSpecies, layout: SystemLayout },
     { path: '/admin/parrot', component: AddParrot, layout: SystemLayout },
     { path: '/admin/dashboard', component: AdminDashboard, layout: SystemLayout },
@@ -114,7 +116,6 @@ const publicRoutes = [
     { path: '/admin/nest-price', component: AdNestPriceManagement, layout: SystemLayout },
     { path: '/admin/nest-development', component: AdNestDevelopmentManagement, layout: SystemLayout },
     { path: '/admin/nest-development-status', component: AdNestDevelopmentStatus, layout: SystemLayout },
-    { path: '/admin/nest-usage-history', component: AdNestUsageHistoryManagement, layout: StaffLayout, role: 'staff' },
     { path: '/admin/role', component: AdminRoleList, layout: SystemLayout },
     { path: '/admin/promotion', component: MngVoucherPromotion, layout: SystemLayout },
     { path: '/admin/account', component: AdminAccountList, layout: SystemLayout },

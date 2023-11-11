@@ -47,6 +47,9 @@ public class OrderDetailEntity extends BaseEntity {
 	@PrimaryKeyJoinColumn
 	private FeedbackEntity feedback;
 
+    @Column(name = "price")
+    private Double price;
+
 
 
 }

@@ -20,7 +20,6 @@ public class FeedbackDTO extends BaseDTO {
 
     private String content;
 
-
     private Integer rating;
 
 private  Boolean status;

@@ -247,12 +247,18 @@ function StaffFeedback() {
                 try {
                     feedback.userInfor = await UserAPI.getUserById(item.userId);
                     feedback.species = await ParrotSpeciesColorAPI.findOneSpeciesByColorId(item.colorId);
+                    const img = ParrotSpeciesColorAPI.getImagesByColorId(item.colorId);
+                    img.then((result) => {
+                        feedback.img = result[0].imageUrl;
+                    });
                     data.push(feedback);
+                    console.log(img);
                 } catch (error) {
                     console.error(error);
                 }
             }
             setCombineData(data);
+            console.log(combineData);
         };
         getUserbyId();
     }, [feedbackList]);
@@ -419,10 +425,7 @@ function StaffFeedback() {
                         <div className={cx('rate-area')}>
                             <div className={cx('product-container')}>
                                 <div className={cx('product-img')}>
-                                    <img
-                                        src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                        alt="product-img"
-                                    />
+                                    <img src={feedback.img} alt="product-img" />
                                 </div>
                                 <div className={cx('product-info')}>
                                     <div className={cx('product-title')}>

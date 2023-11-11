@@ -255,8 +255,9 @@ function AddParrotSpecies() {
                         availabilityStatus: true,
                         origin: '',
                         averageWeight: 0,
-                        parrotAverageRating: 4.5,
+                        parrotAverageRating: 0,
                         nestAverageRating: 4.0,
+                        status: true,
                     });
 
                     setParrotSpeciesColor({

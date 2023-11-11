@@ -106,13 +106,13 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
                         model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
                         model.setColorId(entity.getParrot().getParrotSpeciesColor().getId());
                         model.setSpeciesName(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName());
-                        model.setTotalPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
+                        model.setTotalPrice(entity.getPrice());
                         model.setPrice(entity.getPrice());
                         model.setQuantity(1);
                     }else{
                         model.setImg(entity.getNestUsageHistory().getNest().getNestPrice().getParrotSpecies().getParrotSpeciesColors().get(0).getImages().get(0).getImageUrl());
                         model.setSpeciesName(entity.getNestUsageHistory().getNest().getNestPrice().getParrotSpecies().getName());
-                        model.setTotalPrice(entity.getNestUsageHistory().getNest().getNestPrice().getPrice());
+                        model.setTotalPrice(entity.getPrice());
                         model.setPrice(entity.getPrice());
                         model.setQuantity(1);
                     }

@@ -382,7 +382,6 @@ function AdNestUsageHistoryManagement() {
                                                 }
                                             })}
                                     </Box>
-
                                     <StepSeparator />
                                 </Step>
                             ))}

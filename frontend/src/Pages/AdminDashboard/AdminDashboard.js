@@ -145,6 +145,10 @@ function AdminDashboard() {
     }, []);
 
     useEffect(() => {
+        console.log(totalItem);
+    }, [totalItem]);
+
+    useEffect(() => {
         const getTop3 = async () => {
             const top3 = await ParrotSpeciesAPI.getTop3SpeciesWithHighestOrderMoney();
             console.log(top3);
@@ -223,6 +227,9 @@ function AdminDashboard() {
             </Row>
             <Row className={cx('second-row')}>
                 <Col xs lg="6" margin="2%">
+                    <Text fontSize={20} textAlign="center" fontWeight={500}>
+                        Income Chart by month
+                    </Text>
                     <ResponsiveContainer width="100%" height={400}>
                         <LineChart data={data}>
                             <XAxis dataKey="month" />
@@ -230,12 +237,12 @@ function AdminDashboard() {
                             <CartesianGrid strokeDasharray="3 3" />
                             <Tooltip />
                             <Legend />
-                            <Line type="monotone" dataKey="earnings" stroke="#8884d8" />
+                            <Line type="bump" dataKey="earnings" stroke="#8884d8" />
                         </LineChart>
                     </ResponsiveContainer>
                 </Col>
                 <Col>
-                    <Text fontSize={28} textAlign="center" fontWeight={500}>
+                    <Text fontSize={20} textAlign="center" fontWeight={500}>
                         Top 3 Species
                     </Text>
                     <TableContainer>

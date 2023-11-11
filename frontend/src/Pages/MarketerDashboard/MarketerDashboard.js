@@ -18,7 +18,20 @@ import {
     Img,
 } from '@chakra-ui/react';
 import { Col, Row } from 'react-bootstrap';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    renderCustomizedLabel,
+    PieChart,
+    Pie,
+    Cell,
+} from 'recharts';
 import styles from '~/Pages/AdminDashboard/AdminDashboard.module.scss';
 import classNames from 'classnames/bind';
 import OrderAPI from '~/Api/OrderAPI';
@@ -120,6 +133,7 @@ function MarketerDashboard() {
     useEffect(() => {
         console.log(combineDataForTop3);
     }, [combineDataForTop3]);
+
     return (
         <Container maxW="container.xl">
             <Text fontSize={20} fontWeight={500} paddingTop={10}>
@@ -130,7 +144,7 @@ function MarketerDashboard() {
                     combineData.map((species, index) => (
                         <Col key={index} xs lg="3" margin="2%">
                             <Box className={cx('statistic-item')}>
-                                <Text fontSize={14}>{species.name}</Text>
+                                <Text fontSize={14}>Sale of {species.name}</Text>
                                 <Text fontWeight={600}>{species.earnings}</Text>
                             </Box>
                         </Col>
@@ -139,6 +153,9 @@ function MarketerDashboard() {
 
             <Row className={cx('second-row')}>
                 <Col xs lg="6" margin="2%">
+                    <Text fontSize={20} textAlign="center" fontWeight={500}>
+                        Parrot Trend Chart
+                    </Text>
                     <ResponsiveContainer width="100%" height={400}>
                         <LineChart data={combineData}>
                             <XAxis dataKey="name" />
@@ -146,13 +163,13 @@ function MarketerDashboard() {
                             <CartesianGrid strokeDasharray="3 3" />
                             <Tooltip />
                             <Legend />
-                            <Line type="monotone" dataKey="earnings" stroke="#8884d8" />
+                            <Line type="linear" dataKey="earnings" stroke="#8884d8" />
                         </LineChart>
                     </ResponsiveContainer>
                 </Col>
                 <Col>
-                    <Text fontSize={18} textAlign="center" fontWeight={500}>
-                        Top 3 Species
+                    <Text fontSize={20} textAlign="center" fontWeight={500}>
+                        Top 3 Popular Species
                     </Text>
                     <TableContainer>
                         <Table variant="simple">

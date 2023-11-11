@@ -16,7 +16,7 @@
     flex-direction: column;
 }
 .inner {
-    width: 50% !important;
+    width: 100% !important;
     div {
         overflow: hidden;
         padding: 2px;
@@ -46,7 +46,7 @@
     justify-content: end;
 }
 .table-container {
-    width: 50%;
+    width: 100% !important;
     th {
         padding: 10px;
         background-color: #f9ede9;

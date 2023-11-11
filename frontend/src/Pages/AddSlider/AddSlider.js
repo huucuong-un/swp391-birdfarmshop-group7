@@ -1,5 +1,3 @@
-import classNames from 'classnames/bind';
-import styles from '~/Pages/AddSlider/AddSlider.module.scss';
 import {
     Input,
     Table,
@@ -39,6 +37,8 @@ import SliderAPI from '~/Api/SliderAPI';
 import { useNavigate } from 'react-router-dom';
 import UserAPI from '~/Api/UserAPI';
 import RoleAPI from '~/Api/RoleAPI';
+import classNames from 'classnames/bind';
+import styles from '~/Pages/AddSlider/AddSlider.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -320,6 +320,7 @@ function AddSlider() {
                                 <h1>Add slider</h1>
                             </div>
                         </div>
+
                         <Table size="xs">
                             <Tbody>
                                 <Tr>

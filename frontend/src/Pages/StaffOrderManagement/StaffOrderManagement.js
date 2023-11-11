@@ -221,7 +221,6 @@ function StaffOrderManagement() {
                             <Th>Phone</Th>
                             <Th>Create At</Th>
                             <Th>Price</Th>
-                            <Th>Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -236,15 +235,6 @@ function StaffOrderManagement() {
                                     <Td>{order.orderDTO.totalPrice}</Td>
                                     <Td>
                                         {/* {order.orderDTO.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />} */}
-                                        <Button
-                                            colorScheme="green"
-                                            onClick={() => {
-                                                setOverlay(<OverlayOne />);
-                                                onOpen();
-                                            }}
-                                        >
-                                            Update
-                                        </Button>
                                     </Td>
                                 </Tr>
                             ))}

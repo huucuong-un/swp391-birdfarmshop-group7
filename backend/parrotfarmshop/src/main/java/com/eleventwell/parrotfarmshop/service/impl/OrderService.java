@@ -272,7 +272,7 @@ private Long getNestUsageHistoryId(OrderDetailEntity orderDetail){
     }
 
     public int totalItemWithStatusDone() {
-        return (int)orderRepository.countByStatusEquals("Done");
+        return (int)orderRepository.countByStatusEquals("Paid");
     }
 
     public int countOrdersCreatedToday() {

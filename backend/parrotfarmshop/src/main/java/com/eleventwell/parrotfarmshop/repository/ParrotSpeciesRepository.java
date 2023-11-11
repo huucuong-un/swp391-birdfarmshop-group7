@@ -4,10 +4,7 @@
  */
 package com.eleventwell.parrotfarmshop.repository;
 
-import com.eleventwell.parrotfarmshop.entity.NestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
-import com.eleventwell.parrotfarmshop.entity.PostEntity;
+import com.eleventwell.parrotfarmshop.entity.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
@@ -117,6 +114,8 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
             "group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by" +
             " SUM(o.parrot.parrotSpeciesColor.price) DESC  ")
     List<ParrotSpeciesEntity> findTop3Sales(Pageable pageable);
+
+    ParrotSpeciesEntity findOneByName(String name);
 }
 
 

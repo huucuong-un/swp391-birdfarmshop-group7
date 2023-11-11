@@ -111,6 +111,12 @@ const ParrotSpeciesAPI = {
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
         return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
     },
+
+    getSpeciesByName(speciesName, includeAuthorization = false) {
+        const url = `/parrot-species/find-one-species-by-name/${speciesName}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
+    },
 };
 
 export default ParrotSpeciesAPI;

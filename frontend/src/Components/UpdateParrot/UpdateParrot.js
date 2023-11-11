@@ -16,10 +16,12 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Switch,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
+import ParrotSpeciesColorAPI from '~/Api/ParrotSpeciesColorAPI';
 const cx = classNames.bind(styles);
 
 function UpdateParrot({ parrot, reloadData }) {
@@ -29,8 +31,11 @@ function UpdateParrot({ parrot, reloadData }) {
     const [speciesColor, setSpeciesColor] = useState([]);
     const [speciesColorByID, setSpeciesColorById] = useState([]);
     const [newParrot, setNewParrot] = useState(parrot);
-    console.log('new Parrot');
-    console.log(newParrot);
+    const [healthStatus, setHealthStatus] = useState(parrot.healthStatus);
+    const [specificSpecies, setSpecificSpecies] = useState();
+
+    const [selectedSpeciesId, setSelectedSpeciesId] = useState();
+
     const handleUpdateParentStatus = () => {
         // Simulate an update action here
         // After the update is successful, call the function from the parent to set reloadData to true
@@ -38,6 +43,16 @@ function UpdateParrot({ parrot, reloadData }) {
         // setStatus(true); // Update the status to true
         reloadData(); // Call the parent function to set reloadData to true
     };
+    useEffect(() => {
+        const getSpecies = async () => {
+            const speciesNow = await ParrotSpeciesAPI.getSpeciesByColorId(newParrot.colorID);
+            setSpecificSpecies(speciesNow);
+            setSpeciesColorById(speciesNow.id);
+            setSelectedSpeciesId(speciesNow.id);
+        };
+
+        getSpecies();
+    }, []);
     // Handel add parrot
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,7 +63,7 @@ function UpdateParrot({ parrot, reloadData }) {
                 status: newParrot.status,
                 saleStatus: newParrot.saleStatus,
                 pregnancyStatus: newParrot.pregnancyStatus,
-                healthStatus: newParrot.healthStatus,
+                healthStatus: healthStatus,
                 numberOfChildren: newParrot.numberOfChildren,
                 colorID: newParrot.colorID,
             };
@@ -112,7 +127,9 @@ function UpdateParrot({ parrot, reloadData }) {
         fetchParrotSpeciesColorbyID();
     }, [speciesColorByID]);
     // Fetch parrot list
-
+    const handleChangHealthStatus = () => {
+        setHealthStatus(!healthStatus);
+    };
     return (
         <div className={cx('wrapper')}>
             <form className={cx('inner')} onSubmit={handleSubmit}>
@@ -158,18 +175,50 @@ function UpdateParrot({ parrot, reloadData }) {
                                 </Td>
                             </Tr>
                             <Tr height={35}>
+                                <Td>Health Status</Td>
+                                <Td>
+                                    <Switch
+                                        size="lg"
+                                        isChecked={healthStatus}
+                                        onChange={handleChangHealthStatus}
+                                        marginTop={10}
+                                    />
+                                    {healthStatus ? (
+                                        <p style={{ margin: 0, height: '35px' }}>Good</p>
+                                    ) : (
+                                        <p style={{ margin: 0, height: '35px' }}>Not good</p>
+                                    )}
+                                    <Input
+                                        type="hidden"
+                                        id="health"
+                                        name="health"
+                                        variant="filled"
+                                        value={healthStatus}
+                                        onChange={(e) => setNewParrot({ ...newParrot, healthStatus: e.target.value })}
+                                    />
+                                </Td>
+                            </Tr>
+                            <Tr height={35}>
                                 <Td>Parrot species</Td>
                                 <Td>
                                     <select
                                         className={cx('select-btn')}
-                                        onChange={(e) => setSpeciesColorById(e.target.value)}
+                                        onChange={(e) => {
+                                            setSpeciesColorById(e.target.value);
+                                            setSelectedSpeciesId(e.target.value);
+                                        }}
                                         required
                                     >
                                         <option key={'a'} value={'a'}>
                                             Selected species
                                         </option>
+
                                         {species.map((specie, index) => (
-                                            <option key={index} value={specie.id}>
+                                            <option
+                                                key={index}
+                                                value={specie.id}
+                                                selected={specie.id === selectedSpeciesId}
+                                            >
                                                 {specie.name}
                                             </option>
                                         ))}
@@ -189,6 +238,7 @@ function UpdateParrot({ parrot, reloadData }) {
                                             onChange={(e) => {
                                                 const selectedColorId = e.target.value;
                                                 console.log('Selected color ID:', selectedColorId);
+
                                                 setNewParrot({ ...newParrot, colorID: selectedColorId });
                                             }}
                                             required
@@ -201,6 +251,7 @@ function UpdateParrot({ parrot, reloadData }) {
                                                         key={index}
                                                         value={item.id}
                                                         style={{ backgroundColor: item.color, padding: '5px' }}
+                                                        selected={item.id === species}
                                                     >
                                                         {item.color}
                                                     </option>

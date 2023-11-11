@@ -321,5 +321,11 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
         return result;
     }
 
+    public ParrotSpeciesDTO findOneByName(String name) {
+        if(parrotSpeciesRepository.findOneByName(name) == null) return null;
+        return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesRepository.findOneByName(name), ParrotSpeciesDTO.class);
+
+    }
+
 
 }

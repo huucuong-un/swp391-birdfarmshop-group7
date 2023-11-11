@@ -197,73 +197,79 @@ function AddParrotSpecies() {
                     setSubmissionStatus('');
                 }, 5000);
             } else {
-                const responseSpecies = await ParrotSpeciesAPI.add({
-                    name: parrotSpecies.name,
-                    description: parrotSpecies.description,
-                    quantity: parrotSpecies.quantity,
-                    nestQuantity: parrotSpecies.nestQuantity,
-                    parrotAverageRating: parrotSpecies.parrotAverageRating,
-                    nestAverageRating: parrotSpecies.nestAverageRating,
-                    origin: parrotSpecies.origin,
-                    status: parrotSpecies.status,
-                    averageWeight: parrotSpecies.averageWeight,
-                    img: img,
-                    // Add other fields you want to send to the first API
-                });
-                // if (responseSpecies.status === 200) {
-                //     console.log('POST request was successful at species!!');
-                // } else {
-                //     console.error('POST request failed with status code - species: ', responseSpecies.status);
-                // }
-                const responseSpeciesColor = await ParrotSpeciesColorAPI.add({
-                    // Đoạn này để truyền các data fields về phía database
-                    speciesID: responseSpecies.id,
-                    status: parrotSpeciesColor.status,
-                    price: parrotSpeciesColor.price,
-                    color: parrotSpeciesColor.color,
-                    imageUrl: img,
-                });
+                const speciesFindOneByName = await ParrotSpeciesAPI.getSpeciesByName(parrotSpecies.name);
+                if (speciesFindOneByName !== '') {
+                    window.alert('The species already exist!!');
+                    return;
+                } else {
+                    const responseSpecies = await ParrotSpeciesAPI.add({
+                        name: parrotSpecies.name,
+                        description: parrotSpecies.description,
+                        quantity: parrotSpecies.quantity,
+                        nestQuantity: parrotSpecies.nestQuantity,
+                        parrotAverageRating: parrotSpecies.parrotAverageRating,
+                        nestAverageRating: parrotSpecies.nestAverageRating,
+                        origin: parrotSpecies.origin,
+                        status: parrotSpecies.status,
+                        averageWeight: parrotSpecies.averageWeight,
+                        img: img,
+                        // Add other fields you want to send to the first API
+                    });
+                    // if (responseSpecies.status === 200) {
+                    //     console.log('POST request was successful at species!!');
+                    // } else {
+                    //     console.error('POST request failed with status code - species: ', responseSpecies.status);
+                    // }
+                    const responseSpeciesColor = await ParrotSpeciesColorAPI.add({
+                        // Đoạn này để truyền các data fields về phía database
+                        speciesID: responseSpecies.id,
+                        status: parrotSpeciesColor.status,
+                        price: parrotSpeciesColor.price,
+                        color: parrotSpeciesColor.color,
+                        imageUrl: img,
+                    });
 
-                console.log(responseSpeciesColor);
-                const addImg = await ParrotSpeciesColorAPI.addColorImage({
-                    imageUrl: img,
-                    parrotSpeciesColorId: responseSpeciesColor.id,
-                });
+                    console.log(responseSpeciesColor);
+                    const addImg = await ParrotSpeciesColorAPI.addColorImage({
+                        imageUrl: img,
+                        parrotSpeciesColorId: responseSpeciesColor.id,
+                    });
 
-                console.log(addImg);
-                // if (responseSpeciesColor.status === 200) {
-                //     console.log('POST request was successful at species color');
-                // } else {
-                //     console.error(
-                //         'POST request failed with status code - species color: ',
-                //         responseSpeciesColor.status,
-                //     );
-                // }
-                setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
-                reloadAddSpeciesColor();
+                    console.log(addImg);
+                    // if (responseSpeciesColor.status === 200) {
+                    //     console.log('POST request was successful at species color');
+                    // } else {
+                    //     console.error(
+                    //         'POST request failed with status code - species color: ',
+                    //         responseSpeciesColor.status,
+                    //     );
+                    // }
+                    setSpecies((prevSpecies) => [...prevSpecies, responseSpecies.data]);
+                    reloadAddSpeciesColor();
 
-                setParrotSpecies({
-                    name: '',
-                    quantity: 3,
-                    nestQuantity: 13,
-                    description: '',
-                    availabilityStatus: true,
-                    origin: '',
-                    averageWeight: 0,
-                    parrotAverageRating: 4.5,
-                    nestAverageRating: 4.0,
-                });
+                    setParrotSpecies({
+                        name: '',
+                        quantity: 3,
+                        nestQuantity: 13,
+                        description: '',
+                        availabilityStatus: true,
+                        origin: '',
+                        averageWeight: 0,
+                        parrotAverageRating: 4.5,
+                        nestAverageRating: 4.0,
+                    });
 
-                setParrotSpeciesColor({
-                    status: true,
-                    imageUrl: null,
-                    color: '',
-                    price: 0,
-                    speciesID: 0,
-                });
-                // setSpecies([...species, responseSpecies.data]);
+                    setParrotSpeciesColor({
+                        status: true,
+                        imageUrl: null,
+                        color: '',
+                        price: 0,
+                        speciesID: 0,
+                    });
+                    // setSpecies([...species, responseSpecies.data]);
 
-                setSubmissionStatus(true);
+                    setSubmissionStatus(true);
+                }
             }
             // Make a POST request to the first API endpoint
 
@@ -395,7 +401,7 @@ function AddParrotSpecies() {
                                                 })
                                             }
                                             variant="filled"
-                                            placeholder="Average weight"
+                                            placeholder="With kg"
                                             required
                                         />
                                     </Td>
@@ -412,7 +418,7 @@ function AddParrotSpecies() {
                                             onChange={(e) =>
                                                 setParrotSpeciesColor({ ...parrotSpeciesColor, color: e.target.value })
                                             }
-                                            placeholder="Parrot color"
+                                            placeholder="Type name of color, eg: red, blue,.."
                                             variant="filled"
                                             required
                                         />
@@ -435,7 +441,7 @@ function AddParrotSpecies() {
                                                     price: parseFloat(e.target.value),
                                                 })
                                             }
-                                            placeholder="Price"
+                                            placeholder="With currency: $: dollar"
                                             variant="filled"
                                             required
                                         />
@@ -484,7 +490,7 @@ function AddParrotSpecies() {
             </form>
             {/* CRUD SPECIES LIST */}
 
-            <AddSpeciesColor key={addSpeciesColorKey} className={cx('addspeciescolor')}></AddSpeciesColor>
+            <AddSpeciesColor key={addSpeciesColorKey} inputName={parrotSpecies.name}></AddSpeciesColor>
         </div>
     );
 }

@@ -815,7 +815,7 @@ function AddSpeciesColor() {
                                                                 Success!
                                                             </AlertTitle>
                                                             <AlertDescription className={cx('overflow-hidden')}>
-                                                                Update specie form submitted successfully.
+                                                                Update species form submitted successfully.
                                                             </AlertDescription>
                                                         </Alert>
                                                     )) ||

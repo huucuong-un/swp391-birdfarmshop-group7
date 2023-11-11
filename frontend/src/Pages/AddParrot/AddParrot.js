@@ -556,6 +556,7 @@ function AddParrot() {
                                                 setSpeciesColor([]);
                                                 setSpeciesColorById(e.target.value);
                                             }}
+                                            required
                                         >
                                             <option key={'a'} value={'a'}>
                                                 Selected species
@@ -585,6 +586,7 @@ function AddParrot() {
                                                     console.log('Selected color ID:', selectedColorId);
                                                     setParrots({ ...parrots, colorID: e.target.value });
                                                 }}
+                                                required
                                             >
                                                 <option key={'color'}>Select a color</option>
                                                 {speciesColor.map((item, index) => (
@@ -677,7 +679,7 @@ function AddParrot() {
                                                 colorScheme={'green'}
                                                 size={'lg'}
                                             >
-                                                {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
+                                                {openParrotID === parrot.id ? 'Close' : 'Edit'}
                                             </Button>
                                         )}
                                     </Td>

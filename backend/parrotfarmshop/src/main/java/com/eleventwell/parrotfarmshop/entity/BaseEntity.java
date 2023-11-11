@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable  = false)
     private Long id;
 
     @Temporal(TemporalType.DATE) // Specify that only the date part should be stored

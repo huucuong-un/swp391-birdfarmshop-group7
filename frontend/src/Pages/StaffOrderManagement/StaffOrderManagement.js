@@ -19,6 +19,8 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
+    Text,
+    Box,
 } from '@chakra-ui/react';
 
 import React, { useEffect, useState } from 'react';
@@ -165,11 +167,21 @@ function StaffOrderManagement() {
         console.log(page);
     }, [page]);
 
+    const redirectToUpdateNestStatus = () => {
+        navigate('/staff/nest-usage-history');
+    };
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>Order</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    ORDER
+                </Text>
+            </Box>
+            <Button colorScheme="green" onClick={redirectToUpdateNestStatus} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    Update process of nest orders
+                </Text>
+            </Button>
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input type="email" placeholder="Mail" onChange={(e) => setSort({ ...sort, email: e.target.value })} />
@@ -209,7 +221,6 @@ function StaffOrderManagement() {
                             <Th>Phone</Th>
                             <Th>Create At</Th>
                             <Th>Price</Th>
-                            <Th>Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -224,15 +235,6 @@ function StaffOrderManagement() {
                                     <Td>{order.orderDTO.totalPrice}</Td>
                                     <Td>
                                         {/* {order.orderDTO.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />} */}
-                                        <Button
-                                            colorScheme="green"
-                                            onClick={() => {
-                                                setOverlay(<OverlayOne />);
-                                                onOpen();
-                                            }}
-                                        >
-                                            Update
-                                        </Button>
                                     </Td>
                                 </Tr>
                             ))}

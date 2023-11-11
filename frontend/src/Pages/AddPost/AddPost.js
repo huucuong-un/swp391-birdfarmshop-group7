@@ -371,7 +371,9 @@ function AddPost() {
                                 </Alert>
                             ))}
                         <div className={cx('title-container')}>
-                            <Title system>Add Post</Title>
+                            <Text margin={0} fontSize={20} fontWeight={600}>
+                                Add Post
+                            </Text>
                         </div>
                         <Table size="xs ">
                             <Tbody>

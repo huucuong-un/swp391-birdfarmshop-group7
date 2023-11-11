@@ -1,5 +1,6 @@
 package com.eleventwell.parrotfarmshop.repository;
 
+import com.eleventwell.parrotfarmshop.entity.DeliveryInformationEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
 import com.eleventwell.parrotfarmshop.entity.OrderEntity;
 import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
@@ -57,51 +58,55 @@ List<OrderEntity> findAllByUserIdOrderByIdDescANDSearchSort(@Param("userId") Lon
     @Query("SELECT COUNT(r) FROM OrderEntity r WHERE YEAR(r.createdDate) = YEAR(:today)")
     Integer countByCreatedDateInCurrentYear(@Param("today") Date today);
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND DATE(o.createdDate) = DATE(:today)")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND DATE(o.createdDate) = DATE(:today)")
     Double sumTotalPriceForDoneOrdersToday(@Param("today") Date today);
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND YEAR(o.createdDate) = YEAR(CURDATE()) AND MONTH(o.createdDate) = MONTH(CURDATE())")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND YEAR(o.createdDate) = YEAR(CURDATE()) AND MONTH(o.createdDate) = MONTH(CURDATE())")
     Double sumTotalPriceForDoneOrdersInCurrentMonth();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND YEAR(o.createdDate) = YEAR(CURDATE())")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND YEAR(o.createdDate) = YEAR(CURDATE())")
     Double sumTotalPriceForDoneOrdersInCurrentYear();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 1")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 1")
     Double sumTotalPriceForDoneOrdersInJanuary();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 2")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 2")
     Double sumTotalPriceForDoneOrdersInFebruary();
 
     @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 3")
     Double sumTotalPriceForDoneOrdersInMarch();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 4")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 4")
     Double sumTotalPriceForDoneOrdersInApril();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 5")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 5")
     Double sumTotalPriceForDoneOrdersInMay();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 6")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 6")
     Double sumTotalPriceForDoneOrdersInJune();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 7")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 7")
     Double sumTotalPriceForDoneOrdersInJuly();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 8")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 8")
     Double sumTotalPriceForDoneOrdersInAugust();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 9")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 9")
     Double sumTotalPriceForDoneOrdersInSeptember();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 10")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 10")
     Double sumTotalPriceForDoneOrdersInOctober();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 11")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 11")
     Double sumTotalPriceForDoneOrdersInNovember();
 
-    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Done' AND MONTH(o.createdDate) = 12")
+    @Query("SELECT SUM(o.totalPrice) FROM OrderEntity o WHERE o.status = 'Paid' AND MONTH(o.createdDate) = 12")
     Double sumTotalPriceForDoneOrdersInDecember();
 
     @Query("SELECT o.orderId from OrderDetailEntity o where o.nestUsageHistory.id = :usageId")
     OrderEntity findOneByUsageHistory(@Param("usageId") Long usageId);
+
+
+    @Query("SELECT o.deliveryInformation from OrderEntity o where o.id = :orderId")
+    DeliveryInformationEntity findOneByOrderId(@Param("orderId")Long orderId);
 }

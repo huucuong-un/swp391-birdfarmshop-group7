@@ -32,9 +32,9 @@ function StaffNavbar({ staff, manager }) {
                     <Link to="/staff/feedback">
                         <p>FEEDBACK</p>
                     </Link>
-                    <Link to="/admin/nest-usage-history">
-                        <p>NEST USAGE HISTORY</p>
-                    </Link>
+                    {/* <Link to="/staff/nest-usage-history">
+                        <p>NEST ORDER</p>
+                    </Link> */}
                 </div>
 
                 <div className={cx('user-account')}></div>

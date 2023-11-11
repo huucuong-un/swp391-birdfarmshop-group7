@@ -4,10 +4,7 @@ import com.eleventwell.parrotfarmshop.Model.CartModel;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.OrderDTO;
 import com.eleventwell.parrotfarmshop.dto.PromotionDTO;
-import com.eleventwell.parrotfarmshop.entity.OrderDetailEntity;
-import com.eleventwell.parrotfarmshop.entity.OrderEntity;
-import com.eleventwell.parrotfarmshop.entity.NestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
+import com.eleventwell.parrotfarmshop.entity.*;
 import com.eleventwell.parrotfarmshop.repository.*;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +53,9 @@ public class OrderService implements IGenericService<OrderDTO> {
     @Autowired
     OrderDetailService orderDetailService;
 
+    @Autowired
+    DeliveryInformationRepository deliveryInformationRepository;
+
     @Override
     public List<OrderDTO> findAll() {
         List<OrderDTO> result = new ArrayList<>();
@@ -79,13 +79,16 @@ public class OrderService implements IGenericService<OrderDTO> {
     @Override
     public OrderDTO save(OrderDTO DTO) {
         OrderEntity orderEntity = new OrderEntity();
-        orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
 
 
         if(promotionService.findOneByIdForOrder(DTO.getPromotionID()) !=null){
-return  null;
-        }
 
+    DTO.setPromotionID(promotionService.findOneByIdForOrder(DTO.getPromotionID()).getId());
+        }
+        orderEntity = (OrderEntity) genericConverter.toEntity(DTO, OrderEntity.class);
+
+        DeliveryInformationEntity deliveryInformationEntity = deliveryInformationRepository.findOneById(DTO.getDeliveryInformationId());
+        orderEntity.setDeliveryInformation(deliveryInformationEntity);
         orderRepository.save(orderEntity);
 
         return (OrderDTO) genericConverter.toDTO(orderEntity, OrderDTO.class);
@@ -269,7 +272,7 @@ private Long getNestUsageHistoryId(OrderDetailEntity orderDetail){
     }
 
     public int totalItemWithStatusDone() {
-        return (int)orderRepository.countByStatusEquals("Done");
+        return (int)orderRepository.countByStatusEquals("Paid");
     }
 
     public int countOrdersCreatedToday() {

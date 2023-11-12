@@ -124,6 +124,14 @@ public class UserService implements IGenericService<UserDTO> {
 
     }
 
+    public Integer countAccountByRole(String role){
+        if(!role.equals("admin") && !role.equals("staff") && !role.equals("marketer") && !role.equals("customer") ){
+
+            role =null;
+        }
+        return userRepository.countAllByRole(role);
+    }
+
     @Override
     public int totalItem() {
         return (int)userRepository.count();

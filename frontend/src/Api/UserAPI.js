@@ -21,5 +21,10 @@ const UserAPI = {
         const url = `/send-mail/forgot-password`;
         return axiosClient.post(url, data);
     },
+
+    countAccountByRole(data) {
+        const url = `/user/count-all-by-role/${data}`;
+        return axiosClient.get(url);
+    },
 };
 export default UserAPI;

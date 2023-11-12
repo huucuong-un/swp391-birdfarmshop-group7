@@ -77,4 +77,10 @@ public class UserController {
         result.setLimit(limit);
         return  result;
     }
+
+    @GetMapping(value =  "user/count-all-by-role/{role}")
+    public Integer countByRole (@RequestBody @PathVariable(value = "role") String role ){
+
+        return  userService.countAccountByRole(role);
+    }
 }

@@ -5,7 +5,6 @@ import styles from '~/Pages/AboutUs/AboutUs.module.scss';
 const cx = classNames.bind(styles);
 
 function AboutUs() {
-    
     return (
         <div className={cx('wrapper')}>
             <StartPartPage payment>About us</StartPartPage>
@@ -22,23 +21,26 @@ function AboutUs() {
                 </div>
                 <div className={cx('about-us-content')}>
                     <p>
-                        Inspired by our unconditional love for cats, Meowingtons is more than a company – it is a
-                        community for cat lovers to share in the latest and greatest cat trends, news, memes, and advice
-                        – all while shopping from the largest variety of unique, cat-themed products.
+                        Inspired by an unwavering love for parrots, 11-Twell Parrot Shop transcends the conventional
+                        notion of a mere company; it stands as a vibrant community for enthusiasts to engage in the
+                        latest parrot trends, news, memes, and advice, all while exploring an extensive array of
+                        distinctive, parrot-themed products.
                     </p>
-                    <p>And the best part? We get to help cats in need.</p>
+                    <h1>And the best part? We get to help parrots in need.</h1>
                     <p>
-                        Here at Meowingtons, we believe that every cat deserves a forever home, and our mission is to
-                        help these amazing felines in any way we can. To give back to our feline community, we work
-                        closely with our shelter partners by fostering cats from our office, donating essential supplies
-                        and enrichment toys, and sponsoring community cat adoption events – all to help the cats who
-                        need it most!
+                        What sets us apart is our commitment to making a positive impact on parrots in need. At 11-Twell
+                        Parrot Shop, we firmly believe that every parrot deserves a forever home, driving our mission to
+                        support these incredible birds in every possible way. Collaborating closely with shelter
+                        partners, we actively foster parrots from our premises, contribute essential supplies and
+                        enrichment toys, and sponsor community parrot adoption events, all aimed at aiding parrots in
+                        need.
                     </p>
                     <p>
-                        We here at Meowingtons are devout and longstanding partners with a local rescue, the Good Luck
-                        Cat Cafe! Each month, we sponsor the adoption fee of an adoptable cat at the cafe in hopes of
-                        helping them find the forever homes they deserve. This amazing cat cafe is run 100% on donations
-                        and volunteers by the Lady Luck Animal Rescue, a 501(c)(3) nonprofit animal rescue.
+                        As dedicated and longstanding allies, we proudly join forces with a local rescue, the Good Luck
+                        Parrot Cafe. On a monthly basis, we cover the adoption fee for an adoptable parrot at the cafe,
+                        striving to facilitate their journey towards finding the loving, permanent homes they rightfully
+                        deserve. This exceptional parrot cafe, managed entirely by donations and volunteers through Lady
+                        Luck Animal Rescue, operates as a 501(c)(3) nonprofit animal rescue.
                     </p>
                 </div>
                 <div className={cx('success-story-header')}>
@@ -46,16 +48,18 @@ function AboutUs() {
                 </div>
                 <div className={cx('about-us-content')}>
                     <p>
-                        Our team has been part of an Office Cats Foster Program. We fostered cats from our office space
-                        in Fort Lauderdale, Florida. See our Foster Cats Page for their success stories!
+                        Our team actively participated in a program led by the Vietnam Animal Protection Association,
+                        wherein we provided foster care for parrots directly from our office in Vietnam. Explore our
+                        Parrots Page to discover heartwarming success stories and learn more about the positive impact
+                        of our involvement in this initiative!
                     </p>
                     <div className={cx('center-img')}>
                         <img src="https://storage.googleapis.com/pod_public/1300/160173.jpg" alt="many-parrot" />
                     </div>
                     <p>
-                        As the Meowingtons team and community grow, we hope to be able to foster more than just one cat
-                        at a time – we hope to make Meowingtons into a full-fledged fostering team alongside website
-                        operation.
+                        As the 11-Twel Parrot Shop team and community continue to expand, our aspiration is to extend
+                        our fostering efforts beyond a single parrot at a time. We aim to transform 11-Twel Parrot Shop
+                        into a comprehensive fostering team, seamlessly integrated with our website operations.
                     </p>
                 </div>
             </div>

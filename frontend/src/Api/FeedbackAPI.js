@@ -1,4 +1,3 @@
-import axios from 'axios';
 import axiosClinet from './AxiosClient';
 const FeedbackAPI = {
     addAuthorizationHeader(config, includeAuthorization) {

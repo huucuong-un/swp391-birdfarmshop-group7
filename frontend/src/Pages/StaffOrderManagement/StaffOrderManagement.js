@@ -274,7 +274,9 @@ function StaffOrderManagement() {
                     <div className={cx('order-detail-address')}>
                         <Card>
                             <CardHeader>
-                                <Heading size="md">Delivery Information</Heading>
+                                <Heading size="md" fontSize={20}>
+                                    Delivery Information
+                                </Heading>
                             </CardHeader>
                             <CardBody className={cx('order-detail-delivery-information')}>
                                 <div className={cx('order-detail-name')}>

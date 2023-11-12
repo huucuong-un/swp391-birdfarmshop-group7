@@ -53,6 +53,11 @@ function AdminDashboard() {
     const [top3, setTop3] = useState([]);
     const [combineDataForTop3, setCombineDataForTop3] = useState([]);
     const [finalTop3, setFinalTop3] = useState([]);
+    const [numberOfUserAccount, setNumberOfUserAccount] = useState();
+    const [numberOfCustomerAccount, setNumberOfCustomerAccount] = useState();
+    const [numberOfStaffAccount, setNumberOfStaffAccount] = useState();
+    const [numberOfMarketerAccount, setNumberOfMarketerAccount] = useState();
+    const [numberOfAdminAccount, setNumberOfAdminAccount] = useState();
 
     const data = [
         { month: 'Jan', earnings: totalPriceInJanuary },
@@ -175,6 +180,22 @@ function AdminDashboard() {
         getTotalMoneyBySpecies();
     }, [top3]);
 
+    useState(() => {
+        const getNumberOfAccount = async () => {
+            const numberOfUser = await UserAPI.countAccountByRole(null);
+            setNumberOfUserAccount(numberOfUser);
+            const numberOfCustomer = await UserAPI.countAccountByRole('customer');
+            setNumberOfCustomerAccount(numberOfCustomer);
+            const numberOfStaff = await UserAPI.countAccountByRole('staff');
+            setNumberOfStaffAccount(numberOfStaff);
+            const numberOfMarketer = await UserAPI.countAccountByRole('marketer');
+            setNumberOfMarketerAccount(numberOfMarketer);
+            const numberOfAdmin = await UserAPI.countAccountByRole('admin');
+            setNumberOfAdminAccount(numberOfAdmin);
+        };
+
+        getNumberOfAccount();
+    }, []);
     return (
         <Container maxW="container.xl">
             <Text fontSize={20} fontWeight={500} paddingTop={10}>
@@ -184,45 +205,77 @@ function AdminDashboard() {
                 <Col xs lg="3" margin="2%">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Total Orders</Text>
-                        <Text fontWeight={600}>{totalItem}</Text>
+                        <Text fontWeight={600}>{totalItem} order(s)</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Total Orders Today</Text>
-                        <Text fontWeight={600}>{totalItemInCurrentDay}</Text>
+                        <Text fontWeight={600}>{totalItemInCurrentDay} order(s)</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Total Orders In Month</Text>
-                        <Text fontWeight={600}>{totalItemInCurrentMonth}</Text>
+                        <Text fontWeight={600}>{totalItemInCurrentMonth} order(s)</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
                     <Box className={cx('statistic-item')}>
                         <Text fontSize={14}>Total Orders In Year</Text>
-                        <Text fontWeight={600}>{totalItemInCurrentYear}</Text>
+                        <Text fontWeight={600}>{totalItemInCurrentYear} order(s)</Text>
                     </Box>
                 </Col>
             </Row>
             <Row>
                 <Col md="auto" lg="3">
-                    <Box className={cx('statistic-item')}>
+                    <Box className={cx('statistic-item')} borderLeft="5px solid orange">
                         <Text fontSize={14}>Earnings (Today)</Text>
                         <Text fontWeight={600}>${totalPriceInCurrentDay}</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
-                    <Box className={cx('statistic-item')}>
+                    <Box className={cx('statistic-item')} borderLeft="5px solid orange">
                         <Text fontSize={14}>Earnings (Monthly)</Text>
                         <Text fontWeight={600}>${totalPriceInCurrentMonth}</Text>
                     </Box>
                 </Col>
                 <Col md="auto" lg="3">
-                    <Box className={cx('statistic-item')}>
+                    <Box className={cx('statistic-item')} borderLeft="5px solid orange">
                         <Text fontSize={14}>Earnings (Yearly)</Text>
                         <Text fontWeight={600}>${totalPriceInCurrentYear}</Text>
+                    </Box>
+                </Col>
+            </Row>
+            <Row>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')} borderLeft="5px solid green">
+                        <Text fontSize={14}>Number Of Accounts</Text>
+                        <Text fontWeight={600}>{numberOfUserAccount} account(s)</Text>
+                    </Box>
+                </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')} borderLeft="5px solid green">
+                        <Text fontSize={14}>Number Of Customers</Text>
+                        <Text fontWeight={600}>{numberOfCustomerAccount} account(s)</Text>
+                    </Box>
+                </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')} borderLeft="5px solid green">
+                        <Text fontSize={14}>Number Of Staff</Text>
+                        <Text fontWeight={600}>{numberOfStaffAccount} account(s)</Text>
+                    </Box>
+                </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')} borderLeft="5px solid green">
+                        <Text fontSize={14}>Number Of Marketers</Text>
+                        <Text fontWeight={600}>{numberOfMarketerAccount} account(s)</Text>
+                    </Box>
+                </Col>
+                <Col md="auto" lg="3">
+                    <Box className={cx('statistic-item')} borderLeft="5px solid green">
+                        <Text fontSize={14}>Number Of Admins</Text>
+                        <Text fontWeight={600}>{numberOfAdminAccount} account(s)</Text>
                     </Box>
                 </Col>
             </Row>

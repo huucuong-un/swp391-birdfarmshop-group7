@@ -1084,8 +1084,6 @@ function AddSpeciesColor() {
                                                     </Tr>
                                                 </Tbody>
                                             </Table>
-                                            {/* Table for Update species */}
-                                            {/* Table for Update species */}
                                         </TableContainer>
                                         <input
                                             type="hidden"

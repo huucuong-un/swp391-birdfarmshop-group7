@@ -68,13 +68,7 @@ function UpdateParrot({ parrot, reloadData }) {
                 colorID: newParrot.colorID,
             };
             const responseParrots = await ParrotAPI.updateParrot(data);
-            // Add other fields you want to send to the first API
-            if (responseParrots.status === 200) {
-                console.log('POST request was successful at species!!');
-                setShouldFetchData(true); // Set to true to reload data
-            } else {
-                console.error('POST request failed with status code - species: ', responseParrots.status);
-            }
+
             setSubmissionStatus(true);
             setTimeout(() => {
                 setSubmissionStatus(null);
@@ -130,6 +124,7 @@ function UpdateParrot({ parrot, reloadData }) {
     const handleChangHealthStatus = () => {
         setHealthStatus(!healthStatus);
     };
+    console.log(speciesColor.length);
     return (
         <div className={cx('wrapper')}>
             <form className={cx('inner')} onSubmit={handleSubmit}>
@@ -267,15 +262,16 @@ function UpdateParrot({ parrot, reloadData }) {
                             <Tr>
                                 <Td></Td>
                                 <Td className={cx('submit-btn')} onClick={handleUpdateParentStatus}>
-                                    <Button
+                                    <button
                                         type="submit"
                                         className={cx('btn')}
                                         width="100%"
                                         style={{ marginTop: 15 }}
                                         margin="8px"
+                                        disabled={speciesColor.length === 0}
                                     >
                                         Save
-                                    </Button>
+                                    </button>
                                 </Td>
                             </Tr>
                         </Tfoot>

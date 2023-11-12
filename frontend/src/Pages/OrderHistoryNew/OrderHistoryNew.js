@@ -578,7 +578,7 @@ function OrderHistoryNew() {
                                 </Table>
                             </TableContainer>
 
-                            <Card maxW="lg">
+                            <Card maxW="lg" style={{ boxShadow: 'none' }}>
                                 <CardBody>
                                     <Stack mt="6" spacing="3">
                                         <Heading size="lg" minHeight={10}>

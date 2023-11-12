@@ -536,13 +536,13 @@ function AddPost() {
                 <thead>
                     <tr>
                         <th className={cx('text-center')}>ID</th>
-                        <th className={cx('text-center')}>Title</th>
-                        <th className={cx('text-center')}>Description</th>
-                        <th className={cx('text-center')}>Content</th>
-                        <th className={cx('text-center')}>Image</th>
-                        <th className={cx('text-center')}>Start date</th>
-                        <th className={cx('text-center')}>End date</th>
-                        <th className={cx('text-center')}>Status</th>
+                        <th className={cx('text-center')}>TITLE</th>
+                        <th className={cx('text-center')}>DESCRIPTION</th>
+                        <th className={cx('text-center')}>CONTENT</th>
+                        <th className={cx('text-center')}>IMAGE</th>
+                        <th className={cx('text-center')}>START DATE</th>
+                        <th className={cx('text-center')}>END DATE</th>
+                        <th className={cx('text-center')}>STATUS</th>
                         <th>Action</th>
                     </tr>
                 </thead>

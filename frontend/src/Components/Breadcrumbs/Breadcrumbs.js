@@ -37,7 +37,7 @@ function Breadcrumbs() {
                         displayName = 'Cart';
                     } else if (name === 'payment') {
                         displayName = 'Payment';
-                    } else if (name === 'add-parrot-nest-service') {
+                    } else if (name === 'nest') {
                         displayName = 'Nest';
                     } else if (name === 'about-us') {
                         displayName = 'About Us';

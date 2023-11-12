@@ -525,7 +525,9 @@ function ParrotList(props) {
                                     className={cx('parrot-review-orders')}
                                 >
                                     <div>
-                                        {parrot.countReview === 0 ? '0 review' : parrot.countReview + ' reviews'}{' '}
+                                        {parrot.countReview === 0 || parrot.countReview === 1
+                                            ? parrot.countReview + ' review'
+                                            : parrot.countReview + ' reviews'}{' '}
                                     </div>
                                     <div>{parrot.countSoldProduct} sold</div>
                                 </div>

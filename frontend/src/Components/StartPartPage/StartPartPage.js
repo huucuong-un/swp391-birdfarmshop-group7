@@ -13,7 +13,7 @@ function StartPartPage({ children, payment, totalSpecies }) {
                 <Breadcrumbs></Breadcrumbs>
                 <h1 className={cx('page-title')}>{children}</h1>
             </div>
-            <p className={cx(classes)}>{totalSpecies} product</p>
+            <p className={cx(classes)}>{totalSpecies} product(s)</p>
         </div>
     );
 }

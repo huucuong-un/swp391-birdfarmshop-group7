@@ -221,6 +221,7 @@ function StaffOrderManagement() {
                             <Th>Phone</Th>
                             <Th>Create At</Th>
                             <Th>Price</Th>
+                            <Th>Status</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -232,9 +233,17 @@ function StaffOrderManagement() {
                                     <Td>{order.userDTO.email}</Td>
                                     <Td>{order.deliveryInformation.phoneNumber}</Td>
                                     <Td>{formatDate(new Date(order.orderDTO.createdDate))}</Td>
-                                    <Td>{order.orderDTO.totalPrice}</Td>
+                                    <Td>${order.orderDTO.totalPrice}</Td>
                                     <Td>
-                                        {/* {order.orderDTO.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />} */}
+                                        {order.orderDTO.status === 'Paid' ? (
+                                            <span style={{ color: 'green', margin: '0', fontWeight: 'bold' }}>
+                                                {order.orderDTO.status}
+                                            </span>
+                                        ) : (
+                                            <span style={{ color: 'orange', margin: '0', fontWeight: 'bold' }}>
+                                                {order.orderDTO.status}
+                                            </span>
+                                        )}
                                     </Td>
                                 </Tr>
                             ))}

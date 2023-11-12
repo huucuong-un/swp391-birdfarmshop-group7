@@ -145,7 +145,7 @@ function MarketerDashboard() {
                         <Col key={index} xs lg="3" margin="2%">
                             <Box className={cx('statistic-item')}>
                                 <Text fontSize={14}>Sale of {species.name}</Text>
-                                <Text fontWeight={600}>{species.earnings}</Text>
+                                <Text fontWeight={600}>{species.earnings} sold</Text>
                             </Box>
                         </Col>
                     ))}
@@ -182,7 +182,7 @@ function MarketerDashboard() {
                                 <Tr>
                                     <Th>Species</Th>
                                     <Th>Image</Th>
-                                    <Th>Total earnings</Th>
+                                    <Th>Total sold parrot(s)</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -195,7 +195,7 @@ function MarketerDashboard() {
                                                     <Image src={top3.img} maxHeight={100}></Image>
                                                 </div>
                                             </Td>
-                                            <Td>{top3.earnings}</Td>
+                                            <Td>{top3.earnings} parrot(s)</Td>
                                         </Tr>
                                     ))}
                             </Tbody>

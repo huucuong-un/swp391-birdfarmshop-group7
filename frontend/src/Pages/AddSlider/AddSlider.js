@@ -425,12 +425,12 @@ function AddSlider() {
                 <table size="xs ">
                     <thead>
                         <tr>
-                            <th className={cx('text-center')}>Slider ID</th>
-                            <th className={cx('text-center')}>Slider name</th>
-                            <th className={cx('text-center')}>Description</th>
-                            <th className={cx('text-center')}>Slider image</th>
-                            <th className={cx('text-center')}>Status</th>
-                            <th className={cx('text-center')}>Action</th>
+                            <th className={cx('text-center')}>ID</th>
+                            <th className={cx('text-center')}>SLIDER NAME</th>
+                            <th className={cx('text-center')}>DESCRIPTION</th>
+                            <th className={cx('text-center')}>SLIDER IMAGE</th>
+                            <th className={cx('text-center')}>STATUS</th>
+                            <th className={cx('text-center')}>ACTION</th>
                         </tr>
                     </thead>
                     <tbody className={cx('crud-tbody')}>

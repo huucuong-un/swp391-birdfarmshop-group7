@@ -424,7 +424,7 @@ function ParrotDetail() {
                         <div className={cx('parrot-detail-container')}>
                             <p className={cx('parrot-detail-title')}>{parrot.name}</p>
                             <div className={cx('parrot-star')}>
-                                <StarRating rating={parrot.parrotAverageRating}></StarRating>| {countReview} Reviews |{' '}
+                                <StarRating rating={parrot.parrotAverageRating}></StarRating>| {countReview} Review(s) |{' '}
                                 {countSoldProduct} Sold
                                 {/* <div className={cx('parrot-star-number')}>
                                     {parrot.parrotAverageRating !== null ? (
@@ -486,7 +486,7 @@ function ParrotDetail() {
                                         </Tooltip>
                                     </div>
 
-                                    <p>{countParrot} available</p>
+                                    <p>{countParrot} available(s)</p>
                                 </div>
                             </div>
                             <Accordion defaultIndex={[0]} allowMultiple>

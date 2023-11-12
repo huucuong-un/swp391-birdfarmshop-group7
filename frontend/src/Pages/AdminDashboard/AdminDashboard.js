@@ -52,6 +52,7 @@ function AdminDashboard() {
 
     const [top3, setTop3] = useState([]);
     const [combineDataForTop3, setCombineDataForTop3] = useState([]);
+    const [finalTop3, setFinalTop3] = useState([]);
 
     const data = [
         { month: 'Jan', earnings: totalPriceInJanuary },
@@ -151,7 +152,6 @@ function AdminDashboard() {
     useEffect(() => {
         const getTop3 = async () => {
             const top3 = await ParrotSpeciesAPI.getTop3SpeciesWithHighestOrderMoney();
-            console.log(top3);
             setTop3(top3);
         };
 
@@ -159,21 +159,22 @@ function AdminDashboard() {
     }, []);
 
     useEffect(() => {
-        const getTotalBySpecies = async () => {
+        const getTotalMoneyBySpecies = async () => {
             const data = [];
             for (const item of top3) {
                 try {
                     const speciesItem = { ...item };
-                    speciesItem.earnings = await OrderAPI.countSoldProduct(item.id);
+                    speciesItem.money = await ParrotSpeciesAPI.getMoneyBySpeciesId(speciesItem.id);
                     data.push(speciesItem);
                 } catch (error) {
                     console.error(error);
                 }
             }
-            setCombineDataForTop3(data);
+            setFinalTop3(data);
         };
-        getTotalBySpecies();
+        getTotalMoneyBySpecies();
     }, [top3]);
+
     return (
         <Container maxW="container.xl">
             <Text fontSize={20} fontWeight={500} paddingTop={10}>
@@ -225,10 +226,11 @@ function AdminDashboard() {
                     </Box>
                 </Col>
             </Row>
+
             <Row className={cx('second-row')}>
                 <Col xs lg="6" margin="2%">
                     <Text fontSize={20} textAlign="center" fontWeight={500}>
-                        Income Chart by month
+                        Income Chart Follow By Month ($)
                     </Text>
                     <ResponsiveContainer width="100%" height={400}>
                         <LineChart data={data}>
@@ -243,7 +245,7 @@ function AdminDashboard() {
                 </Col>
                 <Col>
                     <Text fontSize={20} textAlign="center" fontWeight={500}>
-                        Top 3 Species
+                        Top 3 Species With Highest Earnings
                     </Text>
                     <TableContainer>
                         <Table variant="simple">
@@ -260,8 +262,8 @@ function AdminDashboard() {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {combineDataForTop3 &&
-                                    combineDataForTop3.map((top3, index) => (
+                                {finalTop3 &&
+                                    finalTop3.map((top3, index) => (
                                         <Tr key={index} textAlign="center">
                                             <Td>{top3.name}</Td>
                                             <Td>
@@ -269,7 +271,7 @@ function AdminDashboard() {
                                                     <Image src={top3.img} maxHeight={100}></Image>
                                                 </div>
                                             </Td>
-                                            <Td>{top3.earnings}</Td>
+                                            <Td>${top3.money}</Td>
                                         </Tr>
                                     ))}
                             </Tbody>

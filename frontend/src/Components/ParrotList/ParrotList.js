@@ -67,9 +67,6 @@ const datas = () => {
         .then((data) => {
             // Store the fetched data in a constant variable
             const parrotSpeciesData = data;
-
-            // You can now use parrotSpeciesData as needed
-            console.log(parrotSpeciesData);
         })
         .catch((error) => {
             // Handle any errors that occurred during the fetch
@@ -125,7 +122,6 @@ function ParrotList(props) {
         props.onTotalSpeciesChange(totalSpecies);
     };
 
-    console.log(props.sortWay);
     useEffect(() => {
         setSortWithPagination({
             page: 1,
@@ -138,7 +134,6 @@ function ParrotList(props) {
         });
     }, [props.sortWay]);
 
-    // console.log(combineData);
     const [selectedComparisonProduct, setSelectedComparisonProduct] = useState([]);
 
     const handleColorSelection = async (parrotId, color, price, colorId) => {
@@ -186,7 +181,6 @@ function ParrotList(props) {
     };
 
     useEffect(() => {
-        // console.log(selectedComparisonProduct);
         if (selectedComparisonProduct.length === 0) {
             let compareSection = document.getElementById('compare-section-id');
             compareSection.style.display = 'none';
@@ -212,13 +206,13 @@ function ParrotList(props) {
         const getParrotsSpecies = async () => {
             try {
                 const parrotSpeciesList = await ParrotSpeciesAPI.searchSortParrotSpeciesPublic(sortWithPagination);
-                console.log(parrotSpeciesList);
+
                 const totalSpeciesNumber = await ParrotSpeciesAPI.count();
                 setTotalSpecies(totalSpeciesNumber);
                 setParrotSpecies(parrotSpeciesList.listResult);
-                console.log(parrotSpeciesList.listResult);
+
                 setTotalPage(parrotSpeciesList.totalPage);
-                console.log(totalPage);
+
                 notifyTotalSpecies(totalSpeciesNumber);
             } catch (error) {
                 console.error(error);
@@ -236,7 +230,6 @@ function ParrotList(props) {
                 console.error(error);
             }
         };
-
         getCountAvailableParrotId();
     }, [selectedColorId]);
 
@@ -250,7 +243,7 @@ function ParrotList(props) {
                     const params = {
                         id: item.id,
                     };
-                    console.log(params);
+
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
                     parrot.countReview = await FeedbackAPI.countReview2(params);
                     parrot.countSoldProduct = await OrderAPI.countSoldProduct(params.id);
@@ -353,8 +346,6 @@ function ParrotList(props) {
         });
 
         setPage(newPage);
-        console.log(page);
-        console.log(pagination);
     };
 
     const dataCompareToPass = {
@@ -371,10 +362,6 @@ function ParrotList(props) {
             },
         });
     };
-
-    useEffect(() => {
-        console.log(totalSpecies);
-    }, [totalSpecies]);
 
     const StarRating = ({ rating }) => {
         const stars = [];

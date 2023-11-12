@@ -304,12 +304,12 @@ function OrderHistoryNew() {
         const getOrders = async () => {
             try {
                 const param = {
-                    page: 1,
-                    limit: 12,
+                    ...sort,
                     userId: user.id,
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
                 setOrders(orderList.listResult);
+                setTotalPage(orderList.totalPage);
                 console.log(orderList.listResult);
             } catch (error) {
                 console.error(error);
@@ -317,48 +317,8 @@ function OrderHistoryNew() {
         };
 
         getOrders();
-    }, [loggedUser]);
+    }, [sort, loggedUser]);
 
-    // useEffect(() => {
-    //     console.log(loggedUser);
-    // }, [user]);
-
-    const handleClear = () => {
-        setSort({
-            page: 1,
-            limit: 12,
-            userId: user.id,
-            date: null,
-            sortDate: null,
-            sortPrice: null,
-        });
-    };
-    useEffect(() => {
-        const sortData = async () => {
-            try {
-                const orderHistoryNew = await OrderAPI.findAllByUserIdAndSearchSort(sort);
-                setOrders(orderHistoryNew.listResult);
-                setTotalPage(orderHistoryNew.totalPage);
-                console.log(orders);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        sortData();
-    }, [sort]);
-    const handlePageChange = (newPage) => {
-        setSort({
-            page: newPage,
-            limit: 12,
-            email: sort.email,
-            phone: sort.phone,
-            date: sort.date,
-            sortDate: sort.sortDate,
-            sortPrice: sort.sortPrice,
-        });
-
-        setPage(newPage);
-    };
     return (
         <Container className={cx('wrapper')} minW="90%" minH="800px" marginTop={20}>
             <Box>
@@ -370,18 +330,25 @@ function OrderHistoryNew() {
             {/* Sorting Space */}
             {/* Sorting Space */}
             <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
-                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="" disabled selected>
+                <select
+                    name="price"
+                    id="price"
+                    onChange={(e) => setSort({ ...sort, sortDate: e.target.value, sortPrice: '' })}
+                >
+                    <option value="" selected={sort.sortPrice !== ''}>
                         Sort Date
                     </option>
                     <option value="DDESC">Newest</option>
                     <option value="DASC">Oldest</option>
                 </select>
-                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}>
-                    <option value="" disabled selected>
-                        Price
+                <select
+                    name="price"
+                    id="price"
+                    onChange={(e) => setSort({ ...sort, sortPrice: e.target.value, sortDate: '' })}
+                >
+                    <option value="" selected={sort.sortDate !== ''}>
+                        Sort Price
                     </option>
                     <option value="PDESC">Highest</option>
                     <option value="PASC">Lowest</option>

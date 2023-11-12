@@ -265,6 +265,15 @@ function AdNestManagement() {
         console.log(sort);
         console.log(faqsList);
     }, [sort]);
+
+    const redirectToNestPrice = () => {
+        navigate('/admin/nest-price');
+    };
+
+    const redirectToDevelopmentStatus = () => {
+        navigate('/admin/nest-development-status');
+    };
+
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <Box>
@@ -272,7 +281,17 @@ function AdNestManagement() {
                     NEST MANAGEMENT
                 </Text>
             </Box>
-
+            <Button colorScheme="green" onClick={redirectToNestPrice} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    View setting nest price
+                </Text>
+            </Button>
+            <br />
+            <Button colorScheme="yellow" onClick={redirectToDevelopmentStatus} marginBottom={10}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    View setting nest development status
+                </Text>
+            </Button>
             <Flex className={cx('add-button')} onClick={handleShow}>
                 <FontAwesomeIcon icon={faCirclePlus} />
                 <Text className={cx('add-role-text')}>Add nest</Text>
@@ -325,7 +344,7 @@ function AdNestManagement() {
                             </Tr>
                             <Tr>
                                 <Td></Td>
-                                <Td className={cx('submit-btn')}>
+                                <Td>
                                     <Button
                                         colorScheme="green"
                                         onClick={handleSave}

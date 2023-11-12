@@ -58,8 +58,10 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
         orderDetailDTO.setOrderId(orderId);
         if (check == 1) {
             orderDetailDTO.setParrotId(productID);
+            orderDetailDTO.setPrice(parrotRepository.findOneById(productID).getParrotSpeciesColor().getPrice());
         } else if (check == 2) {
             orderDetailDTO.setNestUsageId(productID);
+            orderDetailDTO.setPrice(nestUsageHistoryRepository.findOneById(productID).getNest().getNestPrice().getPrice());
         }
 
         save(orderDetailDTO);
@@ -90,7 +92,7 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
                     if (models.getColor().equals(entity.getParrot().getParrotSpeciesColor().getColor()) && models.getSpeciesName().equals(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName())) {
                         models.setQuantity(models.getQuantity() + 1);
                         models.setTotalPrice(
-                                models.getTotalPrice() + entity.getParrot().getParrotSpeciesColor().getPrice());
+                                models.getTotalPrice() + entity.getPrice());
                         count = 1;
                         break;
                     }
@@ -104,14 +106,14 @@ public class OrderDetailService implements IGenericService<OrderDetailDTO> {
                         model.setColor(entity.getParrot().getParrotSpeciesColor().getColor());
                         model.setColorId(entity.getParrot().getParrotSpeciesColor().getId());
                         model.setSpeciesName(entity.getParrot().getParrotSpeciesColor().getParrotSpecies().getName());
-                        model.setTotalPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
-                        model.setPrice(entity.getParrot().getParrotSpeciesColor().getPrice());
+                        model.setTotalPrice(entity.getPrice());
+                        model.setPrice(entity.getPrice());
                         model.setQuantity(1);
                     }else{
                         model.setImg(entity.getNestUsageHistory().getNest().getNestPrice().getParrotSpecies().getParrotSpeciesColors().get(0).getImages().get(0).getImageUrl());
                         model.setSpeciesName(entity.getNestUsageHistory().getNest().getNestPrice().getParrotSpecies().getName());
-                        model.setTotalPrice(entity.getNestUsageHistory().getNest().getNestPrice().getPrice());
-                        model.setPrice(entity.getNestUsageHistory().getNest().getNestPrice().getPrice());
+                        model.setTotalPrice(entity.getPrice());
+                        model.setPrice(entity.getPrice());
                         model.setQuantity(1);
                     }
 

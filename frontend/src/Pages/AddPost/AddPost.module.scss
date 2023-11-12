@@ -16,7 +16,7 @@
     flex-direction: column;
 }
 .inner {
-    width: 50% !important;
+    width: 100% !important;
 
     div {
         overflow: hidden;
@@ -45,7 +45,7 @@
     }
 }
 .inner-up {
-    width: 50%;
+    width: 60%;
     display: flex;
     align-items: start;
     justify-content: center;
@@ -185,7 +185,7 @@
     border-radius: 28% !important;
 }
 .post-info {
-    width: 49.5%;
+    max-width: 300px;
 }
 .text-area {
     min-height: 100px !important;
@@ -267,8 +267,28 @@
         }
     }
 }
+.td-description,
 .td-content {
-    width: 200px;
-    text-align: center;
-    margin: auto auto;
+    max-width: 200px;
+    .div-description,
+    .div-content {
+        padding: 10px;
+        width: 200px;
+    }
+}
+.td-image {
+    max-width: 200px;
+    .div-image {
+        padding: 10px;
+        width: 150px;
+    }
+}
+.crud-container {
+    thead,
+    th {
+        padding: 10px;
+    }
+    tr {
+        margin: 10px 0;
+    }
 }

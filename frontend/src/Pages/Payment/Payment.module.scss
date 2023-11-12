@@ -147,8 +147,15 @@ p {
     display: flex;
     align-items: center;
     justify-content: left;
-    gap: 50px;
+    gap: 25px;
     width: 100%;
+}
+.payment-detail-items-name-color {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    min-width: 120px;
 }
 .payment-detail-items p {
     font-weight: 400;

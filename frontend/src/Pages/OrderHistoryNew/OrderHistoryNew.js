@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import FeedbackAPI from '~/Api/FeedbackAPI';
 import styles from '~/Pages/OrderHistoryNew/OrderHistoryNew.module.scss';
 
-import { Button, ButtonGroup, Center, Text } from '@chakra-ui/react';
+import { Button, ButtonGroup, Center, Text, Toast, useToast } from '@chakra-ui/react';
 import ButtonT from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
@@ -91,6 +91,15 @@ function OrderHistoryNew() {
         setTextareaValue(event.target.value);
         console.log(textareaValue);
     };
+    const [ratingStatus, setRatingStatus] = useState(true);
+    const isRating = () => {
+        if (rating < 1) {
+            setRatingStatus(false);
+        } else {
+            setRatingStatus(true);
+        }
+    };
+
     const [orderId, setOrderId] = useState({});
     const { user } = ShopState();
     const { addToCartStatus } = useCartStatus();
@@ -98,6 +107,7 @@ function OrderHistoryNew() {
     const [page, setPage] = useState(1);
     const [check, setCheck] = useState(true);
     const navigate = useNavigate();
+    const toast = useToast();
 
     const [sort, setSort] = useState({
         page: 1,
@@ -110,7 +120,7 @@ function OrderHistoryNew() {
     const [nestDevStatus, setNestDevStatus] = useState([]);
     const [usageHistoryByOrderId, setUsageHistoryByOrderId] = useState([]);
     const [nestDevWithUsageHistoryId, setNestDevWithUsageHistoryId] = useState([]);
-    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
+    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(0);
     const [show, setShow] = useState(false);
     const [showF, setShowF] = useState(false);
     const [target, setTarget] = useState(null);
@@ -119,21 +129,6 @@ function OrderHistoryNew() {
         index: 1,
         count: nestDevStatus.length,
     });
-    // const steps = [
-    //     { title: 'Watiting for parrot', description: 'Contact Info' },
-    //     { title: 'Parrot received', description: 'Date & Time' },
-    //     { title: 'Inspecting', description: 'Select Rooms' },
-    //     { title: 'Verification successful', description: 'Select Rooms' },
-    //     { title: 'Start pairing', description: 'Select Rooms' },
-    //     { title: 'Pregnant', description: 'Select Rooms' },
-    //     { title: 'Gave birth', description: 'Select Rooms' },
-    //     { title: 'Incubating', description: 'Select Rooms' },
-    //     { title: 'Hatched', description: 'Select Rooms' },
-    //     { title: 'Ready to deliver', description: 'Select Rooms' },
-    //     { title: 'Delivered to the shipping unit', description: 'Select Rooms' },
-    //     { title: 'Delivering to you', description: 'Select Rooms' },
-    //     { title: 'Delivered successfully', description: 'Select Rooms' },
-    // ];
 
     useEffect(() => {
         const getNestDevStatusList = async () => {
@@ -198,18 +193,10 @@ function OrderHistoryNew() {
         getStepper();
     }, [nestDevWithUsageHistoryId]);
 
-    useEffect(() => {
-        console.log(nestDevWithUsageHistoryId);
-    }, [nestDevWithUsageHistoryId]);
-
     const handleShow = (id) => {
         setShow(!show);
         setOrderIdToGetUsage(id);
     };
-
-    useEffect(() => {
-        console.log(orderIdToGetUsage);
-    }, [orderIdToGetUsage]);
 
     const handleStoreOrderId = (e) => {
         setOrderId(e);
@@ -217,9 +204,19 @@ function OrderHistoryNew() {
     const [validate, setValidate] = useState({ error: '' });
     const handleSaveFeedback = () => {
         // Update the state variable with the new value from the textarea
-        console.log(orders);
-
+        isRating();
+        if (ratingStatus === false) {
+            toast({
+                title: 'Please rating',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'bottom',
+            });
+            return;
+        }
         onClose();
+
         if (textareaValue.length === 0) {
             setValidate({ error: 'Please enter feedback' });
             setSubmissionStatus(false);
@@ -254,6 +251,10 @@ function OrderHistoryNew() {
     };
 
     const handleClick = (event) => {
+        if (ratingStatus === false) {
+            setShowF(!showF);
+            setTarget(event.target);
+        }
         setShowF(!showF);
         setTarget(event.target);
     };
@@ -282,7 +283,6 @@ function OrderHistoryNew() {
     useEffect(() => {
         const getUserByToken = async () => {
             try {
-                console.log(token);
                 const userByToken = await UserAPI.getUserByToken(token);
                 if (
                     userByToken === null ||
@@ -304,24 +304,22 @@ function OrderHistoryNew() {
         const getOrders = async () => {
             try {
                 const param = {
-                    page: 1,
-                    limit: 12,
+                    ...sort,
                     userId: user.id,
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
                 setOrders(orderList.listResult);
-                console.log(orderList.listResult);
+                setTotalPage(orderList.totalPage);
             } catch (error) {
                 console.error(error);
             }
         };
 
         getOrders();
-    }, [loggedUser]);
-
-    // useEffect(() => {
-    //     console.log(loggedUser);
-    // }, [user]);
+    }, [sort, loggedUser]);
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
 
     const handleClear = () => {
         setSort({
@@ -370,18 +368,25 @@ function OrderHistoryNew() {
             {/* Sorting Space */}
             {/* Sorting Space */}
             <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
-                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="" disabled selected>
+                <select
+                    name="price"
+                    id="price"
+                    onChange={(e) => setSort({ ...sort, sortDate: e.target.value, sortPrice: '' })}
+                >
+                    <option value="" selected={sort.sortPrice !== ''}>
                         Sort Date
                     </option>
                     <option value="DDESC">Newest</option>
                     <option value="DASC">Oldest</option>
                 </select>
-                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}>
-                    <option value="" disabled selected>
-                        Price
+                <select
+                    name="price"
+                    id="price"
+                    onChange={(e) => setSort({ ...sort, sortPrice: e.target.value, sortDate: '' })}
+                >
+                    <option value="" selected={sort.sortDate !== ''}>
+                        Sort Price
                     </option>
                     <option value="PDESC">Highest</option>
                     <option value="PASC">Lowest</option>
@@ -398,7 +403,7 @@ function OrderHistoryNew() {
                                     Order #{order.orderDTO.id}
                                 </Text>
                                 <Text fontSize="16px" fontWeight="600" color="green">
-                                    Complete
+                                    Paid
                                 </Text>
                             </div>
                             <p className={cx('order-item-header-date')}>{order.orderDTO.createdDate}</p>
@@ -444,6 +449,17 @@ function OrderHistoryNew() {
                                                                 }
                                                                 onClick={(event) => {
                                                                     handleStoreOrderId({
+                                                                        img: order.listOrderDetailHistoryModel[
+                                                                            parrotIndex
+                                                                        ].img,
+                                                                        speciesName:
+                                                                            order.listOrderDetailHistoryModel[
+                                                                                parrotIndex
+                                                                            ].speciesName,
+
+                                                                        color: order.listOrderDetailHistoryModel[
+                                                                            parrotIndex
+                                                                        ].color,
                                                                         orderDetailId:
                                                                             order.listOrderDetailHistoryModel[
                                                                                 parrotIndex
@@ -482,11 +498,7 @@ function OrderHistoryNew() {
                                                                             <div className={cx('product-container')}>
                                                                                 <div className={cx('product-img')}>
                                                                                     <img
-                                                                                        src={
-                                                                                            order
-                                                                                                .listOrderDetailHistoryModel[0]
-                                                                                                .img
-                                                                                        }
+                                                                                        src={orderId.img}
                                                                                         alt="product-img"
                                                                                     />
                                                                                 </div>
@@ -494,25 +506,10 @@ function OrderHistoryNew() {
                                                                                     <div
                                                                                         className={cx('product-title')}
                                                                                     >
-                                                                                        <p>
-                                                                                            {
-                                                                                                order
-                                                                                                    .listOrderDetailHistoryModel[
-                                                                                                    parrotIndex
-                                                                                                ].speciesName
-                                                                                            }
-                                                                                        </p>
+                                                                                        <p>{orderId.speciesName}</p>
                                                                                     </div>
                                                                                     <div className={cx('product-type')}>
-                                                                                        <p>
-                                                                                            Category:{' '}
-                                                                                            {
-                                                                                                order
-                                                                                                    .listOrderDetailHistoryModel[
-                                                                                                    parrotIndex
-                                                                                                ].color
-                                                                                            }
-                                                                                        </p>
+                                                                                        <p>Category: {orderId.color}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -592,27 +589,29 @@ function OrderHistoryNew() {
                                         <Heading size="lg" minHeight={10}>
                                             Order Summary
                                         </Heading>
-                                        <Text>2 items</Text>
+                                        <Text>{order.listOrderDetailHistoryModel.length} items</Text>
                                         <Text color="blue.600" fontSize="2xl">
                                             Total: $ {order.orderDTO.totalPrice}
                                         </Text>
                                     </Stack>
                                 </CardBody>
                                 <Divider />
-                                <CardFooter>
-                                    <ButtonGroup spacing="2" className={cx('btn-container')}>
-                                        <Button
-                                            ref={btnRef}
-                                            colorScheme="teal"
-                                            onClick={() => {
-                                                onOpen();
-                                                handleShow(order.orderDTO.id);
-                                            }}
-                                        >
-                                            Track Process
-                                        </Button>
-                                    </ButtonGroup>
-                                </CardFooter>
+                                {order.listOrderDetailHistoryModel[0].color === null ? (
+                                    <CardFooter>
+                                        <ButtonGroup spacing="2" className={cx('btn-container')}>
+                                            <Button
+                                                ref={btnRef}
+                                                colorScheme="teal"
+                                                onClick={() => {
+                                                    onOpen();
+                                                    handleShow(order.orderDTO.id);
+                                                }}
+                                            >
+                                                Track Process
+                                            </Button>
+                                        </ButtonGroup>
+                                    </CardFooter>
+                                ) : null}
                             </Card>
                         </div>
                     </div>

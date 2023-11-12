@@ -58,6 +58,7 @@ function StaffFeedback() {
     const [show, setShow] = useState(false);
     const [loggedUser, setLoggedUser] = useState();
     const { user } = ShopState();
+    const { setUser } = ShopState();
     const [feedback, setFeedback] = useState({ content: null });
     const [replyData, setReplyData] = useState({});
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
@@ -80,6 +81,8 @@ function StaffFeedback() {
                         navigate('/error');
                     }
                 }
+                setUser(userByToken);
+                user = userByToken;
             } catch (error) {
                 console.log(error);
             }
@@ -121,9 +124,9 @@ function StaffFeedback() {
         return stars;
     };
 
-    useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    }, []);
+    // useEffect(() => {
+    //     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    // }, []);
     const [vinh, setVinh] = useState(true);
     const [thanh, setThanh] = useState(0);
     const [sort, setSort] = useState({
@@ -153,6 +156,7 @@ function StaffFeedback() {
 
             // Định dạng thành "yyyy/mm/dd"
             const formattedDate = new Date(`${year}/${month}/${day}`);
+            console.log(feedback);
 
             const replyParam = {
                 id: feedback.id,
@@ -160,11 +164,11 @@ function StaffFeedback() {
                 rating: feedback.rating,
                 belongTo: 'parrot',
                 userId: feedback.userId,
-                replyerId: user.userId,
+                replyerId: user.id,
                 replyContent: textareaValue === '' ? null : textareaValue,
                 replyDate: textareaValue === '' ? null : formattedDate,
-                colorId: feedback.colorId,
                 orderDetailId: feedback.orderDetailId,
+                colorId: feedback.colorId,
                 status: true,
             };
 
@@ -243,12 +247,18 @@ function StaffFeedback() {
                 try {
                     feedback.userInfor = await UserAPI.getUserById(item.userId);
                     feedback.species = await ParrotSpeciesColorAPI.findOneSpeciesByColorId(item.colorId);
+                    const img = ParrotSpeciesColorAPI.getImagesByColorId(item.colorId);
+                    img.then((result) => {
+                        feedback.img = result[0].imageUrl;
+                    });
                     data.push(feedback);
+                    console.log(img);
                 } catch (error) {
                     console.error(error);
                 }
             }
             setCombineData(data);
+            console.log(combineData);
         };
         getUserbyId();
     }, [feedbackList]);
@@ -282,9 +292,11 @@ function StaffFeedback() {
 
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>Feedback</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    FEEDBACK
+                </Text>
+            </Box>
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <select
@@ -413,10 +425,7 @@ function StaffFeedback() {
                         <div className={cx('rate-area')}>
                             <div className={cx('product-container')}>
                                 <div className={cx('product-img')}>
-                                    <img
-                                        src="https://images.unsplash.com/photo-1630159914088-a1895c434cc4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHBhcnJvdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                                        alt="product-img"
-                                    />
+                                    <img src={feedback.img} alt="product-img" />
                                 </div>
                                 <div className={cx('product-info')}>
                                     <div className={cx('product-title')}>

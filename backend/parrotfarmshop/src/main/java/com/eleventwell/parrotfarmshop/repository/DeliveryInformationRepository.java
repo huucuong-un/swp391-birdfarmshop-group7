@@ -9,6 +9,8 @@ import java.util.List;
 public interface DeliveryInformationRepository  extends JpaRepository<DeliveryInformationEntity, Long> {
     DeliveryInformationEntity findOneById(Long id);
 
+
+
     List<DeliveryInformationEntity> findAllByOrderByIdDesc();
 
     List<DeliveryInformationEntity> findAllByUserId(Long user_id);

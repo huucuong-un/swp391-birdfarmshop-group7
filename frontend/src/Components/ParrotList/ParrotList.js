@@ -10,8 +10,7 @@ import {
     faAngleLeft,
     faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
-import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
+
 import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import ParrotAPI from '~/Api/ParrotAPI';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
@@ -47,6 +46,9 @@ import number2 from '~/Assets/image/NumberComparison/number-2.png';
 import number3 from '~/Assets/image/NumberComparison/number-3.png';
 import OrderAPI from '~/Api/OrderAPI';
 
+import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
+
 const cx = classNames.bind(styles);
 
 const parrotSpeciesURL = 'http://localhost:8086/api/parrot-species';
@@ -65,9 +67,6 @@ const datas = () => {
         .then((data) => {
             // Store the fetched data in a constant variable
             const parrotSpeciesData = data;
-
-            // You can now use parrotSpeciesData as needed
-            console.log(parrotSpeciesData);
         })
         .catch((error) => {
             // Handle any errors that occurred during the fetch
@@ -88,17 +87,21 @@ function ParrotList(props) {
     const [countParrot, setCountParrot] = useState(null);
     const [selectedColorId, setSelectedColorId] = useState({});
     const [count, setCount] = useState(0);
-    const [countSoldProduct, setCountSoldProduct] = useState(0);
-
     const navigate = useNavigate();
     const [pagination, setPagination] = useState({
         page: 1,
         limit: 8,
     });
+    const [isLogoShaking, setIsLogoShaking] = useState(false);
+
     const [sortWithPagination, setSortWithPagination] = useState({
         page: 1,
         limit: 12,
-        sortway: '',
+        name: null,
+        sortName: null,
+        sortPrice: null,
+        sortDate: null,
+        sortParrotAverageRating: null,
     });
 
     const [searchWithPagination, setSearchWithPagination] = useState({
@@ -122,22 +125,17 @@ function ParrotList(props) {
     };
 
     useEffect(() => {
-        setSearchWithPagination({
-            page: 1,
-            limit: 12,
-            name: props.search,
-        });
-    }, [props.search]);
-
-    useEffect(() => {
         setSortWithPagination({
             page: 1,
             limit: 12,
-            sortway: props.sortWay,
+            name: props.sortWay.searchName,
+            sortName: props.sortWay.sortName,
+            sortPrice: props.sortWay.sortPrice,
+            sortDate: props.sortWay.sortDate,
+            sortParrotAverageRating: props.sortWay.sortRating,
         });
     }, [props.sortWay]);
 
-    // console.log(combineData);
     const [selectedComparisonProduct, setSelectedComparisonProduct] = useState([]);
 
     const handleColorSelection = async (parrotId, color, price, colorId) => {
@@ -185,7 +183,6 @@ function ParrotList(props) {
     };
 
     useEffect(() => {
-        // console.log(selectedComparisonProduct);
         if (selectedComparisonProduct.length === 0) {
             let compareSection = document.getElementById('compare-section-id');
             compareSection.style.display = 'none';
@@ -210,63 +207,21 @@ function ParrotList(props) {
     useEffect(() => {
         const getParrotsSpecies = async () => {
             try {
-                // const params = {
-                //     page: 1,
-                //     limit: 12,
-                // };
-                const parrotSpeciesList = await ParrotSpeciesAPI.searchSortParrotSpeciesPublic(pagination);
+                const parrotSpeciesList = await ParrotSpeciesAPI.searchSortParrotSpeciesPublic(sortWithPagination);
+
                 const totalSpeciesNumber = await ParrotSpeciesAPI.count();
                 setTotalSpecies(totalSpeciesNumber);
                 setParrotSpecies(parrotSpeciesList.listResult);
-                console.log(parrotSpeciesList.listResult);
+
                 setTotalPage(parrotSpeciesList.totalPage);
+
                 notifyTotalSpecies(totalSpeciesNumber);
             } catch (error) {
                 console.error(error);
             }
         };
         getParrotsSpecies();
-    }, [pagination]);
-
-    // useEffect(() => {
-    //     const getSortParrotSpecies = async () => {
-    //         try {
-    //             // const params = {
-    //             //     page: 1,
-    //             //     limit: 12,
-    //             //     sortway: 'NDESC',
-    //             // };
-    //             const sortList = await ParrotSpeciesAPI.sort(sortWithPagination);
-    //             console.log(sortList.listResult);
-    //             setParrotSpecies(sortList.listResult);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     getSortParrotSpecies();
-    // }, [sortWithPagination]);
-
-    // useEffect(() => {
-    //     const getSearchParrotSpecies = async () => {
-    //         try {
-    //             const params = {
-    //                 page: 1,
-    //                 limit: 12,
-    //                 name: 'c',
-    //             };
-    //             const searchList = await ParrotSpeciesAPI.search(searchWithPagination);
-    //             setParrotSpecies(searchList.listResult);
-    //             console.log(parrotSpecies);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     getSearchParrotSpecies();
-    // }, [searchWithPagination]);
-
-    useEffect(() => {
-        console.log(parrotSpecies);
-    }, [parrotSpecies]);
+    }, [sortWithPagination, pagination]);
 
     useEffect(() => {
         const getCountAvailableParrotId = async () => {
@@ -277,7 +232,6 @@ function ParrotList(props) {
                 console.error(error);
             }
         };
-
         getCountAvailableParrotId();
     }, [selectedColorId]);
 
@@ -291,11 +245,11 @@ function ParrotList(props) {
                     const params = {
                         id: item.id,
                     };
-                    console.log(params);
+
                     parrot.colors = await ParrotSpeciesAPI.getListBySpeciesId(item.id);
                     parrot.countReview = await FeedbackAPI.countReview2(params);
-                    const countP = await OrderAPI.countSoldProduct(params.id);
-                    setCountSoldProduct(countP);
+                    parrot.countSoldProduct = await OrderAPI.countSoldProduct(params.id);
+
                     data.push(parrot);
                 }
 
@@ -331,10 +285,6 @@ function ParrotList(props) {
 
         fetchData();
     }, [parrotSpecies]);
-
-    useEffect(() => {
-        console.log(combineData);
-    }, [combineData]);
 
     const handleAddToCart = ({ name, img, quantity, price, color, colorID, id }) => {
         setAddToCartStatus((prev) => prev + 1);
@@ -390,27 +340,21 @@ function ParrotList(props) {
         setSortWithPagination({
             page: newPage,
             limit: 12,
-            sortway: sortWithPagination,
-        });
-
-        setSearchWithPagination({
-            page: newPage,
-            limit: 12,
-            name: searchWithPagination,
+            name: sortWithPagination.name,
+            sortName: sortWithPagination.sortName,
+            sortPrice: sortWithPagination.sortPrice,
+            sortDate: searchWithPagination.sortDate,
+            sortParrotAverageRating: sortWithPagination.sortParrotAverageRating,
         });
 
         setPage(newPage);
-        console.log(page);
-        console.log(pagination);
     };
 
     const dataCompareToPass = {
         selectedComparisonProduct,
     };
-    console.log(combineData);
 
     const handleSaveParrotId = (id) => {
-        // setParrotId(id);
         navigate('/parrot-product/parrot-detail', {
             state: {
                 selectedColor,
@@ -421,13 +365,9 @@ function ParrotList(props) {
         });
     };
 
-    useEffect(() => {
-        console.log(totalSpecies);
-    }, [totalSpecies]);
-
     const StarRating = ({ rating }) => {
         const stars = [];
-        if (rating === null) {
+        if (rating === null || rating === 0) {
             return <div>There are no reviews yet</div>;
         }
         const number = rating;
@@ -461,6 +401,7 @@ function ParrotList(props) {
         if (rating !== null) {
             stars.push(<div key={count}> ( {rating} / 5 )</div>);
         }
+
         return stars;
     };
 
@@ -487,6 +428,7 @@ function ParrotList(props) {
                                         <img className={cx('img')} src={parrot.img} alt="parrot" />
                                     </div>
                                 </Tooltip>
+
                                 <Link to="">
                                     <Tooltip
                                         label="Check to compare"
@@ -532,26 +474,6 @@ function ParrotList(props) {
                                 </Link>
                             </div>
 
-                            {/* <div className={cx('parrot-info')}>
-                                <p className={cx('parrot-name')}>{parrot.name}</p>
-
-                                <div className={cx('parrot-color')}>
-                                    {parrot.colors.map((color, colorIndex) => (
-                                        <div className={cx('cuong')}>
-                                            <button
-                                                key={colorIndex}
-                                                className={cx('parrot-color-item', {
-                                                    selected: color.color === selectedColor[parrot.id]?.color,
-                                                })}
-                                                onClick={() =>
-                                                    handleColorSelection(parrot.id, color.color, color.price, color.id)
-                                                }
-                                                style={{ backgroundColor: color.color }}
-                                            ></button>
-                                        </div>
-                                    ))}
-                                </div> */}
-
                             <div className={cx('parrot-info')}>
                                 <p className={cx('parrot-name')}>{parrot.name}</p>
 
@@ -592,7 +514,7 @@ function ParrotList(props) {
                                     <div>
                                         {parrot.countReview === 0 ? '0 review' : parrot.countReview + ' reviews'}{' '}
                                     </div>
-                                    <div>{countSoldProduct} sold</div>
+                                    <div>{parrot.countSoldProduct} sold</div>
                                 </div>
                             </div>
                         </div>
@@ -668,30 +590,30 @@ function ParrotList(props) {
                                 <Link
                                     to={`/compare-products`}
                                     state={dataCompareToPass}
-                                    class={cx('compare-button-confirm')}
+                                    className={cx('compare-button-confirm')}
                                 >
                                     COMPARE SELECTION
                                 </Link>
                             ) : (
-                                <Button
+                                <Link
                                     size="lg"
-                                    class={cx('compare-button-confirm')}
+                                    className={cx('compare-button-confirm')}
                                     disabled={selectedComparisonProduct.length <= 1}
                                     style={{
                                         opacity: selectedComparisonProduct.length <= 1 ? '0.5' : '1',
                                     }}
                                 >
                                     COMPARE SELECTION
-                                </Button>
+                                </Link>
                             )}
 
-                            <Button
+                            <Link
                                 size="lg"
-                                class={cx('compare-button-cancel')}
+                                className={cx('compare-button-cancel')}
                                 onClick={() => handleCancelComparison()}
                             >
                                 CANCEL
-                            </Button>
+                            </Link>
                         </Col>
                     </Row>
                 </Container>
@@ -702,7 +624,15 @@ function ParrotList(props) {
                     <FontAwesomeIcon icon={faAngleLeft} />
                 </button>
                 {Array.from({ length: totalPage }, (_, index) => (
-                    <p key={index} className={cx('number-page')} onClick={() => handlePageChange(index + 1)}>
+                    <p
+                        key={index}
+                        className={cx('number-page')}
+                        onClick={() => handlePageChange(index + 1)}
+                        style={{
+                            fontSize: page === index + 1 ? '2.2rem' : '1.6rem', // Change background color when on the current page
+                            fontWeight: page === index + 1 ? '600' : '500',
+                        }}
+                    >
                         {index + 1}
                     </p>
                 ))}

@@ -348,7 +348,9 @@ function AdNestPriceManagement() {
             sortPrice: null,
         });
     };
-
+    const redirectBackToNest = () => {
+        navigate('/admin/nest');
+    };
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <Box>
@@ -356,6 +358,11 @@ function AdNestPriceManagement() {
                     NEST PRICE
                 </Text>
             </Box>
+            <Button colorScheme="gray" onClick={redirectBackToNest} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    Back to nest list
+                </Text>
+            </Button>
             <div className={cx('add-btn')}>
                 {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
@@ -482,11 +489,16 @@ function AdNestPriceManagement() {
                                     />
                                 </Td>
                             </Tr>
+                            <Tr>
+                                <Td></Td>
+                                <Td>
+                                    <Button onClick={handleSaveForUpdate} className={cx('save-btn')} fontSize={18}>
+                                        Save
+                                    </Button>
+                                </Td>
+                            </Tr>
                         </Tbody>
                     </Table>
-                    <Button colorScheme="green" onClick={handleSaveForUpdate} className={cx('save-btn')} fontSize={18}>
-                        Save
-                    </Button>
                 </TableContainer>
             ) : (
                 <></>

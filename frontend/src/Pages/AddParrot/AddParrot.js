@@ -311,7 +311,7 @@ function AddParrot() {
         });
         setPage(newPage);
     };
-
+    console.log(speciesColor.length);
     const handleClear = () => {
         setSort({
             page: 1,
@@ -327,6 +327,10 @@ function AddParrot() {
             sortAge: null,
         });
     };
+
+    const redirectBackToParrotSpecies = () => {
+        navigate('/admin/parrot-species');
+    };
     return (
         // <div className={cx('wrapper')}>
         <Container className={cx('wrapper')} maxW="container.xl">
@@ -335,6 +339,11 @@ function AddParrot() {
                     PARROT MANAGEMENT
                 </Text>
             </Box>
+            <Button colorScheme="gray" onClick={redirectBackToParrotSpecies} marginBottom={5} width="250px">
+                <Text fontSize={16} margin={0} padding={4}>
+                    Back to parrot species
+                </Text>
+            </Button>
 
             <Flex className={cx('add-button')} onClick={handleShow}>
                 <FontAwesomeIcon icon={faCirclePlus} />
@@ -366,20 +375,11 @@ function AddParrot() {
                     onChange={(e) => setSort({ ...sort, healthStatus: e.target.value })}
                 >
                     <option value="b">Health status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+                    <option value="true">Good</option>
+                    <option value="false">Not good</option>
                 </select>
                 {/* Sort 6 */}
 
-                <select
-                    name="pregnancyStatus"
-                    id="pregnancyStatus"
-                    onChange={(e) => setSort({ ...sort, pregnancyStatus: e.target.value })}
-                >
-                    <option value="b">Pregnancy status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                </select>
                 {/* Sort 7 */}
                 <select
                     name="saleStatus"
@@ -387,8 +387,8 @@ function AddParrot() {
                     onChange={(e) => setSort({ ...sort, saleStatus: e.target.value })}
                 >
                     <option value="b">Sale status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+                    <option value="true">Sold</option>
+                    <option value="false">Available</option>
                 </select>
                 {/* Sort 8 */}
                 <select name="sortAge" id="sortAge" onChange={(e) => setSort({ ...sort, sortAge: e.target.value })}>
@@ -398,7 +398,7 @@ function AddParrot() {
                 </select>
                 {/* Sort 9 */}
                 <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="b">Date</option>
+                    <option value="b">Created Date</option>
                     <option value="DDESC">Descending</option>
                     <option value="DASC">Ascending</option>
                 </select>
@@ -448,50 +448,6 @@ function AddParrot() {
                                         />
                                     </Td>
                                 </Tr>
-
-                                {/* <Tr>
-                                    <Td>
-                                        <p>Sale status</p>
-                                    </Td>
-                                    <Td>
-                                        <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
-                                        {saleStatus ? <p>Can sale</p> : <p>Can not sale</p>}
-                                        <Input
-                                            type="hidden"
-                                            id="sale"
-                                            name="sale"
-                                            variant="filled"
-                                            value={saleStatus}
-                                            onChange={(e) =>
-                                                setParrots({ ...parrots, saleStatus: e.target.value === 'true' })
-                                            }
-                                        />
-                                    </Td>
-                                </Tr> */}
-
-                                {/* <Tr>
-                                    <Td>
-                                        <p>Pregnancy status</p>
-                                    </Td>
-                                    <Td>
-                                        <Switch
-                                            onChange={handlePregnancyStatus}
-                                            size="lg"
-                                            isChecked={pregnancyStatus}
-                                        />
-                                        {pregnancyStatus ? <p>In progress</p> : <p> No</p>}
-                                        <Input
-                                            type="hidden"
-                                            id="pregnancy"
-                                            name="pregnancy"
-                                            variant="filled"
-                                            value={pregnancyStatus}
-                                            onChange={(e) =>
-                                                setParrots({ ...parrots, pregnancyStatus: e.target.value })
-                                            }
-                                        />
-                                    </Td>
-                                </Tr> */}
 
                                 <Tr>
                                     <Td>
@@ -547,6 +503,7 @@ function AddParrot() {
                                                 setSpeciesColor([]);
                                                 setSpeciesColorById(e.target.value);
                                             }}
+                                            required
                                         >
                                             <option key={'a'} value={'a'}>
                                                 Selected species
@@ -576,6 +533,7 @@ function AddParrot() {
                                                     console.log('Selected color ID:', selectedColorId);
                                                     setParrots({ ...parrots, colorID: e.target.value });
                                                 }}
+                                                required
                                             >
                                                 <option key={'color'}>Select a color</option>
                                                 {speciesColor.map((item, index) => (
@@ -596,15 +554,16 @@ function AddParrot() {
                                 <Tr>
                                     <Td></Td>
                                     <Td className={cx('submit-btn')}>
-                                        <Button
+                                        <button
                                             type="submit"
                                             className={cx('btn')}
                                             width="100%"
                                             style={{ marginTop: 15 }}
                                             margin="8px"
+                                            disabled={speciesColor.length === 0}
                                         >
                                             ADD
-                                        </Button>
+                                        </button>
                                     </Td>
                                 </Tr>
                             </Tbody>
@@ -668,7 +627,7 @@ function AddParrot() {
                                                 colorScheme={'green'}
                                                 size={'lg'}
                                             >
-                                                {openParrotID === parrot.id ? 'Close Edit' : 'Edit'}
+                                                {openParrotID === parrot.id ? 'Close' : 'Edit'}
                                             </Button>
                                         )}
                                     </Td>

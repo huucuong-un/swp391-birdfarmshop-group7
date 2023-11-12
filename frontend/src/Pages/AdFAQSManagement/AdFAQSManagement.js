@@ -109,32 +109,7 @@ function AdFAQSManagement() {
         };
         getUserByToken();
     }, [token]);
-    // useEffect(() => {
-    //     const getUserByToken = async () => {
-    //         try {
-    //             console.log(token);
-    //             const userByToken = await UserAPI.getUserByToken(token);
-    //             if (
-    //                 userByToken === null ||
-    //                 userByToken === '' ||
-    //                 userByToken === undefined ||
-    //                 userByToken.length === 0
-    //             ) {
-    //                 navigate('/login-user');
-    //             } else {
-    //                 if (userByToken.roleId === 1) {
-    //                     navigate('/login-user');
-    //                 }
-    //                 if (userByToken.roleId !== 4) {
-    //                     navigate('/system/login');
-    //                 }
-    //             }
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     getUserByToken();
-    // }, [token]);
+
     useEffect(() => {
         const getFaqsList = async () => {
             try {
@@ -356,18 +331,6 @@ function AdFAQSManagement() {
     }, [faqForUpdate]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            {/* <div className={cx('title')}>
-                <h1>FAQS</h1>
-            </div> */}
-            {/* <div className={cx('add-btn')}>
-                <Button onClick={handleShow} colorScheme="green" size="lg">
-                    Add
-                    <span className={cx('span-icon', { 'rotate-icon': show })}>
-                        {show ? <FontAwesomeIcon icon={faMinus} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
-                </Button>
-            </div> */}
-
             <Box>
                 <Text fontSize="20px" fontWeight="600" marginTop="5%">
                     FAQs MANAGEMENT
@@ -391,7 +354,7 @@ function AdFAQSManagement() {
                     <Stack spacing={4}>
                         <Alert status="error">
                             <AlertIcon />
-                            <AlertTitle>
+                            <AlertTitle className={cx('alert-container')}>
                                 {validate.title}
                                 <br />
                                 {validate.content}

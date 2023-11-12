@@ -72,7 +72,7 @@ function AdNestUsageHistoryManagement() {
     const [nestDevWithUsageHistoryId, setNestDevWithUsageHistoryId] = useState([]);
     const [nestDevStatus, setNestDevStatus] = useState();
     const [nestDevStatusCurrent, setNestDevStatusCurrent] = useState();
-    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(1);
+    const [nestDevStatusWithSequenceToUseStepper, setNestDevStatusWithSequenceToUseStepper] = useState(0);
     const [disabled, setDisabled] = useState(false);
     const [combineData, setCombineData] = useState([]);
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
@@ -156,6 +156,7 @@ function AdNestUsageHistoryManagement() {
                 };
                 const nestDevStatusList = await NestAPI.getAllNestDevelopmentStatus(params);
                 const nestDevWithUsageId = await NestAPI.getAllNestDevelopmentWithUsageId(nestUsageHistoryId);
+                console.log(nestDevWithUsageId);
                 setNestDevStatus(nestDevStatusList.listResult);
                 setNestDevWithUsageHistoryId(nestDevWithUsageId);
             } catch (error) {
@@ -166,6 +167,10 @@ function AdNestUsageHistoryManagement() {
             getNestDevStatusList();
         }
     }, [show]);
+
+    useEffect(() => {
+        console.log(nestDevWithUsageHistoryId);
+    }, [nestDevWithUsageHistoryId]);
 
     useEffect(() => {
         const getStepper = async () => {
@@ -192,10 +197,6 @@ function AdNestUsageHistoryManagement() {
     useEffect(() => {
         console.log(nestDevStatusWithSequenceToUseStepper);
     }, [nestDevStatusWithSequenceToUseStepper]);
-
-    useEffect(() => {
-        console.log(nestDevWithUsageHistoryId);
-    }, [nestDevWithUsageHistoryId]);
 
     useEffect(() => {
         const getDevStatusById = async () => {
@@ -257,8 +258,12 @@ function AdNestUsageHistoryManagement() {
     }, [addStatus]);
 
     useEffect(() => {
-        console.log(nestDev);
-    }, [nestDev]);
+        console.log(disabled);
+    }, [disabled]);
+
+    useEffect(() => {
+        console.log(nestDevWithUsageHistoryId);
+    }, [nestDevWithUsageHistoryId]);
 
     function formatDate(date) {
         const day = date.getDate();
@@ -275,6 +280,7 @@ function AdNestUsageHistoryManagement() {
         setShow(!show);
         setNestDev({ ...nestDev, nestUsageHistoryId: id });
         setNestUsageHistoryId(id);
+        setDisabled(false);
     };
 
     const handleSave = () => {
@@ -299,11 +305,45 @@ function AdNestUsageHistoryManagement() {
         }
     };
 
+    useEffect(() => {
+        console.log(nestDevWithUsageHistoryId);
+    }, nestDevWithUsageHistoryId);
+
+    const getDescription = (id) => {
+        let description = 'hello';
+        for (const nestItem of nestDev) {
+            if (id === nestItem.statusId) {
+                description = nestItem.description;
+                break;
+            }
+        }
+        if (description === null) {
+            for (const item of nestDevStatus) {
+                if (id === item.statusId) {
+                    description = item.description;
+                    break;
+                }
+            }
+        }
+        console.log(description);
+        return description;
+    };
+
+    const redirectBackToOrder = () => {
+        navigate('/staff/order');
+    };
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>Nest Usage History</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    UPDATE PROCESS FOR NEST ORDERS
+                </Text>
+            </Box>
+            <Button colorScheme="gray" onClick={redirectBackToOrder} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    Back to orders list
+                </Text>
+            </Button>
             <div className={cx('add-btn')}>
                 {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add Development
@@ -345,13 +385,18 @@ function AdNestUsageHistoryManagement() {
 
                                     <Box flexShrink="0">
                                         <StepTitle>{step.name}</StepTitle>
-                                        <StepDescription>{step.description}</StepDescription>
+                                        {nestDevWithUsageHistoryId &&
+                                            nestDevWithUsageHistoryId.map((nestDev, nestDevIndex) => {
+                                                if (step.id === nestDev.statusId) {
+                                                    return <StepTitle>{nestDev.description}</StepTitle>;
+                                                }
+                                            })}
                                     </Box>
-
                                     <StepSeparator />
                                 </Step>
                             ))}
                     </Stepper>
+
                     {disabled ? (
                         <Text textAlign="center" color="grey" fontSize={18}>
                             The nest usage history has reached the final status
@@ -376,7 +421,9 @@ function AdNestUsageHistoryManagement() {
                                         <Td>
                                             {nestDevStatusCurrent != null ? (
                                                 <div className={cx('text-status')}>
-                                                    <Text marginBottom={0}>{nestDevStatusCurrent.name}</Text>
+                                                    <Text marginBottom={0} fontSize={18} overflow="hidden">
+                                                        {nestDevStatusCurrent.name}
+                                                    </Text>
                                                 </div>
                                             ) : (
                                                 <Text className={cx('text-status')} marginBottom={0}>

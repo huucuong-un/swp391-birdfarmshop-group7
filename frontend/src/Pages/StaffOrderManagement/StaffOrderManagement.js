@@ -19,6 +19,15 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
+    Text,
+    Box,
+    Image,
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
+    Stack,
+    Heading,
 } from '@chakra-ui/react';
 
 import React, { useEffect, useState } from 'react';
@@ -50,6 +59,7 @@ function StaffOrderManagement() {
         sortDate: null,
         sortPrice: null,
     });
+    const [show, setShow] = useState(false);
     const [combineData, setCombineData] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
@@ -141,6 +151,10 @@ function StaffOrderManagement() {
         getDelByOrderId();
     }, [orders]);
 
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
+
     const handleClear = () => {
         setSort({
             page: 1,
@@ -165,11 +179,25 @@ function StaffOrderManagement() {
         console.log(page);
     }, [page]);
 
+    const redirectToUpdateNestStatus = () => {
+        navigate('/staff/nest-usage-history');
+    };
+
+    const handleShow = () => {
+        setShow(!show);
+    };
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
-            <div className={cx('title')}>
-                <h1>Order</h1>
-            </div>
+            <Box>
+                <Text fontSize="20px" fontWeight="600" marginTop="5%">
+                    ORDER
+                </Text>
+            </Box>
+            <Button colorScheme="green" onClick={redirectToUpdateNestStatus} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    Update process of nest orders
+                </Text>
+            </Button>
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input type="email" placeholder="Mail" onChange={(e) => setSort({ ...sort, email: e.target.value })} />
@@ -199,6 +227,57 @@ function StaffOrderManagement() {
                     <option value="PASC">Lowest</option>
                 </select>
             </div>
+            {show ? (
+                <div className={cx('order-detail-container-big')}>
+                    <div className={cx('order-detail-id')}>
+                        <Text margin={0} fontWeight={600}>
+                            Order ID: 1
+                        </Text>
+                    </div>
+                    <div className={cx('order-detail-address')}>
+                        <Card>
+                            <CardHeader>
+                                <Heading size="md">Delivery Information</Heading>
+                            </CardHeader>
+                            <CardBody className={cx('order-detail-delivery-information')}>
+                                <div className={cx('order-detail-name')}>
+                                    <Text margin={0}>
+                                        <Text fontWeight={600}>Name</Text>
+                                    </Text>
+                                </div>
+                                <div className={cx('order-detail-address')}>
+                                    <Text fontWeight={600}>Address</Text>
+                                    {/* <Text margin={0}>{order.deliveryInformation.address}</Text> */}
+                                </div>
+                                <div className={cx('order-detail-phone-number')}>
+                                    <Text fontWeight={600}>Phone Number</Text>
+                                    {/* <Text margin={0}>{order.deliveryInformation.phoneNumber}</Text> */}
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </div>
+                    <div className={cx('order-detail-container')}>
+                        <TableContainer>
+                            <Table>
+                                <Thead>
+                                    <Tr>
+                                        <Th>Img</Th>
+                                        <Th>Name</Th>
+                                        <Th>Color</Th>
+                                        <Th>Price</Th>
+                                        <Th>Quantity</Th>
+                                        <Th>Total Price</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody></Tbody>
+                            </Table>
+                        </TableContainer>
+                    </div>
+                </div>
+            ) : (
+                <></>
+            )}
+
             <TableContainer className={cx('table-container')}>
                 <Table size="lg">
                     <Thead>
@@ -209,32 +288,28 @@ function StaffOrderManagement() {
                             <Th>Phone</Th>
                             <Th>Create At</Th>
                             <Th>Price</Th>
-                            <Th>Status</Th>
+                            <Th>Detail</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {combineData &&
                             combineData.map((order, index) => (
-                                <Tr key={index}>
-                                    <Td>{order.orderDTO.id}</Td>
-                                    <Td>{order.userDTO.fullName}</Td>
-                                    <Td>{order.userDTO.email}</Td>
-                                    <Td>{order.deliveryInformation.phoneNumber}</Td>
-                                    <Td>{formatDate(new Date(order.orderDTO.createdDate))}</Td>
-                                    <Td>{order.orderDTO.totalPrice}</Td>
-                                    <Td>
-                                        {/* {order.orderDTO.status ? <Switch size="lg" isChecked /> : <Switch size="lg" />} */}
-                                        <Button
-                                            colorScheme="green"
-                                            onClick={() => {
-                                                setOverlay(<OverlayOne />);
-                                                onOpen();
-                                            }}
-                                        >
-                                            Update
-                                        </Button>
-                                    </Td>
-                                </Tr>
+                                <>
+                                    <Tr key={index}>
+                                        <Td>{order.orderDTO.id}</Td>
+                                        <Td>{order.userDTO.fullName}</Td>
+                                        <Td>{order.userDTO.email}</Td>
+                                        <Td>{order.deliveryInformation.phoneNumber}</Td>
+                                        <Td>{formatDate(new Date(order.orderDTO.createdDate))}</Td>
+                                        <Td>{order.orderDTO.totalPrice}</Td>
+
+                                        <Td>
+                                            <Button colorScheme="green" onClick={handleShow}>
+                                                View Detail
+                                            </Button>
+                                        </Td>
+                                    </Tr>
+                                </>
                             ))}
                     </Tbody>
                 </Table>
@@ -253,7 +328,7 @@ function StaffOrderManagement() {
                 </button>
             </div>
 
-            <Modal isCentered isOpen={isOpen} onClose={onClose}>
+            {/* <Modal isCentered isOpen={isOpen} onClose={onClose}>
                 {overlay}
                 <ModalContent>
                     <ModalHeader>Modal Title</ModalHeader>
@@ -263,7 +338,7 @@ function StaffOrderManagement() {
                         <Button onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
-            </Modal>
+            </Modal> */}
         </Container>
     );
 }

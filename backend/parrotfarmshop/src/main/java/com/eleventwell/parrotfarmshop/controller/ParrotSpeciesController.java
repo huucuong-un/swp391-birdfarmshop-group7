@@ -251,4 +251,32 @@ public class ParrotSpeciesController {
     public List<ParrotSpeciesDTO> findTop3SaleForMarketing() {
         return  parrotSpeciesService.findTop3Sale();
     }
+
+    @GetMapping(value = "marketer/parrot-species/find-top-sale-price-by-species-id/{id}")
+    public Double findTopsalePriceBySpeciesId(@RequestBody @PathVariable("id") Long id) {
+        return  parrotSpeciesService.findTopSalePrice(id);
+    }
+
+    @GetMapping(value = "marketer/parrot-species/find-top3-sale-count")
+    public List<ParrotSpeciesDTO> findTop3saleCount() {
+        return  parrotSpeciesService.findTop3SaleCount();
+    }
+
+    @GetMapping(value = "marketer/parrot-species/find-top3-sale-count/{id}")
+    public Integer findTop3saleCountValue(@RequestBody @PathVariable("id") Long id) {
+        return  parrotSpeciesService.findTopSaleCountValue(id);
+    }
+
+    @GetMapping(value = "marketer/parrot-species/find-top3-average-rating")
+    public List<ParrotSpeciesDTO> findTop3AverageRating() {
+        return  parrotSpeciesService.findTop3Averagerating();
+    }
+
+
+    @GetMapping(value = "parrot-species/find-one-species-by-name/{name}")
+    public ParrotSpeciesDTO findOneSpeciesById(@RequestBody @PathVariable("name") String name) {
+        ParrotSpeciesDTO parrotSpeciesDTO =  parrotSpeciesService.findOneByName(name);
+        if(parrotSpeciesDTO != null) return parrotSpeciesDTO;
+        return null;
+    }
 }

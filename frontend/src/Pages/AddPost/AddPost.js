@@ -371,7 +371,9 @@ function AddPost() {
                                 </Alert>
                             ))}
                         <div className={cx('title-container')}>
-                            <Title system>Add Post</Title>
+                            <Text margin={0} fontSize={20} fontWeight={600}>
+                                Add Post
+                            </Text>
                         </div>
                         <Table size="xs ">
                             <Tbody>
@@ -530,7 +532,7 @@ function AddPost() {
                 </select>
             </div>
 
-            <table>
+            <table className={cx('crud-container')}>
                 <thead>
                     <tr>
                         <th className={cx('text-center')}>ID</th>
@@ -550,12 +552,16 @@ function AddPost() {
                             <tr key={index}>
                                 <td>{post.id} </td>
                                 <td>{post.title} </td>
-                                <td>{post.description}</td>
-                                <td>
-                                    <div className={cx('td-content')}>{post.content}</div>
+                                <td className={cx('td-description')}>
+                                    <div className={cx('div-description')}>{post.description}</div>
                                 </td>
-                                <td>
-                                    <img src={post.imageUrl} width="150px" height="150px" />
+                                <td className={cx('td-content')}>
+                                    <div className={cx('div-content')}>{post.content}</div>
+                                </td>
+                                <td className={cx('td-image')}>
+                                    <div className={cx('div-image')}>
+                                        <img src={post.imageUrl} width="150px" height="150px" />
+                                    </div>
                                 </td>
                                 <td>{post.startDate} </td>
                                 <td>{post.endDate} </td>

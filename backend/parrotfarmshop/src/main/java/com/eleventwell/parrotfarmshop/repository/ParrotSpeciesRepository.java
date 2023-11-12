@@ -4,10 +4,7 @@
  */
 package com.eleventwell.parrotfarmshop.repository;
 
-import com.eleventwell.parrotfarmshop.entity.NestEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
-import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
-import com.eleventwell.parrotfarmshop.entity.PostEntity;
+import com.eleventwell.parrotfarmshop.entity.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
@@ -115,9 +112,32 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
                                          Pageable pageable);
     @Query("SELECT  o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity o  " +
             "group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by" +
-            " SUM(o.parrot.parrotSpeciesColor.price) DESC  ")
+            " SUM(o.price) DESC  ")
     List<ParrotSpeciesEntity> findTop3Sales(Pageable pageable);
+
+    @Query("SELECT SUM(o.price)  FROM OrderDetailEntity o  " +
+            "group by o.parrot.parrotSpeciesColor.parrotSpecies.id having o.parrot.parrotSpeciesColor.parrotSpecies.id = :speciesId ")
+    Double findTop3SalesPrice(@Param("speciesId") Long speciesId);
+
+
+
+    @Query("SELECT o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity  o group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by COUNT(o.parrot.parrotSpeciesColor.parrotSpecies.id) desc ")
+    List<ParrotSpeciesEntity> findTop3SalesCount(Pageable pageable);
+
+    @Query("SELECT COUNT(o) FROM OrderDetailEntity  o where o.parrot.parrotSpeciesColor.parrotSpecies.id = :speciesId ")
+    Integer findTop3SalesCountValue(Long speciesId);
+
+
+
+
+    @Query("SELECT p FROM ParrotSpeciesEntity p order by p.parrotAverageRating DESC ")
+    List<ParrotSpeciesEntity> Top3AverageRating(Pageable pageable);
+
+
+
+    ParrotSpeciesEntity findOneByName(String name);
 }
+
 
 
 //    @NotBlank

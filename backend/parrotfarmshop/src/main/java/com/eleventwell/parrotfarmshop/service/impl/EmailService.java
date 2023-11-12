@@ -64,11 +64,12 @@ private OrderRepository orderRepository;
     private String processThymeleafTemplate(Long id) {
         OrderEntity orderEntity =  orderRepository.findOneById(id);
         List<OrderDetailHistoryModel>  orderDetailHistoryModel = orderDetailService.createOrderDetailHistoryModelList(id);
+
         Context context = new Context();
+
         context.setVariable("customerName", orderEntity.getUser().getFullName());
-        context.setVariable("consignee",orderEntity.getDeliveryInformation().getName());
-        context.setVariable("phone",orderEntity.getDeliveryInformation().getPhoneNumber());
-        context.setVariable("address",orderEntity.getDeliveryInformation().getAddress());
+     context.setVariable("delivery",orderEntity.getDeliveryInformation());
+
         context.setVariable("orderDetailHistoryModelList", orderDetailHistoryModel);
 
 
@@ -77,6 +78,20 @@ private OrderRepository orderRepository;
 
         return templateEngine.process("email-template", context);
     }
+    private String getDeliveryUserName(Long id){
+        DeliveryInformationEntity  deliveryInformationEntity = orderRepository.findOneByOrderId(id);
+        return deliveryInformationEntity.getName();
+    }
+    private String getPhoneNumber(Long id){
+        DeliveryInformationEntity  deliveryInformationEntity = orderRepository.findOneByOrderId(id);
+        return deliveryInformationEntity.getPhoneNumber();
+    }
+    private String getAddress(Long id){
+        DeliveryInformationEntity  deliveryInformationEntity = orderRepository.findOneByOrderId(id);
+        return deliveryInformationEntity.getName();
+    }
+
+
 
     private String processThymeleafTemplate(String email) {
         Context context = new Context();

@@ -62,6 +62,7 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
             if (deliveryInfo.length === 1) {
                 setSelectedDeliveryId(deliveryInfo[0].id);
                 selectedDelivery(deliveryInfo[0]);
+                setSelectedDelivery(deliveryInfo[0]);
             }
         } catch (error) {}
         // Create a copy of the deliveryInfo array

@@ -12,7 +12,7 @@ import PromotionAPI from '~/Api/PromotionAPI';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import DeliveryInformation from '../DeliveryInformation/DeliveryInformation';
 import { ShopState } from '~/context/ShopProvider';
-import { Box, Button, Image } from '@chakra-ui/react';
+import { Box, Button, Image, useToast } from '@chakra-ui/react';
 import Paypal from '~/Assets/image/Payment/Paypal.svg';
 import VnPay from '~/Assets/image/Payment/vnpay-seeklogo.com.svg';
 import { useCartStatus } from '~/Components/CartStatusContext/CartStatusContext';
@@ -61,7 +61,7 @@ function Payment() {
     });
 
     const [checkNest, setCheckNest] = useState(false);
-
+    const toast = useToast();
     useEffect(() => {
         const getUserByToken = async () => {
             try {
@@ -96,7 +96,21 @@ function Payment() {
     };
 
     const handlePayStatus = async () => {
-        setPayStatus(true);
+        if (payStatus) {
+            setPayStatus(false);
+        } else {
+            setPayStatus(true);
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+            user.id,
+            config,
+        );
+        console.log('selected deli:' + nowDeliInfo.id);
         console.log('click');
     };
     const handlePromotionCode = async () => {
@@ -178,88 +192,49 @@ function Payment() {
         updateListOrder();
     }, [listOrder]);
 
-    useEffect(() => {
-        const addOrders = async () => {
-            if (checkNest == false) {
-                try {
-                    const cartList = listOrder.map((item, index) => ({
-                        speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
-                        quantity: item.quantity,
-                        type: 'parrot',
-                    }));
-                    const data = {
-                        orderDTO: {
-                            // userID: 1,
-                            deliveryInformationId: selectedDelivery.id,
-                            promotionID: promotion,
-                            userID: user.id,
-                            status: 'pending',
-                        },
-                        cartList: cartList,
-                    };
+    // useEffect(() => {
+    const addOrders = async () => {
+        if (checkNest == false) {
+            try {
+                const cartList = listOrder.map((item, index) => ({
+                    speicesId: item.colorID, // Sử dụng item.colorID thay vì receivedData.colorID
+                    quantity: item.quantity,
+                    type: 'parrot',
+                }));
 
-                    // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-                    await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                    user.id,
+                    config,
+                );
 
-                    const addOrder = await OrderAPI.add(data);
-                    if (addOrder !== null) {
-                        const response = await VnpayAPI.add(addOrder);
-                        console.log(addOrder);
-                        console.log(response);
-                        window.location.href = response;
-                        if (response.status === 200) {
-                            console.log('Payment Sucessful');
-                        } else {
-                            console.error('payment not successful ', response.status);
-                        }
-                    } else {
-                        console.error('payment not successful ');
-                    }
-
-                    console.log('Order added:', addOrder);
-                    console.log(data);
-                } catch (error) {
-                    console.error(error);
+                const data = {
+                    orderDTO: {
+                        // userID: 1,
+                        deliveryInformationId: nowDeliInfo.id,
+                        promotionID: promotion,
+                        userID: user.id,
+                        status: 'pending',
+                    },
+                    cartList: cartList,
+                };
+                if (nowDeliInfo.id === null || nowDeliInfo.id === undefined || nowDeliInfo.id === '') {
+                    toast({
+                        title: 'Select an Delivery',
+                        status: 'warning',
+                        duration: 5000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                    return;
                 }
-            } else {
-                try {
-                    const addFirstParrot = await ParrotAPI.add(listOrder[0].firstParrot);
-                    const addSecondParrot = await ParrotAPI.add(listOrder[0].secondParrot);
-                    const addParrotCouple = await ParrotCoupleAPI.add({
-                        parrotMaleId: addFirstParrot.gender === true ? addFirstParrot.id : addSecondParrot.id,
-                        parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
-                        status: true,
-                    });
-                    const getNestBySpeciesID = await NestAPI.findOneBySpeciesId({
-                        speciesId: listOrder[0].id,
-                    });
-                    const addNestUsageHistory = await NestUsageHistoryAPI.add({
-                        parrotCoupleId: addParrotCouple.id,
-                        nestId: getNestBySpeciesID.id,
-                        startDate: null,
-                        endDate: null,
-                    });
-                    const cartList = listOrder.map((item, index) => ({
-                        speicesId: addNestUsageHistory.id, // Sử dụng item.colorID thay vì receivedData.colorID
-                        quantity: 1,
-                        type: 'nest',
-                    }));
-                    const data = {
-                        orderDTO: {
-                            // userID: 1,
-                            deliveryInformationId: selectedDelivery.id,
-                            promotionID: promotion,
-                            userID: user.id,
-                            status: 'pending',
-                        },
-                        cartList: cartList,
-                    };
 
-                    // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
-
-                    await DeliveryInformationAPI.updatePickingStatus(selectedDelivery);
-                    const addOrder = await OrderAPI.add(data);
-
+                const addOrder = await OrderAPI.add(data);
+                if (addOrder !== null) {
                     const response = await VnpayAPI.add(addOrder);
                     console.log(addOrder);
                     console.log(response);
@@ -269,21 +244,96 @@ function Payment() {
                     } else {
                         console.error('payment not successful ', response.status);
                     }
-
-                    console.log('Order added:', addOrder);
-                    console.log(data);
-                } catch (error) {
-                    console.error(error);
+                } else {
+                    console.error('payment not successful ');
                 }
-            }
-            // setPaymentStatus((prev) => prev + 1);
-        };
 
-        if (payStatus) {
-            addOrders();
-            // navigate('/paid-success');
+                console.log('Order added:', addOrder);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            try {
+                const addFirstParrot = await ParrotAPI.add(listOrder[0].firstParrot);
+                const addSecondParrot = await ParrotAPI.add(listOrder[0].secondParrot);
+                const addParrotCouple = await ParrotCoupleAPI.add({
+                    parrotMaleId: addFirstParrot.gender === true ? addFirstParrot.id : addSecondParrot.id,
+                    parrotFemaleId: addSecondParrot.gender === false ? addSecondParrot.id : addFirstParrot.id,
+                    status: true,
+                });
+                const getNestBySpeciesID = await NestAPI.findOneBySpeciesId({
+                    speciesId: listOrder[0].id,
+                });
+                const addNestUsageHistory = await NestUsageHistoryAPI.add({
+                    parrotCoupleId: addParrotCouple.id,
+                    nestId: getNestBySpeciesID.id,
+                    startDate: null,
+                    endDate: null,
+                });
+                const cartList = listOrder.map((item, index) => ({
+                    speicesId: addNestUsageHistory.id, // Sử dụng item.colorID thay vì receivedData.colorID
+                    quantity: 1,
+                    type: 'nest',
+                }));
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
+                    user.id,
+                    config,
+                );
+                const data = {
+                    orderDTO: {
+                        // userID: 1,
+                        deliveryInformationId: nowDeliInfo.id,
+                        promotionID: promotion,
+                        userID: user.id,
+                        status: 'pending',
+                    },
+                    cartList: cartList,
+                };
+                if (nowDeliInfo.id === null || nowDeliInfo.id === undefined || nowDeliInfo.id === '') {
+                    toast({
+                        title: 'Select an Delivery',
+                        status: 'warning',
+                        duration: 5000,
+                        isClosable: true,
+                        position: 'bottom',
+                    });
+                    return;
+                }
+
+                console.log(selectedDelivery);
+                // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
+                const addOrder = await OrderAPI.add(data);
+
+                const response = await VnpayAPI.add(addOrder);
+                console.log(addOrder);
+                console.log(response);
+                window.location.href = response;
+                if (response.status === 200) {
+                    console.log('Payment Sucessful');
+                } else {
+                    console.error('payment not successful ', response.status);
+                }
+
+                console.log('Order added:', addOrder);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
         }
-    }, [payStatus]);
+        // setPaymentStatus((prev) => prev + 1);
+    };
+
+    //     if (payStatus) {
+    //         addOrders();
+    //     }
+    //     // navigate('/paid-success');
+    // }, [payStatus]);
 
     useEffect(() => {
         console.log(listOrder);
@@ -304,6 +354,22 @@ function Payment() {
                 vnp_OrderType: orderInfo.vnp_OrderType,
                 vnp_TxnRef: orderInfo.vnp_TxnRef,
             };
+            if (
+                orderInfo.deliveryInformationId === null ||
+                orderInfo.deliveryInformationId === undefined ||
+                orderInfo.deliveryInformationId === ''
+            ) {
+                toast({
+                    title: 'Select an Delivery',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'bottom',
+                    duration: 9000,
+                    isClosable: true,
+                });
+                return;
+            }
             const response = await VnpayAPI.add(data);
 
             console.log(response);
@@ -320,7 +386,9 @@ function Payment() {
             // setPaymentStatus(false);
         }
     };
-
+    useEffect(() => {
+        console.log(selectedDelivery);
+    }, [selectedDelivery]);
     return (
         <div className={cx('wrapper')}>
             <StartPartPage payment>Payment</StartPartPage>
@@ -361,6 +429,11 @@ function Payment() {
                                         <div className={cx('payment-detail-items-img')}>
                                             <img src={item.img} alt="product" />
                                         </div>
+                                        <div className={cx('payment-detail-items-name-color')}>
+                                            <p className={cx('payment-detail-items-quantity')}>{item.name}</p>
+                                            <p className={cx('payment-detail-items-quantity')}>{item.color}</p>
+                                        </div>
+
                                         <p className={cx('payment-detail-items-quantity')}>
                                             x{checkNest ? 1 : item.quantity}
                                         </p>
@@ -403,7 +476,7 @@ function Payment() {
                             width="100%"
                             className={cx('pay-btn')}
                             fontSize="16px"
-                            onClick={() => handlePayStatus()}
+                            onClick={() => addOrders()}
                         >
                             Pay
                         </Button>

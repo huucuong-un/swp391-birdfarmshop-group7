@@ -20,7 +20,7 @@ const FAQSAPI = {
     add(data, includeAuthorization = true) {
         const url = `/admin/faqs`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
-        return axiosClient.post(url, authorizedConfig.data);
+        return axiosClient.post(url, authorizedConfig.data, authorizedConfig);
     },
 
     changeStatus(id, includeAuthorization = true) {

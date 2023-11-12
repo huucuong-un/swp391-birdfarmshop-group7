@@ -14,6 +14,8 @@ const cx = classNames.bind(styles);
 function SystemNavbar({ staff, manager }) {
     const { setUser } = ShopState();
     const navigate = useNavigate();
+    const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const { user } = ShopState();
 
     const logoutHandler = () => {
         localStorage.removeItem('accessToken');
@@ -67,32 +69,40 @@ function SystemNavbar({ staff, manager }) {
                     <Link to="/admin/dashboard">
                         <p>DASHBOARD</p>
                     </Link>
-                    <Link to="/admin/account">
-                        <p>ACCOUNT</p>
-                    </Link>
-                    <Link to="/admin/role">
-                        <p>ROLE</p>
-                    </Link>
                     <Link to="/admin/parrot-species">
                         <p>SPECIES</p>
-                    </Link>
-                    <Link to="/admin/parrot">
-                        <p>PARROT</p>
-                    </Link>
-                    <Link to="/admin/promotion">
-                        <p>PROMOTION</p>
                     </Link>
                     <Link to="/admin/nest">
                         <p>NEST</p>
                     </Link>
-                    <Link to="/admin/nest-price">
+                    <Link to="/admin/role">
+                        <p>ROLE</p>
+                    </Link>
+                    <Link to="/admin/account">
+                        <p>ACCOUNT</p>
+                    </Link>
+
+                    {/* <Link to="/admin/parrot">
+                        <p>PARROT</p>
+                    </Link> */}
+                    <Link to="/admin/promotion">
+                        <p>PROMOTION</p>
+                    </Link>
+
+                    {/* <Link to="/admin/nest-price">
                         <p>NEST PRICE</p>
                     </Link>
                     <Link to="/admin/nest-development-status">
                         <p>DEVELOPMENT STATUS</p>
-                    </Link>
+                    </Link> */}
                     <Link to="/admin/faqs">
                         <p>FAQs</p>
+                    </Link>
+                    <Link to="/staff/order">
+                        <p style={{ borderTop: '3px solid #555' }}>STAFF</p>
+                    </Link>
+                    <Link to="/marketer/dashboard">
+                        <p>MARKETER</p>
                     </Link>
                 </div>
 

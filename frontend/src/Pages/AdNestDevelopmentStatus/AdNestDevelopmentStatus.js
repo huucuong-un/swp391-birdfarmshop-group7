@@ -278,6 +278,7 @@ function AdNestDevelopmentStatus() {
                 };
                 const updateSequence = NestAPI.changeSequenceForNestDevelopmentStatus(params);
             }
+            setVinh(true);
             setSubmitStatus(true);
             setTimeout(() => {
                 setSubmitStatus();
@@ -286,8 +287,19 @@ function AdNestDevelopmentStatus() {
     };
 
     useEffect(() => {
+        console.log(vinh);
+    }, [vinh]);
+
+    useEffect(() => {
+        console.log(faqsList);
+    }, [faqsList]);
+
+    useEffect(() => {
         console.log(selectedValues);
     }, [selectedValues]);
+    const redirectBackToNest = () => {
+        navigate('/admin/nest');
+    };
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <Box>
@@ -295,6 +307,11 @@ function AdNestDevelopmentStatus() {
                     NEST DEVELOPMENT STATUS
                 </Text>
             </Box>
+            <Button colorScheme="gray" onClick={redirectBackToNest} marginBottom={5}>
+                <Text fontSize={16} margin={0} padding={4}>
+                    Back to nest list
+                </Text>
+            </Button>
             <div className={cx('add-btn')}>
                 {/* <Button onClick={handleShow} colorScheme="green" size="lg">
                     Add
@@ -356,11 +373,15 @@ function AdNestDevelopmentStatus() {
                         <p>End</p>
                     </div>
                     <div className={cx('update-zone')}>
+                        <p>Start</p>
+                        <FontAwesomeIcon icon={faArrowRight} />
+
                         {Array.from({ length: faqsList.length }, (_, index) => (
                             <div className={cx('update-zone-item')}>
                                 <p key={index} className={cx('number-page')}>
                                     {index + 1}:
                                 </p>
+
                                 <select
                                     value={JSON.stringify(selectedValues[index])}
                                     onChange={(e) => handleSelectChange(index, e)}
@@ -381,8 +402,10 @@ function AdNestDevelopmentStatus() {
                                             </option>
                                         ))}
                                 </select>
+                                <FontAwesomeIcon icon={faArrowRight} />
                             </div>
                         ))}
+                        <p>End</p>
                     </div>
                     <Button onClick={() => handleUpdateSequence()} className={cx('save-btn')} fontSize={18}>
                         Save

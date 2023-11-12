@@ -1,6 +1,7 @@
 package com.eleventwell.parrotfarmshop.repository;
 
 import com.eleventwell.parrotfarmshop.entity.FeedbackEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,9 +23,16 @@ public interface FeedbackRepository extends JpaRepository<FeedbackEntity,Long> {
     List<FeedbackEntity> findbyspeciesIdAndType(@Param("speciesId") Long id,@Param("belongTo") String belongTo,@Param("rating") Integer rating,@Param("colorId") Long colorId, Pageable pageable);
 
 
-    @Query("SELECT ROUND(AVG(f.rating), 1) FROM FeedbackEntity f WHERE f.parrotSpeciesColor.parrotSpecies.id = :colorid AND f.status = true")
-    Double calculateRoundedAverageRating(@Param("colorid") Long colorid);
+    @Query("SELECT ROUND(AVG(f.rating), 1) FROM FeedbackEntity f WHERE f.parrotSpeciesColor.parrotSpecies.id = :speciesId AND f.status = true")
+    Double calculateRoundedAverageRating(@Param("speciesId") Long speciesId);
     List<FeedbackEntity> findAllByOrderByIdDesc();
+
+
+
+    @Query("select count(u) From FeedbackEntity u ")
+    Integer countAll();
+
+
 
 
  Integer countAllByOrderDetailIdId(Long orderDetailId);

@@ -10,34 +10,23 @@ import { useState } from 'react';
 const cx = classNames.bind(styles);
 
 function ParrotProduct() {
-    const [search, setSearch] = useState('');
     const [sortWay, setSortWay] = useState('');
     const [totalSpecies, setTotalSpecies] = useState(0);
 
-    const handleSearchChange = (newSearchValue) => {
-        setSearch(newSearchValue);
-    };
-
     const handleSortChange = (newSortValue) => {
         setSortWay(newSortValue);
+        // console.log(newSortValue);
     };
 
     const handleTotalSpeciesChange = (newTotalSpecies) => {
         setTotalSpecies(newTotalSpecies);
     };
 
-    console.log(totalSpecies);
-
     return (
         <div className={cx('wrapper')}>
             <StartPartPage totalSpecies={totalSpecies}>Parrots</StartPartPage>
-            <SortSpace
-                search={search}
-                onSearchChange={handleSearchChange}
-                onSortChange={handleSortChange}
-                sortWay={sortWay}
-            ></SortSpace>
-            <ParrotList search={search} sortWay={sortWay} onTotalSpeciesChange={handleTotalSpeciesChange}></ParrotList>
+            <SortSpace onSortAndSearchChange={handleSortChange} sortWay={sortWay}></SortSpace>
+            <ParrotList sortWay={sortWay} onTotalSpeciesChange={handleTotalSpeciesChange}></ParrotList>
         </div>
     );
 }

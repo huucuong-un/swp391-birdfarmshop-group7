@@ -141,8 +141,8 @@ const NestAPI = {
         return axiosClinet.get(url, authorizedConfig);
     },
 
-    changeSequenceForNestDevelopmentStatus(data, includeAuthorization = true) {
-        const url = `/admin/nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`;
+    changeSequenceForNestDevelopmentStatus(data, includeAuthorization = false) {
+        const url = `nest-development-status/update-sequence?id=${data.id}&sequence=${data.sequence}`;
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClinet.put(url, authorizedConfig);
     },
@@ -164,6 +164,11 @@ const NestAPI = {
         const url = `/staff/nest-development`;
         const authorizedConfig = this.addAuthorizationHeader({ data }, includeAuthorization);
         return axiosClinet.post(url, authorizedConfig.data, authorizedConfig);
+    },
+    countAvailableNestById(id, includeAuthorization = false) {
+        const url = `/parrot-egg-nest/count-available-nest/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClinet.get(url, authorizedConfig);
     },
 };
 

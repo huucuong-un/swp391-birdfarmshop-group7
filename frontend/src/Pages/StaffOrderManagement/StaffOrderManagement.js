@@ -63,6 +63,10 @@ function StaffOrderManagement() {
     const [combineData, setCombineData] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
+    const [orderIdToOrderDetail, setOrderIdToOrderDetail] = useState(null);
+    const [orderToSeeOrderDetail, setOrderToSeeOrderDetail] = useState([]);
+    const [combineDataToSeeDetail, setCombineDataToSeeDetail] = useState([]);
+
     const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -183,9 +187,42 @@ function StaffOrderManagement() {
         navigate('/staff/nest-usage-history');
     };
 
-    const handleShow = () => {
+    const handleShow = (id) => {
         setShow(!show);
+        setOrderIdToOrderDetail(id);
     };
+
+    useEffect(() => {
+        const getOrderToSeeOrderDetail = async () => {
+            try {
+                const orderToSeeOrderDetail = await OrderAPI.findOneOrderModelById(orderIdToOrderDetail);
+                setOrderToSeeOrderDetail(orderToSeeOrderDetail.listResult[0]);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getOrderToSeeOrderDetail();
+    }, [orderIdToOrderDetail]);
+
+    useEffect(() => {
+        const getDelByOrderId = async () => {
+            try {
+                const orderList = { ...orderToSeeOrderDetail };
+                orderList.deliveryInformation = await DeliveryInformation.getOneById(
+                    orderToSeeOrderDetail.orderDTO.deliveryInformationId,
+                );
+                setCombineDataToSeeDetail(orderList);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getDelByOrderId();
+    }, [orderToSeeOrderDetail]);
+
+    useEffect(() => {
+        console.log(combineDataToSeeDetail);
+    }, [combineDataToSeeDetail]);
     return (
         <Container className={cx('wrapper')} maxW="container.xl">
             <Box>
@@ -231,7 +268,7 @@ function StaffOrderManagement() {
                 <div className={cx('order-detail-container-big')}>
                     <div className={cx('order-detail-id')}>
                         <Text margin={0} fontWeight={600}>
-                            Order ID: 1
+                            Order ID: {combineDataToSeeDetail.orderDTO ? combineDataToSeeDetail.orderDTO.id : 'N/A'}
                         </Text>
                     </div>
                     <div className={cx('order-detail-address')}>
@@ -243,15 +280,25 @@ function StaffOrderManagement() {
                                 <div className={cx('order-detail-name')}>
                                     <Text margin={0}>
                                         <Text fontWeight={600}>Name</Text>
+                                        {/* <Text margin={0}>{combineDataToSeeDetail.deliveryInformation.name}</Text> */}
+                                        {combineDataToSeeDetail.deliveryInformation
+                                            ? combineDataToSeeDetail.deliveryInformation.name
+                                            : 'N/A'}
                                     </Text>
                                 </div>
                                 <div className={cx('order-detail-address')}>
                                     <Text fontWeight={600}>Address</Text>
-                                    {/* <Text margin={0}>{order.deliveryInformation.address}</Text> */}
+                                    {/* <Text margin={0}>{combineDataToSeeDetail.deliveryInformation.address}</Text> */}
+                                    {combineDataToSeeDetail.deliveryInformation
+                                        ? combineDataToSeeDetail.deliveryInformation.address
+                                        : 'N/A'}
                                 </div>
                                 <div className={cx('order-detail-phone-number')}>
                                     <Text fontWeight={600}>Phone Number</Text>
-                                    {/* <Text margin={0}>{order.deliveryInformation.phoneNumber}</Text> */}
+                                    {/* <Text margin={0}>{combineDataToSeeDetail.deliveryInformation.phoneNumber}</Text> */}
+                                    {combineDataToSeeDetail.deliveryInformation
+                                        ? combineDataToSeeDetail.deliveryInformation.phoneNumber
+                                        : 'N/A'}
                                 </div>
                             </CardBody>
                         </Card>
@@ -269,7 +316,23 @@ function StaffOrderManagement() {
                                         <Th>Total Price</Th>
                                     </Tr>
                                 </Thead>
-                                <Tbody></Tbody>
+                                <Tbody>
+                                    {combineDataToSeeDetail.listOrderDetailHistoryModel &&
+                                        combineDataToSeeDetail.listOrderDetailHistoryModel.map(
+                                            (orderDetail, orderDetailIndex) => (
+                                                <Tr key={orderDetailIndex}>
+                                                    <Td>
+                                                        <img src={orderDetail.img} className={cx('order-detail-img')} />
+                                                    </Td>
+                                                    <Td>{orderDetail.speciesName}</Td>
+                                                    <Td>{orderDetail.color}</Td>
+                                                    <Td>{orderDetail.price}</Td>
+                                                    <Td>{orderDetail.quantity}</Td>
+                                                    <Td>{orderDetail.totalPrice}</Td>
+                                                </Tr>
+                                            ),
+                                        )}
+                                </Tbody>
                             </Table>
                         </TableContainer>
                     </div>
@@ -304,7 +367,7 @@ function StaffOrderManagement() {
                                         <Td>{order.orderDTO.totalPrice}</Td>
 
                                         <Td>
-                                            <Button colorScheme="green" onClick={handleShow}>
+                                            <Button colorScheme="green" onClick={() => handleShow(order.orderDTO.id)}>
                                                 View Detail
                                             </Button>
                                         </Td>

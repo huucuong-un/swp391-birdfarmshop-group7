@@ -360,7 +360,6 @@ function StaffOrderManagement() {
                     <Tbody>
                         {combineData &&
                             combineData.map((order, index) => (
-<<<<<<< HEAD
                                 <Tr key={index}>
                                     <Td>{order.orderDTO.id}</Td>
                                     <Td>{order.userDTO.fullName}</Td>
@@ -385,24 +384,6 @@ function StaffOrderManagement() {
                                         </Button>
                                     </Td>
                                 </Tr>
-=======
-                                <>
-                                    <Tr key={index}>
-                                        <Td>{order.orderDTO.id}</Td>
-                                        <Td>{order.userDTO.fullName}</Td>
-                                        <Td>{order.userDTO.email}</Td>
-                                        <Td>{order.deliveryInformation.phoneNumber}</Td>
-                                        <Td>{formatDate(new Date(order.orderDTO.createdDate))}</Td>
-                                        <Td>{order.orderDTO.totalPrice}</Td>
-
-                                        <Td>
-                                            <Button colorScheme="green" onClick={() => handleShow(order.orderDTO.id)}>
-                                                View Detail
-                                            </Button>
-                                        </Td>
-                                    </Tr>
-                                </>
->>>>>>> 0e9b854be2d4083cfe0a147abe0d74c3f8a3d32b
                             ))}
                     </Tbody>
                 </Table>

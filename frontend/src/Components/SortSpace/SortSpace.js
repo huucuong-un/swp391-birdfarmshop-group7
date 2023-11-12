@@ -23,7 +23,6 @@ function SortSpace(props) {
             props.onSortAndSearchChange({
                 ...sort,
             });
-            console.log(sort);
         };
         handleSortAndSearchChange();
     }, [sort]);

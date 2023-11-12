@@ -311,7 +311,7 @@ function AddParrot() {
         });
         setPage(newPage);
     };
-
+    console.log(speciesColor.length);
     const handleClear = () => {
         setSort({
             page: 1,
@@ -449,50 +449,6 @@ function AddParrot() {
                                     </Td>
                                 </Tr>
 
-                                {/* <Tr>
-                                    <Td>
-                                        <p>Sale status</p>
-                                    </Td>
-                                    <Td>
-                                        <Switch onChange={handleSaleStatus} size="lg" isChecked={saleStatus} />
-                                        {saleStatus ? <p>Can sale</p> : <p>Can not sale</p>}
-                                        <Input
-                                            type="hidden"
-                                            id="sale"
-                                            name="sale"
-                                            variant="filled"
-                                            value={saleStatus}
-                                            onChange={(e) =>
-                                                setParrots({ ...parrots, saleStatus: e.target.value === 'true' })
-                                            }
-                                        />
-                                    </Td>
-                                </Tr> */}
-
-                                {/* <Tr>
-                                    <Td>
-                                        <p>Pregnancy status</p>
-                                    </Td>
-                                    <Td>
-                                        <Switch
-                                            onChange={handlePregnancyStatus}
-                                            size="lg"
-                                            isChecked={pregnancyStatus}
-                                        />
-                                        {pregnancyStatus ? <p>In progress</p> : <p> No</p>}
-                                        <Input
-                                            type="hidden"
-                                            id="pregnancy"
-                                            name="pregnancy"
-                                            variant="filled"
-                                            value={pregnancyStatus}
-                                            onChange={(e) =>
-                                                setParrots({ ...parrots, pregnancyStatus: e.target.value })
-                                            }
-                                        />
-                                    </Td>
-                                </Tr> */}
-
                                 <Tr>
                                     <Td>
                                         <p>Health status</p>
@@ -598,15 +554,16 @@ function AddParrot() {
                                 <Tr>
                                     <Td></Td>
                                     <Td className={cx('submit-btn')}>
-                                        <Button
+                                        <button
                                             type="submit"
                                             className={cx('btn')}
                                             width="100%"
                                             style={{ marginTop: 15 }}
                                             margin="8px"
+                                            disabled={speciesColor.length === 0}
                                         >
                                             ADD
-                                        </Button>
+                                        </button>
                                     </Td>
                                 </Tr>
                             </Tbody>

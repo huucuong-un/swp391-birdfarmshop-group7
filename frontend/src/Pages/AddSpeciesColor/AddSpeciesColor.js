@@ -520,14 +520,6 @@ function AddSpeciesColor() {
         }
     };
 
-    useEffect(() => {
-        console.log(totalPage);
-    }, [totalPage]);
-
-    useEffect(() => {
-        console.log(page);
-    }, [page]);
-
     return (
         <div className={cx('wrapper')}>
             <Accordion className={cx('accordion')} allowToggle>
@@ -541,11 +533,7 @@ function AddSpeciesColor() {
                         placeholder="Name"
                         onChange={(e) => setSort({ ...sort, name: e.target.value })}
                     />
-                    {/* Sort #2 */}
 
-                    {/* Sort #3 */}
-
-                    {/* Sort #4 */}
                     <input
                         type="text"
                         name="origin"
@@ -553,9 +541,7 @@ function AddSpeciesColor() {
                         placeholder="Origin"
                         onChange={(e) => setSort({ ...sort, origin: e.target.value })}
                     />
-                    {/* Sort #5 */}
-                    {/* Sort #6 */}
-                    {/* Sort #7 */}
+
                     <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
                         <option value="b">Status</option>
                         <option value="true">Active</option>
@@ -1098,8 +1084,6 @@ function AddSpeciesColor() {
                                                     </Tr>
                                                 </Tbody>
                                             </Table>
-                                            {/* Table for Update species */}
-                                            {/* Table for Update species */}
                                         </TableContainer>
                                         <input
                                             type="hidden"

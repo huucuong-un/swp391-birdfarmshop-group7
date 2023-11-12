@@ -125,6 +125,32 @@ public class    OrderController {
 
     }
 
+    @GetMapping(value = "admin/order/find-one-by-order-id-for-detail/{id}")
+    public PagingModel findOneByOrderIdForDetail(@RequestBody @PathVariable("id") Long id ) {
+
+        PagingModel result = new PagingModel();
+
+
+      OrderDTO order = orderService.findOneByOrderId(id);
+        List<OrderResponse> orderResponses = new ArrayList<>();
+
+        List<OrderDetailHistoryModel> orderDetailHistoryModes = new ArrayList<>();
+
+
+            OrderResponse orderResponse = new OrderResponse();
+            orderDetailHistoryModes = orderDetailService.createOrderDetailHistoryModelList(order.getId());
+            orderResponse.setOrderDTO(order);
+            orderResponse.setListOrderDetailHistoryModel(orderDetailHistoryModes);
+
+            orderResponses.add(orderResponse);
+
+
+
+        result.setListResult(orderResponses);
+        return result;
+
+    }
+
     @PostMapping(value = "order/find-all-order-with-user")
     public List<OrderResponseForManagement> findAllOrderWithUserInfo() {
         List<OrderDTO> orders = orderService.findAll();

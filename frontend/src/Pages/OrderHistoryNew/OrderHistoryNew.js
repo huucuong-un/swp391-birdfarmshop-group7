@@ -317,7 +317,46 @@ function OrderHistoryNew() {
 
         getOrders();
     }, [sort, loggedUser]);
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
 
+    const handleClear = () => {
+        setSort({
+            page: 1,
+            limit: 12,
+            userId: user.id,
+            date: null,
+            sortDate: null,
+            sortPrice: null,
+        });
+    };
+    useEffect(() => {
+        const sortData = async () => {
+            try {
+                const orderHistoryNew = await OrderAPI.findAllByUserIdAndSearchSort(sort);
+                setOrders(orderHistoryNew.listResult);
+                setTotalPage(orderHistoryNew.totalPage);
+                console.log(orders);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        sortData();
+    }, [sort]);
+    const handlePageChange = (newPage) => {
+        setSort({
+            page: newPage,
+            limit: 12,
+            email: sort.email,
+            phone: sort.phone,
+            date: sort.date,
+            sortDate: sort.sortDate,
+            sortPrice: sort.sortPrice,
+        });
+
+        setPage(newPage);
+    };
     return (
         <Container className={cx('wrapper')} minW="90%" minH="800px" marginTop={20}>
             <Box>

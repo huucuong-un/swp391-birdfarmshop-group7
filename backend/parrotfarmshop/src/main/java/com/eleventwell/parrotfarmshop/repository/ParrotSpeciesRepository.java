@@ -119,8 +119,25 @@ public interface ParrotSpeciesRepository extends JpaRepository<ParrotSpeciesEnti
             "group by o.parrot.parrotSpeciesColor.parrotSpecies.id having o.parrot.parrotSpeciesColor.parrotSpecies.id = :speciesId ")
     Double findTop3SalesPrice(@Param("speciesId") Long speciesId);
 
+
+
+    @Query("SELECT o.parrot.parrotSpeciesColor.parrotSpecies FROM OrderDetailEntity  o group by o.parrot.parrotSpeciesColor.parrotSpecies.id order by COUNT(o.parrot.parrotSpeciesColor.parrotSpecies.id) desc ")
+    List<ParrotSpeciesEntity> findTop3SalesCount(Pageable pageable);
+
+    @Query("SELECT COUNT(o) FROM OrderDetailEntity  o where o.parrot.parrotSpeciesColor.parrotSpecies.id = :speciesId ")
+    Integer findTop3SalesCountValue(Long speciesId);
+
+
+
+
+    @Query("SELECT p FROM ParrotSpeciesEntity p order by p.parrotAverageRating DESC ")
+    List<ParrotSpeciesEntity> Top3AverageRating(Pageable pageable);
+
+
+
     ParrotSpeciesEntity findOneByName(String name);
 }
+
 
 
 //    @NotBlank

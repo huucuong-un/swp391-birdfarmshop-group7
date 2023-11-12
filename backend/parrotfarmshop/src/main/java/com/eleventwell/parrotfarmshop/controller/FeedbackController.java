@@ -95,6 +95,14 @@ public class FeedbackController {
         return result;
     }
 
+    @GetMapping(value = "marketer/feedback/count-all")
+    public Integer countAll() {
+
+        return feedbackService.totalItem();
+
+
+    }
+
 
     @PostMapping(value = "feedback")
     public FeedbackDTO createFeedback(@RequestBody FeedbackDTO dto) {

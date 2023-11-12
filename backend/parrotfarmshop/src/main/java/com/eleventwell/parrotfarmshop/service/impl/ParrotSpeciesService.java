@@ -324,6 +324,36 @@ public class ParrotSpeciesService implements IGenericService<ParrotSpeciesDTO> {
         return parrotSpeciesRepository.findTop3SalesPrice(speciesId);
     }
 
+    public List<ParrotSpeciesDTO> findTop3SaleCount() {
+        List<ParrotSpeciesDTO> result = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 3);
+        List<ParrotSpeciesEntity> listEntity =  parrotSpeciesRepository.findTop3SalesCount(pageable);
+
+        for (ParrotSpeciesEntity entity: listEntity) {
+            ParrotSpeciesDTO dto = (ParrotSpeciesDTO)genericConverter.toDTO(entity, ParrotSpeciesDTO.class);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+
+    public Integer findTopSaleCountValue(Long speciesId){
+        return parrotSpeciesRepository.findTop3SalesCountValue(speciesId);
+    }
+    public List<ParrotSpeciesDTO> findTop3Averagerating() {
+        List<ParrotSpeciesDTO> result = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 3);
+        List<ParrotSpeciesEntity> listEntity =  parrotSpeciesRepository.Top3AverageRating(pageable);
+
+        for (ParrotSpeciesEntity entity: listEntity) {
+            ParrotSpeciesDTO dto = (ParrotSpeciesDTO)genericConverter.toDTO(entity, ParrotSpeciesDTO.class);
+            result.add(dto);
+        }
+
+        return result;
+    }
+
     public ParrotSpeciesDTO findOneByName(String name) {
         if(parrotSpeciesRepository.findOneByName(name) == null) return null;
         return (ParrotSpeciesDTO) genericConverter.toDTO(parrotSpeciesRepository.findOneByName(name), ParrotSpeciesDTO.class);

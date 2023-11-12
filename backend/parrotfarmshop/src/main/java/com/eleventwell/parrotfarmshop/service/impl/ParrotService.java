@@ -9,6 +9,8 @@ package com.eleventwell.parrotfarmshop.service.impl;
 import com.eleventwell.parrotfarmshop.converter.GenericConverter;
 import com.eleventwell.parrotfarmshop.dto.ParrotDTO;
 import com.eleventwell.parrotfarmshop.entity.ParrotEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesColorEntity;
+import com.eleventwell.parrotfarmshop.entity.ParrotSpeciesEntity;
 import com.eleventwell.parrotfarmshop.repository.ParrotRepository;
 import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesColorRepository;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.eleventwell.parrotfarmshop.repository.ParrotSpeciesRepository;
 import com.eleventwell.parrotfarmshop.service.IGenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +37,9 @@ public class ParrotService implements IGenericService<ParrotDTO> {
 
     @Autowired
     private ParrotSpeciesColorRepository parrotSpeciesColorRepository;
+
+    @Autowired
+    private ParrotSpeciesRepository parrotSpeciesRepository;
 
     @Autowired
     private GenericConverter parrotConverter;
@@ -65,10 +71,14 @@ public class ParrotService implements IGenericService<ParrotDTO> {
         } else {
             parrotEntity = (ParrotEntity) parrotConverter.toEntity(parrotDTO, ParrotEntity.class);
         }
-        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(parrotDTO.getColorID()));
+        ParrotSpeciesColorEntity parrotSpeciesColorEntity = parrotSpeciesColorRepository.findOneById(parrotDTO.getColorID());
+        parrotEntity.setParrotSpeciesColor(parrotSpeciesColorEntity);
         // parrotEntity.setOwner();
         //parrotEntity.setParrotEggNest(parrotEggNest);
         parrotRepository.save(parrotEntity);
+        ParrotSpeciesEntity parrotSpeciesEntity = parrotSpeciesRepository.findOneById(parrotSpeciesColorEntity.getParrotSpecies().getId());
+        parrotSpeciesEntity.setQuantity(parrotSpeciesEntity.getQuantity()+1);
+        parrotSpeciesRepository.save(parrotSpeciesEntity);
         return (ParrotDTO) parrotConverter.toDTO(parrotEntity, ParrotDTO.class);
     }
 

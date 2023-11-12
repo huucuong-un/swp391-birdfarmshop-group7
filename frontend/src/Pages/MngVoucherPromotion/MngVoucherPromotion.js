@@ -168,7 +168,9 @@ function MngVoucherPromotion() {
     };
 
     const handleSave = () => {
-        if (code === '' || description === '' || value === '' || startDate === '' || endDate === '') {
+        if (value <= 0 || value >= 1) {
+            window.alert('Code value must be > 0 and < 1');
+        } else if (code === '' || description === '' || value === '' || startDate === '' || endDate === '') {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);
             setTimeout(() => {
@@ -228,7 +230,7 @@ function MngVoucherPromotion() {
 
             <Flex className={cx('add-button')} onClick={handleShow}>
                 <FontAwesomeIcon icon={faCirclePlus} />
-                <Text className={cx('add-role-text')}>Add voucher</Text>
+                <Text className={cx('add-role-text')}>Add code</Text>
             </Flex>
 
             {/* {(submitStatus === true && (
@@ -253,7 +255,7 @@ function MngVoucherPromotion() {
                     <Table variant="simple">
                         <Thead>
                             <Tr>
-                                <Th colSpan={2}>New Voucher</Th>
+                                <Th colSpan={2}>New Code</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -266,6 +268,7 @@ function MngVoucherPromotion() {
                                         placeholder="Code..."
                                         fontSize={18}
                                         onChange={(e) => setCode(e.target.value)}
+                                        required
                                     />
                                 </Td>
                             </Tr>
@@ -277,6 +280,7 @@ function MngVoucherPromotion() {
                                         placeholder="Description..."
                                         fontSize={18}
                                         onChange={(e) => setDescription(e.target.value)}
+                                        required
                                     />
                                 </Td>
                             </Tr>
@@ -289,6 +293,7 @@ function MngVoucherPromotion() {
                                         placeholder="Value must be > 0 and < 1 (Eg: 0.15, 0.5,...)"
                                         fontSize={18}
                                         onChange={(e) => setValue(e.target.value)}
+                                        required
                                     />
                                 </Td>
                             </Tr>
@@ -301,6 +306,7 @@ function MngVoucherPromotion() {
                                         placeholder="Quantity > 0"
                                         fontSize={18}
                                         onChange={(e) => setQuantity(e.target.value)}
+                                        required
                                     />
                                 </Td>
                             </Tr>
@@ -313,6 +319,7 @@ function MngVoucherPromotion() {
                                         fontSize={15}
                                         value={startDate}
                                         onChange={(e) => setStartDate(e.target.value)}
+                                        required
                                     />
                                 </Td>
                             </Tr>
@@ -325,6 +332,7 @@ function MngVoucherPromotion() {
                                         fontSize={15}
                                         value={endDate}
                                         onChange={(e) => setEndDate(e.target.value)}
+                                        required
                                     />
                                 </Td>
                             </Tr>
@@ -356,30 +364,27 @@ function MngVoucherPromotion() {
             )}
             <div className={cx('sort-space')}>
                 <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
+                Start Date{' '}
                 <input
                     type="date"
                     id="searchStartDate"
                     name="searchStartDate"
                     onChange={(e) => setSort({ ...sort, searchStartDate: e.target.value })}
-                />
+                />{' '}
+                End Date
                 <input
                     type="date"
                     id="searchEndDate"
                     name="searchEndDate"
                     onChange={(e) => setSort({ ...sort, searchEndDate: e.target.value })}
                 />
-
                 <select name="status" id="status" onChange={(e) => setSort({ ...sort, status: e.target.value })}>
-                    <option value="" disabled>
-                        Status
-                    </option>
+                    <option>Status</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
                 </select>
                 <select name="sortDate" id="sortDate" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="" disabled>
-                        Date
-                    </option>
+                    <option>Date</option>
                     <option value="DDESC">Newest</option>
                     <option value="DASC">Oldest</option>
                 </select>
@@ -388,9 +393,7 @@ function MngVoucherPromotion() {
                     id="sortPrice"
                     onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}
                 >
-                    <option value="" disabled selected>
-                        Date
-                    </option>
+                    <option>Date</option>
                     <option value="PDESC">Descending</option>
                     <option value="PASC">Ascending</option>
                 </select>

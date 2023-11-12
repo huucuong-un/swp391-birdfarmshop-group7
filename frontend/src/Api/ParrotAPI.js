@@ -64,6 +64,12 @@ const ParrotAPI = {
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClient.delete(url, authorizedConfig);
     },
+
+    changeHealthStatus(id, includeAuthorization = true) {
+        const url = `/admin/parrot/change-health-status/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.delete(url, authorizedConfig);
+    },
 };
 
 export default ParrotAPI;

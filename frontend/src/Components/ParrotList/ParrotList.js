@@ -92,6 +92,8 @@ function ParrotList(props) {
         page: 1,
         limit: 8,
     });
+    const [isLogoShaking, setIsLogoShaking] = useState(false);
+
     const [sortWithPagination, setSortWithPagination] = useState({
         page: 1,
         limit: 12,
@@ -593,7 +595,7 @@ function ParrotList(props) {
                                     COMPARE SELECTION
                                 </Link>
                             ) : (
-                                <Button
+                                <Link
                                     size="lg"
                                     className={cx('compare-button-confirm')}
                                     disabled={selectedComparisonProduct.length <= 1}
@@ -602,16 +604,16 @@ function ParrotList(props) {
                                     }}
                                 >
                                     COMPARE SELECTION
-                                </Button>
+                                </Link>
                             )}
 
-                            <Button
+                            <Link
                                 size="lg"
                                 className={cx('compare-button-cancel')}
                                 onClick={() => handleCancelComparison()}
                             >
                                 CANCEL
-                            </Button>
+                            </Link>
                         </Col>
                     </Row>
                 </Container>

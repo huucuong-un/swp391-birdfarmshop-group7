@@ -4,7 +4,9 @@
     div {
         border-style: none;
     }
+    margin-bottom: 100px;
 }
+
 .accordionItem {
     position: fixed !important;
     bottom: 0 !important;
@@ -15,6 +17,7 @@
     &:hover {
         background-color: transparent;
     }
+    margin-bottom: 60px;
 }
 .logo {
     color: #009dff;

@@ -30,6 +30,8 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
     ParrotSpeciesColorRepository parrotSpeciesColorRepository;
 
     @Autowired
+    OrderDetailRepository orderDetailRepository;
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -52,14 +54,15 @@ public class FeedbackService implements IGenericService<FeedbackDTO> {
         ParrotSpeciesColorEntity pcEntity = parrotSpeciesColorRepository.findOneById(DTO.getColorId());
         ParrotSpeciesEntity pEntity = parrotSpeciesRepository.findOneById(pcEntity.getParrotSpecies().getId());
 
-        if (DTO.getId() != null) {
-            FeedbackEntity oldEntity = feedbackRepository.findOneById(DTO.getId());
-            newEntity = (FeedbackEntity) genericConverter.updateEntity(DTO, oldEntity);
-
-        } else {
+//        if (DTO.getId() != null) {
+//            FeedbackEntity oldEntity = feedbackRepository.findOneById(DTO.getId());
+//            newEntity = (FeedbackEntity) genericConverter.updateEntity(DTO, oldEntity);
+//
+//        } else {
 
             newEntity = (FeedbackEntity) genericConverter.toEntity(DTO, FeedbackEntity.class);
-        }
+//        }
+
         newEntity.setUser(userRepository.findOneById(DTO.getUserId()));
         newEntity.setParrotSpeciesColor(parrotSpeciesColorRepository.findOneById(DTO.getColorId()));
         feedbackRepository.save(newEntity);
@@ -170,6 +173,8 @@ feedbackRepository.save(fEntity);
     public int totalItem() {
         return (int) feedbackRepository.count();
     }
+
+
 
 
 

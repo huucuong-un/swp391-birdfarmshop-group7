@@ -174,7 +174,7 @@ const OrderAPI = {
         return axiosClient.get(url, authorizedConfig);
     },
 
-    findOneOrderModelById(id, includeAuthorization = false) {
+    findOneOrderModelById(id, includeAuthorization = true) {
         const url = `/admin/order/find-one-by-order-id-for-detail/${id}`;
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClient.get(url, authorizedConfig);

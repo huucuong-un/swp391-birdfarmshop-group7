@@ -319,9 +319,9 @@ function OrderHistoryNew() {
         getOrders();
     }, [loggedUser]);
 
-    // useEffect(() => {
-    //     console.log(loggedUser);
-    // }, [user]);
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
 
     const handleClear = () => {
         setSort({

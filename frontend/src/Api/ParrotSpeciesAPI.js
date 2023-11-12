@@ -123,6 +123,18 @@ const ParrotSpeciesAPI = {
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClient.get(url, authorizedConfig);
     },
+
+    getTop3SpeciesForMarketer(includeAuthorization = true) {
+        const url = '/marketer/parrot-species/find-top3-sale-count';
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+
+    getQuantityBySpeciesId(id, includeAuthorization = true) {
+        const url = `/marketer/parrot-species/find-top3-sale-count/${id}`;
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
 };
 
 export default ParrotSpeciesAPI;

@@ -106,7 +106,7 @@ function MarketerDashboard() {
 
     useEffect(() => {
         const getTop3 = async () => {
-            const top3 = await ParrotSpeciesAPI.getTop3SpeciesWithHighestOrderMoney();
+            const top3 = await ParrotSpeciesAPI.getTop3SpeciesForMarketer();
             // console.log(top3);
             setTop3(top3);
         };
@@ -119,7 +119,7 @@ function MarketerDashboard() {
             for (const item of top3) {
                 try {
                     const speciesItem = { ...item };
-                    speciesItem.earnings = await OrderAPI.countSoldProduct(item.id);
+                    speciesItem.earnings = await ParrotSpeciesAPI.getQuantityBySpeciesId(item.id);
                     data.push(speciesItem);
                 } catch (error) {
                     console.error(error);

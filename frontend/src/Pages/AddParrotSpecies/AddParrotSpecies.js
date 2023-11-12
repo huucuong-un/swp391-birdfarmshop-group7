@@ -62,14 +62,14 @@ function AddParrotSpecies() {
     // Parrot Species and species color usestate
     const [parrotSpecies, setParrotSpecies] = useState({
         name: '',
-        quantity: 3,
-        nestQuantity: 13,
+        quantity: 0,
+        nestQuantity: 0,
         description: '',
         availabilityStatus: true,
         origin: '',
         averageWeight: '',
         parrotAverageRating: 0,
-        nestAverageRating: 4.0,
+        nestAverageRating: 0,
         status: true,
         img: '',
     });
@@ -249,14 +249,14 @@ function AddParrotSpecies() {
 
                     setParrotSpecies({
                         name: '',
-                        quantity: 3,
-                        nestQuantity: 13,
+                        quantity: 0,
+                        nestQuantity: 0,
                         description: '',
                         availabilityStatus: true,
                         origin: '',
                         averageWeight: 0,
                         parrotAverageRating: 0,
-                        nestAverageRating: 4.0,
+                        nestAverageRating: 0,
                         status: true,
                     });
 

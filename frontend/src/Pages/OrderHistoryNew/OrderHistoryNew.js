@@ -304,12 +304,12 @@ function OrderHistoryNew() {
         const getOrders = async () => {
             try {
                 const param = {
-                    page: 1,
-                    limit: 12,
+                    ...sort,
                     userId: user.id,
                 };
                 const orderList = await OrderAPI.findAllByUserIdAndSearchSort(param);
                 setOrders(orderList.listResult);
+                setTotalPage(orderList.totalPage);
                 console.log(orderList.listResult);
             } catch (error) {
                 console.error(error);
@@ -317,11 +317,10 @@ function OrderHistoryNew() {
         };
 
         getOrders();
-    }, [loggedUser]);
-
-    // useEffect(() => {
-    //     console.log(loggedUser);
-    // }, [user]);
+    }, [sort, loggedUser]);
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
 
     const handleClear = () => {
         setSort({
@@ -370,18 +369,25 @@ function OrderHistoryNew() {
             {/* Sorting Space */}
             {/* Sorting Space */}
             <div className={cx('sort-space')}>
-                <FontAwesomeIcon icon={faArrowsRotate} className={cx('refresh-icon')} onClick={handleClear} />
                 <input type="date" onChange={(e) => setSort({ ...sort, date: e.target.value })} />
-                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortDate: e.target.value })}>
-                    <option value="" disabled selected>
+                <select
+                    name="price"
+                    id="price"
+                    onChange={(e) => setSort({ ...sort, sortDate: e.target.value, sortPrice: '' })}
+                >
+                    <option value="" selected={sort.sortPrice !== ''}>
                         Sort Date
                     </option>
                     <option value="DDESC">Newest</option>
                     <option value="DASC">Oldest</option>
                 </select>
-                <select name="price" id="price" onChange={(e) => setSort({ ...sort, sortPrice: e.target.value })}>
-                    <option value="" disabled selected>
-                        Price
+                <select
+                    name="price"
+                    id="price"
+                    onChange={(e) => setSort({ ...sort, sortPrice: e.target.value, sortDate: '' })}
+                >
+                    <option value="" selected={sort.sortDate !== ''}>
+                        Sort Price
                     </option>
                     <option value="PDESC">Highest</option>
                     <option value="PASC">Lowest</option>

@@ -305,7 +305,7 @@ function AddSpeciesColor() {
             if (id === parent.id) {
                 console.log('Color existed');
                 for (const child of parent.colors) {
-                    if (input.toString() === child.color.toString()) {
+                    if (input.toString().toLowerCase() === child.color.toString().toLowerCase()) {
                         console.log('color existed | parent name: ' + parent.name + ' | with color: ' + child.color);
                         return true;
                     }

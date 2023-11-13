@@ -363,7 +363,7 @@ function AddParrotNestService() {
                                             <option value="false">Not Good</option>
                                         </select>
                                     </div>
-                                    <div className={cx('add-form-item')}>
+                                    {/* <div className={cx('add-form-item')}>
                                         <label>Pregnancy Status:</label>
                                         <select
                                             onChange={(e) =>
@@ -385,7 +385,7 @@ function AddParrotNestService() {
                                                 </>
                                             )}
                                         </select>
-                                    </div>
+                                    </div> */}
                                     <div className={cx('add-form-item')}>
                                         <label>Gender:</label>
                                         <select
@@ -516,7 +516,7 @@ function AddParrotNestService() {
                                             <option value="false">Not Good</option>
                                         </select>
                                     </div>
-                                    <div className={cx('add-form-item')}>
+                                    {/* <div className={cx('add-form-item')}>
                                         <label>Pregnancy Status:</label>
                                         <select
                                             onChange={(e) =>
@@ -538,7 +538,7 @@ function AddParrotNestService() {
                                                 </>
                                             )}
                                         </select>
-                                    </div>
+                                    </div> */}
                                     <div className={cx('add-form-item')}>
                                         <label>Gender:</label>
                                         <select

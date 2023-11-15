@@ -207,10 +207,12 @@ function Payment() {
                         'Content-Type': 'application/json',
                     },
                 };
+                console.log(user);
                 const nowDeliInfo = await DeliveryInformationAPI.getDeliveryInfoWithTruePickingStatusByCustomerId(
                     user.id,
                     config,
                 );
+                console.log(nowDeliInfo);
 
                 const data = {
                     orderDTO: {
@@ -230,6 +232,8 @@ function Payment() {
                         isClosable: true,
                         position: 'bottom',
                     });
+                    console.log(selectedDelivery);
+
                     return;
                 }
 
@@ -306,7 +310,6 @@ function Payment() {
                     return;
                 }
 
-                console.log(selectedDelivery);
                 // await DeliveryInformationAPI.updatePickingStatus(1, selectedDelivery);
                 const addOrder = await OrderAPI.add(data);
 

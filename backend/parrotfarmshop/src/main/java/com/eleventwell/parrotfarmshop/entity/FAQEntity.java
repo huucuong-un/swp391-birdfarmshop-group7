@@ -28,12 +28,12 @@ import lombok.*;
 public class FAQEntity extends BaseEntity {
 
     @NotBlank
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 300)
     @Column(name = "title")
     private String title;
 
     @NotBlank
-    @Size(min = 2, max = 200)
+    @Size(min = 2, max = 1000)
     @Column(name = "content")
     private String content;
 

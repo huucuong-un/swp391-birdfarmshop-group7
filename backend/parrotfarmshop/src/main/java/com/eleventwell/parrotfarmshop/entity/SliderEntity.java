@@ -33,12 +33,12 @@ public class SliderEntity extends BaseEntity {
 
 
 	@NotBlank
-	@Size(max=50)
+	@Size(min =3 ,max=150)
 	@Column(name = "slider_name")
 	private String sliderName;
         
         @NotBlank
-        @Size(max=200)
+        @Size(min = 20, max=500)
         @Column(name = "slider_description")
 	private String sliderDescription;
         

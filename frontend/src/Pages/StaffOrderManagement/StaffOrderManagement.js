@@ -195,6 +195,7 @@ function StaffOrderManagement() {
     useEffect(() => {
         const getOrderToSeeOrderDetail = async () => {
             try {
+                console.log(orderIdToOrderDetail);
                 const orderToSeeOrderDetail = await OrderAPI.findOneOrderModelById(orderIdToOrderDetail);
                 setOrderToSeeOrderDetail(orderToSeeOrderDetail.listResult[0]);
             } catch (error) {
@@ -274,7 +275,7 @@ function StaffOrderManagement() {
                     <div className={cx('order-detail-address')}>
                         <Card>
                             <CardHeader>
-                                <Heading size="md" fontSize={20}>
+                                <Heading padding={2} size="md" fontSize={20} textAlign="center">
                                     Delivery Information
                                 </Heading>
                             </CardHeader>
@@ -306,6 +307,10 @@ function StaffOrderManagement() {
                         </Card>
                     </div>
                     <div className={cx('order-detail-container')}>
+                        <Heading padding={2} size="md" fontSize={20} alignItems="center" textAlign="center">
+                            Order Details
+                        </Heading>
+
                         <TableContainer>
                             <Table>
                                 <Thead>
@@ -381,7 +386,7 @@ function StaffOrderManagement() {
                                         )}
                                     </Td>
                                     <Td>
-                                        <Button colorScheme="green" onClick={handleShow}>
+                                        <Button colorScheme="green" onClick={() => handleShow(order.orderDTO.id)}>
                                             View Detail
                                         </Button>
                                     </Td>

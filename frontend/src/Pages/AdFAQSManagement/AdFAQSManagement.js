@@ -133,19 +133,19 @@ function AdFAQSManagement() {
             try {
                 if (
                     (title.length !== 0 && content.length !== 0 && title.length < 3) ||
-                    title.length > 150 ||
+                    title.length > 300 ||
                     content.length < 2 ||
-                    content.length > 200
+                    content.length > 500
                 ) {
-                    if (title.length < 3 || title.length > 150 || content.length < 2 || content.length > 200) {
+                    if (title.length < 3 || title.length > 300 || content.length < 2 || content.length > 500) {
                         setValidate({
-                            title: 'Title must be in 3 to 150 charactes',
-                            content: 'Content must be in 2 to 200 charactes',
+                            title: 'Title must be in 3 to 300 charactes',
+                            content: 'Content must be in 2 to 500 charactes',
                         });
-                    } else if (content.length < 2 || content.length > 200) {
-                        setValidate({ title: '', content: 'Content must be in 2 to 200 charactes' });
-                    } else if (title.length < 3 || title.length > 150) {
-                        setValidate({ title: 'Title must be in 3 to 150 charactes', content: '' });
+                    } else if (content.length < 2 || content.length > 500) {
+                        setValidate({ title: '', content: 'Content must be in 2 to 500 charactes' });
+                    } else if (title.length < 3 || title.length > 300) {
+                        setValidate({ title: 'Title must be in 3 to 300 charactes', content: '' });
                     }
                 } else {
                     const data = {
@@ -193,9 +193,9 @@ function AdFAQSManagement() {
             title === '' ||
             content === '' ||
             title.length < 3 ||
-            title.length > 150 ||
+            title.length > 300 ||
             content.length < 2 ||
-            content.length > 200
+            content.length > 500
         ) {
             setAddFail((prev) => prev + 1);
             setSubmitStatus(false);

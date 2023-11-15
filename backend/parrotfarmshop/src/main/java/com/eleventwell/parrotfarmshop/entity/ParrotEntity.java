@@ -8,6 +8,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
 
 /**
@@ -18,6 +20,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +46,8 @@ public class ParrotEntity extends BaseEntity {
 
     @Unsigned
     @PositiveOrZero
+    @Min(value = 1)
+    @Max(value = 70)
     @Column(name = "age")
     private int age;
 

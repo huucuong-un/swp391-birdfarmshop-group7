@@ -62,6 +62,9 @@ const FeedbackAPI = {
             this.addAuthorizationHeader({}, includeAuthorization),
         );
     },
+    countFeedbackForDashBoard(includeAuthorization = true) {
+        return axiosClinet.get(`marketer/feedback/count-all`, this.addAuthorizationHeader({}, includeAuthorization));
+    },
 };
 
 export default FeedbackAPI;

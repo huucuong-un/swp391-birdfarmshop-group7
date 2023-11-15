@@ -135,6 +135,14 @@ const ParrotSpeciesAPI = {
         const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
         return axiosClient.get(url, authorizedConfig);
     },
+
+    getTop3SpeciesRatingForMarketer(includeAuthorization = true) {
+        const url = '/marketer/parrot-species/find-top3-average-rating';
+        const authorizedConfig = this.addAuthorizationHeader({}, includeAuthorization);
+        return axiosClient.get(url, authorizedConfig);
+    },
+   
+
 };
 
 export default ParrotSpeciesAPI;

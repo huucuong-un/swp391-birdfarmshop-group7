@@ -218,6 +218,7 @@ function AddParrotNestService() {
         // });
 
         try {
+            // if(firstParrot.age < 1 || firstParrot )
             const check = await NestAPI.countAvailableNestById(choosenFirstParrotSpecies);
             console.log(check);
             if (check === 0) {

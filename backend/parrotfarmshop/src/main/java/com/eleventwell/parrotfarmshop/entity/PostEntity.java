@@ -38,12 +38,12 @@ public class PostEntity extends BaseEntity {
 
 
 	@NotBlank
-	@Size(min = 3, max = 100)
+	@Size(min = 3, max = 500)
 	@Column(name = "title")
 	private String title;
 
 	@NotBlank
-	@Size(min = 10, max = 300)
+	@Size(min = 10, max = 2000)
 	@Column(name = "content")
 	private String content;
 

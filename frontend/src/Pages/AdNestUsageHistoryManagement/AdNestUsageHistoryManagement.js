@@ -356,7 +356,7 @@ function AdNestUsageHistoryManagement() {
                 <Stack spacing={3} className={cx('alert')}>
                     <Alert status="success">
                         <AlertIcon />
-                        There was an error processing your request
+                        Update status successfully
                     </Alert>
                 </Stack>
             )) ||

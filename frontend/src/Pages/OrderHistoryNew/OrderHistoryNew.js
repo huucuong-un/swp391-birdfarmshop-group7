@@ -1,7 +1,3 @@
-import classNames from 'classnames/bind';
-import FeedbackAPI from '~/Api/FeedbackAPI';
-import styles from '~/Pages/OrderHistoryNew/OrderHistoryNew.module.scss';
-
 import { Button, ButtonGroup, Center, Text, Toast, useToast } from '@chakra-ui/react';
 import ButtonT from '~/Components/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -71,6 +67,9 @@ import ButtonB from 'react-bootstrap/Button';
 import Overlay from 'react-bootstrap/Overlay';
 import Popover from 'react-bootstrap/Popover';
 import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames/bind';
+import FeedbackAPI from '~/Api/FeedbackAPI';
+import styles from '~/Pages/OrderHistoryNew/OrderHistoryNew.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -129,6 +128,7 @@ function OrderHistoryNew() {
         index: 1,
         count: nestDevStatus.length,
     });
+    const [orderIdD, setOrderIdD] = useState(0);
 
     useEffect(() => {
         const getNestDevStatusList = async () => {
@@ -344,6 +344,10 @@ function OrderHistoryNew() {
         };
         sortData();
     }, [sort]);
+
+    useEffect(() => {
+        const getOrderIdD = setOrderIdD(orders.length);
+    }, [orders]);
     const handlePageChange = (newPage) => {
         setSort({
             page: newPage,
@@ -400,7 +404,7 @@ function OrderHistoryNew() {
                         <div className={cx('order-item-header-container')}>
                             <div className={cx('order-item-header')}>
                                 <Text fontSize="16px" fontWeight="500">
-                                    Order #{order.orderDTO.id}
+                                    Order #{orders.length - index}
                                 </Text>
                                 <Text fontSize="16px" fontWeight="600" color="green">
                                     Paid
@@ -413,12 +417,17 @@ function OrderHistoryNew() {
                                 <Table variant="simple">
                                     <Thead>
                                         <Tr>
-                                            <Th>Image</Th>
-                                            <Th>Name</Th>
-                                            {order.listOrderDetailHistoryModel[0].color != null ? <Th>Color</Th> : null}
-                                            <Th>Quantity</Th>
-                                            <Th>Price</Th>
-                                            <Th>Service</Th>
+                                            <Th className={cx('order-item-content-container-th')}>Image</Th>
+                                            <Th className={cx('order-item-content-container-th')}>Name</Th>
+                                            {order.listOrderDetailHistoryModel[0].color != null ? (
+                                                <Th className={cx('order-item-content-container-th')}>Color</Th>
+                                            ) : null}
+                                            <Th className={cx('order-item-content-container-th')}>Quantity</Th>
+                                            <Th className={cx('order-item-content-container-th')}>Price</Th>
+                                            <Th className={cx('order-item-content-container-th')}>Service</Th>
+                                            {order.listOrderDetailHistoryModel[0].color != null ? (
+                                                <Th className={cx('order-item-content-container-th')}>Feedback</Th>
+                                            ) : null}
                                         </Tr>
                                     </Thead>
                                     <Tbody>
@@ -642,9 +651,19 @@ function OrderHistoryNew() {
                                             />
                                         </StepIndicator>
 
-                                        <Box flexShrink="0">
+                                        {/* <Box flexShrink="0">
                                             <StepTitle>{step.name}</StepTitle>
                                             <StepDescription>{step.description}</StepDescription>
+                                        </Box> */}
+
+                                        <Box flexShrink="0">
+                                            <StepTitle>{step.name}</StepTitle>
+                                            {nestDevWithUsageHistoryId &&
+                                                nestDevWithUsageHistoryId.map((nestDev, nestDevIndex) => {
+                                                    if (step.id === nestDev.statusId) {
+                                                        return <StepTitle>{nestDev.description}</StepTitle>;
+                                                    }
+                                                })}
                                         </Box>
 
                                         <StepSeparator />

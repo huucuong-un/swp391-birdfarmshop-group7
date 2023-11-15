@@ -171,28 +171,28 @@ function AddPost() {
             if (
                 post.title.length !== 0 &&
                 post.content.length !== 0 &&
-                (post.title.length > 150 ||
+                (post.title.length > 500 ||
                     post.title.length < 3 ||
-                    post.content.length > 300 ||
+                    post.content.length > 2000 ||
                     post.content.length < 10)
             ) {
                 if (
-                    (post.title.length > 150 || post.title.length < 3) &&
-                    (post.content.length > 300 || post.content.length < 10)
+                    (post.title.length > 500 || post.title.length < 3) &&
+                    (post.content.length > 2000 || post.content.length < 10)
                 ) {
                     setValidate({
-                        title: 'Title must be between 3 and 150 characters',
-                        description: 'Content must be between 10 and 300 character',
+                        title: 'Title must be between 3 and 500 characters',
+                        description: 'Content must be between 10 and 2000 character',
                     });
-                } else if (post.title.length > 150 || post.title.length < 3) {
+                } else if (post.title.length > 500 || post.title.length < 3) {
                     setValidate({
-                        title: 'Title must be between 3 and 150 characters',
+                        title: 'Title must be between 3 and 500 characters',
                         description: '',
                     });
-                } else if (post.content.length > 300 || post.content.length < 10) {
+                } else if (post.content.length > 2000 || post.content.length < 10) {
                     setValidate({
                         title: '',
-                        description: 'Content must be between 10 and 300 character',
+                        description: 'Content must be between 10 and 2000 character',
                     });
                 }
 

@@ -1,5 +1,19 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Table, Box, Center, Flex, Radio, Square, Text, textDecoration } from '@chakra-ui/react';
+import {
+    Table,
+    Box,
+    Center,
+    Flex,
+    Radio,
+    Square,
+    Text,
+    textDecoration,
+    Thead,
+    Tbody,
+    Tr,
+    Td,
+    Th,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DeliveryInformationAPI from '~/Api/DeliveryInformationAPI';
 import classNames from 'classnames/bind';
@@ -9,6 +23,7 @@ import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import AddMoreDeliveryInfo from '~/Components/AddMoreDeliveryInfo/AddMoreDeliveryInfo';
 import UpdateDeliveryInfo from '~/Components/UpdateDeliveryInfo/UpdateDeliveryInfo';
 import { ShopState } from '~/context/ShopProvider';
+import { TabContainer } from 'react-bootstrap';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +34,8 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     const [showUpdate, setShowUpdate] = useState(Array(deliveryInfo.length).fill(false)); // Initialize with false for each item
     const { user } = ShopState();
     const [reloadStatus, setReloadStatus] = useState(true);
+    const [showForUpdate, setShowForUpdate] = useState(false);
+    const [itemForUpdate, setItemForUpdate] = useState();
 
     const handleShow = () => {
         setShow(!show);
@@ -33,6 +50,8 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
     const handleShowUpdate = (index) => {
         const updatedShowUpdate = [...showUpdate]; // Create a copy of showUpdate array
         updatedShowUpdate[index] = !updatedShowUpdate[index]; // Toggle the value
+        setItemForUpdate(deliveryInfo[index]);
+        setShowForUpdate(true);
         setShowUpdate(updatedShowUpdate); // Update the state
     };
 
@@ -107,9 +126,52 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
 
     return (
         <Box className={cx('wrapper')}>
-            {deliveryInfo.map((item, itemIndex) => (
-                <>
-                    <Flex
+            <TabContainer>
+                <Table>
+                    <Thead>
+                        <Tr>
+                            <Th backgroundColor="white">Receiver</Th>
+                            <Th backgroundColor="white">Phone</Th>
+                            <Th backgroundColor="white">Address</Th>
+                            <Th backgroundColor="white">Choose</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {deliveryInfo.map((item, itemIndex) => (
+                            <Tr>
+                                <Td>{item.name}</Td>
+                                <Td padding={5}>{item.phoneNumber}</Td>
+                                <Td>
+                                    <Text padding={5}>{item.address}</Text>
+                                </Td>
+                                <Td>
+                                    <Radio
+                                        name="delivery-info-item-radio"
+                                        backgroundColor="white"
+                                        size="lg"
+                                        colorScheme="gray"
+                                        value={item.id}
+                                        // isChecked={selectedDeliveryId === item.id}
+                                        isChecked={item.pickingStatus}
+                                        onChange={() => {
+                                            setSelectedDeliveryId(item.id);
+                                            setSelectedDelivery(item);
+                                            handleChangePickingStatus(item);
+                                            // handleRedirectToPayment(); // Redirect to Payment
+                                        }}
+                                        display="flex"
+                                        justifyContent={'center'}
+                                        alignItems={'center'}
+                                        p={5}
+                                    />
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            </TabContainer>
+
+            {/* <Flex
                         className={cx('delivery-info-item')}
                         id={item.id}
                         onClick={() => handleShowUpdate(itemIndex)}
@@ -146,19 +208,13 @@ const DeliveryInformation = ({ selectedDelivery, setSelectedDelivery }) => {
                             alignItems={'center'}
                             p={5}
                         />
-
+ <div className={cx('fade-container')}>
+                        <UpdateDeliveryInfo deliveryInfo={itemForUpdate} onUpdate={handleUpdate} w={100} />
+                    </div>
                         <Text onClick={() => handleShowUpdate(itemIndex)} className={cx('edit-button')}>
                             Edit
                         </Text>
-                    </Flex>
-                    <div className={cx('fade-container ', { showUpdate: showUpdate[itemIndex] })}>
-                        {showUpdate[itemIndex] && (
-                            <UpdateDeliveryInfo deliveryInfo={item} onUpdate={handleUpdate} w={100} />
-                        )}
-                    </div>
-                </>
-            ))}
-
+                    </Flex> */}
             <div className={cx('information')}>
                 <FontAwesomeIcon onClick={handleShow} icon={faCirclePlus} size="xl" className={cx('add-button')} />
                 <Text onClick={handleShow} className={cx('add-button-text')}>

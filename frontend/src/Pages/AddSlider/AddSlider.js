@@ -122,28 +122,28 @@ function AddSlider() {
             if (
                 slider.sliderName.length !== 0 &&
                 slider.sliderDescription.length !== 0 &&
-                (slider.sliderName.length > 50 ||
+                (slider.sliderName.length > 150 ||
                     slider.sliderName.length < 3 ||
-                    slider.sliderDescription.length > 150 ||
+                    slider.sliderDescription.length > 500 ||
                     slider.sliderDescription.length < 20)
             ) {
                 if (
-                    (slider.sliderName.length > 50 || slider.sliderName.length < 3) &&
-                    (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20)
+                    (slider.sliderName.length > 150 || slider.sliderName.length < 3) &&
+                    (slider.sliderDescription.length > 500 || slider.sliderDescription.length < 20)
                 ) {
                     setValidate({
-                        sliderName: 'Slider name must be between 3 and 50 characters',
-                        sliderDescription: 'Slider description must be between 20 and 150 characters',
+                        sliderName: 'Slider name must be between 3 and 150 characters',
+                        sliderDescription: 'Slider description must be between 20 and 500 characters',
                     });
-                } else if (slider.sliderName.length > 50 || slider.sliderName.length < 3) {
+                } else if (slider.sliderName.length > 150 || slider.sliderName.length < 3) {
                     setValidate({
-                        sliderName: 'Slider name must be between 3 and 50 characters',
+                        sliderName: 'Slider name must be between 3 and 150 characters',
                         sliderDescription: '',
                     });
-                } else if (slider.sliderDescription.length > 150 || slider.sliderDescription.length < 20) {
+                } else if (slider.sliderDescription.length > 500 || slider.sliderDescription.length < 20) {
                     setValidate({
                         sliderName: '',
-                        sliderDescription: 'Slider description must be between 20 and 150 characters',
+                        sliderDescription: 'Slider description must be between 20 and 500 characters',
                     });
                 }
 

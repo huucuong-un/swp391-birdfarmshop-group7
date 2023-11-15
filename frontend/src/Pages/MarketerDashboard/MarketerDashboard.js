@@ -1,4 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faHeart,
+    faMagnifyingGlass,
+    faCircleXmark,
+    faAngleLeft,
+    faAngleRight,
+} from '@fortawesome/free-solid-svg-icons';
 import {
     Box,
     Container,
@@ -39,16 +47,67 @@ import ParrotSpeciesAPI from '~/Api/ParrotSpeciesAPI';
 import { useNavigate } from 'react-router-dom';
 import UserAPI from '~/Api/UserAPI';
 import RoleAPI from '~/Api/RoleAPI';
+import FeedbackAPI from '~/Api/FeedbackAPI';
+import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 
 const cx = classNames.bind(styles);
 
 function MarketerDashboard() {
     const [species, setSpecies] = useState([]);
     const [top3, setTop3] = useState([]);
+    const [top3Rating, setTop3Rating] = useState([]);
     const [combineData, setCombineData] = useState([]);
     const [combineDataForTop3, setCombineDataForTop3] = useState([]);
     const [token, setToken] = useState(JSON.parse(localStorage.getItem('accessToken')));
+    const [totalFeedback, setTotalFeedback] = useState(0);
     const navigate = useNavigate();
+
+    const StarRating = ({ rating }) => {
+        const stars = [];
+        if (rating === null || rating === 0) {
+            return <div>There are no reviews yet</div>;
+        }
+        const number = rating;
+        const integerPart = Math.floor(number);
+        const decimalPart = (number - integerPart).toFixed(1);
+        var count = 0;
+        for (let i = 0; i < integerPart; i++) {
+            stars.push(<FontAwesomeIcon style={{ height: 20 }} icon={solidStar} key={count} />);
+            count = count + 1;
+        }
+        if (decimalPart > 0) {
+            stars.push(<FontAwesomeIcon style={{ height: 20 }} icon={faStarHalfAlt} key={count} />);
+            count = count + 1;
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart - 1; i++) {
+                    stars.push(<FontAwesomeIcon style={{ height: 20 }} icon={regularStar} key={count} />);
+                    count = count + 1;
+                }
+            }
+        }
+
+        if (decimalPart == 0) {
+            if (integerPart < 5) {
+                for (let i = 0; i < 5 - integerPart; i++) {
+                    stars.push(<FontAwesomeIcon style={{ height: 20 }} icon={regularStar} key={count} />);
+                    count = count + 1;
+                }
+            }
+        }
+
+        if (rating !== null) {
+            stars.push(
+                <div style={{ padding:10 }} key={count}>
+                    {' '}
+                    ( {rating} / 5 )
+                </div>,
+            );
+        }
+
+        return stars;
+    };
+
     useEffect(() => {
         const getUserByToken = async () => {
             try {
@@ -114,6 +173,22 @@ function MarketerDashboard() {
     }, []);
 
     useEffect(() => {
+        const getTop3Rating = async () => {
+            const top3 = await ParrotSpeciesAPI.getTop3SpeciesRatingForMarketer();
+
+            setTop3Rating(top3);
+        };
+        getTop3Rating();
+    }, []);
+    useEffect(() => {
+        const getTotalFeedback = async () => {
+            const feedbackcount = await FeedbackAPI.countFeedbackForDashBoard();
+            setTotalFeedback(feedbackcount);
+        };
+        getTotalFeedback();
+    }, []);
+
+    useEffect(() => {
         const getTotalBySpecies = async () => {
             const data = [];
             for (const item of top3) {
@@ -149,6 +224,12 @@ function MarketerDashboard() {
                             </Box>
                         </Col>
                     ))}
+                <Col xs lg="3" margin="2%">
+                    <Box className={cx('statistic-item')}>
+                        <Text fontSize={14}>Total of Feedback</Text>
+                        <Text fontWeight={600}>{totalFeedback}</Text>
+                    </Box>
+                </Col>
             </Row>
 
             <Row className={cx('second-row')}>
@@ -201,6 +282,52 @@ function MarketerDashboard() {
                             </Tbody>
                         </Table>
                     </TableContainer>
+                    <div style={{ marginTop: '50px' }}>
+                        <Text fontSize={20} textAlign="center" fontWeight={500}>
+                            Top 3 Rating Species
+                        </Text>
+                        <TableContainer>
+                            <Table variant="simple">
+                                <Thead>
+                                    {/* <Tr>
+                                    <Th>Species</Th>
+                                    <Th>Color</Th>
+                                    <Th>Total Price</Th>
+                                </Tr> */}
+                                    <Tr>
+                                        <Th>Species</Th>
+                                        <Th>Image</Th>
+                                        <Th>Rating</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {top3Rating &&
+                                        top3Rating.map((top3, index) => (
+                                            <Tr key={index} textAlign="center">
+                                                <Td>{top3.name}</Td>
+                                                <Td>
+                                                    <div className="img-for-top-3">
+                                                        <Image src={top3.img} maxHeight={100}></Image>
+                                                    </div>
+                                                </Td>
+                                                <Td>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                        }}
+                                                        className="img-for-top-3"
+                                                    >
+                                                        <StarRating rating={top3.parrotAverageRating}></StarRating>
+                                                    </div>
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
+                    </div>
                 </Col>
             </Row>
         </Container>
